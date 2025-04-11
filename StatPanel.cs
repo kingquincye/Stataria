@@ -26,8 +26,12 @@ namespace Stataria
         private string[] statNames = { "VIT", "STR", "AGI", "INT", "LUC", "END", "POW", "DEX", "SPR" };
         private UIText[] statTexts;
         private UITextPanel<string>[] plusButtons;
+        private UITextPanel<string>[] minusButtons;
 
         private UITextPanel<string> resetButton;
+        private float[] holdTimers;
+        private float[] holdTimersDown;
+        private const float buttonRepeatDelay = 0.15f;
 
         private bool dragging = false;
         private Vector2 offset;
@@ -36,17 +40,19 @@ namespace Stataria
         {
             // Main panel
             panel = new UIPanel();
-            panel.Width.Set(300f, 0f);
-            panel.Height.Set(400f, 0f);
+            // Slightly wider panel to avoid cramping the minus button
+            panel.Width.Set(340f, 0f);
+            panel.Height.Set(450f, 0f);
             panel.HAlign = 0.5f;
             panel.VAlign = 0.5f;
 
+            // Make sure we set padding to 0 so we can place things precisely
+            panel.SetPadding(0);
             panel.BackgroundColor = new Color(63, 82, 151, 200);
             panel.BorderColor = new Color(0, 0, 0, 255);
             Append(panel);
 
             // Enable dragging the entire panel
-            panel.SetPadding(0);
             panel.OnLeftMouseDown += (evt, el) =>
             {
                 offset = new Vector2(evt.MousePosition.X - panel.Left.Pixels, evt.MousePosition.Y - panel.Top.Pixels);
@@ -68,7 +74,7 @@ namespace Stataria
             // Stat points label
             statPointsText = new UIText("Points: 0");
             statPointsText.Top.Set(top, 0f);
-            statPointsText.Left.Set(200f, 0f);
+            statPointsText.Left.Set(220f, 0f);
             panel.Append(statPointsText);
 
             top += 30f;
@@ -84,6 +90,9 @@ namespace Stataria
             // Create rows for each stat
             statTexts = new UIText[statNames.Length];
             plusButtons = new UITextPanel<string>[statNames.Length];
+            minusButtons = new UITextPanel<string>[statNames.Length];
+            holdTimers = new float[statNames.Length];
+            holdTimersDown = new float[statNames.Length];
 
             for (int i = 0; i < statNames.Length; i++)
             {
@@ -98,17 +107,36 @@ namespace Stataria
                 var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
                 {
                     Top = { Pixels = top },
-                    Left = { Pixels = 220f },
+                    // Shift to the left a bit so we have room for minus
+                    Left = { Pixels = 240f },
                     Width = { Pixels = 40f },
                     Height = { Pixels = 25f },
-                    BackgroundColor = new Color(63, 82, 151, 200),
-                    BorderColor = new Color(0, 0, 0, 255)
+                    // Use white-transparent for "enabled" color (we'll override in Update)
+                    BackgroundColor = new Color(255, 255, 255, 50),
+                    BorderColor = new Color(255, 255, 255, 50)
                 };
                 plusBtn.SetPadding(0f);
-                int statIndex = i;
+                int statIndex = i; // Important: Capture current value of i
                 plusBtn.OnLeftClick += (evt, el) => OnStatIncrease(statIndex);
                 panel.Append(plusBtn);
                 plusButtons[i] = plusBtn;
+
+                // Minus button for stat decrease
+                var minusBtn = new UITextPanel<string>("-", textScale: 1.2f, large: false)
+                {
+                    Top = { Pixels = top },
+                    Left = { Pixels = 290f },
+                    Width = { Pixels = 40f },
+                    Height = { Pixels = 25f },
+                    BackgroundColor = new Color(255, 255, 255, 50),
+                    BorderColor = new Color(255, 255, 255, 50)
+                };
+                minusBtn.SetPadding(0f);
+                // FIX: Capture the current value of i in a local variable
+                int minusStatIndex = i;
+                minusBtn.OnLeftClick += (evt, el) => OnStatDecrease(minusStatIndex);
+                panel.Append(minusBtn);
+                minusButtons[i] = minusBtn;
 
                 // MouseOver and MouseOut events for showing/hiding tooltip
                 string tip = GetStatTooltip(statIndex);
@@ -117,14 +145,18 @@ namespace Stataria
                 plusBtn.OnMouseOver += (evt, el) => ShowTooltip(tip);
                 plusBtn.OnMouseOut += (evt, el) => HideTooltip();
 
-                top += 30f;
+                // IMPORTANT: also show tooltips when hovering the minus button
+                minusBtn.OnMouseOver += (evt, el) => ShowTooltip(tip);
+                minusBtn.OnMouseOut += (evt, el) => HideTooltip();
+
+                top += 35f; // a bit more spacing
             }
 
             // Reset stats button
             resetButton = new UITextPanel<string>("Reset Stats", textScale: 0.9f, large: false)
             {
                 Top = { Pixels = top + 10f },
-                Left = { Pixels = 80f },
+                Left = { Pixels = 110f },
                 Width = { Pixels = 120f },
                 Height = { Pixels = 30f },
                 BackgroundColor = new Color(63, 82, 151, 200),
@@ -135,12 +167,12 @@ namespace Stataria
 
             // Tooltip panel setup: Docked below the main panel content
             tooltipPanel = new UIPanel();
-            tooltipPanel.Width.Set(280f, 0f);
+            tooltipPanel.Width.Set(320f, 0f);
             // Start with 0 height so it doesn't show initially
             tooltipPanel.Height.Set(0f, 0f);
             tooltipPanel.Left.Set(10f, 0f);
-            // Position it just below the stats area (you may adjust the Y position as needed)
-            tooltipPanel.Top.Set(420f, 0f);
+            // Position it below everything (adjust if needed)
+            tooltipPanel.Top.Set(460f, 0f);
             // Start fully transparent
             tooltipPanel.BackgroundColor = Color.Transparent;
             tooltipPanel.BorderColor = Color.Transparent;
@@ -185,16 +217,57 @@ namespace Stataria
             {
                 statTexts[i].SetText($"{statNames[i]}: {values[i]}");
 
+                // If we have points left, let the plus button be white-transparent. Else gray it out.
                 if (rpg.StatPoints > 0)
                 {
-                    plusButtons[i].BackgroundColor = new Color(63, 82, 151, 200);
-                    plusButtons[i].BorderColor = new Color(0, 0, 0, 255);
+                    plusButtons[i].BackgroundColor = new Color(150, 150, 150, 20);
+                    plusButtons[i].BorderColor = new Color(200, 200, 200, 20);
                 }
                 else
                 {
-                    plusButtons[i].BackgroundColor = new Color(80, 80, 80, 200);
-                    plusButtons[i].BorderColor = new Color(20, 20, 20, 255);
+                    // More transparent for disabled buttons
+                    plusButtons[i].BackgroundColor = new Color(80, 80, 80, 100);
+                    plusButtons[i].BorderColor = new Color(20, 20, 20, 150);
                 }
+
+                // If we have at least 1 point in the stat, minus is white-transparent; otherwise, gray it out.
+                if (values[i] > 0)
+                {
+                    minusButtons[i].BackgroundColor = new Color(150, 150, 150, 20);
+                    minusButtons[i].BorderColor = new Color(200, 200, 200, 20);
+                }
+                else
+                {
+                    // More transparent for disabled buttons
+                    minusButtons[i].BackgroundColor = new Color(80, 80, 80, 100);
+                    minusButtons[i].BorderColor = new Color(20, 20, 20, 150);
+                }
+            }
+
+            // Hold-to-increase or decrease
+            for (int i = 0; i < statNames.Length; i++)
+            {
+                if (plusButtons[i].IsMouseHovering && Main.mouseLeft)
+                {
+                    holdTimers[i] += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (holdTimers[i] > buttonRepeatDelay)
+                    {
+                        holdTimers[i] = 0f;
+                        OnStatIncrease(i);
+                    }
+                }
+                else holdTimers[i] = 0f;
+
+                if (minusButtons[i].IsMouseHovering && Main.mouseLeft)
+                {
+                    holdTimersDown[i] += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (holdTimersDown[i] > buttonRepeatDelay)
+                    {
+                        holdTimersDown[i] = 0f;
+                        OnStatDecrease(i);
+                    }
+                }
+                else holdTimersDown[i] = 0f;
             }
         }
 
@@ -218,7 +291,6 @@ namespace Stataria
         }
 
         // Helper: Wrap a string to fit a maximum pixel width using the MouseText font.
-        // This method splits the string word by word and inserts newline characters where needed.
         private string WrapText(string text, float maxWidth, float textScale = 1f)
         {
             DynamicSpriteFont font = FontAssets.MouseText.Value;
@@ -267,7 +339,7 @@ namespace Stataria
 
             // Calculate dynamic height manually
             DynamicSpriteFont font = FontAssets.MouseText.Value;
-            float lineHeight = font.LineSpacing * 1f; // Assuming textScale is 1f
+            float lineHeight = font.LineSpacing * 1f; // textScale = 1f
             int lineCount = wrappedText.Split('\n').Length;
             float totalTextHeight = lineCount * lineHeight;
 
@@ -276,13 +348,12 @@ namespace Stataria
             tooltipPanel.Recalculate();
         }
 
-        // Hide tooltip by clearing text and making background and border transparent.
+        // Hide tooltip by clearing text and making background/border transparent.
         private void HideTooltip()
         {
             tooltipText.SetText("");
             tooltipPanel.BackgroundColor = Color.Transparent;
             tooltipPanel.BorderColor = Color.Transparent;
-            // Optionally collapse the panel height
             tooltipPanel.Height.Set(0f, 0f);
             tooltipPanel.Recalculate();
         }
@@ -309,6 +380,27 @@ namespace Stataria
             }
 
             rpg.StatPoints--;
+            SoundEngine.PlaySound(SoundID.MenuTick);
+        }
+
+        private void OnStatDecrease(int index)
+        {
+            Player player = Main.LocalPlayer;
+            RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
+
+            switch (index)
+            {
+                case 0: if (rpg.VIT > 0) { rpg.VIT--; rpg.StatPoints++; } break;
+                case 1: if (rpg.STR > 0) { rpg.STR--; rpg.StatPoints++; } break;
+                case 2: if (rpg.AGI > 0) { rpg.AGI--; rpg.StatPoints++; } break;
+                case 3: if (rpg.INT > 0) { rpg.INT--; rpg.StatPoints++; } break;
+                case 4: if (rpg.LUC > 0) { rpg.LUC--; rpg.StatPoints++; } break;
+                case 5: if (rpg.END > 0) { rpg.END--; rpg.StatPoints++; } break;
+                case 6: if (rpg.POW > 0) { rpg.POW--; rpg.StatPoints++; } break;
+                case 7: if (rpg.DEX > 0) { rpg.DEX--; rpg.StatPoints++; } break;
+                case 8: if (rpg.SPR > 0) { rpg.SPR--; rpg.StatPoints++; } break;
+            }
+
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
 

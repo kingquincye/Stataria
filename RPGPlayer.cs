@@ -6,6 +6,8 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using System;
 using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Stataria
 {
@@ -20,6 +22,8 @@ namespace Stataria
 
         public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0;
 
+        public HashSet<int> rewardedBosses = new();
+
         public override void Initialize()
         {
             Level = 1;
@@ -27,6 +31,7 @@ namespace Stataria
             XPToNext = 100;
             StatPoints = 0;
             VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = 0;
+            rewardedBosses.Clear();
         }
 
         public override void SaveData(TagCompound tag)
@@ -38,6 +43,7 @@ namespace Stataria
             tag["VIT"] = VIT; tag["STR"] = STR; tag["AGI"] = AGI;
             tag["INT"] = INT; tag["LUC"] = LUC; tag["END"] = END;
             tag["POW"] = POW; tag["DEX"] = DEX; tag["SPR"] = SPR;
+            tag["RewardedBosses"] = new List<int>(rewardedBosses);
         }
 
         public override void LoadData(TagCompound tag)
@@ -49,6 +55,8 @@ namespace Stataria
             VIT = tag.GetInt("VIT"); STR = tag.GetInt("STR"); AGI = tag.GetInt("AGI");
             INT = tag.GetInt("INT"); LUC = tag.GetInt("LUC"); END = tag.GetInt("END");
             POW = tag.GetInt("POW"); DEX = tag.GetInt("DEX"); SPR = tag.GetInt("SPR");
+            if (tag.ContainsKey("RewardedBosses"))
+                rewardedBosses = tag.Get<List<int>>("RewardedBosses").ToHashSet();
         }
 
         public void GainXP(int amount)
@@ -70,8 +78,15 @@ namespace Stataria
 
         private void LevelUp()
         {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config.EnableLevelCap && Level >= config.LevelCapValue)
+            {
+                XP = XPToNext;
+                return;
+            }
+
             Level++;
-            StatPoints += 1;
+            StatPoints++;
             XPToNext = (int)(100 * Math.Pow(Level, 1.5));
 
             if (Main.netMode != NetmodeID.Server)

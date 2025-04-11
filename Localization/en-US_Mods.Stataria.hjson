@@ -7,6 +7,7 @@ Configs: {
 		Headers: {
 			XP_Multipliers: XP Multipliers
 			Stat_Scaling: Stat Scaling
+			Multiplayer_Balance: Multiplayer_ Balance Header
 		}
 
 		DamageXP: {
@@ -62,6 +63,26 @@ Configs: {
 		INT_MP: {
 			Label: INT MP
 			Tooltip: Extra max mana per INT point.
+		}
+
+		UseFlatBossXP: {
+			Label: Use Flat Boss XP
+			Tooltip: ""
+		}
+
+		EnableLevelCap: {
+			Label: Enable Level Cap
+			Tooltip: ""
+		}
+
+		LevelCapValue: {
+			Label: Level Cap Value
+			Tooltip: ""
+		}
+
+		FlatBossXPPerID: {
+			Label: Flat Boss XP Per ID
+			Tooltip: ""
 		}
 	}
 }
