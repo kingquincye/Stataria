@@ -1,0 +1,9 @@
+displayName = Stataria
+name = Stataria
+author = KQE
+version = 1.4
+description = A full RPG stat and leveling system!
+side = Both
+homepage = 
+hideCode = true
+noCompile = false
