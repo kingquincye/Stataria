@@ -7,7 +7,7 @@ Configs: {
 		Headers: {
 			XP_Multipliers: XP Multipliers
 			Stat_Scaling: Stat Scaling
-			Multiplayer_Balance: Multiplayer_ Balance Header
+			Multiplayer_Balance: Other Balances
 		}
 
 		DamageXP: {
@@ -67,22 +67,31 @@ Configs: {
 
 		UseFlatBossXP: {
 			Label: Use Flat Boss XP
-			Tooltip: ""
+			Tooltip: This will enable gaining a flat XP bonus for unique boss kills! Uses scaling if disabled.
 		}
 
 		EnableLevelCap: {
 			Label: Enable Level Cap
-			Tooltip: ""
+			Tooltip: This will enable the level cap. For right now, it's simple.
 		}
 
 		LevelCapValue: {
 			Label: Level Cap Value
-			Tooltip: ""
+			Tooltip: The maximum level achieveable. This is controllable... so once you need to pass this cap, simply increase it.
 		}
 
-		FlatBossXPPerID: {
-			Label: Flat Boss XP Per ID
-			Tooltip: ""
+		DefaultFlatBossXP: {
+			Label: Default Flat Boss XP
+			Tooltip: Value of bonus XP you will gain per unique boss kills.
+		}
+
+		EnableAbsentPlayerCompensation: {
+			Label: Enable Absent Player Compensation
+			Tooltip:
+				'''
+				This will enable whether you want new players or players who missed a boss fight joining a world/server to not fall behind and gain XP from bosses already killed in that world/server.
+				Only once per boss and it depends on whether you are using scaling or flat based XP!
+				'''
 		}
 	}
 }

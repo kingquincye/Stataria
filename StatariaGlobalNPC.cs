@@ -32,7 +32,7 @@ namespace Stataria
                         continue;
 
                     if (config.UseFlatBossXP)
-                        xpToGive = config.FlatBossXPPerID.TryGetValue(npc.type, out int flat) ? flat : 0;
+                        xpToGive = config.DefaultFlatBossXP;
                     else
                         xpToGive = (int)(npc.lifeMax * config.KillXP) + (int)(rpg.XPToNext * config.BossXP / 100f);
 

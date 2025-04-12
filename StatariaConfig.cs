@@ -25,8 +25,9 @@ namespace Stataria
 
         [Header("Multiplayer_Balance")]
         [DefaultValue(false)] public bool UseFlatBossXP;
+        [Range(0, 50000000)][DefaultValue(5000)] public int DefaultFlatBossXP;
+        [DefaultValue(false)] public bool EnableAbsentPlayerCompensation;
         [DefaultValue(false)] public bool EnableLevelCap;
-        [DefaultValue(50)] public int LevelCapValue;
-        public Dictionary<int, int> FlatBossXPPerID = new();
+        [Range(0, 100000000)][DefaultValue(50)] public int LevelCapValue;
     }
 }

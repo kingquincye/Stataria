@@ -4,15 +4,15 @@ Stataria adds a full RPG stat and leveling system to Terraria!
  Level up and earn stat points (1 per level)  
  Assign stats to boost your power:
 
-VIT = +5 Max HP & regen  
-STR = +1% melee damage  
-AGI = +1% move/attack speed (diminishing returns)  
-INT = +5 Max Mana, mana regen, +1% magic damage  
-LUC = +0.5% crit chance  
-END = Defense, damage reduction, status/knockback resistance, knocksback enemies (except bosses) 
-POW = +1% global damage  
-DEX = +1% ranged damage, ammo efficiency  
-SPR = +1% summon damage, bonus minion/sentry slots (+1 minion slot every 10 points, +1 sentry every 20 points)
+    VIT: Increases Max Health and Regen
+    STR: Increases Melee Damage 
+    AGI: Increases Movement Speed and Attack Speed (diminishes after 75+ points)
+    INT: Increases Mana, Regen, and Magic Damage  
+    LUC: Increases Crit Chance
+    END: Increases Defense, Damage Reduction (cannot reach 100%), Debuff/Knockback Resist, and Enemy Knock Back (except bosses... pretty much thorns without the damage... kind of :/)
+    POW: Increases All Damages  
+    DEX: Increases Ranged Damage, and Chance To Not Consume Ammo  
+    SPR: Increases Summon Damage plus Minion and Sentry slots (+1 minion slot every 10 points, +1 sentry slot every 20 points) 
 
  XP bar appears when gaining XP  
  Draggable UI panel with reset button  

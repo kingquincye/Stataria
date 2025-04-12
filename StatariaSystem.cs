@@ -36,6 +36,10 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
+             // Skip compensation if disabled
+            if (!config.EnableAbsentPlayerCompensation)
+                return;
+
             for (int i = 0; i < Main.maxPlayers; i++)
             {
                 var player = Main.player[i];
@@ -52,7 +56,7 @@ namespace Stataria
                     int xp = 0;
 
                     if (config.UseFlatBossXP)
-                        xp = config.FlatBossXPPerID.TryGetValue(bossID, out int val) ? val : 0;
+                        xp = config.DefaultFlatBossXP;
                     else if (ContentSamples.NpcsByNetId.TryGetValue(bossID, out NPC dummy))
                     {
                         xp = (int)(dummy.lifeMax * config.KillXP);

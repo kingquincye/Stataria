@@ -2,11 +2,14 @@
 
 Stataria brings a stat-based leveling and character building to Terraria.
 
+[i]Psst, hey, want a sword that you can use with this mod? Check out my XP Blade mod![/i]
+
 Gain XP by:
-[olist]
+[list]
   [*] Dealing damage
   [*] Killing enemies
   [*] Defeating bosses (+bonus XP)
+[/list]
 
 Level up and earn [b]1 stat point per level[/b]
 Assign points across 9 unique stats:
@@ -16,18 +19,21 @@ Assign points across 9 unique stats:
 [*][b]AGI[/b]: Increases Movement Speed and Attack Speed (diminishes after 75+ points)
 [*][b]INT[/b]: Increases Mana, Regen, and Magic Damage  
 [*][b]LUC[/b]: Increases Crit Chance
-[*][b]END[/b]: Increases Defense, Damage Reduction, Debuff/Knockback Resist, and Enemy Knock Back (except bosses... pretty much thorns without the damage... kind of :/)
+[*][b]END[/b]: Increases Defense, Damage Reduction (cannot reach 100%), Debuff/Knockback Resist, and Enemy Knock Back (except bosses... pretty much thorns without the damage... kind of :/)
 [*][b]POW[/b]: Increases All Damages  
 [*][b]DEX[/b]: Increases Ranged Damage, and Chance To Not Consume Ammo  
 [*][b]SPR[/b]: Increases Summon Damage plus Minion and Sentry slots (+1 minion slot every 10 points, +1 sentry slot every 20 points) 
 [/list]
 
-An XP bar pops up above your character when gaining XP (won't be noticable though when gaining a lot of XP... but it's there...)  
-Simple stat panel UI (clean, draggable, has a reset stats button, and now has dynamically updating tooltips for each stat)  
+An XP bar pops up above your character when gaining XP (won't be noticable though when gaining a lot of XP... but it's there...)
+
+Simple stat panel UI (clean, draggable, has a reset stats button, and now has dynamically updating tooltips for each stat)
+  
 Most stat scaling and XP values are configurable in the mod's config settings! So go crazy, or don't. Default values are what I believe is... normal?
-[/olist]
+
+There are now configurable balances mainly focused for multiplayer, but also affects singleplayer. (Multiplayer is not fully tested, so if anything happens or problems arrise, please let me know!)
 
 [b] Don’t forget to bind a key to open the Stat Panel under Controls > Keybindings.[/b]
 
 [i]Might be compatible with other mods... I don't fully know but try it out![/i]  
-[b]Make your character broken, but make it your way. Inspired by NExperience Mod.[/b]
+[b]Make your character broken, but make it your way. Inspired by NExperience Mod.[/b][quote=tModLoader Stataria]
