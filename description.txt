@@ -17,6 +17,7 @@ Stataria adds a full RPG stat and leveling system to Terraria!
  XP bar appears when gaining XP  
  Draggable UI panel with reset button  
  Fully configurable stats and XP in Mod Configs
+ Also now has configurable Balances!
 
 Don’t forget to set a keybind to open the Stat Panel!
 

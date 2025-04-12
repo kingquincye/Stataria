@@ -31,7 +31,9 @@ Simple stat panel UI (clean, draggable, has a reset stats button, and now has dy
   
 Most stat scaling and XP values are configurable in the mod's config settings! So go crazy, or don't. Default values are what I believe is... normal?
 
-There are now configurable balances mainly focused for multiplayer, but also affects singleplayer. (Multiplayer is not fully tested, so if anything happens or problems arrise, please let me know!)
+There are now configurable balances.
+
+[b] Multiplayer is not fully tested, so if anything happens or problems arrise, please let me know![/b]
 
 [b] Don’t forget to bind a key to open the Stat Panel under Controls > Keybindings.[/b]
 

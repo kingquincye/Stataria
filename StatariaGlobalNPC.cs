@@ -25,20 +25,47 @@ namespace Stataria
                 var rpg = p.GetModPlayer<RPGPlayer>();
 
                 int xpToGive = 0;
+                bool hasKilledBefore = rpg.rewardedBosses.Contains(npc.type);
 
+                // --- Boss HP XP ---
                 if (npc.boss)
                 {
-                    if (rpg.rewardedBosses.Contains(npc.type))
-                        continue;
-
-                    if (config.UseFlatBossXP)
-                        xpToGive = config.DefaultFlatBossXP;
+                    if (config.EnableBossHPXP)
+                    {
+                        // Always give HP XP when enabled
+                        xpToGive += (int)(npc.lifeMax * config.KillXP);
+                    }
                     else
-                        xpToGive = (int)(npc.lifeMax * config.KillXP) + (int)(rpg.XPToNext * config.BossXP / 100f);
-
-                    rpg.rewardedBosses.Add(npc.type);
+                    {
+                        // Only give HP XP once per boss when disabled
+                        if (!hasKilledBefore)
+                        {
+                            xpToGive += (int)(npc.lifeMax * config.KillXP);
+                        }
+                    }
                 }
-                else
+
+                // --- Bonus XP (flat or scaling) ---
+                if (npc.boss)
+                {
+                    if (!config.BonusBossXPIsUnique || !hasKilledBefore)
+                    {
+                        int bonusXP = config.UseFlatBossXP
+                            ? config.DefaultFlatBossXP
+                            : (int)(rpg.XPToNext * config.BossXP / 100f);
+
+                        xpToGive += bonusXP;
+                    }
+
+                    // Only track boss as rewarded if bonus XP is marked unique or HP XP is disabled (making it unique)
+                    if (!hasKilledBefore && (config.BonusBossXPIsUnique || !config.EnableBossHPXP))
+                    {
+                        rpg.rewardedBosses.Add(npc.type);
+                    }
+                }
+
+                // --- Regular (non-boss) kill XP ---
+                if (!npc.boss)
                 {
                     xpToGive = (int)(npc.lifeMax * config.KillXP);
                 }
