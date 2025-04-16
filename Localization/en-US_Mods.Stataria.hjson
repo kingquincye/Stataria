@@ -1,108 +1,264 @@
-"Keybinds.Toggle Stat Panel.DisplayName": Toggle  Stat  Panel
-
 Configs: {
 	StatariaConfig: {
-		DisplayName: Stataria Config
-
 		Headers: {
+			General_Balance: General Balances
 			XP_Multipliers: XP Multipliers
-			Stat_Scaling: Stat Scaling
-			Multiplayer_Balance: Other Balances
-			Balances: Balances
+			VIT_Settings: VIT Settings
+			STR_Settings: STR Settings
+			AGI_Settings: AGI Settings
+			INT_Settings: INT Settings
+			LUC_Settings: LUC Settings
+			END_Settings: END Settings
+			POW_Settings: POW Settings
+			DEX_Settings: DEX Settings
+			SPR_Settings: SPR Settings
 		}
 
-		DamageXP: {
-			Label: Damage XP
-			Tooltip: XP % gained from doing damage, multiplied by this value! Ex. 1 = 100%
+		SPR_SentriesPerX: {
+			Label: Sentries Per X
+			Tooltip: Adds +1 Sentry for every X SPR points.
 		}
 
-		KillXP: {
-			Label: Kill XP
-			Tooltip: XP % gained from NPC kills, multiplied by this value! Ex. 1 = 100%
+		SPR_MinionsPerX: {
+			Label: Minions Per X
+			Tooltip: Adds +1 Minion for every X SPR points.
+		}
+
+		SPR_Damage: {
+			Label: Damage
+			Tooltip: Increases summon damage by a percentage per point.
+		}
+
+		DEX_Range: {
+			Label: Range
+			Tooltip: Increases block placement and mining range.
+		}
+
+		DEX_BuildSpeed: {
+			Label: Build Speed
+			Tooltip: Speeds up tile placement/building.
+		}
+
+		DEX_MiningSpeed: {
+			Label: Mining Speed
+			Tooltip: Reduces mining time, increasing mining speed.
+		}
+
+		DEX_Damage: {
+			Label: Damage
+			Tooltip: Increases ranged damage per point.
+		}
+
+		POW_Damage: {
+			Label: Damage
+			Tooltip: Increases modded weapon damage by a percentage. Also gives a small bonus to all vanilla damage types.
+		}
+
+		END_EnemyKnockbackMultiplier: {
+			Label: Enemy Knockback Multiplier
+			Tooltip: Controls how strongly enemies are knocked back when END triggers knockback.
+		}
+
+		EnableEnemyKnockback: {
+			Label: Enable Enemy Knockback
+			Tooltip: Non-boss enemies are knocked back on hit when END is invested.
+		}
+
+		EnableDR: {
+			Label: Enable Damage Reduction
+			Tooltip: Enables damage reduction scaling with END.
+		}
+
+		EnableKnockbackResist: {
+			Label: Enable Knockback Resist
+			Tooltip: Enables knockback resistance scaling with END.
+		}
+
+		END_Aggro: {
+			Label: Aggro
+			Tooltip: Increases enemy aggression toward the player.
+		}
+
+		END_DefensePerX: {
+			Label: Defense Per X
+			Tooltip: Grants +1 defense per X END points.
+		}
+
+		LUC_LuckBonus: {
+			Label: Luck Bonus
+			Tooltip: Increases player luck slightly per point.
+		}
+
+		LUC_AggroReduction: {
+			Label: Aggro Reduction
+			Tooltip: Decreases enemy aggression per point.
+		}
+
+		LUC_Fishing: {
+			Label: Fishing
+			Tooltip: Increases fishing power per point.
+		}
+
+		LUC_Crit: {
+			Label: Crit
+			Tooltip: Increases critical chance per point.
+		}
+
+		INT_ArmorPen: {
+			Label: Armor Pen
+			Tooltip: Increases magic armor penetration.
+		}
+
+		INT_ManaCostReduction: {
+			Label: Mana Cost Reduction
+			Tooltip: Reduces mana cost per point with diminishing returns.
+		}
+
+		INT_MP: {
+			Label: Mana
+			Tooltip: Increases max mana.
+		}
+
+		INT_Damage: {
+			Label: Damage
+			Tooltip: Increases magic damage per point.
+		}
+
+		EnableTeleportCooldownBar: {
+			Label: Enable Teleport Cooldown Bar
+			Tooltip: Turns teleport cooldown bar on.
+		}
+
+		AGI_TeleportCooldown: {
+			Label: Teleport Cooldown
+			Tooltip: Sets the teleport ability's cooldown (in seconds).
+		}
+
+		AGI_TeleportUnlockAt: {
+			Label: Teleport Unlock At
+			Tooltip: Unlock teleport at this AGI value.
+		}
+
+		AGI_NoFallDamageUnlockAt: {
+			Label: No Fall Damage Unlock At
+			Tooltip: Grants immunity to fall damage when AGI reaches this value.
+		}
+
+		AGI_JumpUnlockAt: {
+			Label: Jump Unlock At
+			Tooltip: Unlocks auto-jump at this AGI value.
+		}
+
+		AGI_SwimUnlockAt: {
+			Label: Swim Unlock At
+			Tooltip: Enables swimming and water mobility at this AGI value.
+		}
+
+		AGI_DashUnlockAt: {
+			Label: Dash Unlock At
+			Tooltip: Unlocks dash at this AGI value.
+		}
+
+		AGI_WingTime: {
+			Label: Wing Time
+			Tooltip: Increases flight time for wings.
+		}
+
+		AGI_JumpSpeed: {
+			Label: Jump Speed
+			Tooltip: Boosts jump speed per point.
+		}
+
+		AGI_JumpHeight: {
+			Label: Jump Height
+			Tooltip: Increases jump height with diminishing returns.
+		}
+
+		AGI_AttackSpeed: {
+			Label: Attack Speed
+			Tooltip: Increases weapon attack speed (all types).
+		}
+
+		AGI_MoveSpeed: {
+			Label: Move Speed
+			Tooltip: Increases movement speed per point.
+		}
+
+		STR_ArmorPen: {
+			Label: Armor Pen
+			Tooltip: Increases melee armor penetration.
+		}
+
+		STR_Knockback: {
+			Label: Knockback
+			Tooltip: Increases melee knockback.
+		}
+
+		STR_Damage: {
+			Label: Damage
+			Tooltip: Increases melee damage per point.
+		}
+
+		VIT_HP: {
+			Label: Health
+			Tooltip: Increases max health per point.
 		}
 
 		BossXP: {
 			Label: Boss XP
-			Tooltip: XP % bonus added when defeating bosses! Ex. 10 = 10% Formula: 'XPToNextLevel * this value'
+			Tooltip: Bonus XP given after a boss kill ( % of XP Needed To Level Up).
 		}
 
-		STR_Damage: {
-			Label: STR Damage
-			Tooltip: Bonus % melee damage per STR point. 1 = 1%
+		KillXP: {
+			Label: Kill XP
+			Tooltip: XP multiplier for enemy kills based on their health (bosses included).
 		}
 
-		INT_Damage: {
-			Label: INT Damage
-			Tooltip: Bonus % magic damage per INT point. 1 = 1%
-		}
-
-		DEX_Damage: {
-			Label: DEX Damage
-			Tooltip: Bonus % ranged damage per DEX point. 1 = 1%
-		}
-
-		SPR_Damage: {
-			Label: SPR Damage
-			Tooltip: Bonus % summon damage per SPR point. 1 = 1%
-		}
-
-		POW_Damage: {
-			Label: POW Damage
-			Tooltip: Bonus % to all damage per POW point. 1 = 1%
-		}
-
-		LUC_Crit: {
-			Label: LUC Crit
-			Tooltip: Crit chance per LUC point, in hundredths of a percent. Ex. 50 = 0.5%
-		}
-
-		VIT_HP: {
-			Label: VIT HP
-			Tooltip: Extra max HP per VIT point.
-		}
-
-		INT_MP: {
-			Label: INT MP
-			Tooltip: Extra max mana per INT point.
-		}
-
-		UseFlatBossXP: {
-			Label: Use Flat Boss XP
-			Tooltip: This will enable gaining a flat XP bonus per boss kill! Uses scaling if disabled.
-		}
-
-		EnableLevelCap: {
-			Label: Enable Level Cap
-			Tooltip: This will enable the level cap. For right now, it's simple.
+		DamageXP: {
+			Label: Damage XP
+			Tooltip: XP multiplier based on damage dealt.
 		}
 
 		LevelCapValue: {
 			Label: Level Cap Value
-			Tooltip: The maximum level achieveable. This is controllable... so once you need to pass this cap, simply increase it.
+			Tooltip: Sets the maximum level players can reach.
 		}
 
-		DefaultFlatBossXP: {
-			Label: Default Flat Boss XP
-			Tooltip: Value of bonus XP you will gain per boss kill.
+		EnableLevelCap: {
+			Label: Enable Level Cap
+			Tooltip: Enable to prevent leveling past a set level.
 		}
 
 		EnableAbsentPlayerCompensation: {
 			Label: Enable Absent Player Compensation
-			Tooltip:
-				'''
-				This will enable whether you want new players or players who missed a boss fight joining a world/server to not fall behind and gain XP from bosses already killed in that world/server.
-				Only once per boss and it depends on whether you are using scaling or flat based XP!
-				'''
+			Tooltip: Returning/New players will receive boss XP they missed when they join a world/server. Only once per boss.
 		}
 
-		EnableBossHPXP: {
-			Label: Boss HP XP All Times
-			Tooltip: Makes it whether you get the HP XP from bosses all the time or once per unique boss kill.
+		DefaultFlatBossXP: {
+			Label: Default Flat Boss XP
+			Tooltip: Sets the XP reward for bosses if flat XP is enabled.
+		}
+
+		UseFlatBossXP: {
+			Label: Use Flat Boss XP
+			Tooltip: Gives bosses a flat bonus XP reward instead of scaling.
 		}
 
 		BonusBossXPIsUnique: {
 			Label: Bonus Boss XP Is Unique
-			Tooltip: Makes it whether you get the bonus XP from defeating bosses all the time or once per unique boss kill.
+			Tooltip: Each boss only gives bonus XP once. Otherwise receive bonus all times.
 		}
+
+		EnableBossHPXP: {
+			Label: Enable Boss HP XP
+			Tooltip: Grants XP based on boss max HP all times. Otherwise it's once per boss.
+		}
+
+		DisplayName: Stataria Config
 	}
+}
+
+Keybinds: {
+	"AGI Teleport.DisplayName": AGI  Teleport
+	"Toggle Stat Panel.DisplayName": Toggle Stat Panel
 }

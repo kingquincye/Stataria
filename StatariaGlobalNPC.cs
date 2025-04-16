@@ -21,7 +21,7 @@ namespace Stataria
 
             foreach (Player p in Main.player)
             {
-                if (p is null || !p.active) continue;
+                if (p is null || !p.active || p.dead) continue;
                 var rpg = p.GetModPlayer<RPGPlayer>();
 
                 int xpToGive = 0;

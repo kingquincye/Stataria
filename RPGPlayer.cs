@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using Terraria.Audio;
 
 namespace Stataria
 {
@@ -15,6 +16,11 @@ namespace Stataria
     {
         public int xpBarTimer = 0;
         private const int xpBarDuration = 120;
+        public int levelCapMessageTimer = 0;
+        private const int levelCapMessageCooldown = 1800; // 2 seconds
+        public int teleportCooldownTimer = 0;
+        public float breathDepletionCounter;
+        private float breathMultiplier = 1f;
         public int Level = 1;
         public int XP = 0;
         public int XPToNext = 100;
@@ -61,6 +67,23 @@ namespace Stataria
 
         public void GainXP(int amount)
         {
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            // First: Don't do anything if we're at the level cap
+            if (config.EnableLevelCap && Level >= config.LevelCapValue)
+            {
+                XP = XPToNext;
+
+                if (Main.netMode != NetmodeID.Server && levelCapMessageTimer <= 0)
+                {
+                    CombatText.NewText(Player.Hitbox, Color.Gray, "Level Cap Reached!");
+                    levelCapMessageTimer = levelCapMessageCooldown;
+                }
+
+                return; // Skip XP gain and gold text
+            }
+
+            // Safe to gain XP
             XP += amount;
 
             if (Main.netMode != NetmodeID.Server)
@@ -71,6 +94,17 @@ namespace Stataria
 
             while (XP >= XPToNext)
             {
+                if (config.EnableLevelCap && Level >= config.LevelCapValue)
+                {
+                    XP = XPToNext;
+                    if (Main.netMode != NetmodeID.Server && levelCapMessageTimer <= 0)
+                    {
+                        CombatText.NewText(Player.Hitbox, Color.Gray, "Level Cap Reached!");
+                        levelCapMessageTimer = levelCapMessageCooldown;
+                    }
+                    break;
+                }
+
                 XP -= XPToNext;
                 LevelUp();
             }
@@ -110,52 +144,158 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
             GainXP((int)(damageDone * config.DamageXP));
         }
+        public override void ModifyLuck(ref float luck)
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            luck += LUC * config.LUC_LuckBonus;
+            luck = Math.Clamp(luck, -0.7f, 1f); 
+        }
 
         public override void ResetEffects()
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
+            // --- VIT ---
             Player.statLifeMax2 += VIT * config.VIT_HP;
-            Player.statManaMax2 += INT * config.INT_MP;
-            Player.statDefense += END / 2;
-            Player.maxMinions += SPR / 10; // 1 extra minion per 10 SPR
-            Player.maxTurrets += SPR / 20;   // 1 extra sentry per 20 SPR
+            //Player.breathMax += VIT * config.VIT_Breath;
+            breathMultiplier = 1f / (1f + VIT * 0.04f);
 
+            // --- STR ---
+            Player.GetArmorPenetration(DamageClass.Melee) += STR * config.STR_ArmorPen;
+
+            // --- INT ---
+            Player.statManaMax2 += INT * config.INT_MP;
+            //Player.manaRegenBonus += INT * config.INT_ManaRegen;
+            float rawReduction = INT * config.INT_ManaCostReduction / 100f;
+            float diminishingReduction = 1f - (1f / (1f + rawReduction));
+            Player.manaCost -= diminishingReduction;
+            Player.GetArmorPenetration(DamageClass.Magic) += INT * config.INT_ArmorPen;
+
+            // --- END ---
+            /*if (config.EnableKnockbackResist)
+                Player.knockBackResist += Math.Min(END * config.END_KnockbackResist / 100f, 1f);*/
+            if (config.END_DefensePerX > 0)
+            {
+                Player.statDefense += END / config.END_DefensePerX;
+            }
+            Player.aggro += END * config.END_Aggro;
+
+            // --- AGI ---
             float effectiveAGI = AGI <= 75 ? AGI : 75 + (AGI - 75) * 0.5f;
-            Player.moveSpeed += effectiveAGI * 0.01f;
+            Player.moveSpeed += effectiveAGI * (config.AGI_MoveSpeed / 100f);
+            Player.GetAttackSpeed(DamageClass.Generic) += effectiveAGI * (config.AGI_AttackSpeed / 100f);
+            float jumpHeightMultiplier = 1f - (float)Math.Pow(0.98, AGI);
+            Player.jumpHeight += (int)(15 * jumpHeightMultiplier * config.AGI_JumpHeight);
+            Player.jumpSpeedBoost += AGI * config.AGI_JumpSpeed;
+            Player.autoJump = AGI >= config.AGI_JumpUnlockAt;      // Enable auto-jump at threshold
+
+            if (AGI >= config.AGI_NoFallDamageUnlockAt)
+                Player.noFallDmg = true;
+            if (AGI >= config.AGI_SwimUnlockAt)
+                Player.accFlipper = true;
+                Player.ignoreWater = true;
+            if (AGI >= config.AGI_DashUnlockAt)
+                Player.dashType = 2;
+
+            // --- LUC ---
+            Player.fishingSkill += LUC * config.LUC_Fishing;
+            Player.aggro -= LUC * config.LUC_AggroReduction;
+            //Player.luck += LUC * config.LUC_LuckBonus;
+
+            // --- SPR ---
+            Player.maxMinions += SPR / config.SPR_MinionsPerX;
+            Player.maxTurrets += SPR / config.SPR_SentriesPerX;
+            Player.GetDamage(DamageClass.Summon) += SPR * (config.SPR_Damage / 100f);
+            //Player.minionAttackSpeed += SPR * config.SPR_AttackSpeed / 100f;
+
+            // --- DEX ---
+            Player.pickSpeed -= DEX * config.DEX_MiningSpeed * 0.01f;
+            Player.tileSpeed += DEX * config.DEX_BuildSpeed;
+            Player.tileRangeX += DEX * config.DEX_Range;
+            Player.tileRangeY += DEX * config.DEX_Range;
+        }
+
+        public override void PostUpdateEquips()
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            Player.wingTimeMax += AGI * config.AGI_WingTime;
         }
 
         public override void PostUpdate()
         {
             if (xpBarTimer > 0)
                 xpBarTimer--;
+            
+            if (levelCapMessageTimer > 0)
+                levelCapMessageTimer--;
 
             Player.lifeRegen += VIT / 2;
             Player.manaRegenBonus += INT / 2;
 
-            float resistPercent = Math.Min(END * 0.005f, 1f);
-            for (int i = 0; i < Player.buffTime.Length; i++)
+            if (Player.wet && Player.breathCD > 0)
             {
-                int buffType = Player.buffType[i];
-                if (Player.buffTime[i] > 0 && Main.debuff[buffType])
+                breathDepletionCounter += breathMultiplier;
+                if (breathDepletionCounter >= 1f)
                 {
-                    Player.buffTime[i] = (int)(Player.buffTime[i] * (1f - resistPercent));
+                    int actualLoss = (int)breathDepletionCounter;
+                    Player.breathCD -= actualLoss;
+                    breathDepletionCounter -= actualLoss;
                 }
             }
+            else
+            {
+                breathDepletionCounter = 0f; // Reset when not underwater
+            }
 
-            float endBonus = 1f - (1f / (1f + END * 0.01f));
-            float currentDR = Player.endurance;
-            Player.endurance = currentDR + (1f - currentDR) * endBonus;
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (teleportCooldownTimer > 0)
+                teleportCooldownTimer--;
+
+            if (AGI >= config.AGI_TeleportUnlockAt &&
+                StatariaKeybinds.TeleportKey.JustPressed &&
+                teleportCooldownTimer <= 0)
+            {
+                Vector2 mouseWorld = Main.MouseWorld;
+                if (Collision.CanHitLine(Player.Center, 0, 0, mouseWorld, 0, 0))
+                {
+                    Player.Teleport(mouseWorld, 1);
+                    teleportCooldownTimer = config.AGI_TeleportCooldown * 60;
+
+                    // Add some visual & sound
+                    for (int i = 0; i < 30; i++)
+                    {
+                        Dust.NewDust(Player.position, Player.width, Player.height, DustID.MagicMirror);
+                    }
+                    SoundEngine.PlaySound(SoundID.Item6, Player.position);
+                }
+            }
         }
 
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
-            float kbResist = Math.Min(END * 0.01f, 1f);
-            modifiers.Knockback *= 1f - kbResist;
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (config.EnableKnockbackResist)
+            {
+                float kbResist = Math.Min(END * 0.01f, 1f); // 1% per END
+                modifiers.Knockback *= 1f - kbResist;
+            }
+
+            if (config.EnableDR)
+            {
+                float diminishingDR = 1f - (1f / (1f + END * 0.01f)); // 50% at 100 END
+                modifiers.FinalDamage *= 1f - diminishingDR;
+            }
         }
 
         public override void OnHurt(Player.HurtInfo info)
         {
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (!config.EnableEnemyKnockback)
+                return;
+
             if (!info.DamageSource.TryGetCausingEntity(out Entity entity) || entity is not NPC npc)
                 return;
 
@@ -163,7 +303,8 @@ namespace Stataria
             {
                 Vector2 knockbackDir = npc.Center - Player.Center;
                 knockbackDir.Normalize();
-                float knockbackStrength = Math.Clamp(END * 0.01f * 10f, 2f, 12f);
+
+                float knockbackStrength = Math.Clamp(END * config.END_EnemyKnockbackMultiplier, 2f, 12f);
                 npc.velocity += knockbackDir * knockbackStrength;
             }
         }
@@ -172,24 +313,46 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            float bonus = POW * (config.POW_Damage / 100f);
+            float bonus = 0f;
 
             if (item.CountsAsClass(DamageClass.Melee))
                 bonus += STR * (config.STR_Damage / 100f);
-            else if (item.CountsAsClass(DamageClass.Magic))
+
+            if (item.CountsAsClass(DamageClass.Magic))
                 bonus += INT * (config.INT_Damage / 100f);
-            else if (item.CountsAsClass(DamageClass.Ranged))
+
+            if (item.CountsAsClass(DamageClass.Ranged))
                 bonus += DEX * (config.DEX_Damage / 100f);
-            else if (item.CountsAsClass(DamageClass.Summon))
-                bonus += SPR * (config.SPR_Damage / 100f);
+
+            /*if (item.CountsAsClass(DamageClass.Summon))
+                bonus += SPR * (config.SPR_Damage / 100f);*/
+
+            if (!item.CountsAsClass(DamageClass.Melee) &&
+                !item.CountsAsClass(DamageClass.Ranged) &&
+                !item.CountsAsClass(DamageClass.Magic) &&
+                !item.CountsAsClass(DamageClass.Summon))
+            {
+                bonus += POW * (config.POW_Damage / 100f);
+            }
+            else
+            {
+                bonus += POW * 0.001f;
+            }
 
             damage += bonus;
+        }
+
+        public override void ModifyWeaponKnockback(Item item, ref StatModifier knockback)
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (item.CountsAsClass(DamageClass.Melee))
+                knockback += STR * (config.STR_Knockback / 100f);
         }
 
         public override void ModifyWeaponCrit(Item item, ref float crit)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
-            crit += LUC * (config.LUC_Crit / 100f);
+            crit += LUC * config.LUC_Crit;
         }
 
         public override bool CanConsumeAmmo(Item weapon, Item ammo)
@@ -209,13 +372,10 @@ namespace Stataria
             return 1f + (effectiveAGI * 0.01f);
         }
 
-        // --- New override for network synchronization ---
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
-            var packet = Mod.GetPacket();
-            // Write an identifier so that the receiver knows what type of data follows.
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
             packet.Write((byte)StatariaMessageType.SyncPlayer);
-            // Write the player index to know which player's data we’re updating.
             packet.Write(Player.whoAmI);
             packet.Write(Level);
             packet.Write(XP);

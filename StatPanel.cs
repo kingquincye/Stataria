@@ -139,14 +139,12 @@ namespace Stataria
                 minusButtons[i] = minusBtn;
 
                 // MouseOver and MouseOut events for showing/hiding tooltip
-                string tip = GetStatTooltip(statIndex);
-                statLabel.OnMouseOver += (evt, el) => ShowTooltip(tip);
+                //string tip = GetStatTooltip(statIndex);
+                statLabel.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(statIndex));
                 statLabel.OnMouseOut += (evt, el) => HideTooltip();
-                plusBtn.OnMouseOver += (evt, el) => ShowTooltip(tip);
+                plusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(statIndex));
                 plusBtn.OnMouseOut += (evt, el) => HideTooltip();
-
-                // IMPORTANT: also show tooltips when hovering the minus button
-                minusBtn.OnMouseOver += (evt, el) => ShowTooltip(tip);
+                minusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(statIndex));
                 minusBtn.OnMouseOut += (evt, el) => HideTooltip();
 
                 top += 35f; // a bit more spacing
@@ -275,17 +273,68 @@ namespace Stataria
         private string GetStatTooltip(int statIndex)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
+            Player player = Main.LocalPlayer;
+            RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
+
             switch (statIndex)
             {
-                case 0: return $"VIT: +{config.VIT_HP} Max Health, Increased Health Regen (VIT/2)";
-                case 1: return $"STR: +{config.STR_Damage}% Melee Damage";
-                case 2: return "AGI: +1% Movement/Attack Speed (diminishing returns after 75+ points)";
-                case 3: return $"INT: +{config.INT_MP} Max Mana, Increased Mana Regen (INT/2), +{config.INT_Damage}% Magic Damage";
-                case 4: return $"LUC: +{(config.LUC_Crit / 100f):0.##}% Crit Chance";
-                case 5: return "END: +1 Defense (every 2 points), Increased Damage Reduction (cannot reach 100%), +1% Debuff/Knockback Resist, Knocks Back Enemies (excl. bosses)";
-                case 6: return $"POW: +{config.POW_Damage}% All Damage";
-                case 7: return $"DEX: +{config.DEX_Damage}% Ranged Damage, +1% Chance To Not Consume Ammo";
-                case 8: return $"SPR: +{config.SPR_Damage}% Summon Damage, Increased Minion (every 10 points) & Sentry (every 20 points) Slots";
+                case 0: // VIT
+                    return $"+{config.VIT_HP} Max Health per point\n" +
+                        $"+{rpg.VIT / 2f:0.##} Health Regen\n" +
+                        $"Breath depletes {100f - (100f / (1f + rpg.VIT * 0.04f)):0.##}% slower";
+
+                case 1: // STR
+                    return $"+{config.STR_Damage}% Melee Damage per point\n" +
+                        $"+{config.STR_Knockback}% Melee Knockback per point\n" +
+                        $"+{config.STR_ArmorPen} Melee Armor Penetration per point";
+
+                case 2: // AGI
+                    return $"+{config.AGI_MoveSpeed}% Movement Speed\n" +
+                        $"+{config.AGI_AttackSpeed}% Attack Speed (All Weapons)\n" +
+                        $"Dash at {config.AGI_DashUnlockAt} AGI\n" +
+                        $"Water Freedom at {config.AGI_SwimUnlockAt} AGI\n" +
+                        $"No Fall Damage at {config.AGI_NoFallDamageUnlockAt} AGI\n" +
+                        $"Teleport (G Key) at {config.AGI_TeleportUnlockAt} AGI\n" +
+                        $"+{config.AGI_JumpSpeed * 100}% Jump Speed\n" +
+                        $"+{config.AGI_WingTime} Wing Flight Time";
+
+                case 3: // INT
+                    float manaCostReduction = 100f * (1f - (1f / (1f + (rpg.INT * config.INT_ManaCostReduction / 100f))));
+                    return $"+{config.INT_MP} Max Mana\n" +
+                        $"+{rpg.INT / 2f:0.##} Mana Regen\n" +
+                        $"+{config.INT_Damage}% Magic Damage\n" +
+                        $"-{manaCostReduction:0.##}% Mana Cost\n" +
+                        $"+{config.INT_ArmorPen} Magic Armor Penetration";
+
+                case 4: // LUC
+                    return $"+{config.LUC_Crit}% Critical Chance\n" +
+                        $"+{config.LUC_LuckBonus * 100}% Luck\n" +
+                        $"+{config.LUC_Fishing} Fishing Power\n" +
+                        $"-{config.LUC_AggroReduction} Aggro";
+
+                case 5: // END
+                    float drPercent = 100f * (1f - (1f / (1f + rpg.END * 0.01f)));
+                    return $"+1 Defense every {config.END_DefensePerX} points\n" +
+                        $"+{rpg.END}% Knockback Resistance\n" +
+                        (config.EnableDR ? $"Current DR: -{drPercent:0.##}% Damage Taken\n" : "") +
+                        (config.EnableEnemyKnockback ? "Knocks Back Non-Boss Enemies\n" : "") +
+                        $"+{config.END_Aggro} Aggro";
+
+                case 6: // POW
+                    return $"+{config.POW_Damage}% Damage (Modded Weapons)\n" +
+                        $"+0.1% Damage (Vanilla Weapons)";
+
+                case 7: // DEX
+                    return $"+{config.DEX_Damage}% Ranged Damage\n" +
+                        $"-{config.DEX_MiningSpeed}% Mining Time\n" +
+                        $"+{config.DEX_BuildSpeed}% Placement Speed\n" +
+                        $"+{config.DEX_Range} Block Reach";
+
+                case 8: // SPR
+                    return $"+{config.SPR_Damage}% Summon Damage\n" +
+                        $"+1 Minion per {config.SPR_MinionsPerX} SPR\n" +
+                        $"+1 Sentry per {config.SPR_SentriesPerX} SPR";
+
                 default: return "";
             }
         }
