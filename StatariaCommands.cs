@@ -106,6 +106,18 @@ namespace Stataria
                     caller.Reply("Rewarded boss XP progress cleared.", Color.Cyan);
                     break;
 
+                case "syncbosses":
+                    if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        StatariaSystem.SyncGlobalBosses();
+                        caller.Reply("Forced boss list sync.", Color.Green);
+                    }
+                    else
+                    {
+                        caller.Reply("Cannot sync in single player.", Color.Red);
+                    }
+                    break;
+
                 default:
                     caller.Reply("Unknown subcommand. " + Usage, Color.Red);
                     break;

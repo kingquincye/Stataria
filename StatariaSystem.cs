@@ -32,11 +32,44 @@ namespace Stataria
             }
         }
 
+        public static void SyncGlobalBosses(int toWho = -1, int fromWho = -1)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                return;
+                
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
+            packet.Write((byte)StatariaMessageType.SyncGlobalBosses);
+            packet.Write(killedBossesGlobal.Count);
+            foreach (int bossId in killedBossesGlobal)
+            {
+                packet.Write(bossId);
+            }
+            packet.Send(toWho, fromWho);
+        }
+
         public override void PostUpdatePlayers()
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-             // Skip compensation if disabled
+            // Sync global bosses list to new players
+            if (Main.netMode == NetmodeID.Server)
+            {
+                for (int i = 0; i < Main.maxPlayers; i++)
+                {
+                    var player = Main.player[i];
+                    if (player == null || !player.active)
+                        continue;
+                        
+                    if (!syncedPlayers.Contains(i))
+                    {
+                        // This is a new player that hasn't been synced yet
+                        SyncGlobalBosses(toWho: i);
+                        syncedPlayers.Add(i);
+                    }
+                }
+            }
+
+            // Skip compensation if disabled
             if (!config.EnableAbsentPlayerCompensation)
                 return;
 

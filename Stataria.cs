@@ -6,16 +6,32 @@ using System.Threading.Tasks;
 using Terraria.ModLoader;
 using System.IO;
 using Terraria;
+using Terraria.ID;
 
 namespace Stataria
 {
     public enum StatariaMessageType : byte
     {
-        SyncPlayer
+        SyncPlayer,
+        SyncGlobalBosses,
+        BossXP
     }
 
     public class Stataria : Mod
     {
+        public static void SendBossXP(int playerIndex, int bossType, int xpAmount, string source)
+        {
+            if (Main.netMode != NetmodeID.Server)
+                return;
+                
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
+            packet.Write((byte)StatariaMessageType.BossXP);
+            packet.Write(playerIndex);
+            packet.Write(bossType);
+            packet.Write(xpAmount);
+            packet.Write(source);
+            packet.Send();
+        }
         // This method handles incoming packets.
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
@@ -40,6 +56,40 @@ namespace Stataria
                 rpg.POW = reader.ReadInt32();
                 rpg.DEX = reader.ReadInt32();
                 rpg.SPR = reader.ReadInt32();
+                
+                // Add this code to read rewardedBosses
+                int bossCount = reader.ReadInt32();
+                rpg.rewardedBosses.Clear();
+                for (int i = 0; i < bossCount; i++)
+                {
+                    rpg.rewardedBosses.Add(reader.ReadInt32());
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncGlobalBosses)
+            {
+                // Add this new message type to sync global bosses
+                int bossCount = reader.ReadInt32();
+                StatariaSystem.killedBossesGlobal.Clear();
+                for (int i = 0; i < bossCount; i++)
+                {
+                    StatariaSystem.killedBossesGlobal.Add(reader.ReadInt32());
+                }
+            }
+            else if (msgType == StatariaMessageType.BossXP)
+            {
+                int playerIndex = reader.ReadInt32();
+                int bossType = reader.ReadInt32();
+                int xpAmount = reader.ReadInt32();
+                string source = reader.ReadString();
+                
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers && Main.player[playerIndex].active)
+                {
+                    var rpg = Main.player[playerIndex].GetModPlayer<RPGPlayer>();
+                    rpg.GainXP(xpAmount, source);
+                    
+                    // Also track boss as rewarded if needed
+                    rpg.rewardedBosses.Add(bossType);
+                }
             }
         }
     }

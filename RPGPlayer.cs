@@ -14,6 +14,7 @@ namespace Stataria
 {
     public class RPGPlayer : ModPlayer
     {
+        public bool debugMode = true; // Toggle this to enable/disable XP source display
         public int xpBarTimer = 0;
         private const int xpBarDuration = 120;
         public int levelCapMessageTimer = 0;
@@ -65,7 +66,7 @@ namespace Stataria
                 rewardedBosses = tag.Get<List<int>>("RewardedBosses").ToHashSet();
         }
 
-        public void GainXP(int amount)
+        public void GainXP(int amount, string source = "Unknown")
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
@@ -89,7 +90,19 @@ namespace Stataria
             if (Main.netMode != NetmodeID.Server)
             {
                 xpBarTimer = xpBarDuration;
+                
+                // Normal XP text
                 CombatText.NewText(Player.Hitbox, Color.Gold, $"+{amount} XP");
+                
+                // Debug text showing source if enabled
+                if (debugMode && amount > 0)
+                {
+                    // Display XP source a bit higher so it doesn't overlap with normal XP text
+                    Vector2 position = Player.Hitbox.TopLeft();
+                    position.Y -= 20;
+                    CombatText.NewText(new Rectangle((int)position.X, (int)position.Y, Player.Hitbox.Width, 20), 
+                        Color.Cyan, $"From: {source}");
+                }
             }
 
             while (XP >= XPToNext)
@@ -107,6 +120,12 @@ namespace Stataria
 
                 XP -= XPToNext;
                 LevelUp();
+            }
+            
+            // Sync player data after XP update if in multiplayer
+            if (Main.netMode == NetmodeID.Server)
+            {
+                SyncPlayer(-1, Player.whoAmI, false);
             }
         }
 
@@ -134,7 +153,7 @@ namespace Stataria
             if (target.friendly || target.lifeMax <= 5)
                 return;
             var config = ModContent.GetInstance<StatariaConfig>();
-            GainXP((int)(damageDone * config.DamageXP));
+            GainXP((int)(damageDone * config.DamageXP), "Melee");
         }
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
@@ -142,7 +161,7 @@ namespace Stataria
             if (target.friendly || target.lifeMax <= 5 || proj.owner != Player.whoAmI)
                 return;
             var config = ModContent.GetInstance<StatariaConfig>();
-            GainXP((int)(damageDone * config.DamageXP));
+            GainXP((int)(damageDone * config.DamageXP), "Proj");
         }
         public override void ModifyLuck(ref float luck)
         {
@@ -372,7 +391,7 @@ namespace Stataria
             return 1f + (effectiveAGI * 0.01f);
         }
 
-        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+       public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             var packet = ModContent.GetInstance<Stataria>().GetPacket();
             packet.Write((byte)StatariaMessageType.SyncPlayer);
@@ -390,6 +409,14 @@ namespace Stataria
             packet.Write(POW);
             packet.Write(DEX);
             packet.Write(SPR);
+            
+            // Add this code to sync rewardedBosses
+            packet.Write(rewardedBosses.Count);
+            foreach (int bossId in rewardedBosses)
+            {
+                packet.Write(bossId);
+            }
+            
             packet.Send(toWho, fromWho);
         }
     }
