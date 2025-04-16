@@ -270,10 +270,14 @@ Configs: {
 			Tooltip: Enables a custom HP regeneration system based on VIT. Ignores vanilla life regen and heals directly over time.
 			Label: Use Custom Hp Regen
 		}
+		ShowXPBarAbovePlayer: {
+			Label: Show XP Bar Above Player
+			Tooltip: Toggles the floating XP bar that appears above your character when gaining XP.
+		}
 	}
 }
 
 Keybinds: {
-	"AGI Teleport.DisplayName": AGI  Teleport
+	"AGI Teleport.DisplayName": Teleport
 	"Toggle Stat Panel.DisplayName": Toggle Stat Panel
 }
