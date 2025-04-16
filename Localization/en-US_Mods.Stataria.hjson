@@ -255,6 +255,21 @@ Configs: {
 		}
 
 		DisplayName: Stataria Config
+
+		CustomHpRegenDelay: {
+			Tooltip: Delay (in frames) before custom regen starts after taking damage. 60 frames = 1 second.
+			Label: Custom Hp Regen Delay
+		}
+
+		CustomHpRegenPerVIT: {
+			Tooltip: How much HP per second each point of VIT restores. For example, 0.5 means 10 VIT = 5 HP/sec.
+			Label: Custom Hp Regen Per VIT
+		}
+
+		UseCustomHpRegen: {
+			Tooltip: Enables a custom HP regeneration system based on VIT. Ignores vanilla life regen and heals directly over time.
+			Label: Use Custom Hp Regen
+		}
 	}
 }
 

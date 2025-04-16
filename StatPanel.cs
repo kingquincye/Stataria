@@ -279,8 +279,20 @@ namespace Stataria
             switch (statIndex)
             {
                 case 0: // VIT
+                    string regenText;
+                    if (config.UseCustomHpRegen)
+                    {
+                        float totalRegen = rpg.VIT * config.CustomHpRegenPerVIT;
+                        float delaySec = config.CustomHpRegenDelay / 60f;
+                        regenText = $"+{totalRegen:0.##} HP/sec (after {delaySec:0.#}s)";
+                    }
+                    else
+                    {
+                        regenText = $"+{rpg.VIT / 2f:0.##} HP Regen (vanilla)";
+                    }
+
                     return $"+{config.VIT_HP} Max Health per point\n" +
-                        $"+{rpg.VIT / 2f:0.##} Health Regen\n" +
+                        regenText + "\n" +
                         $"Breath depletes {100f - (100f / (1f + rpg.VIT * 0.04f)):0.##}% slower";
 
                 case 1: // STR
@@ -289,12 +301,18 @@ namespace Stataria
                         $"+{config.STR_ArmorPen} Melee Armor Penetration per point";
 
                 case 2: // AGI
+                    string teleportKeyName = "Unknown";
+                    if (StatariaKeybinds.TeleportKey != null && StatariaKeybinds.TeleportKey.GetAssignedKeys().Count > 0)
+                    {
+                        teleportKeyName = StatariaKeybinds.TeleportKey.GetAssignedKeys()[0];
+                    }
+                    
                     return $"+{config.AGI_MoveSpeed}% Movement Speed\n" +
-                        $"+{config.AGI_AttackSpeed}% Attack Speed (All Weapons)\n" +
+                        $"+{config.AGI_AttackSpeed}% Attack Speed\n" +
                         $"Dash at {config.AGI_DashUnlockAt} AGI\n" +
                         $"Water Freedom at {config.AGI_SwimUnlockAt} AGI\n" +
                         $"No Fall Damage at {config.AGI_NoFallDamageUnlockAt} AGI\n" +
-                        $"Teleport (G Key) at {config.AGI_TeleportUnlockAt} AGI\n" +
+                        $"Teleport ({teleportKeyName} Key) at {config.AGI_TeleportUnlockAt} AGI\n" +
                         $"+{config.AGI_JumpSpeed * 100}% Jump Speed\n" +
                         $"+{config.AGI_WingTime} Wing Flight Time";
 
@@ -321,8 +339,8 @@ namespace Stataria
                         $"+{config.END_Aggro} Aggro";
 
                 case 6: // POW
-                    return $"+{config.POW_Damage}% Damage (Modded Weapons)\n" +
-                        $"+0.1% Damage (Vanilla Weapons)";
+                    return $"+{config.POW_Damage}% All Damages (Not Covered By Other Stats)\n" +
+                        $"+0.1% Fixed Damage (Melee, Ranged, Summon, Magic)";
 
                 case 7: // DEX
                     return $"+{config.DEX_Damage}% Ranged Damage\n" +

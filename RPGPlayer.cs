@@ -14,7 +14,7 @@ namespace Stataria
 {
     public class RPGPlayer : ModPlayer
     {
-        public bool debugMode = true; // Toggle this to enable/disable XP source display
+        public bool debugMode = false; // Toggle this to enable/disable XP source display
         public int xpBarTimer = 0;
         private const int xpBarDuration = 120;
         public int levelCapMessageTimer = 0;
@@ -26,6 +26,8 @@ namespace Stataria
         public int XP = 0;
         public int XPToNext = 100;
         public int StatPoints = 0;
+        private int customRegenDelayTimer = 0;
+        private float regenCarryover = 0f; // For fractional regen
 
         public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0;
 
@@ -94,10 +96,9 @@ namespace Stataria
                 // Normal XP text
                 CombatText.NewText(Player.Hitbox, Color.Gold, $"+{amount} XP");
                 
-                // Debug text showing source if enabled
+                // Only show source if debug mode is enabled
                 if (debugMode && amount > 0)
                 {
-                    // Display XP source a bit higher so it doesn't overlap with normal XP text
                     Vector2 position = Player.Hitbox.TopLeft();
                     position.Y -= 20;
                     CombatText.NewText(new Rectangle((int)position.X, (int)position.Y, Player.Hitbox.Width, 20), 
@@ -242,13 +243,40 @@ namespace Stataria
 
         public override void PostUpdate()
         {
+            var config = ModContent.GetInstance<StatariaConfig>();            
+            
             if (xpBarTimer > 0)
                 xpBarTimer--;
             
             if (levelCapMessageTimer > 0)
                 levelCapMessageTimer--;
 
-            Player.lifeRegen += VIT / 2;
+            if (config.UseCustomHpRegen)
+            {
+                if (customRegenDelayTimer > 0)
+                    customRegenDelayTimer--;
+                else if (Player.statLife < Player.statLifeMax2 && !Player.dead)
+                {
+                    float hpPerSecond = VIT * config.CustomHpRegenPerVIT;
+                    regenCarryover += hpPerSecond / 60f;
+
+                    if (regenCarryover >= 1f)
+                    {
+                        int healAmount = (int)regenCarryover;
+                        regenCarryover -= healAmount;
+                        Player.statLife += healAmount;
+                        if (Player.statLife > Player.statLifeMax2)
+                            Player.statLife = Player.statLifeMax2;
+
+                        if (Main.netMode != NetmodeID.SinglePlayer)
+                            Player.HealEffect(healAmount, true); // show healing effect for multiplayer
+                    }
+                }
+            }
+            else
+            {
+                Player.lifeRegen += VIT / 2;
+            }
             Player.manaRegenBonus += INT / 2;
 
             if (Player.wet && Player.breathCD > 0)
@@ -265,8 +293,6 @@ namespace Stataria
             {
                 breathDepletionCounter = 0f; // Reset when not underwater
             }
-
-            var config = ModContent.GetInstance<StatariaConfig>();
 
             if (teleportCooldownTimer > 0)
                 teleportCooldownTimer--;
@@ -311,6 +337,8 @@ namespace Stataria
         public override void OnHurt(Player.HurtInfo info)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
+
+            customRegenDelayTimer = ModContent.GetInstance<StatariaConfig>().CustomHpRegenDelay;
 
             if (!config.EnableEnemyKnockback)
                 return;

@@ -13,7 +13,6 @@ namespace Stataria
         [DefaultValue(false)] public bool BonusBossXPIsUnique;
         [DefaultValue(false)] public bool UseFlatBossXP;
         [Range(0, 50000000)][DefaultValue(5000)] public int DefaultFlatBossXP;
-        [DefaultValue(false)] public bool EnableAbsentPlayerCompensation;
         [DefaultValue(false)] public bool EnableLevelCap;
         [Range(1, 100000000)][DefaultValue(50)] public int LevelCapValue;
 
@@ -26,6 +25,9 @@ namespace Stataria
         // ───────────────────────────────────────────────
         [Header("VIT_Settings")]
         [DefaultValue(5)] public int VIT_HP;
+        [DefaultValue(false)] public bool UseCustomHpRegen;
+        [Range(0f, 10f)][DefaultValue(0.5f)] public float CustomHpRegenPerVIT;
+        [Range(0, 300)][DefaultValue(180)] public int CustomHpRegenDelay; // frames (2 seconds default)
         //[DefaultValue(1)] public int VIT_Breath; // Seconds per point
 
         // ───────────────────────────────────────────────
