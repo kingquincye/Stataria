@@ -20,6 +20,7 @@ Assign points across 9 unique stats:
   Unlocks Abilities
   [list]
     [*] Dash
+    [*] Auto-Jump
     [*] Swimming
     [*] Fall Damage immunity
     [*] Teleportation (SET A KEYBIND!!!)

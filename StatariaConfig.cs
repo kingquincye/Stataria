@@ -8,6 +8,10 @@ namespace Stataria
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         // ───────────────────────────────────────────────
+        [Header("UI_Settings")]
+        [DefaultValue(true)] public bool ShowXPBarAbovePlayer;
+
+        // ───────────────────────────────────────────────
         [Header("General_Balance")]
         [DefaultValue(true)] public bool EnableBossHPXP;
         [DefaultValue(false)] public bool BonusBossXPIsUnique;
