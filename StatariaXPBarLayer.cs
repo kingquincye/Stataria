@@ -17,8 +17,9 @@ namespace Stataria
                 return;
             Player player = drawInfo.drawPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
+            var config = ModContent.GetInstance<StatariaConfig>();
 
-            if (rpg.xpBarTimer <= 0)
+            if (rpg.xpBarTimer <= 0 || !config.ShowXPBarAbovePlayer)
                 return;
 
             Vector2 pos = player.MountedCenter - Main.screenPosition;

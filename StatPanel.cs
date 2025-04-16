@@ -310,6 +310,7 @@ namespace Stataria
                     return $"+{config.AGI_MoveSpeed}% Movement Speed\n" +
                         $"+{config.AGI_AttackSpeed}% Attack Speed\n" +
                         $"Dash at {config.AGI_DashUnlockAt} AGI\n" +
+                        $"Auto-Jump at {config.AGI_JumpUnlockAt} AGI\n" +
                         $"Water Freedom at {config.AGI_SwimUnlockAt} AGI\n" +
                         $"No Fall Damage at {config.AGI_NoFallDamageUnlockAt} AGI\n" +
                         $"Teleport ({teleportKeyName} Key) at {config.AGI_TeleportUnlockAt} AGI\n" +
@@ -344,6 +345,7 @@ namespace Stataria
 
                 case 7: // DEX
                     return $"+{config.DEX_Damage}% Ranged Damage\n" +
+                        $"+1% Chance To No Consume Ammo\n" +
                         $"-{config.DEX_MiningSpeed}% Mining Time\n" +
                         $"+{config.DEX_BuildSpeed}% Placement Speed\n" +
                         $"+{config.DEX_Range} Block Reach";
