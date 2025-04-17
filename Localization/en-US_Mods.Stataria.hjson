@@ -322,11 +322,15 @@ Configs: {
 			Label: XP Proximity Range
 			Tooltip: The maximum distance (in pixels) a player can be from an enemy to gain XP from its defeat.
 		}
+
+		VIT_WaterBreathingUnlockAt: {
+			Label: Water Breathing Unlock At
+			Tooltip: Gain gills effect at this VIT amount.
+		}
 	}
 }
 
 Keybinds: {
-	"AGI Teleport.DisplayName": Teleport
 	"AGI Teleport.DisplayName": Teleport
 	"Toggle Stat Panel.DisplayName": Toggle Stat Panel
 }

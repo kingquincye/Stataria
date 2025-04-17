@@ -297,7 +297,7 @@ namespace Stataria
 
                     return $"+{config.VIT_HP} Max Health per point\n" +
                         regenText + "\n" +
-                        $"Breath depletes {100f - (100f / (1f + rpg.VIT * 0.04f)):0.##}% slower";
+                        $"Water Breathing at {config.VIT_WaterBreathingUnlockAt} VIT";
 
                 case 1: // STR
                     return $"+{config.STR_Damage}% Melee Damage per point\n" +

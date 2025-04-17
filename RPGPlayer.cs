@@ -18,10 +18,8 @@ namespace Stataria
         public int xpBarTimer = 0;
         private const int xpBarDuration = 120;
         public int levelCapMessageTimer = 0;
-        private const int levelCapMessageCooldown = 1800; // 2 seconds
+        private const int levelCapMessageCooldown = 1800; // 3 seconds
         public int teleportCooldownTimer = 0;
-        public float breathDepletionCounter;
-        private float breathMultiplier = 1f;
         public int Level = 1;
         public int XP = 0;
         public int XPToNext = 100;
@@ -184,8 +182,8 @@ namespace Stataria
 
             // --- VIT ---
             Player.statLifeMax2 += VIT * config.VIT_HP;
-            //Player.breathMax += VIT * config.VIT_Breath;
-            breathMultiplier = 1f / (1f + VIT * 0.04f);
+            if (VIT >= config.VIT_WaterBreathingUnlockAt)
+                Player.gills = true;
 
             // --- STR ---
             Player.GetArmorPenetration(DamageClass.Melee) += STR * config.STR_ArmorPen;
@@ -296,22 +294,8 @@ namespace Stataria
             {
                 Player.lifeRegen += VIT / 2;
             }
+            
             Player.manaRegenBonus += INT / 2;
-
-            if (Player.wet && Player.breathCD > 0)
-            {
-                breathDepletionCounter += breathMultiplier;
-                if (breathDepletionCounter >= 1f)
-                {
-                    int actualLoss = (int)breathDepletionCounter;
-                    Player.breathCD -= actualLoss;
-                    breathDepletionCounter -= actualLoss;
-                }
-            }
-            else
-            {
-                breathDepletionCounter = 0f; // Reset when not underwater
-            }
 
             if (teleportCooldownTimer > 0)
                 teleportCooldownTimer--;

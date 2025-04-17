@@ -40,7 +40,7 @@ namespace Stataria
         [DefaultValue(false)] public bool UseCustomHpRegen;
         [Range(0f, 10f)][DefaultValue(0.5f)] public float CustomHpRegenPerVIT;
         [Range(0, 600)][DefaultValue(180)] public int CustomHpRegenDelay; // frames (3 seconds default)
-        //[DefaultValue(1)] public int VIT_Breath; // Seconds per point
+        [DefaultValue(25)] public int VIT_WaterBreathingUnlockAt;
 
         // ───────────────────────────────────────────────
         [Header("STR_Settings")]
