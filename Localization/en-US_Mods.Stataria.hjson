@@ -327,5 +327,6 @@ Configs: {
 
 Keybinds: {
 	"AGI Teleport.DisplayName": Teleport
+	"AGI Teleport.DisplayName": Teleport
 	"Toggle Stat Panel.DisplayName": Toggle Stat Panel
 }
