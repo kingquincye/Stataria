@@ -22,16 +22,24 @@ namespace Stataria
 
         // ───────────────────────────────────────────────
         [Header("XP_Multipliers")]
+        [SliderColor(255, 200, 0)]
         [Range(0f, 10f)][DefaultValue(0.25f)] public float DamageXP;
+        [SliderColor(255, 200, 0)]
         [Range(0f, 10f)][DefaultValue(0.5f)] public float KillXP;
         [Range(0, 1000)][DefaultValue(25)] public int BossXP;
 
         // ───────────────────────────────────────────────
+        [Header("Multiplayer_Settings")]
+        [DefaultValue(false)] public bool SplitKillXP;
+        [DefaultValue(true)] public bool EnableXPProximity;
+        [Range(0, 10000)][DefaultValue(1000)] public int XPProximityRange; // Distance in pixels
+
+        // ───────────────────────────────────────────────
         [Header("VIT_Settings")]
-        [DefaultValue(5)] public int VIT_HP;
+        [Range(0, 1000)][DefaultValue(5)] public int VIT_HP;
         [DefaultValue(false)] public bool UseCustomHpRegen;
         [Range(0f, 10f)][DefaultValue(0.5f)] public float CustomHpRegenPerVIT;
-        [Range(0, 300)][DefaultValue(180)] public int CustomHpRegenDelay; // frames (2 seconds default)
+        [Range(0, 600)][DefaultValue(180)] public int CustomHpRegenDelay; // frames (3 seconds default)
         //[DefaultValue(1)] public int VIT_Breath; // Seconds per point
 
         // ───────────────────────────────────────────────
@@ -58,7 +66,7 @@ namespace Stataria
         // ───────────────────────────────────────────────
         [Header("INT_Settings")]
         [DefaultValue(1)] public int INT_Damage;
-        [DefaultValue(5)] public int INT_MP;
+        [Range(0, 1000)][DefaultValue(5)] public int INT_MP;
         //[DefaultValue(1)] public int INT_ManaRegen;
         [DefaultValue(2)] public int INT_ManaCostReduction;
         [DefaultValue(1)] public int INT_ArmorPen;
@@ -67,8 +75,10 @@ namespace Stataria
         [Header("LUC_Settings")]
         [DefaultValue(1)] public int LUC_Crit; // Now int instead of float
         [DefaultValue(1)] public int LUC_Fishing;
+        [DefaultValue(false)] public bool LUC_EnableFishing;
         [DefaultValue(10)] public int LUC_AggroReduction;
         [Range(-1f, 1f)][DefaultValue(0.02f)] public float LUC_LuckBonus;
+        [DefaultValue(false)] public bool LUC_EnableLuckBonus;
 
         // ───────────────────────────────────────────────
         [Header("END_Settings")]
@@ -88,9 +98,13 @@ namespace Stataria
         // ───────────────────────────────────────────────
         [Header("DEX_Settings")]
         [DefaultValue(1)] public int DEX_Damage;
+        [DefaultValue(1)] public int DEX_ArmorPen;
         [DefaultValue(1)] public int DEX_MiningSpeed;
+        [DefaultValue(false)] public bool DEX_EnableMiningSpeed;
         [DefaultValue(1)] public int DEX_BuildSpeed;
+        [DefaultValue(false)] public bool DEX_EnableBuildSpeed;
         [DefaultValue(1)] public int DEX_Range;
+        [DefaultValue(false)] public bool DEX_EnableRange;
 
         // ───────────────────────────────────────────────
         [Header("SPR_Settings")]

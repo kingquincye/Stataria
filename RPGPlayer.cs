@@ -30,7 +30,6 @@ namespace Stataria
         private float regenCarryover = 0f; // For fractional regen
 
         public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0;
-
         public HashSet<int> rewardedBosses = new();
 
         public override void Initialize()
@@ -153,7 +152,9 @@ namespace Stataria
         {
             if (target.friendly || target.lifeMax <= 5)
                 return;
+            
             var config = ModContent.GetInstance<StatariaConfig>();
+            
             GainXP((int)(damageDone * config.DamageXP), "Melee");
         }
 
@@ -161,13 +162,19 @@ namespace Stataria
         {
             if (target.friendly || target.lifeMax <= 5 || proj.owner != Player.whoAmI)
                 return;
+            
             var config = ModContent.GetInstance<StatariaConfig>();
+            
             GainXP((int)(damageDone * config.DamageXP), "Proj");
         }
+        
         public override void ModifyLuck(ref float luck)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
-            luck += LUC * config.LUC_LuckBonus;
+            
+            if (config.LUC_EnableLuckBonus)
+                luck += LUC * config.LUC_LuckBonus;
+                
             luck = Math.Clamp(luck, -0.7f, 1f); 
         }
 
@@ -218,7 +225,9 @@ namespace Stataria
                 Player.dashType = 2;
 
             // --- LUC ---
-            Player.fishingSkill += LUC * config.LUC_Fishing;
+            if (config.LUC_EnableFishing)
+                Player.fishingSkill += LUC * config.LUC_Fishing;
+                
             Player.aggro -= LUC * config.LUC_AggroReduction;
             //Player.luck += LUC * config.LUC_LuckBonus;
 
@@ -229,10 +238,20 @@ namespace Stataria
             //Player.minionAttackSpeed += SPR * config.SPR_AttackSpeed / 100f;
 
             // --- DEX ---
-            Player.pickSpeed -= DEX * config.DEX_MiningSpeed * 0.01f;
-            Player.tileSpeed += DEX * config.DEX_BuildSpeed;
-            Player.tileRangeX += DEX * config.DEX_Range;
-            Player.tileRangeY += DEX * config.DEX_Range;
+            if (config.DEX_EnableMiningSpeed)
+                Player.pickSpeed -= DEX * config.DEX_MiningSpeed * 0.01f;
+                
+            if (config.DEX_EnableBuildSpeed)
+                Player.tileSpeed += DEX * config.DEX_BuildSpeed;
+                
+            if (config.DEX_EnableRange)
+            {
+                Player.tileRangeX += DEX * config.DEX_Range;
+                Player.tileRangeY += DEX * config.DEX_Range;
+            }
+            
+            // New: Ranged Armor Penetration
+            Player.GetArmorPenetration(DamageClass.Ranged) += DEX * config.DEX_ArmorPen;
         }
 
         public override void PostUpdateEquips()

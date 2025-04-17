@@ -1,5 +1,7 @@
 Stataria adds a full RPG stat and leveling system to Terraria!
 
+DEFAULT KEYBIND: K
+
 Gain XP by:
 
     Dealing damage
@@ -40,13 +42,12 @@ Assign stat points across 9 unique stats to build your character:
 
     SPR: Increases Summon Damage and adds Minion and Sentry slots (1 minion per 10 SPR, 1 sentry per 20 SPR)
 
-An XP bar appears above your character when gaining XP (may be hard to notice if gaining XP rapidly).
 The UI panel is clean, draggable, and includes a reset stats button. Each stat has a dynamic tooltip that updates with your current values.
 
 Most features and stat scaling values are fully configurable in the mod config.
 You can make Stataria as balanced or as broken as you want!
 
-Multiplayer is not fully tested, so if you run into issues, please report them.
+Multiplayer is not fully tested (sometimes there are syncing problems, sometimes rejoining the server fixes them), so if you run into issues, please report them.
 
 Don't forget to bind a key to open the Stat Panel under Controls > Keybindings.
 

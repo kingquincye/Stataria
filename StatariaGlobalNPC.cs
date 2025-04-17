@@ -2,6 +2,8 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace Stataria
 {
@@ -17,8 +19,46 @@ namespace Stataria
             if (npc.boss)
                 StatariaSystem.killedBossesGlobal.Add(npc.type);
 
+            // Get all active players
+            var activePlayers = Main.player.Where(p => p != null && p.active && !p.dead).ToList();
+            
+            // If no active players, no XP to distribute
+            if (activePlayers.Count == 0)
+                return;
+            
+            // Filter players by proximity if enabled
+            List<Player> eligiblePlayers = new List<Player>();
+            if (config.EnableXPProximity)
+            {
+                foreach (var p in activePlayers)
+                {
+                    if (p is null || !p.active || p.dead) continue;
+                    
+                    float distance = Vector2.Distance(npc.Center, p.Center);
+                    if (distance <= config.XPProximityRange)
+                    {
+                        eligiblePlayers.Add(p);
+                    }
+                }
+            }
+            else
+            {
+                eligiblePlayers = activePlayers;
+            }
+            
+            // If no eligible players (all too far), no XP to distribute
+            if (eligiblePlayers.Count == 0)
+                return;
+            
+            // Calculate split multiplier for XP if enabled
+            float splitMultiplier = 1f;
+            if (config.SplitKillXP && eligiblePlayers.Count > 0)
+            {
+                splitMultiplier = 1f / eligiblePlayers.Count;
+            }
+            
             // For server or single player only
-            foreach (Player p in Main.player)
+            foreach (Player p in eligiblePlayers)
             {
                 if (p is null || !p.active || p.dead) continue;
                 var rpg = p.GetModPlayer<RPGPlayer>();
@@ -31,6 +71,12 @@ namespace Stataria
                     {
                         // Always give HP XP when enabled
                         int hpXP = (int)(npc.lifeMax * config.KillXP);
+                        
+                        // Apply split scaling if enabled
+                        if (config.SplitKillXP)
+                        {
+                            hpXP = (int)(hpXP * splitMultiplier);
+                        }
                         
                         if (Main.netMode == NetmodeID.SinglePlayer)
                         {
@@ -49,6 +95,12 @@ namespace Stataria
                         if (!hasKilledBefore)
                         {
                             int hpXP = (int)(npc.lifeMax * config.KillXP);
+                            
+                            // Apply split scaling if enabled
+                            if (config.SplitKillXP)
+                            {
+                                hpXP = (int)(hpXP * splitMultiplier);
+                            }
                             
                             if (Main.netMode == NetmodeID.SinglePlayer)
                             {
@@ -71,6 +123,12 @@ namespace Stataria
                             ? config.DefaultFlatBossXP
                             : (int)(rpg.XPToNext * config.BossXP / 100f);
                         
+                        // Apply split scaling if enabled
+                        if (config.SplitKillXP)
+                        {
+                            bonusXP = (int)(bonusXP * splitMultiplier);
+                        }
+                        
                         if (Main.netMode == NetmodeID.SinglePlayer)
                         {
                             rpg.GainXP(bonusXP, "Boss Bonus");
@@ -92,6 +150,12 @@ namespace Stataria
                 if (!npc.boss)
                 {
                     int killXP = (int)(npc.lifeMax * config.KillXP);
+                    
+                    // Apply split scaling if enabled
+                    if (config.SplitKillXP)
+                    {
+                        killXP = (int)(killXP * splitMultiplier);
+                    }
                     
                     if (Main.netMode == NetmodeID.SinglePlayer)
                     {

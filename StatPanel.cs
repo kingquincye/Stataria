@@ -70,6 +70,8 @@ namespace Stataria
             levelText.Top.Set(top, 0f);
             levelText.Left.Set(10f, 0f);
             panel.Append(levelText);
+            levelText.OnMouseOver += (evt, el) => ShowTooltip(GetXPSystemTooltip());
+            levelText.OnMouseOut += (evt, el) => HideTooltip();
 
             // Stat points label
             statPointsText = new UIText("Points: 0");
@@ -84,6 +86,8 @@ namespace Stataria
             xpText.Top.Set(top, 0f);
             xpText.Left.Set(10f, 0f);
             panel.Append(xpText);
+            xpText.OnMouseOver += (evt, el) => ShowTooltip(GetXPSystemTooltip());
+            xpText.OnMouseOut += (evt, el) => HideTooltip();
 
             top += 40f;
 
@@ -326,9 +330,12 @@ namespace Stataria
                         $"+{config.INT_ArmorPen} Magic Armor Penetration";
 
                 case 4: // LUC
+                    string luckText = config.LUC_EnableLuckBonus ? $"+{config.LUC_LuckBonus * 100}% Luck\n" : "";
+                    string fishingText = config.LUC_EnableFishing ? $"+{config.LUC_Fishing} Fishing Power\n" : "";
+                    
                     return $"+{config.LUC_Crit}% Critical Chance\n" +
-                        $"+{config.LUC_LuckBonus * 100}% Luck\n" +
-                        $"+{config.LUC_Fishing} Fishing Power\n" +
+                        luckText +
+                        fishingText +
                         $"-{config.LUC_AggroReduction} Aggro";
 
                 case 5: // END
@@ -344,11 +351,16 @@ namespace Stataria
                         $"+0.1% Fixed Damage (Melee, Ranged, Summon, Magic)";
 
                 case 7: // DEX
+                    string miningText = config.DEX_EnableMiningSpeed ? $"-{config.DEX_MiningSpeed}% Mining Time\n" : "";
+                    string buildText = config.DEX_EnableBuildSpeed ? $"+{config.DEX_BuildSpeed}% Placement Speed\n" : "";
+                    string rangeText = config.DEX_EnableRange ? $"+{config.DEX_Range} Block Reach\n" : "";
+                    
                     return $"+{config.DEX_Damage}% Ranged Damage\n" +
+                        $"+{config.DEX_ArmorPen} Ranged Armor Penetration\n" +
                         $"+1% Chance To No Consume Ammo\n" +
-                        $"-{config.DEX_MiningSpeed}% Mining Time\n" +
-                        $"+{config.DEX_BuildSpeed}% Placement Speed\n" +
-                        $"+{config.DEX_Range} Block Reach";
+                        miningText +
+                        buildText +
+                        rangeText;
 
                 case 8: // SPR
                     return $"+{config.SPR_Damage}% Summon Damage\n" +
@@ -357,6 +369,28 @@ namespace Stataria
 
                 default: return "";
             }
+        }
+
+        private string GetXPSystemTooltip()
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            string tooltip = "XP System Info:\n";
+            
+            tooltip += $"Damage XP: {config.DamageXP:0.##}x damage dealt\n";
+            tooltip += $"Kill XP: {config.KillXP:0.##}x enemy max health\n";
+            tooltip += $"Boss XP: ";
+            if (config.UseFlatBossXP)
+                tooltip += $"{config.DefaultFlatBossXP} flat XP\n";
+            else
+                tooltip += $"{config.BossXP}% of next level\n";
+            
+            if (config.SplitKillXP)
+                tooltip += "XP is split evenly among all eligible players\n";
+            
+            if (config.EnableXPProximity)
+                tooltip += $"Players must be within {config.XPProximityRange} pixels of enemies to get XP";
+            
+            return tooltip;
         }
 
         // Helper: Wrap a string to fit a maximum pixel width using the MouseText font.

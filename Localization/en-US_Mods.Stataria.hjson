@@ -12,6 +12,8 @@ Configs: {
 			POW_Settings: POW Settings
 			DEX_Settings: DEX Settings
 			SPR_Settings: SPR Settings
+			UI_Settings: UI Settings
+			Multiplayer_Settings: Multiplayer Settings
 		}
 
 		SPR_SentriesPerX: {
@@ -270,10 +272,60 @@ Configs: {
 			Tooltip: Enables a custom HP regeneration system based on VIT. Ignores vanilla life regen and heals directly over time.
 			Label: Use Custom Hp Regen
 		}
+
+		ShowXPBarAbovePlayer: {
+			Label: Show XP Bar Above Player
+			Tooltip: Toggles the floating XP bar that appears above your character when gaining XP.
+		}
+
+		SplitKillXP: {
+			Label: Split Kill XP
+			Tooltip: "When enabled, XP from kills is divided among all players."
+		}
+
+		LUC_EnableFishing: {
+			Label: Enable Fishing
+			Tooltip: "When enabled, LUC increases fishing power by a fixed amount per point."
+		}
+
+		LUC_EnableLuckBonus: {
+			Label: Enable Luck Bonus
+			Tooltip: "When enabled, LUC increases vanilla Luck stat."
+		}
+
+		DEX_ArmorPen: {
+			Label: Armor Pen
+			Tooltip: "Each point of DEX adds flat armor penetration to ranged attacks."
+		}
+
+		DEX_EnableMiningSpeed: {
+			Label: Enable Mining Speed
+			Tooltip: "When enabled, DEX reduces mining time, increasing pickaxe speed."
+		}
+
+		DEX_EnableBuildSpeed: {
+			Label: Enable Build Speed
+			Tooltip: "When enabled, DEX increases block placement speed."
+		}
+
+		DEX_EnableRange: {
+			Label: Enable Range
+			Tooltip: "When enabled, DEX increases tile reach for placing and mining blocks."
+		}
+
+		EnableXPProximity: {
+			Label: Enable XP Proximity
+			Tooltip: "When enabled, only players within a certain range receive XP from kills."
+		}
+
+		XPProximityRange: {
+			Label: XP Proximity Range
+			Tooltip: "The maximum distance (in pixels) a player can be from an enemy to gain XP from its defeat."
+		}
 	}
 }
 
 Keybinds: {
-	"AGI Teleport.DisplayName": AGI  Teleport
+	"AGI Teleport.DisplayName": Teleport
 	"Toggle Stat Panel.DisplayName": Toggle Stat Panel
 }

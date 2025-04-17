@@ -4,6 +4,8 @@ Stataria brings a stat-based leveling and character building to Terraria.
 
 [i]Psst, hey, want a sword that you can use with this mod? Check out my XP Blade mod![/i]
 
+[b][u] DEFAULT KEYBIND: K [/u][/b]
+
 Gain XP by:
 [list]
   [*] Dealing damage
@@ -33,13 +35,11 @@ Assign points across 9 unique stats:
 [*][b]SPR[/b]: Increases Summon Damage plus Minion and Sentry slots
 [/list]
 
-An XP bar pops up above your character when gaining XP (won't be noticable though when gaining a lot of XP... but it's there...)
-
 Simple stat panel UI (clean, draggable, has a reset stats button, and now has dynamically updating tooltips for each stat)
   
-[b] Most things are configurable in the mods config so go crazy. You can make this as balanced as you want!
+[b] Most things are configurable in the mods config so go crazy. You can make this as balanced as you want! [/b]
 
-[b] Multiplayer is not fully tested, so if anything happens or problems arrise, please let me know![/b]
+[b] Multiplayer is not fully tested (sometimes there are syncing problems, sometimes rejoining server fixes them), so if anything happens or problems arrise, please let me know![/b]
 
 [b] Don’t forget to bind a key to open the Stat Panel under Controls > Keybindings.[/b]
 

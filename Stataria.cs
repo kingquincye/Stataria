@@ -14,7 +14,8 @@ namespace Stataria
     {
         SyncPlayer,
         SyncGlobalBosses,
-        BossXP
+        BossXP,
+        SyncRewardedBosses
     }
 
     public class Stataria : Mod
@@ -32,6 +33,30 @@ namespace Stataria
             packet.Write(source);
             packet.Send();
         }
+        
+        // Add method to sync rewarded bosses specifically
+        public static void SyncRewardedBosses(int playerIndex, int toWho = -1, int fromWho = -1)
+        {
+            if (Main.netMode != NetmodeID.Server || playerIndex < 0 || playerIndex >= Main.maxPlayers)
+                return;
+                
+            Player player = Main.player[playerIndex];
+            if (player == null || !player.active)
+                return;
+                
+            var rpg = player.GetModPlayer<RPGPlayer>();
+            
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
+            packet.Write((byte)StatariaMessageType.SyncRewardedBosses);
+            packet.Write(playerIndex);
+            packet.Write(rpg.rewardedBosses.Count);
+            foreach (int bossId in rpg.rewardedBosses)
+            {
+                packet.Write(bossId);
+            }
+            packet.Send(toWho, fromWho);
+        }
+        
         // This method handles incoming packets.
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
@@ -42,6 +67,7 @@ namespace Stataria
                 int playerIndex = reader.ReadInt32();
                 if (playerIndex < 0 || playerIndex >= Main.maxPlayers)
                     return;
+                    
                 RPGPlayer rpg = Main.player[playerIndex].GetModPlayer<RPGPlayer>();
                 rpg.Level = reader.ReadInt32();
                 rpg.XP = reader.ReadInt32();
@@ -87,8 +113,31 @@ namespace Stataria
                     var rpg = Main.player[playerIndex].GetModPlayer<RPGPlayer>();
                     rpg.GainXP(xpAmount, source);
                     
-                    // Also track boss as rewarded if needed
-                    rpg.rewardedBosses.Add(bossType);
+                    // Track boss as rewarded only if this message is coming from a boss XP
+                    if (source.Contains("Boss") && !rpg.rewardedBosses.Contains(bossType))
+                    {
+                        rpg.rewardedBosses.Add(bossType);
+                        
+                        // If in multiplayer server, make sure this gets synced to all clients
+                        if (Main.netMode == NetmodeID.Server)
+                        {
+                            SyncRewardedBosses(playerIndex);
+                        }
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncRewardedBosses)
+            {
+                int playerIndex = reader.ReadInt32();
+                if (playerIndex < 0 || playerIndex >= Main.maxPlayers)
+                    return;
+                    
+                var rpg = Main.player[playerIndex].GetModPlayer<RPGPlayer>();
+                int bossCount = reader.ReadInt32();
+                rpg.rewardedBosses.Clear();
+                for (int i = 0; i < bossCount; i++)
+                {
+                    rpg.rewardedBosses.Add(reader.ReadInt32());
                 }
             }
         }
