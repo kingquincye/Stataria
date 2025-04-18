@@ -327,6 +327,26 @@ Configs: {
 			Label: Water Breathing Unlock At
 			Tooltip: Gain gills effect at this VIT amount.
 		}
+
+		ShowBossXPPopups: {
+			Tooltip: When XP gain popups is enabled, this shows the bonus XP from bosses if enabled.
+			Label: Show Boss Bonus XP Popups
+		}
+
+		ShowKillXPPopups: {
+			Tooltip: When XP gain popups is enabled, this shows the kill XP popup if enabled.
+			Label: Show Kill XP Popups
+		}
+
+		ShowDamageXPPopups: {
+			Tooltip: When XP gain popups is enabled, this shows the damage XP popup if enabled.
+			Label: Show Damage XP Popups
+		}
+
+		ShowXPGainPopups: {
+			Tooltip: Enables whether you see the XP gain popups or not. If disabled, nothing will be shown at all.
+			Label: Show XP Gain Popups
+		}
 	}
 }
 

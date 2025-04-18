@@ -16,7 +16,7 @@ Gain XP by:
 Level up and earn [b]1 stat point per level[/b]
 Assign points across 9 unique stats:
 [list]
-[*][b]VIT[/b]: Increases Max Health and Regen, Decreases Breath Loss Rate
+[*][b]VIT[/b]: Increases Max Health and Regen, Unlocks Gills Effect
 [*][b]STR[/b]: Increases Melee Damage, Knockback, and Melee Armor Penetration
 [*][b]AGI[/b]: Increases Movement Speed, Attack Speed, Wing Time, Jump Speed and Jump Height
   Unlocks Abilities
@@ -31,7 +31,7 @@ Assign points across 9 unique stats:
 [*][b]LUC[/b]: Increases Crit Chance, Luck, and Fishing Power, Decreases Enemy Aggro
 [*][b]END[/b]: Increases Defense, Damage Reduction, Knockback Resistance, Enemy Knock Back (except bosses), and Enemy Aggro
 [*][b]POW[/b]: Increases All Damages (but has an extremely small flat increase for Melee, Range, Magic, and Summon damage)
-[*][b]DEX[/b]: Increases Ranged Damage, Chance To Not Consume Ammo, Mining Speed and Range, Block Placement Speed and Range
+[*][b]DEX[/b]: Increases Ranged Damage and Armor Penetration, Chance To Not Consume Ammo, Mining Speed and Range, Block Placement Speed and Range
 [*][b]SPR[/b]: Increases Summon Damage plus Minion and Sentry slots
 [/list]
 

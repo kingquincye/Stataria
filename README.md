@@ -11,7 +11,7 @@ Gain XP by:
 Level up and earn 1 stat point per level.
 Assign stat points across 9 unique stats to build your character:
 
-    VIT: Increases Max Health and HP Regen, and reduces Breath Loss Rate
+    VIT: Increases Max Health and HP Regen, and Unlocks Gills Effect
 
     STR: Increases Melee Damage, Knockback, and Melee Armor Penetration
 
@@ -36,11 +36,10 @@ Assign stat points across 9 unique stats to build your character:
 
     POW: Increases All Damage types and gives a small flat bonus to melee, ranged, magic, and summon damage
 
-    DEX: Increases Ranged Damage, Chance to Not Consume Ammo, Mining Speed and Range, and Block Placement Speed and Range
+    DEX: Increases Ranged Damage and Armor Penetration, Chance to Not Consume Ammo, Mining Speed and Range, and Block Placement Speed and Range
 
     SPR: Increases Summon Damage and adds Minion and Sentry slots (1 minion per 10 SPR, 1 sentry per 20 SPR)
 
-An XP bar appears above your character when gaining XP (may be hard to notice if gaining XP rapidly).
 The UI panel is clean, draggable, and includes a reset stats button. Each stat has a dynamic tooltip that updates with your current values.
 
 Most features and stat scaling values are fully configurable in the mod config.

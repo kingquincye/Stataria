@@ -88,18 +88,56 @@ namespace Stataria
 
             if (Main.netMode != NetmodeID.Server)
             {
+                // Always update the XP bar timer regardless of popup settings
                 xpBarTimer = xpBarDuration;
                 
-                // Normal XP text
-                CombatText.NewText(Player.Hitbox, Color.Gold, $"+{amount} XP");
+                // Check if XP popups are enabled based on source
+                bool showPopup = config.ShowXPGainPopups;
                 
-                // Only show source if debug mode is enabled
-                if (debugMode && amount > 0)
+                // Apply source-specific settings
+                if (source.Contains("Melee") || source.Contains("Proj") || source.Contains("Damage"))
                 {
-                    Vector2 position = Player.Hitbox.TopLeft();
-                    position.Y -= 20;
-                    CombatText.NewText(new Rectangle((int)position.X, (int)position.Y, Player.Hitbox.Width, 20), 
-                        Color.Cyan, $"From: {source}");
+                    // Damage XP - check if we should show it
+                    showPopup = showPopup && config.ShowDamageXPPopups;
+                    
+                    // If damage XP multiplier is set to 0, don't show popup
+                    if (config.DamageXP <= 0)
+                        showPopup = false;
+                }
+                else if (source.Contains("Kill"))
+                {
+                    // Kill XP - check if we should show it
+                    showPopup = showPopup && config.ShowKillXPPopups;
+                    
+                    // If kill XP multiplier is set to 0, don't show popup
+                    if (config.KillXP <= 0)
+                        showPopup = false;
+                }
+                else if (source.Contains("Boss"))
+                {
+                    // Boss XP - check if we should show it
+                    showPopup = showPopup && config.ShowBossXPPopups;
+                    
+                    // If boss XP is set to 0 or if flat boss XP is 0, don't show popup
+                    if ((config.UseFlatBossXP && config.DefaultFlatBossXP <= 0) || 
+                        (!config.UseFlatBossXP && config.BossXP <= 0))
+                        showPopup = false;
+                }
+                
+                // Only show XP popup if enabled and amount is greater than 0
+                if (showPopup && amount > 0)
+                {
+                    // Normal XP text
+                    CombatText.NewText(Player.Hitbox, Color.Gold, $"+{amount} XP");
+                    
+                    // Only show source if debug mode is enabled
+                    if (debugMode)
+                    {
+                        Vector2 position = Player.Hitbox.TopLeft();
+                        position.Y -= 20;
+                        CombatText.NewText(new Rectangle((int)position.X, (int)position.Y, Player.Hitbox.Width, 20), 
+                            Color.Cyan, $"From: {source}");
+                    }
                 }
             }
 

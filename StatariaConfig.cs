@@ -10,6 +10,10 @@ namespace Stataria
         // ───────────────────────────────────────────────
         [Header("UI_Settings")]
         [DefaultValue(true)] public bool ShowXPBarAbovePlayer;
+        [DefaultValue(true)] public bool ShowXPGainPopups;
+        [DefaultValue(true)] public bool ShowDamageXPPopups; 
+        [DefaultValue(true)] public bool ShowKillXPPopups; 
+        [DefaultValue(true)] public bool ShowBossXPPopups; 
 
         // ───────────────────────────────────────────────
         [Header("General_Balance")]
@@ -74,11 +78,11 @@ namespace Stataria
         // ───────────────────────────────────────────────
         [Header("LUC_Settings")]
         [DefaultValue(1)] public int LUC_Crit; // Now int instead of float
-        [DefaultValue(1)] public int LUC_Fishing;
         [DefaultValue(false)] public bool LUC_EnableFishing;
+        [DefaultValue(1)] public int LUC_Fishing;
         [DefaultValue(10)] public int LUC_AggroReduction;
-        [Range(-1f, 1f)][DefaultValue(0.02f)] public float LUC_LuckBonus;
         [DefaultValue(false)] public bool LUC_EnableLuckBonus;
+        [Range(-1f, 1f)][DefaultValue(0.02f)] public float LUC_LuckBonus;
 
         // ───────────────────────────────────────────────
         [Header("END_Settings")]
@@ -99,12 +103,12 @@ namespace Stataria
         [Header("DEX_Settings")]
         [DefaultValue(1)] public int DEX_Damage;
         [DefaultValue(1)] public int DEX_ArmorPen;
-        [DefaultValue(1)] public int DEX_MiningSpeed;
         [DefaultValue(false)] public bool DEX_EnableMiningSpeed;
-        [DefaultValue(1)] public int DEX_BuildSpeed;
+        [DefaultValue(1)] public int DEX_MiningSpeed;
         [DefaultValue(false)] public bool DEX_EnableBuildSpeed;
-        [DefaultValue(1)] public int DEX_Range;
+        [DefaultValue(1)] public int DEX_BuildSpeed;
         [DefaultValue(false)] public bool DEX_EnableRange;
+        [DefaultValue(1)] public int DEX_Range;
 
         // ───────────────────────────────────────────────
         [Header("SPR_Settings")]
