@@ -1,0 +1,12 @@
+displayName = Stataria
+name = Stataria
+author = KQE
+version = 3.3.1
+description = 
+side = Both
+homepage = https://github.com/kingquincye/Stataria
+hideCode = false
+noCompile = false
+sortAfter = ThoriumMod, CalamityMod, ClickerClass
+loadAfter = ThoriumMod, CalamityMod, ClickerClass
+buildIgnore = Test.cs, Things-To-Add.txt, Stataria_Localization.txt

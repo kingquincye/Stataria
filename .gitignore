@@ -1,0 +1,10 @@
+bin/
+obj/
+*.user
+*.suo
+*.exe
+*.dll
+*.pdb
+*.db
+*.bak*
+.vscode/

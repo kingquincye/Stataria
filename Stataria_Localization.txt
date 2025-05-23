@@ -1,0 +1,1137 @@
+Keybinds: {
+	"Toggle Stat Panel.DisplayName": Toggle Stat Panel
+	"AGI Teleport.DisplayName": Teleport
+}
+
+ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
+
+Configs: {
+	StatariaConfig: {
+		DisplayName: Stataria Config
+
+		generalBalance: {
+			Label: General Balance
+			Tooltip: Configure XP gain, level caps, and other general balance options.
+		}
+
+		uiSettings: {
+			Label: UI Settings
+			Tooltip: Customize the appearance and behavior of XP bars, level indicators, and other UI elements.
+		}
+
+		rebirthSystem: {
+			Label: Rebirth System
+			Tooltip: Configure rebirth mechanics, level requirements, and reward systems for character progression.
+		}
+
+		multiplayerSettings: {
+			Label: Multiplayer Settings
+			Tooltip: Adjust how XP is shared and tracked between players in multiplayer games.
+		}
+
+		enemyScaling: {
+			Label: Enemy Scaling
+			Tooltip: Control how enemies scale with player level, multiplayer, and elite enemy spawning.
+		}
+
+		statSettings: {
+			Label: Stat Settings
+			Tooltip: Configure how each stat affects player attributes
+		}
+
+		modIntegration: {
+			Label: Mod Integration
+			Tooltip: Settings for mod support integrations and special stat effects.
+		}
+
+		rebirthAbilities: {
+			Label: Rebirth Abilities
+			Tooltip: Configure special abilities that players can unlock with Rebirth Points.
+		}
+
+		resourceBars: {
+			Label: Resource Bars
+			Tooltip: Customize the appearance and position of health, mana, and boss health bars.
+		}
+
+		advanced: {
+			Tooltip: Only for the mighty. Be warned.
+			Label: Advanced
+		}
+
+		xpVerification: {
+			Label: XP Verification
+			Tooltip: Configure the system that detects and validates abnormal XP gains.
+		}
+	}
+
+	GeneralBalance: {
+		Tooltip: ""
+
+		Headers: {
+			General_Balance: General Balance
+			XP_Multipliers: XP Multipliers
+			Damage_Calculation: Damage Calculation
+		}
+
+		EnableBossHPXP: {
+			Label: Enable Boss HP XP
+			Tooltip: Grants XP based on boss max HP all times. Otherwise it's once per boss.
+		}
+
+		BonusBossXPIsUnique: {
+			Label: Bonus Boss XP Is Unique
+			Tooltip: Each boss only gives bonus XP once. Otherwise receive bonus all times.
+		}
+
+		UseFlatBossXP: {
+			Label: Use Flat Boss XP
+			Tooltip: Gives bosses a flat bonus XP reward instead of scaling.
+		}
+
+		DefaultFlatBossXP: {
+			Label: Default Flat Boss XP
+			Tooltip: Sets the XP reward for bosses if flat XP is enabled.
+		}
+
+		EnableLevelCap: {
+			Label: Enable Level Cap
+			Tooltip: Enable to prevent leveling past a set level, ignored if dynamic rebirth cap is enabled.
+		}
+
+		LevelCapValue: {
+			Label: Level Cap Value
+			Tooltip: Sets the maximum level players can reach, ignored if dynamic rebirth cap is enabled.
+		}
+
+		StatPointsPerLevel: {
+			Label: Stat Points Per Level
+			Tooltip: Amount of stat points received per level up.
+		}
+
+		DamageXP: {
+			Label: Damage XP
+			Tooltip: XP multiplier based on damage dealt.
+		}
+
+		KillXP: {
+			Label: Kill XP
+			Tooltip: XP multiplier for enemy kills based on their health (bosses included).
+		}
+
+		BossXP: {
+			Label: Boss XP
+			Tooltip: Bonus XP given after a boss kill ( % of XP Needed To Level Up).
+		}
+
+		UseMultiplicativeDamage: {
+			Label: Use Multiplicative Damage
+			Tooltip: When enabled, damage from stats multiplies with other damage sources instead of adding to them.
+		}
+
+		LevelScalingFactor: {
+			Tooltip: Controls how quickly XP requirements increase with level. Higher values mean steeper XP curves and slower leveling.
+			Label: Level Scaling Factor
+		}
+
+		EnableStatPointRecalculation: {
+			Tooltip: When enabled, players will automatically receive additional stat points if Stat Points Per Level is increased.
+			Label: Enable Stat Point Recalculation
+		}
+	}
+
+	UISettings: {
+		Tooltip: ""
+		Headers.UI_Settings: UI Settings
+
+		ShowXPBarAbovePlayer: {
+			Label: Show XP Bar Above Player
+			Tooltip: Toggles the floating XP bar that appears above your character when gaining XP.
+		}
+
+		ShowXPGainPopups: {
+			Label: Show XP Gain Popups
+			Tooltip: Enables whether you see the XP gain popups or not. If disabled, nothing will be shown at all.
+		}
+
+		ShowDamageXPPopups: {
+			Label: Show Damage XP Popups
+			Tooltip: When XP gain popups is enabled, this shows the damage XP popup if enabled.
+		}
+
+		ShowKillXPPopups: {
+			Label: Show Kill XP Popups
+			Tooltip: When XP gain popups is enabled, this shows the kill XP popup if enabled.
+		}
+
+		ShowBossXPPopups: {
+			Label: Show Boss Bonus XP Popups
+			Tooltip: When XP gain popups is enabled, this shows the bonus XP from bosses if enabled.
+		}
+
+		ShowLevelIndicator: {
+			Label: Show Level Indicator
+			Tooltip: Shows your current level above your character's head, visible to all players in multiplayer.
+		}
+
+		ShowRebirthTitle: {
+			Label: Show Rebirth Title
+			Tooltip: Displays your rebirth status below your level indicator when you have rebirth levels.
+		}
+
+		IndicatorOpacity: {
+			Label: Indicator Opacity
+			Tooltip: Controls the transparency of level and rebirth indicators shown above your character.
+		}
+	}
+
+	RebirthSystem: {
+		Tooltip: ""
+
+		Headers: {
+			Rebirth_System: Rebirth System
+			Rebirth_Points: Rebirth Points
+			Ghost_Stats: Ghost Stats
+		}
+
+		EnableRebirthSystem: {
+			Label: Enable Rebirth System
+			Tooltip: Enables the rebirth system, allowing players to reset their progress for permanent XP gain bonuses.
+		}
+
+		RebirthLevelRequirement: {
+			Label: Rebirth Level Requirement
+			Tooltip: The minimum level required to perform a rebirth.
+		}
+
+		RebirthXPMultiplier: {
+			Label: Rebirth XP Multiplier
+			Tooltip: XP gain bonus per rebirth level. 0.5 means +50% XP per rebirth.
+		}
+
+		ResetStatsOnRebirth: {
+			Label: Reset Stats On Rebirth
+			Tooltip: If enabled, all allocated stat points will be reset upon rebirth.
+		}
+
+		ResetBossRewardsOnRebirth: {
+			Label: Reset Boss Rewards On Rebirth
+			Tooltip: If enabled, boss reward tracking will be reset, allowing you to earn boss XP rewards again.
+		}
+
+		BonusPointsForExcessLevels: {
+			Label: Bonus Points For Excess Levels
+			Tooltip: If enabled, rebirthing at levels higher than the requirement grants bonus Rebirth Points.
+		}
+
+		ExcessLevelPointMultiplier: {
+			Label: Excess Level Point Multiplier
+			Tooltip: Multiplier for bonus points from excess levels. For example, 0.5 means 10 excess levels would give 5 extra points.
+		}
+
+		IncreaseLevelRequirement: {
+			Label: Increase Level Requirement
+			Tooltip: If enabled, the level requirement for rebirth increases with each rebirth.
+		}
+
+		AdditionalLevelRequirementPerRebirth: {
+			Label: Additional Level Requirement Per Rebirth
+			Tooltip: How much the rebirth level requirement increases per rebirth.
+		}
+
+		RebirthPointsMultiplier: {
+			Label: Rebirth Points Multiplier
+			Tooltip: Mltiplier for Rebirth Points awarded based on each Rebirth Requirement.
+		}
+
+		EnableDynamicRebirthLevelCap: {
+			Label: Enable Dynamic Rebirth Level Cap
+			Tooltip: If enabled, the maximum level achievable in a rebirth cycle is dynamically set based on the next rebirth's level requirement.
+		}
+
+		DynamicRebirthLevelCapMultiplier: {
+			Label: Dynamic Rebirth Level Cap Multiplier
+			Tooltip: Multiplier applied to the next rebirth's level requirement to determine the dynamic level cap for the current cycle.
+		}
+
+		EnableRebirthPointRecalculation: {
+			Tooltip: When enabled, players will automatically receive additional rebirth points if related config values are increased.
+			Label: Enable Rebirth Point Recalculation
+		}
+
+		EnableGhostStats: {
+			Label: Enable Ghost Stats
+			Tooltip: Provides automatic stat bonuses based on rebirth progress.
+		}
+
+		UsePercentageGhostStats: {
+			Label: Use Percentage Ghost Stats
+			Tooltip: If enabled, ghost stats are a percentage of rebirth level requirement. If disabled, a flat amount per rebirth is used.
+		}
+
+		GhostStatsPercentage: {
+			Label: Ghost Stats Percentage
+			Tooltip: Percentage of rebirth level requirement to add as ghost stats when percentage mode is enabled.
+		}
+
+		GhostStatsFlatAmount: {
+			Label: Ghost Stats Flat Amount
+			Tooltip: Flat amount of ghost stats to add per rebirth when flat mode is enabled.
+		}
+
+		GhostStatsAffectedStats: {
+			Label: Ghost Stats Affected Stats
+			Tooltip:
+				'''
+				List of stats that will receive ghost stat bonuses. 
+				Valid entries: VIT, STR, AGI, INT, LUC, END, POW, DEX, SPR, TCH, RGE, BRD, HLR, CLK
+				'''
+		}
+	}
+
+	MultiplayerSettings: {
+		Tooltip: ""
+		Headers.Multiplayer_Settings: Multiplayer Settings
+
+		SplitKillXP: {
+			Label: Split Kill XP
+			Tooltip: When enabled, XP from kills is divided among all players.
+		}
+
+		EnableXPProximity: {
+			Label: Enable XP Proximity
+			Tooltip: When enabled, only players within a certain range receive XP from kills.
+		}
+
+		XPProximityRange: {
+			Label: XP Proximity Range
+			Tooltip: The maximum distance (in pixels) a player can be from an enemy to gain XP from its defeat.
+		}
+	}
+
+	EnemyScaling: {
+		Tooltip: ""
+
+		Headers: {
+			Enemy_Scaling: Enemy Scaling
+			Multiplayer_Scaling: Multiplayer Scaling
+			Elite_Enemies: Elite Enemies
+			Sync_Settings: Sync Settings
+		}
+
+		EnableEnemyScaling: {
+			Label: Enable Enemy Scaling
+			Tooltip: Toggles enemy scaling based on player levels or count. When disabled, enemies use their default stats.
+		}
+
+		EnemyHealthScaling: {
+			Label: Enemy Health Scaling
+			Tooltip: How much enemy health increases per player level. Higher values create tougher enemies.
+		}
+
+		EnemyDamageScaling: {
+			Label: Enemy Damage Scaling
+			Tooltip: How much enemy damage increases per player level. Higher values create more dangerous enemies.
+		}
+
+		EnemyDefenseScaling: {
+			Label: Enemy Defense Scaling
+			Tooltip: How much non-boss enemy defense increases per player level. Bosses do not receive defense scaling.
+		}
+
+		BossHealthScaling: {
+			Label: Boss Health Scaling
+			Tooltip: Additional multiplier applied to boss health scaling. Higher values make bosses significantly tougher.
+		}
+
+		BossDamageScaling: {
+			Label: Boss Damage Scaling
+			Tooltip: Additional multiplier applied to boss damage scaling. Higher values make bosses hit harder.
+		}
+
+		ShowEnemyLevelIndicator: {
+			Label: Show Enemy Level Indicator
+			Tooltip: When enabled, displays enemy levels above their heads.
+		}
+
+		EnemyIndicatorOpacity: {
+			Label: Enemy Indicator Opacity
+			Tooltip: Controls the transparency of level indicators shown above enemies.
+		}
+
+		ScalingType: {
+			Label: Scaling Type
+			Tooltip: Determines how enemy scaling is calculated: 0 = Player Count (fixed bonus per player), 1 = Highest Level (scales to strongest player), 2 = Average Level (scales to party average).
+		}
+
+		UseProximityForScaling: {
+			Label: Use Proximity For Scaling
+			Tooltip: When enabled, only considers players within range when calculating enemy levels.
+		}
+
+		ScalingProximityRange: {
+			Label: Scaling Proximity Range
+			Tooltip: Maximum distance (in pixels) to consider players for proximity-based scaling.
+		}
+
+		EnableEliteEnemies: {
+			Label: Enable Elite Enemies
+			Tooltip: Toggles elite enemy variants with enhanced stats and resistances.
+		}
+
+		EliteEnemyChance: {
+			Label: Elite Enemy Chance
+			Tooltip: Chance for non-boss enemies to spawn as elites.
+		}
+
+		EliteHealthMultiplier: {
+			Label: Elite Health Multiplier
+			Tooltip: How much additional health elite enemies have compared to normal enemies.
+		}
+
+		EliteDamageMultiplier: {
+			Label: Elite Damage Multiplier
+			Tooltip: How much additional damage elite enemies deal compared to normal enemies.
+		}
+
+		EliteDefenseMultiplier: {
+			Label: Elite Defense Multiplier
+			Tooltip: How much additional defense elite enemies have compared to normal enemies.
+		}
+
+		EliteKnockbackResistance: {
+			Label: Elite Knockback Resistance
+			Tooltip: How much knockback resistance elite enemies have. 0.5 = 50% knockback reduction.
+		}
+
+		EliteCriticalHitResistance: {
+			Label: Elite Critical Hit Resistance
+			Tooltip: How much critical hit damage is reduced against elite enemies. 0.25 = 25% less critical damage.
+		}
+
+		EliteScaleIncrease: {
+			Label: Elite Scale Increase
+			Tooltip: When enabled, elite enemies appear larger than normal enemies.
+		}
+
+		EliteScaleMultiplier: {
+			Label: Elite Scale Multiplier
+			Tooltip: How much larger elite enemies appear. 1.15 = 15% size increase.
+		}
+
+		SyncDelayFrames: {
+			Label: Sync Delay Frames
+			Tooltip:
+				'''
+				Controls how quickly enemy stats are synchronized in multiplayer. 
+				Lower values improve consistency but may increase network traffic during high spawn rates. Setting to 0 forces immediate syncing of all enemies (may impact performance).
+				60 = 1 second
+				'''
+		}
+
+		ImmediateSyncInSingleplayer: {
+			Label: Immediate Sync In Singleplayer
+			Tooltip: When enabled, enemies in singleplayer are scaled instantly for the best experience. Disable only if you want to test multiplayer behavior in a singleplayer world.
+		}
+
+		PrioritizeBossSync: {
+			Label: Prioritize Boss Sync
+			Tooltip: When enabled, boss enemies are always scaled and synced immediately regardless of other settings. This ensures consistent boss battles even during high spawn rates.
+		}
+
+		MaxSyncAttempts: {
+			Label: Max Sync Attempts
+			Tooltip: The maximum number of times the system will try to sync an enemy's stats in multiplayer. Higher values increase reliability but may impact performance during very high spawn rates.
+		}
+
+		EnableDefenseCap: {
+			Label: Enable Defense Cap
+			Tooltip:
+				'''
+				When enabled, limits how high enemy defense can scale with level to prevent enemies from becoming too difficult to damage. 
+				Disable for a more hardcore experience where high-level enemies can have extremely high defense.
+				'''
+		}
+
+		MaxDefenseMultiplier: {
+			Label: Max Defense Multiplier
+			Tooltip:
+				'''
+				Maximum multiplier applied to enemy defense when scaling with level (if Defense Cap is enabled). 
+				At the default value of 3, an enemy's defense will never scale higher than 3x its base value, regardless of level. Higher values allow for tougher enemies.
+				'''
+		}
+
+		LevelsPerPlayer: {
+			Label: Levels Per Player
+			Tooltip: Number of extra enemy levels added per active player when using Player Count scaling (Type 0).
+		}
+
+		ShowEnemyLevelBehindWalls: {
+			Label: Show Enemy Level Behind Walls
+			Tooltip: Show enemy level indicators even if the enemy is hidden behind walls. Otherwise, levels are only shown when you have line of sight.
+		}
+
+		MinimumLevelDifference: {
+			Tooltip:
+				'''
+				Prevents enemies from spawning more than this many levels below the player when the Maximum Level Variation is large enough.
+				Only for Scaling Type 1 (Highest Level)
+				'''
+			Label: Minimum Level Difference
+		}
+
+		EnableMinimumLevelDifference: {
+			Tooltip: When enabled, enemies won't spawn more than the specified number of levels below the player.
+			Label: Enable Minimum Level Difference
+		}
+
+		MaxLevelVariation: {
+			Tooltip: The maximum number of levels an enemy can be above or below the calculated level (±).
+			Label: Max Level Variation
+		}
+
+		EnableLevelVariation: {
+			Tooltip: When enabled, enemies will spawn with random level differences within the Maximum Level Variation range.
+			Label: Enable Level Variation
+		}
+
+		ScaleCrawlerEnemies: {
+			Label: Scale Crawler Enemies
+			Tooltip:
+				'''
+				If true, scales enemies like Blood Crawlers, Jungle Creepers, Wall Creepers, and Black Recluses. 
+				If false, these enemies will ignore the scaling system to prevent issues when they switch between ground and wall states.
+				'''
+		}
+	}
+
+	StatSettings: {
+		Tooltip: ""
+
+		Headers: {
+			VIT_Settings: VIT Settings
+			STR_Settings: STR Settings
+			AGI_Settings: AGI Settings
+			INT_Settings: INT Settings
+			LUC_Settings: LUC Settings
+			END_Settings: END Settings
+			POW_Settings: POW Settings
+			DEX_Settings: DEX Settings
+			TCH_Settings: TCH Settings
+			SPR_Settings: SPR Settings
+			Stat_Caps: Stat Caps
+		}
+
+		VIT_HP: {
+			Label: Health
+			Tooltip: Increases max health per point.
+		}
+
+		UseCustomHpRegen: {
+			Label: Use Custom Hp Regen
+			Tooltip: Enables a custom HP regeneration system based on VIT. Ignores vanilla life regen and heals directly over time.
+		}
+
+		CustomHpRegenPerVIT: {
+			Label: Custom Hp Regen Per VIT
+			Tooltip: How much HP per second each point of VIT restores. For example, 0.5 means 10 VIT = 5 HP/sec.
+		}
+
+		CustomHpRegenDelay: {
+			Label: Custom Hp Regen Delay
+			Tooltip: Delay (in frames) before custom regen starts after taking damage. 60 frames = 1 second.
+		}
+
+		EnableHealingPotionBoost: {
+			Label: Enable Healing Potion Boost
+			Tooltip: When enabled, VIT increases healing from potions.
+		}
+
+		HealingPotionBoostPercent: {
+			Label: Healing Potion Boost Percent
+			Tooltip: Percentage increase to healing per point of VIT.
+		}
+
+		STR_Damage: {
+			Label: Damage
+			Tooltip: Increases melee damage by a percentage per point.
+		}
+
+		STR_Knockback: {
+			Label: Knockback
+			Tooltip: Increases melee knockback.
+		}
+
+		STR_ArmorPen: {
+			Label: Armor Pen
+			Tooltip: Increases melee armor penetration.
+		}
+
+		AGI_MoveSpeed: {
+			Label: Move Speed
+			Tooltip: Increases movement speed per point.
+		}
+
+		AGI_AttackSpeed: {
+			Label: Attack Speed
+			Tooltip: Increases weapon attack speed (all types).
+		}
+
+		AGI_JumpHeight: {
+			Label: Jump Height
+			Tooltip: Increases jump height with diminishing returns.
+		}
+
+		AGI_JumpSpeed: {
+			Label: Jump Speed
+			Tooltip: Boosts jump speed per point.
+		}
+
+		AGI_WingTime: {
+			Label: Wing Time
+			Tooltip: Increases flight time for wings.
+		}
+
+		INT_Damage: {
+			Label: Damage
+			Tooltip: Increases magic damage by a percentage per point.
+		}
+
+		INT_MP: {
+			Label: Mana
+			Tooltip: Increases max mana.
+		}
+
+		INT_ManaCostReduction: {
+			Label: Mana Cost Reduction
+			Tooltip: Reduces mana cost per point with diminishing returns.
+		}
+
+		INT_ArmorPen: {
+			Label: Armor Pen
+			Tooltip: Increases magic armor penetration.
+		}
+
+		LUC_Crit: {
+			Label: Crit
+			Tooltip: Increases critical chance per point.
+		}
+
+		LUC_EnableFishing: {
+			Label: Enable Fishing
+			Tooltip: When enabled, LUC increases fishing power by a fixed amount per point.
+		}
+
+		LUC_Fishing: {
+			Label: Fishing
+			Tooltip: Increases fishing power per point.
+		}
+
+		LUC_AggroReduction: {
+			Label: Aggro Reduction
+			Tooltip: Decreases enemy aggression per point.
+		}
+
+		LUC_EnableLuckBonus: {
+			Label: Enable Luck Bonus
+			Tooltip: When enabled, LUC increases vanilla Luck stat.
+		}
+
+		LUC_LuckBonus: {
+			Label: Luck Bonus
+			Tooltip: Increases player luck slightly per point.
+		}
+
+		END_DefensePerX: {
+			Label: Defense Per X
+			Tooltip: Grants +1 defense per X END points.
+		}
+
+		END_Aggro: {
+			Label: Aggro
+			Tooltip: Increases enemy aggression toward the player.
+		}
+
+		EnableKnockbackResist: {
+			Label: Enable Knockback Resist
+			Tooltip: Enables knockback resistance scaling with END.
+		}
+
+		EnableDR: {
+			Label: Enable Damage Reduction
+			Tooltip: Enables damage reduction scaling with END.
+		}
+
+		EnableEnemyKnockback: {
+			Label: Enable Enemy Knockback
+			Tooltip: Non-boss enemies are knocked back on hit when END is invested.
+		}
+
+		END_EnemyKnockbackMultiplier: {
+			Label: Enemy Knockback Multiplier
+			Tooltip: Controls how strongly enemies are knocked back when END triggers knockback.
+		}
+
+		POW_Damage: {
+			Label: Damage
+			Tooltip: Increases modded weapon damage by a percentage. Also gives a small bonus to all vanilla damage types.
+		}
+
+		DEX_Damage: {
+			Label: Damage
+			Tooltip: Increases ranged damage by a percentage per point.
+		}
+
+		DEX_ArmorPen: {
+			Label: Armor Pen
+			Tooltip: Each point of DEX adds flat armor penetration to ranged attacks.
+		}
+
+		TCH_EnableMiningSpeed: {
+			Label: Enable Mining Speed
+			Tooltip: When enabled, TCH will increase mining speed of pickaxes.
+		}
+
+		TCH_MiningSpeed: {
+			Label: Mining Speed
+			Tooltip: Reduces mining time, increasing mining speed.
+		}
+
+		TCH_EnableBuildSpeed: {
+			Label: Enable Build Speed
+			Tooltip: When enabled, TCH will increase building and tile placement speed.
+		}
+
+		TCH_BuildSpeed: {
+			Label: Build Speed
+			Tooltip: Speeds up tile placement/building.
+		}
+
+		TCH_EnableRange: {
+			Label: Enable Range
+			Tooltip: When enabled, TCH will increase tile interaction range.
+		}
+
+		TCH_Range: {
+			Label: Range
+			Tooltip: Increases block placement and mining range.
+		}
+
+		SPR_Damage: {
+			Label: Damage
+			Tooltip: Increases summon damage by a percentage per point.
+		}
+
+		SPR_MinionsPerX: {
+			Label: Minions Per X
+			Tooltip: Adds +1 Minion for every X SPR points.
+		}
+
+		SPR_SentriesPerX: {
+			Label: Sentries Per X
+			Tooltip: Adds +1 Sentry for every X SPR points.
+		}
+
+		EnableStatCaps: {
+			Label: Enable Stat Caps
+			Tooltip: Enables a stat cap for all stats.
+		}
+
+		VIT_Cap: {
+			Label: VIT Cap
+			Tooltip: ""
+		}
+
+		STR_Cap: {
+			Label: STR Cap
+			Tooltip: ""
+		}
+
+		AGI_Cap: {
+			Label: AGI Cap
+			Tooltip: ""
+		}
+
+		INT_Cap: {
+			Label: INT Cap
+			Tooltip: ""
+		}
+
+		LUC_Cap: {
+			Label: LUC Cap
+			Tooltip: ""
+		}
+
+		END_Cap: {
+			Label: END Cap
+			Tooltip: ""
+		}
+
+		POW_Cap: {
+			Label: POW Cap
+			Tooltip: ""
+		}
+
+		DEX_Cap: {
+			Label: DEX Cap
+			Tooltip: ""
+		}
+
+		SPR_Cap: {
+			Label: SPR Cap
+			Tooltip: ""
+		}
+
+		TCH_Cap: {
+			Label: TCH Cap
+			Tooltip: ""
+		}
+
+		RGE_Cap: {
+			Label: RGE Cap
+			Tooltip: ""
+		}
+
+		BRD_Cap: {
+			Label: BRD Cap
+			Tooltip: ""
+		}
+
+		HLR_Cap: {
+			Label: HLR Cap
+			Tooltip: ""
+		}
+
+		DEX_AmmoConservation: {
+			Label: Ammo Conservation
+			Tooltip: Percentage chance to not consume ammo per point of DEX.
+		}
+
+		CLK_Cap: {
+			Label: CLK Cap
+			Tooltip: ""
+		}
+	}
+
+	ModIntegration: {
+		Tooltip: ""
+
+		Headers: {
+			Mod_Integration: Mod Integration
+			RGE_Settings: RGE Settings
+			POW_CalamityEnhancements: POW Calamity Enhancements
+			BRD_Settings: BRD Settings
+			HLR_Settings: HLR Settings
+			CLK_Settings: CLK Settings
+		}
+
+		EnableCalamityIntegration: {
+			Label: Enable Calamity Integration
+			Tooltip: Enable or disable integration with the Calamity mod. Must have Calamity installed for these settings to take effect.
+		}
+
+		RGE_Damage: {
+			Label: Damage
+			Tooltip: Increases your rogue weapon damage by a percentage per point in RGE.
+		}
+
+		RGE_Velocity: {
+			Label: Velocity
+			Tooltip: Increases your rogue projectiles' velocity by this percentage per point in RGE.
+		}
+
+		RGE_AmmoConsumptionReduction: {
+			Label: Ammo Consumption Reduction
+			Tooltip: Reduces the ammo consumption of rogue weapons by this percentage per point in RGE.
+		}
+
+		RGE_EnableStealthConsumptionReduction: {
+			Label: Enable Stealth Consumption Reduction
+			Tooltip: When enabled, your RGE stat will reduce stealth consumption at different thresholds below.
+		}
+
+		RGE_StealthConsumption85Threshold: {
+			Label: Stealth Strike 85%
+			Tooltip: At this many RGE points, rogue stealth strikes will cost 85% of their normal amount.
+		}
+
+		RGE_StealthConsumption75Threshold: {
+			Label: Stealth Strike 75%
+			Tooltip: At this many RGE points, rogue stealth strikes will cost 75% of their normal amount.
+		}
+
+		RGE_StealthConsumptionReductionThreshold: {
+			Label: Stealth Strike 50%
+			Tooltip: At this many RGE points, rogue stealth strikes will cost only 50% of their normal amount.
+		}
+
+		POW_RageDamage: {
+			Label: Rage Damage
+			Tooltip: Increases the damage boost you get from Calamity's Rage mode by this percentage per point in POW.
+		}
+
+		POW_RageDuration: {
+			Label: Rage Duration
+			Tooltip: Increases the duration of Calamity's Rage mode by this many frames per point in POW (60 frames = 1 second).
+		}
+
+		POW_AdrenalineDuration: {
+			Label: Adrenaline Duration
+			Tooltip: Increases the duration of Calamity's Adrenaline mode by this many frames per point in POW (60 frames = 1 second).
+		}
+
+		EnableThoriumIntegration: {
+			Label: Enable Thorium Integration
+			Tooltip: Enable or disable integration with the Thorium Mod. Must have Thorium installed for these settings to take effect.
+		}
+
+		BRD_Damage: {
+			Label: Damage
+			Tooltip: Increases symphonic damage by a percentage per point in BRD.
+		}
+
+		BRD_EnableEmpowermentBoost: {
+			Label: Enable Empowerment Boost
+			Tooltip: When enabled, BRD stat will increase the duration of empowerments provided by Bard instruments.
+		}
+
+		BRD_EmpowermentDuration: {
+			Label: Empowerment Duration
+			Tooltip: Increases the duration of empowerments by this percentage.
+		}
+
+		HLR_Damage: {
+			Label: Damage
+			Tooltip: The percentage of Radiant Damage gained per HLR point.
+		}
+
+		HLR_HealingPower: {
+			Label: Healing Power
+			Tooltip: The amount of Healing Power each effective HLR point contributes. Also base for Life Recovery scaling.
+		}
+
+		RGE_MaxStealthPerPoint: {
+			Label: Max Stealth Per Point
+			Tooltip: How many points of maximum stealth are gained per point invested in the RGE stat.
+		}
+
+		BRD_ArmorPen: {
+			Label: Armor Pen
+			Tooltip: Increases Symphonic armor penetration by this much per BRD.
+		}
+
+		HLR_ArmorPen: {
+			Label: Armor Pen
+			Tooltip: Increases Radiant armor penetration by this much per HLR.
+		}
+
+		BRD_PointsPerMaxInspiration: {
+			Label: Max Inspiration per X BRD
+			Tooltip: Sets how many BRD points are needed to gain 1 point of Max Inspiration.
+		}
+
+		HLR_PointsPerEffectPoint: {
+			Tooltip: How many HLR stat points are needed for 1 point of HLR effect (for Healing Power, Life Recovery amount, and Life Recovery interval).
+			Label: Points Per Effect Point
+		}
+
+		EnableClickerClassIntegration: {
+			Label: Enable Clicker Class Integration
+			Tooltip: If enabled, enables Stataria's integration features for Clicker Class, including the CLK stat.
+		}
+
+		CLK_Damage: {
+			Label: Damage
+			Tooltip: Percentage Click Damage increase per CLK point.
+		}
+
+		CLK_Radius: {
+			Label: Radius
+			Tooltip: Additional Clicker Radius units per CLK point
+		}
+
+		CLK_EffectThreshold: {
+			Label: Effect Threshold
+			Tooltip: Initial linear percentage reduction to clicks needed for effects per CLK point. Benefits have diminishing returns.
+		}
+
+		POW_MaxRageDurationBonus: {
+			Label: Max Rage Duration Bonus
+			Tooltip: The maximum bonus to rage duration from POW. This prevents issues where high POW values can cause rage to increase instead of decrease when activated.
+		}
+	}
+
+	RebirthAbilities: {
+		Tooltip: ""
+
+		Headers: {
+			Last_Stand: Last Stand
+			Teleport: Teleport
+			Golden_Touch: Golden Touch
+			Extra_Accessory_Slots: Extra Accessory Slots
+			Enhanced_Spawns: Enhanced Spawns
+			Auto_Clicker: Auto Clicker
+		}
+
+		LastStandHealPercent: {
+			Label: Last Stand Heal Percent
+			Tooltip: Percentage of max health restored when Last Stand activates.
+		}
+
+		LastStandImmunityTime: {
+			Label: Last Stand Immunity Time
+			Tooltip: Amount of damage immunity time after Last Stand activates in seconds.
+		}
+
+		LastStandCooldown: {
+			Label: Last Stand Cooldown
+			Tooltip: Time before Last Stand can activate again in seconds.
+		}
+
+		EnableLastStandCooldownBar: {
+			Label: Enable Last Stand Cooldown Bar
+			Tooltip: Displays a bar showing the remaining cooldown for Last Stand.
+		}
+
+		TeleportCooldown: {
+			Label: Teleport Cooldown
+			Tooltip: Sets the teleport ability's cooldown (in seconds).
+		}
+
+		EnableTeleportCooldownBar: {
+			Label: Enable Teleport Cooldown Bar
+			Tooltip: Turns teleport cooldown bar on.
+		}
+
+		GoldenTouchPercentPerLevel: {
+			Tooltip: Percentage increase in coins picked up per level of the Golden Touch ability.
+			Label: Golden Touch Percent Per Level
+		}
+
+		MaxGoldenTouchLevel: {
+			Tooltip: Maximum level for the Golden Touch ability.
+			Label: Max Golden Touch Level
+		}
+
+		MaxExtraAccessorySlots: {
+			Tooltip: Maximum number of extra accessory slots that can be unlocked through the Extra Accessory Slot ability.
+			Label: Max Extra Accessory Slots
+		}
+
+		MaxEnhancedSpawnsLevel: {
+			Label: Max Enhanced Spawns Level
+			Tooltip: Maximum level for the Enhanced Spawns ability.
+		}
+
+		SpawnRatePercentPerLevel: {
+			Label: Spawn Rate Percent Per Level
+			Tooltip: Percentage increase in enemy spawn rate per level of the Enhanced Spawns ability.
+		}
+
+		AutoClickerMaxLevel: {
+			Label: Auto Clicker Max Level
+			Tooltip: Maximum upgrade level for the Auto-Clicker.
+		}
+
+		AutoClickerSpeedFactorAtLevel1: {
+			Label: Auto Clicker Speed Factor At Level1
+			Tooltip: Auto-click speed factor at Level 1. Lower is faster.
+		}
+
+		AutoClickerSpeedFactorImprovementPerLevel: {
+			Label: Speed Factor Improvement Per Level
+			Tooltip: Change in speed factor for each level after level 1. Use negative values for faster clicks.
+		}
+
+		AutoClickerPreventsEffects: {
+			Label: Prevents Effects
+			Tooltip: If enabled, auto-clicks from this ability will NOT trigger item click effects. If false, they WILL attempt to trigger effects.
+		}
+	}
+
+	ResourceBarsConfig: {
+		BarHeight: {
+			Label: Bar Height
+			Tooltip: Adjusts the height of resource bars in pixels.
+		}
+
+		BarWidth: {
+			Tooltip: Adjusts the width of resource bars in pixels.
+			Label: Bar Width
+		}
+
+		PositionYPercent: {
+			Tooltip: Controls the vertical position of resource bars as a percentage of screen height.
+			Label: Position Y Percent
+		}
+
+		PositionXPercent: {
+			Tooltip: Controls the horizontal position of resource bars as a percentage of screen width.
+			Label: Position X Percent
+		}
+
+		Tooltip: ""
+
+		BarPadding: {
+			Label: Bar Padding
+			Tooltip: Space between adjacent bars in pixels.
+		}
+
+		Headers.Resource_Bars_Settings: Resource Bars Settings
+	}
+
+	Advanced: {
+		BlacklistedNPCs: {
+			Tooltip: List of NPC names or IDs that should not give XP when killed (e.g., Zombie or 3 for zombies)
+			Label: Blacklisted NPCs
+		}
+
+		Headers.XP_Blacklist: XP Blacklist
+		Tooltip: ""
+	}
+
+	XPVerification: {
+		Tooltip: ""
+		Headers.XP_Verification: XP Verification
+
+		EnableXPVerification: {
+			Label: Enable XP Verification
+			Tooltip: When enabled, suspiciously large XP gains will require confirmation.
+		}
+
+		BaseXPThreshold: {
+			Label: Base XP Threshold
+			Tooltip: Base amount of XP that will trigger verification. This scales with level and rebirth count.
+		}
+
+		LevelScalingFactor: {
+			Label: Level Scaling Factor
+			Tooltip: How much the XP threshold increases per player level.
+		}
+
+		RebirthScalingFactor: {
+			Label: Rebirth Scaling Factor
+			Tooltip: How much the XP threshold increases per rebirth level.
+		}
+
+		RelativeXPThreshold: {
+			Label: Relative XP Threshold
+			Tooltip: Verification is triggered when XP gain exceeds this percentage of XP required for next level. For example, 1.5 means 150% of XP to next level.
+		}
+
+		RebirthRelativeThresholdReduction: {
+			Label: Rebirth Relative Threshold Reduction
+			Tooltip: How much the relative threshold is reduced per rebirth. This allows higher rebirth characters to gain larger XP amounts without verification.
+		}
+
+		WhitelistedSources: {
+			Label: Whitelisted Sources
+			Tooltip:
+				'''
+				XP sources that are exempt from verification. Add entries like 'Boss' to whitelist all XP from sources containing 'Boss' in their name.
+				Common sources include: 'Boss Bonus', 'Kill', 'Damage', 'Melee', 'Projectile'.
+				'''
+		}
+	}
+}

@@ -1,0 +1,53 @@
+[b] Stataria - An RPG System for Terraria [/b]
+
+Stataria brings a stat-based leveling and character building to Terraria.
+
+[i]Psst, hey, want a sword that you can use with this mod? Check out my XP Blade mod![/i]
+
+[b] Hey, if you're enjoying the journey, feel free to support it and fuel my modding addiction xD[/b]: [url=https://ko-fi.com/kingquincye]Ko-fi[/url]
+
+[b][u] DEFAULT KEYBIND: K [/u][/b]
+
+Gain XP by:
+[list]
+  [*] Dealing damage
+  [*] Killing enemies
+  [*] Defeating bosses (+bonus XP)
+[/list]
+
+Level up and earn statpoints!
+Assign points across 10 unique stats:
+[list]
+[*][b]VIT[/b]: Increases Max Health and Regen
+[*][b]STR[/b]: Increases Melee Damage, Knockback, and Melee Armor Penetration
+[*][b]AGI[/b]: Increases Movement Speed, Attack Speed, Wing Time, Jump Speed and Jump Height
+[*][b]INT[/b]: Increases Max Mana, Regen, Magic Damage, and Magic Armor Penetration, Decrease Mana Cost
+[*][b]LUC[/b]: Increases Crit Chance, Luck, and Fishing Power, Decreases Enemy Aggro
+[*][b]END[/b]: Increases Defense, Damage Reduction, Knockback Resistance, Enemy Knock Back (except bosses), and Enemy Aggro
+[*][b]POW[/b]: Increases All Damages (but has an extremely small flat increase for damages covered by other stats)
+[*][b]DEX[/b]: Increases Ranged Damage and Armor Penetration, Chance To Not Consume Ammo
+[*][b]TCH[/b]: Increases Mining Speed and Range, Block Placement Speed and Range
+[*][b]SPR[/b]: Increases Summon Damage plus Minion and Sentry slots
+[/list]
+
+Mod integration stats:
+[list]
+[*][b]POW+[/b]: Increases Rage Damage, Rage Duration, and Adrenaline Duration (Calamity)
+[*][b]RGE[/b]: Increase Rogue Damage, Max Stealth, and Rogue Projectile Velocity, Decreases Rogue Ammo Cost (Calamity)
+[*][b]BRD[/b]: Increase Symphonic Damage, Max Inspiration (cannot exceed cap at 30), and Empowerment Duration (Thorium)
+[*][b]HLR[/b]: Increases Radiant Damage, Healing Power, and Improved Life Recovery (Thorium)
+[*][b]CLK[/b]: Increases Clicker Damage, Radius, and Decreases Clicks Required for Click Effects (ClickerClass)
+[/list]
+
+Simple stat panel UI
+  
+[b] Most things are configurable in the mods config so go crazy. You can make this as balanced as you want! [/b]
+
+[b] Multiplayer is not fully tested (sometimes there are syncing problems, sometimes rejoining server fixes them), so if anything happens or problems arrise, please let me know! Thorium team effects boosted from mod does not work on others in multiplayer![/b]
+
+[b] Don’t forget to bind a key to open the Stat Panel under Controls > Keybindings.[/b]
+
+[b][u] Default values/settings for the mod can be considered unbalanced. I encourage changing/playing with the settings/values to fit your style of gameplay balance. I've tried making many things from the mod configurable. [/u][/b]
+
+[i]Might be compatible with other mods... I don't fully know but try it out![/i]  
+[b]Inspired by NExperience Mod.[/b]
