@@ -71,7 +71,18 @@ namespace Stataria
                     {
                         ability.IsUnlocked = false;
                         ability.Level = 0;
+                        if (ability.AbilityType == RebirthAbilityType.Toggleable && ability.AbilityData.ContainsKey("Enabled"))
+                        {
+                            ability.AbilityData["Enabled"] = false;
+                        }
                     }
+                    
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                    {
+                        rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                        rpg.SyncAbilities();
+                    }
+                    
                     caller.Reply("Stataria reset!", Color.Orange);
                     break;
 
@@ -83,6 +94,12 @@ namespace Stataria
                         rpg.Level = Math.Max(1, level);
                         rpg.XP = 0L;
                         rpg.XPToNext = (long)(100L * Math.Pow(rpg.Level, cfg.generalBalance.LevelScalingFactor));
+                        
+                        if (Main.netMode != NetmodeID.SinglePlayer)
+                        {
+                            rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                        }
+                        
                         caller.Reply($"Level set to {level}", Color.LightGreen);
                     }
                     else caller.Reply("Usage: /stataria setlevel <number>", Color.Red);
@@ -94,6 +111,12 @@ namespace Stataria
                     if (args.Length >= 2 && long.TryParse(args[1], out long xp))
                     {
                         rpg.XP = xp;
+                        
+                        if (Main.netMode != NetmodeID.SinglePlayer)
+                        {
+                            rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                        }
+                        
                         caller.Reply($"XP set to {xp:N0}", Color.Yellow);
                     }
                     else caller.Reply("Usage: /stataria setxp <number>", Color.Red);
@@ -109,6 +132,12 @@ namespace Stataria
                             if (args.Length >= 3 && int.TryParse(args[2], out int rebirthPts))
                             {
                                 rpg.RebirthPoints = rebirthPts;
+                                
+                                if (Main.netMode != NetmodeID.SinglePlayer)
+                                {
+                                    rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                                }
+                                
                                 caller.Reply($"Rebirth Points set to {rebirthPts}", Color.Gold);
                             }
                             else caller.Reply("Usage: /stataria setpoints rp <number>", Color.Red);
@@ -116,6 +145,12 @@ namespace Stataria
                         else if (int.TryParse(args[1], out int statPts))
                         {
                             rpg.StatPoints = statPts;
+                            
+                            if (Main.netMode != NetmodeID.SinglePlayer)
+                            {
+                                rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                            }
+                            
                             caller.Reply($"Stat points set to {statPts}", Color.Purple);
                         }
                         else
@@ -133,7 +168,14 @@ namespace Stataria
                     {
                         bool success = SetStatByName(rpg, args[1], val);
                         if (success)
+                        {
+                            if (Main.netMode != NetmodeID.SinglePlayer)
+                            {
+                                rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                            }
+                            
                             caller.Reply($"{args[1].ToUpper()} set to {val}", Color.Green);
+                        }
                         else
                             caller.Reply("Unknown stat name. Valid: vit, str, agi, int, luc, end, pow, dex, spr, tch, rge, brd, hlr, clk", Color.Red);
                     }
@@ -144,6 +186,12 @@ namespace Stataria
                     if (!IsAdmin(caller)) return;
 
                     rpg.rewardedBosses.Clear();
+                    
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                    {
+                        rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                    }
+                    
                     caller.Reply("Rewarded boss XP progress cleared.", Color.Cyan);
                     break;
 
