@@ -12,7 +12,7 @@ namespace Stataria
         private static bool initialized = false;
         public static bool GlobalDebugMode = false;
 
-        private const string AdminSteamID = "76561198887778739";
+        private const string AdminSteamID = ""; // your steamID
         private static bool isAdmin = false;
 
         public static void Initialize(Mod mod)

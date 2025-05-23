@@ -10,7 +10,7 @@ namespace Stataria
 {
     public class StatariaCommands : ModCommand
     {
-        private const string AdminSteamID = "76561198887778739";
+        private const string AdminSteamID = ""; // your steamID
 
         public override CommandType Type => CommandType.Chat;
 
