@@ -122,7 +122,7 @@ namespace Stataria
             if (msgType == StatariaMessageType.SyncPlayer)
             {
                 int playerIndex = reader.ReadInt32();
-                if (playerIndex < 0 || playerIndex >= Main.maxPlayers || !Main.player[playerIndex].active)
+                if (playerIndex < 0 || playerIndex >= Main.maxPlayers)
                     return;
 
                 RPGPlayer rpg = Main.player[playerIndex].GetModPlayer<RPGPlayer>();
@@ -160,11 +160,6 @@ namespace Stataria
                 for (int i = 0; i < bossCount; i++)
                 {
                     rpg.rewardedBosses.Add(reader.ReadInt32());
-                }
-
-                if (Main.netMode == NetmodeID.Server)
-                {
-                    rpg.SyncPlayer(toWho: -1, fromWho: whoAmI, newPlayer: false);
                 }
             }
             else if (msgType == StatariaMessageType.SyncGlobalBosses)

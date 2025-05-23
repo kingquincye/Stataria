@@ -73,14 +73,6 @@ namespace Stataria
                         ability.Level = 0;
                     }
                     caller.Reply("Stataria reset!", Color.Orange);
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        rpg.SyncPlayer(toWho: 255, fromWho: caller.Player.whoAmI, newPlayer: false);
-                    }
-                    else if (Main.netMode == NetmodeID.Server)
-                    {
-                        rpg.SyncPlayer(toWho: -1, fromWho: caller.Player.whoAmI, newPlayer: false);
-                    }
                     break;
 
                 case "setlevel":
@@ -92,14 +84,6 @@ namespace Stataria
                         rpg.XP = 0L;
                         rpg.XPToNext = (long)(100L * Math.Pow(rpg.Level, cfg.generalBalance.LevelScalingFactor));
                         caller.Reply($"Level set to {level}", Color.LightGreen);
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                        {
-                            rpg.SyncPlayer(toWho: 255, fromWho: caller.Player.whoAmI, newPlayer: false);
-                        }
-                        else if (Main.netMode == NetmodeID.Server)
-                        {
-                            rpg.SyncPlayer(toWho: -1, fromWho: caller.Player.whoAmI, newPlayer: false);
-                        }
                     }
                     else caller.Reply("Usage: /stataria setlevel <number>", Color.Red);
                     break;
@@ -111,14 +95,6 @@ namespace Stataria
                     {
                         rpg.XP = xp;
                         caller.Reply($"XP set to {xp:N0}", Color.Yellow);
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                        {
-                            rpg.SyncPlayer(toWho: 255, fromWho: caller.Player.whoAmI, newPlayer: false);
-                        }
-                        else if (Main.netMode == NetmodeID.Server)
-                        {
-                            rpg.SyncPlayer(toWho: -1, fromWho: caller.Player.whoAmI, newPlayer: false);
-                        }
                     }
                     else caller.Reply("Usage: /stataria setxp <number>", Color.Red);
                     break;
@@ -128,14 +104,12 @@ namespace Stataria
 
                     if (args.Length >= 2)
                     {
-                        bool changed = false;
                         if (args[1].ToLower() == "rp")
                         {
                             if (args.Length >= 3 && int.TryParse(args[2], out int rebirthPts))
                             {
                                 rpg.RebirthPoints = rebirthPts;
                                 caller.Reply($"Rebirth Points set to {rebirthPts}", Color.Gold);
-                                changed = true;
                             }
                             else caller.Reply("Usage: /stataria setpoints rp <number>", Color.Red);
                         }
@@ -143,23 +117,10 @@ namespace Stataria
                         {
                             rpg.StatPoints = statPts;
                             caller.Reply($"Stat points set to {statPts}", Color.Purple);
-                            changed = true;
                         }
                         else
                         {
                             caller.Reply("Usage: /stataria setpoints <number> or /stataria setpoints rp <number>", Color.Red);
-                        }
-
-                        if (changed)
-                        {
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                            {
-                                rpg.SyncPlayer(toWho: 255, fromWho: caller.Player.whoAmI, newPlayer: false);
-                            }
-                            else if (Main.netMode == NetmodeID.Server)
-                            {
-                                rpg.SyncPlayer(toWho: -1, fromWho: caller.Player.whoAmI, newPlayer: false);
-                            }
                         }
                     }
                     else caller.Reply("Usage: /stataria setpoints <number> or /stataria setpoints rp <number>", Color.Red);
@@ -172,17 +133,7 @@ namespace Stataria
                     {
                         bool success = SetStatByName(rpg, args[1], val);
                         if (success)
-                        {
                             caller.Reply($"{args[1].ToUpper()} set to {val}", Color.Green);
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                            {
-                                rpg.SyncPlayer(toWho: 255, fromWho: caller.Player.whoAmI, newPlayer: false);
-                            }
-                            else if (Main.netMode == NetmodeID.Server)
-                            {
-                                rpg.SyncPlayer(toWho: -1, fromWho: caller.Player.whoAmI, newPlayer: false);
-                            }
-                        }
                         else
                             caller.Reply("Unknown stat name. Valid: vit, str, agi, int, luc, end, pow, dex, spr, tch, rge, brd, hlr, clk", Color.Red);
                     }
