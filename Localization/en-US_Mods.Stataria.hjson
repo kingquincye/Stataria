@@ -307,6 +307,11 @@ Configs: {
 			Label: XP Proximity Range
 			Tooltip: The maximum distance (in pixels) a player can be from an enemy to gain XP from its defeat.
 		}
+
+		AllowSelfResetInMultiplayer: {
+			Label: Allow Self Reset In Multiplayer
+			Tooltip: When enabled, allows non-admin players to reset their own Stataria progress using '/stataria selfreset' command in multiplayer.
+		}
 	}
 
 	EnemyScaling: {

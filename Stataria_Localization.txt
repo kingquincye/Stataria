@@ -307,6 +307,11 @@ Configs: {
 			Label: XP Proximity Range
 			Tooltip: The maximum distance (in pixels) a player can be from an enemy to gain XP from its defeat.
 		}
+
+		AllowSelfResetInMultiplayer: {
+			Label: Allow Self Reset In Multiplayer
+			Tooltip: When enabled, allows non-admin players to reset their own Stataria progress using '/stataria selfreset' command in multiplayer.
+		}
 	}
 
 	EnemyScaling: {
@@ -1071,6 +1076,11 @@ Configs: {
 			Label: Position X Percent
 		}
 
+		Headers: {
+			Resource_Bars_Settings: Resource Bars Settings
+			Boss_Bars: Boss Bars
+		}
+
 		Tooltip: ""
 
 		BarPadding: {
@@ -1078,7 +1088,35 @@ Configs: {
 			Tooltip: Space between adjacent bars in pixels.
 		}
 
-		Headers.Resource_Bars_Settings: Resource Bars Settings
+		BossBarScale: {
+			Label: Boss Bar Scale
+			Tooltip: Controls the size of boss health bars as a percentage of default size.
+		}
+
+		ShowBossHealthText: {
+			Label: Show Boss Health Text
+			Tooltip: When enabled, displays boss health numbers above the health bar.
+		}
+
+		ShowBossName: {
+			Label: Show Boss Name
+			Tooltip: When enabled, displays the boss name above its health bar.
+		}
+
+		BossBarWidth: {
+			Label: Boss Bar Width
+			Tooltip: Adjusts the width of boss health bars in pixels.
+		}
+
+		BossBarYOffsetPercent: {
+			Label: Boss Bar Y Offset Percent
+			Tooltip: Controls the vertical position of boss health bars as a percentage of screen height.
+		}
+
+		MaxVisibleBossBars: {
+			Label: Max Visible Boss Bars
+			Tooltip: Maximum number of boss health bars to display on screen at the same time.
+		}
 	}
 
 	Advanced: {

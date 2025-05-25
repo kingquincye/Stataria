@@ -360,6 +360,12 @@ namespace Stataria
             }
         }
 
+        private void RecalculateXPToNext()
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+        }
+
         public void PerformRebirth()
         {
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -1260,6 +1266,8 @@ namespace Stataria
                 Player.immune = true;
                 Player.immuneTime = 2;
             }
+
+            RecalculateXPToNext();
 
             CalculateGhostStats();
 

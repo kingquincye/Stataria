@@ -176,6 +176,7 @@ namespace Stataria
         public class MultiplayerSettings
         {
             [Header("Multiplayer_Settings")]
+            [DefaultValue(false)] public bool AllowSelfResetInMultiplayer { get; set; } = false;
             [DefaultValue(false)] public bool SplitKillXP { get; set; } = false;
             [DefaultValue(true)] public bool EnableXPProximity { get; set; } = true;
             [Range(500, 10000)][DefaultValue(1000)] public int XPProximityRange { get; set; } = 1000;

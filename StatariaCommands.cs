@@ -5,18 +5,21 @@ using Microsoft.Xna.Framework;
 using System;
 using Steamworks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Stataria
 {
     public class StatariaCommands : ModCommand
     {
         private const string AdminSteamID = ""; // your steamID
+        private static Dictionary<int, DateTime> selfResetConfirmations = new Dictionary<int, DateTime>();
+        private static readonly TimeSpan ConfirmationTimeout = TimeSpan.FromSeconds(30);
 
         public override CommandType Type => CommandType.Chat;
 
         public override string Command => "stataria";
 
-        public override string Usage => "/stataria <reset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal>";
+        public override string Usage => "/stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal>";
 
         public override string Description => "Commands for Stataria mod";
 
@@ -84,6 +87,10 @@ namespace Stataria
                     }
                     
                     caller.Reply("Stataria reset!", Color.Orange);
+                    break;
+                
+                case "selfreset":
+                    HandleSelfReset(caller);
                     break;
 
                 case "setlevel":
@@ -510,6 +517,75 @@ namespace Stataria
                     caller.Reply("Unknown subcommand. " + Usage, Color.Red);
                     break;
             }
+        }
+
+        private void HandleSelfReset(CommandCaller caller)
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            
+            if (Main.netMode == NetmodeID.MultiplayerClient && !config.multiplayerSettings.AllowSelfResetInMultiplayer)
+            {
+                caller.Reply("Self-reset is disabled in multiplayer on this server.", Color.Red);
+                return;
+            }
+            
+            int playerId = caller.Player.whoAmI;
+            DateTime now = DateTime.Now;
+            
+            var expiredKeys = selfResetConfirmations.Where(kvp => now - kvp.Value > ConfirmationTimeout).Select(kvp => kvp.Key).ToList();
+            foreach (var key in expiredKeys)
+            {
+                selfResetConfirmations.Remove(key);
+            }
+            
+            if (selfResetConfirmations.ContainsKey(playerId))
+            {
+                ExecuteSelfReset(caller);
+                selfResetConfirmations.Remove(playerId);
+            }
+            else
+            {
+                selfResetConfirmations[playerId] = now;
+                caller.Reply("WARNING: This will completely reset your Stataria progress!", Color.Red);
+                caller.Reply("All levels, stats, XP, rebirth progress, and abilities will be lost!", Color.Red);
+                caller.Reply("Type '/stataria selfreset' again within 30 seconds to confirm.", Color.Yellow);
+            }
+        }
+
+        private void ExecuteSelfReset(CommandCaller caller)
+        {
+            var rpg = caller.Player.GetModPlayer<RPGPlayer>();
+            var cfg = ModContent.GetInstance<StatariaConfig>();
+            
+            rpg.Level = 1;
+            rpg.XP = 0L;
+            rpg.XPToNext = (long)(100L * Math.Pow(rpg.Level, cfg.generalBalance.LevelScalingFactor));
+            rpg.StatPoints = 0;
+            rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = 0;
+            rpg.rewardedBosses.Clear();
+            rpg.RebirthCount = 0;
+            rpg.RebirthPoints = 0;
+            rpg.WasRetroRPGranted = false;
+            rpg.AutoAllocateEnabled = false;
+            rpg.AutoAllocateStats.Clear();
+            
+            foreach (var ability in rpg.RebirthAbilities.Values)
+            {
+                ability.IsUnlocked = false;
+                ability.Level = 0;
+                if (ability.AbilityType == RebirthAbilityType.Toggleable && ability.AbilityData.ContainsKey("Enabled"))
+                {
+                    ability.AbilityData["Enabled"] = false;
+                }
+            }
+            
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                rpg.SyncAbilities();
+            }
+            
+            caller.Reply("Your Stataria progress has been completely reset!", Color.Orange);
         }
 
         private bool SetStatByName(RPGPlayer rpg, string name, int value)
