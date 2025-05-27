@@ -24,6 +24,7 @@ namespace Stataria
         public int Level { get; set; }
         public int MaxLevel { get; set; }
         public RebirthAbilityType AbilityType { get; set; }
+        public bool IsHidden { get; set; }
 
         public Dictionary<string, object> AbilityData { get; set; }
 
@@ -133,6 +134,7 @@ namespace Stataria
             tag["Name"] = Name;
             tag["IsUnlocked"] = IsUnlocked;
             tag["Level"] = Level;
+            tag["IsHidden"] = IsHidden;
 
             if (AbilityType == RebirthAbilityType.Toggleable && AbilityData.ContainsKey("Enabled"))
             {
@@ -146,6 +148,7 @@ namespace Stataria
         {
             IsUnlocked = tag.GetBool("IsUnlocked");
             Level = tag.GetInt("Level");
+            IsHidden = tag.GetBool("IsHidden");
 
             if (AbilityType == RebirthAbilityType.Toggleable && tag.ContainsKey("IsEnabled"))
             {

@@ -20,9 +20,11 @@ namespace Stataria
         private UIText titleText;
         private UIText pointsText;
         private UITextPanel<string> resetAbilitiesButton;
+        private UITextPanel<string> showHiddenButton;
 
         private bool dragging = false;
         private Vector2 offset;
+        private bool showHiddenAbilities = false;
 
         private const float MaxVisibleHeight = 600f;
 
@@ -40,8 +42,9 @@ namespace Stataria
 
             mainPanel.OnLeftMouseDown += (evt, el) =>
             {
-                 if (scrollbar.ContainsPoint(evt.MousePosition))
+                if (scrollbar.ContainsPoint(evt.MousePosition))
                     return;
+
                 offset = new Vector2(evt.MousePosition.X - mainPanel.Left.Pixels, evt.MousePosition.Y - mainPanel.Top.Pixels);
                 dragging = true;
             };
@@ -60,13 +63,13 @@ namespace Stataria
 
             abilityList = new UIList();
             abilityList.Width.Set(-25f, 1f);
-            abilityList.Height.Set(-80f, 1f);
+            abilityList.Height.Set(-120f, 1f);
             abilityList.Top.Set(70f, 0f);
             abilityList.ListPadding = 10f;
             mainPanel.Append(abilityList);
 
             scrollbar = new UIScrollbar();
-            scrollbar.Height.Set(-100f, 1f);
+            scrollbar.Height.Set(-140f, 1f);
             scrollbar.Top.Set(70f, 0f);
             scrollbar.Left.Set(-20f, 1f);
             mainPanel.Append(scrollbar);
@@ -98,6 +101,36 @@ namespace Stataria
                 SoundEngine.PlaySound(SoundID.MenuClose);
             };
             mainPanel.Append(resetAbilitiesButton);
+
+            showHiddenButton = new UITextPanel<string>("Show Hidden", 0.9f, false);
+            showHiddenButton.Width.Set(120f, 0f);
+            showHiddenButton.Height.Set(30f, 0f);
+            showHiddenButton.Top.Set(mainPanel.Height.Pixels - 60f, 0f);
+            showHiddenButton.HAlign = 0.5f;
+            showHiddenButton.BackgroundColor = new Color(100, 100, 100, 200);
+            showHiddenButton.BorderColor = new Color(150, 150, 150, 200);
+            showHiddenButton.OnLeftClick += (evt, el) =>
+            {
+                showHiddenAbilities = !showHiddenAbilities;
+                UpdateShowHiddenButton();
+                RefreshAbilitiesList();
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            };
+            mainPanel.Append(showHiddenButton);
+        }
+
+        private void UpdateShowHiddenButton()
+        {
+            if (showHiddenAbilities)
+            {
+                showHiddenButton.BackgroundColor = new Color(80, 180, 80, 200);
+                showHiddenButton.BorderColor = new Color(100, 255, 100, 200);
+            }
+            else
+            {
+                showHiddenButton.BackgroundColor = new Color(100, 100, 100, 200);
+                showHiddenButton.BorderColor = new Color(150, 150, 150, 200);
+            }
         }
 
         public void RefreshAbilitiesList()
@@ -125,6 +158,9 @@ namespace Stataria
                     }
                 }
 
+                if (ability.IsHidden && !showHiddenAbilities)
+                    continue;
+
                 float basePanelHeight = 70f;
 
                 string wrappedDesc = WrapText(ability.GetCurrentEffectDescription(), 400);
@@ -138,22 +174,60 @@ namespace Stataria
                     BackgroundColor = ability.IsUnlocked ? new Color(80, 120, 80, 200) : new Color(100, 100, 100, 200)
                 };
 
+                if (ability.IsHidden && showHiddenAbilities)
+                {
+                    Color bgColor = abilityPanel.BackgroundColor;
+                    abilityPanel.BackgroundColor = new Color(bgColor.R, bgColor.G, bgColor.B, (int)(bgColor.A * 0.5f));
+                }
+
                 var nameText = new UIText(ability.Name, 1f);
                 nameText.Top.Set(-5f, 0f);
                 nameText.Left.Set(10f, 0f);
+                if (ability.IsHidden && showHiddenAbilities)
+                {
+                    nameText.TextColor = Color.White * 0.5f;
+                }
                 abilityPanel.Append(nameText);
 
                 var descText = new UIText(wrappedDesc, 0.8f);
                 descText.Top.Set(20f, 0f);
                 descText.Left.Set(10f, 0f);
-                descText.TextColor = Color.LightGray;
+                descText.TextColor = ability.IsHidden && showHiddenAbilities ? Color.LightGray * 0.5f : Color.LightGray;
                 abilityPanel.Append(descText);
 
                 var costText = new UIText($"Cost: {ability.Cost} RP", 0.8f);
                 costText.Top.Set(panelHeight - 30f, 0f);
                 costText.Left.Set(10f, 0f);
-                costText.TextColor = Color.Yellow;
+                costText.TextColor = ability.IsHidden && showHiddenAbilities ? Color.Yellow * 0.5f : Color.Yellow;
                 abilityPanel.Append(costText);
+
+                var hideButton = new UITextPanel<string>("Hide", 0.8f, false)
+                {
+                    Width = { Pixels = 80f },
+                    Height = { Pixels = 30f },
+                    Top = { Pixels = -5f },
+                    Left = { Pixels = 360f },
+                    BackgroundColor = ability.IsHidden ? new Color(180, 80, 80, 200) : new Color(100, 100, 100, 150),
+                    BorderColor = ability.IsHidden ? new Color(255, 100, 100, 200) : new Color(150, 150, 150, 150)
+                };
+
+                hideButton.OnLeftClick += (evt, el) =>
+                {
+                    ability.IsHidden = !ability.IsHidden;
+                    RefreshAbilitiesList();
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                    {
+                        rpg.SyncAbilities();
+                    }
+
+                    dragging = false;
+                    Main.mouseLeft = false;
+                    Main.mouseLeftRelease = false;
+                };
+
+                abilityPanel.Append(hideButton);
 
                 bool canUnlock = !ability.IsUnlocked || (ability.IsStackable && ability.Level < ability.MaxLevel);
                 string buttonText = ability.IsUnlocked ? (ability.IsStackable ? "Upgrade" : "Unlocked") : "Unlock";
