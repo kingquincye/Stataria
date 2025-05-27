@@ -1060,7 +1060,22 @@ namespace Stataria
 
             string tooltip = "XP System Info:\n";
 
-            tooltip += $"Stat Points per Level: {config.generalBalance.StatPointsPerLevel}\n";
+            int baseStatPoints = config.generalBalance.StatPointsPerLevel;
+            int bonusStatPoints = 0;
+
+            if (config.rebirthSystem.EnableRebirthBonusStatPoints && rpg.RebirthCount > 0)
+            {
+                bonusStatPoints = (int)(baseStatPoints * rpg.RebirthCount * config.rebirthSystem.RebirthStatPointsMultiplier);
+            }
+
+            if (bonusStatPoints > 0)
+            {
+                tooltip += $"Stat Points per Level: {baseStatPoints} + {bonusStatPoints} (Rebirth Bonus) = {baseStatPoints + bonusStatPoints}\n";
+            }
+            else
+            {
+                tooltip += $"Stat Points per Level: {baseStatPoints}\n";
+            }
             tooltip += $"Damage XP: {config.generalBalance.DamageXP:0.##}x damage dealt\n";
             tooltip += $"Kill XP: {config.generalBalance.KillXP:0.##}x enemy max health\n";
             tooltip += $"Boss XP: ";
@@ -1080,7 +1095,7 @@ namespace Stataria
             if (config.rebirthSystem.EnableDynamicRebirthLevelCap)
             {
                 int nextRebirthRequirement = config.rebirthSystem.RebirthLevelRequirement +
-                                           (rpg.RebirthCount * config.rebirthSystem.AdditionalLevelRequirementPerRebirth);
+                                        (rpg.RebirthCount * config.rebirthSystem.AdditionalLevelRequirementPerRebirth);
                 int dynamicLevelCap = (int)(nextRebirthRequirement * config.rebirthSystem.DynamicRebirthLevelCapMultiplier);
                 capText = $"Dynamic Level Cap (Current Cycle): {dynamicLevelCap}\n";
             }
@@ -1089,6 +1104,19 @@ namespace Stataria
                 capText = $"Level Cap: {config.generalBalance.LevelCapValue}\n";
             }
             tooltip += capText;
+
+            if (config.statSettings.EnableStatCaps)
+            {
+                if (config.rebirthSystem.EnableProgressiveStatCaps && rpg.RebirthCount > 0)
+                {
+                    float capMultiplier = 1f + (rpg.RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                    tooltip += $"Stat Caps: Base × {capMultiplier:F2} (Progressive)\n";
+                }
+                else
+                {
+                    tooltip += "Stat Caps: Base values\n";
+                }
+            }
 
             if (config.multiplayerSettings.SplitKillXP)
                 tooltip += "XP is split evenly among all eligible players\n";
@@ -1198,11 +1226,29 @@ namespace Stataria
 
             if (config.statSettings.EnableStatCaps)
             {
-                int currentVal = stat.GetValue(rpg);
+                int currentBaseStat = stat.GetValue(rpg);
                 int cap = stat.GetCap(config);
 
-                if (currentVal + amount > cap)
-                    amount = Math.Max(0, cap - currentVal);
+                if (config.rebirthSystem.EnableProgressiveStatCaps && rpg.RebirthCount > 0)
+                {
+                    float capMultiplier = 1f + (rpg.RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                    cap = (int)(cap * capMultiplier);
+                }
+
+                int effectiveCurrentStat = rpg.GetEffectiveStat(stat.Name);
+
+                if (effectiveCurrentStat >= cap)
+                {
+                    return;
+                }
+
+                int ghostBonus = rpg.GhostStats.TryGetValue(stat.Name, out int ghost) ? ghost : 0;
+                int maxUsefulBaseStat = cap - ghostBonus;
+
+                if (currentBaseStat + amount > maxUsefulBaseStat)
+                {
+                    amount = Math.Max(0, maxUsefulBaseStat - currentBaseStat);
+                }
 
                 if (amount <= 0)
                     return;
@@ -1318,7 +1364,22 @@ namespace Stataria
                     bool canAdd = rpg.StatPoints > 0;
                     if (canAdd && config.statSettings.EnableStatCaps)
                     {
-                        canAdd = value < stat.GetCap(config);
+                        int cap = stat.GetCap(config);
+
+                        if (config.rebirthSystem.EnableProgressiveStatCaps && rpg.RebirthCount > 0)
+                        {
+                            float capMultiplier = 1f + (rpg.RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                            cap = (int)(cap * capMultiplier);
+                        }
+
+                        int effectiveStat = rpg.GetEffectiveStat(stat.Name);
+                        canAdd = effectiveStat < cap;
+
+                        if (canAdd && rpg.GhostStats.TryGetValue(stat.Name, out int ghostBonus))
+                        {
+                            int maxUsefulBaseStat = cap - ghostBonus;
+                            canAdd = value < maxUsefulBaseStat;
+                        }
                     }
 
                     plusButtons[i].BackgroundColor = canAdd

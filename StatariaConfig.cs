@@ -126,6 +126,11 @@ namespace Stataria
             [DefaultValue(true)] public bool ResetBossRewardsOnRebirth { get; set; } = true;
             [DefaultValue(false)] public bool EnableDynamicRebirthLevelCap { get; set; } = false;
             [Range(1.1f, 10f)][DefaultValue(2f)][Increment(0.1f)] public float DynamicRebirthLevelCapMultiplier { get; set; } = 2f;
+            [DefaultValue(true)] public bool EnableRebirthBonusStatPoints { get; set; } = true;
+            [Range(0.1f, 10f)][DefaultValue(0.25f)] public float RebirthStatPointsMultiplier { get; set; } = 0.25f;
+            [DefaultValue(false)] public bool EnableRebirthStatPointRecalculation { get; set; } = false;
+            [DefaultValue(true)] public bool EnableProgressiveStatCaps { get; set; } = true;
+            [Range(0.1f, 10f)][DefaultValue(0.5f)] public float ProgressiveStatCapMultiplier { get; set; } = 0.5f;
 
             [Header("Rebirth_Points")]
             [DefaultValue(false)] public bool EnableRebirthPointRecalculation { get; set; } = false;

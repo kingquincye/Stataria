@@ -287,6 +287,31 @@ Configs: {
 				Valid entries: VIT, STR, AGI, INT, LUC, END, POW, DEX, SPR, TCH, RGE, BRD, HLR, CLK
 				'''
 		}
+
+		EnableRebirthBonusStatPoints: {
+			Label: Enable Rebirth Bonus Stat Points
+			Tooltip: When enabled, each rebirth increases the stat points gained per level up.
+		}
+
+		RebirthStatPointsMultiplier: {
+			Label: Rebirth Stat Points Multiplier
+			Tooltip: Percentage bonus to stat points per level for each rebirth. 0.25 means +25% stat points per rebirth.
+		}
+
+		EnableRebirthStatPointRecalculation: {
+			Label: Enable Rebirth Stat Point Recalculation
+			Tooltip: When enabled, players will automatically receive additional stat points if rebirth stat point settings are increased.
+		}
+
+		EnableProgressiveStatCaps: {
+			Label: Enable Progressive Stat Caps
+			Tooltip: When enabled, stat caps increase with each rebirth, allowing for higher stat investment.
+		}
+
+		ProgressiveStatCapMultiplier: {
+			Label: Progressive Stat Cap Multiplier
+			Tooltip: Percentage increase to stat caps per rebirth. 0.5 means +50% cap increase per rebirth.
+		}
 	}
 
 	MultiplayerSettings: {

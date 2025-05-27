@@ -14,6 +14,8 @@ namespace Stataria
         private static int lastAdditionalLevelRequirementPerRebirth;
         private static bool lastBonusPointsForExcessLevels;
         private static float lastExcessLevelPointMultiplier;
+        private static bool lastRebirthBonusStatPoints;
+        private static float lastRebirthStatPointsMultiplier;
 
         public override void Load()
         {
@@ -27,6 +29,8 @@ namespace Stataria
             lastAdditionalLevelRequirementPerRebirth = config.rebirthSystem.AdditionalLevelRequirementPerRebirth;
             lastBonusPointsForExcessLevels = config.rebirthSystem.BonusPointsForExcessLevels;
             lastExcessLevelPointMultiplier = config.rebirthSystem.ExcessLevelPointMultiplier;
+            lastRebirthBonusStatPoints = config.rebirthSystem.EnableRebirthBonusStatPoints;
+            lastRebirthStatPointsMultiplier = config.rebirthSystem.RebirthStatPointsMultiplier;
         }
 
         public override void OnModLoad()
@@ -129,6 +133,35 @@ namespace Stataria
                     lastAdditionalLevelRequirementPerRebirth = cfg.rebirthSystem.AdditionalLevelRequirementPerRebirth;
                     lastBonusPointsForExcessLevels = cfg.rebirthSystem.BonusPointsForExcessLevels;
                     lastExcessLevelPointMultiplier = cfg.rebirthSystem.ExcessLevelPointMultiplier;
+                }
+            }
+
+            bool rebirthStatPointConfigChanged =
+                cfg.rebirthSystem.EnableRebirthBonusStatPoints != lastRebirthBonusStatPoints ||
+                cfg.rebirthSystem.RebirthStatPointsMultiplier != lastRebirthStatPointsMultiplier;
+
+            if (rebirthStatPointConfigChanged)
+            {
+                if (cfg.rebirthSystem.EnableRebirthStatPointRecalculation)
+                {
+                    StatariaLogger.Debug("Rebirth stat point config change detected - recalculating stat points for players");
+                    lastRebirthBonusStatPoints = cfg.rebirthSystem.EnableRebirthBonusStatPoints;
+                    lastRebirthStatPointsMultiplier = cfg.rebirthSystem.RebirthStatPointsMultiplier;
+
+                    foreach (Player player in Main.player)
+                    {
+                        if (player.active)
+                        {
+                            var rpg = player.GetModPlayer<RPGPlayer>();
+                            rpg.RecalculateRebirthStatPoints();
+                        }
+                    }
+                }
+                else
+                {
+                    StatariaLogger.Debug("Rebirth stat point config change detected - recalculation disabled");
+                    lastRebirthBonusStatPoints = cfg.rebirthSystem.EnableRebirthBonusStatPoints;
+                    lastRebirthStatPointsMultiplier = cfg.rebirthSystem.RebirthStatPointsMultiplier;
                 }
             }
 

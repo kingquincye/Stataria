@@ -561,6 +561,12 @@ namespace Stataria
 
             if (capsEnabled)
             {
+                if (config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
+                {
+                    float capMultiplier = 1f + (RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                    cap = (int)(cap * capMultiplier);
+                }
+
                 totalStat = Math.Min(totalStat, cap);
             }
 
@@ -605,6 +611,37 @@ namespace Stataria
                 if (Main.netMode != NetmodeID.Server)
                 {
                     CombatText.NewText(Player.Hitbox, Color.Gold, $"+{difference} RP", true);
+                }
+            }
+        }
+
+        public void RecalculateRebirthStatPoints()
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (!config.rebirthSystem.EnableRebirthStatPointRecalculation || !config.rebirthSystem.EnableRebirthBonusStatPoints)
+                return;
+
+            int shouldHaveBaseStatPoints = (Level - 1) * config.generalBalance.StatPointsPerLevel;
+            int shouldHaveBonusStatPoints = 0;
+
+            if (RebirthCount > 0)
+            {
+                shouldHaveBonusStatPoints = (Level - 1) * (int)(config.generalBalance.StatPointsPerLevel * RebirthCount * config.rebirthSystem.RebirthStatPointsMultiplier);
+            }
+
+            int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK;
+            int totalPointsShould = shouldHaveBaseStatPoints + shouldHaveBonusStatPoints;
+            int currentTotalPoints = spentPoints + StatPoints;
+
+            if (totalPointsShould > currentTotalPoints)
+            {
+                int difference = totalPointsShould - currentTotalPoints;
+                StatPoints += difference;
+
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    CombatText.NewText(Player.Hitbox, Color.Gold, $"+{difference} Rebirth Stat Points", true);
                 }
             }
         }
@@ -744,7 +781,16 @@ namespace Stataria
             }
 
             Level++;
-            StatPoints += config.generalBalance.StatPointsPerLevel;
+
+            int baseStatPoints = config.generalBalance.StatPointsPerLevel;
+            int bonusStatPoints = 0;
+
+            if (config.rebirthSystem.EnableRebirthBonusStatPoints && RebirthCount > 0)
+            {
+                bonusStatPoints = (int)(baseStatPoints * RebirthCount * config.rebirthSystem.RebirthStatPointsMultiplier);
+            }
+
+            StatPoints += baseStatPoints + bonusStatPoints;
             XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
 
             if (Main.netMode != NetmodeID.Server)
@@ -1153,64 +1199,52 @@ namespace Stataria
 
                 if (config.statSettings.EnableStatCaps)
                 {
+                    int cap = 0;
+                    int currentBaseStat = 0;
+
                     switch (statName)
                     {
-                        case "VIT":
-                            isAtCap = VIT >= config.statSettings.VIT_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.VIT_Cap - VIT);
-                            break;
-                        case "STR":
-                            isAtCap = STR >= config.statSettings.STR_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.STR_Cap - STR);
-                            break;
-                        case "AGI":
-                            isAtCap = AGI >= config.statSettings.AGI_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.AGI_Cap - AGI);
-                            break;
-                        case "INT":
-                            isAtCap = INT >= config.statSettings.INT_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.INT_Cap - INT);
-                            break;
-                        case "LUC":
-                            isAtCap = LUC >= config.statSettings.LUC_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.LUC_Cap - LUC);
-                            break;
-                        case "END":
-                            isAtCap = END >= config.statSettings.END_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.END_Cap - END);
-                            break;
-                        case "POW":
-                            isAtCap = POW >= config.statSettings.POW_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.POW_Cap - POW);
-                            break;
-                        case "DEX":
-                            isAtCap = DEX >= config.statSettings.DEX_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.DEX_Cap - DEX);
-                            break;
-                        case "SPR":
-                            isAtCap = SPR >= config.statSettings.SPR_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.SPR_Cap - SPR);
-                            break;
-                        case "TCH":
-                            isAtCap = TCH >= config.statSettings.TCH_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.TCH_Cap - TCH);
-                            break;
-                        case "RGE":
-                            isAtCap = RGE >= config.statSettings.RGE_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.RGE_Cap - RGE);
-                            break;
-                        case "BRD":
-                            isAtCap = BRD >= config.statSettings.BRD_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.BRD_Cap - BRD);
-                            break;
-                        case "HLR":
-                            isAtCap = HLR >= config.statSettings.HLR_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.HLR_Cap - HLR);
-                            break;
-                        case "CLK":
-                            isAtCap = CLK >= config.statSettings.CLK_Cap;
-                            pointsToAdd = Math.Min(pointsToAdd, config.statSettings.CLK_Cap - CLK);
-                            break;
+                        case "VIT": currentBaseStat = VIT; cap = config.statSettings.VIT_Cap; break;
+                        case "STR": currentBaseStat = STR; cap = config.statSettings.STR_Cap; break;
+                        case "AGI": currentBaseStat = AGI; cap = config.statSettings.AGI_Cap; break;
+                        case "INT": currentBaseStat = INT; cap = config.statSettings.INT_Cap; break;
+                        case "LUC": currentBaseStat = LUC; cap = config.statSettings.LUC_Cap; break;
+                        case "END": currentBaseStat = END; cap = config.statSettings.END_Cap; break;
+                        case "POW": currentBaseStat = POW; cap = config.statSettings.POW_Cap; break;
+                        case "DEX": currentBaseStat = DEX; cap = config.statSettings.DEX_Cap; break;
+                        case "SPR": currentBaseStat = SPR; cap = config.statSettings.SPR_Cap; break;
+                        case "TCH": currentBaseStat = TCH; cap = config.statSettings.TCH_Cap; break;
+                        case "RGE": currentBaseStat = RGE; cap = config.statSettings.RGE_Cap; break;
+                        case "BRD": currentBaseStat = BRD; cap = config.statSettings.BRD_Cap; break;
+                        case "HLR": currentBaseStat = HLR; cap = config.statSettings.HLR_Cap; break;
+                        case "CLK": currentBaseStat = CLK; cap = config.statSettings.CLK_Cap; break;
+                        default: continue;
+                    }
+
+                    if (config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
+                    {
+                        float capMultiplier = 1f + (RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                        cap = (int)(cap * capMultiplier);
+                    }
+
+                    int effectiveStat = GetEffectiveStat(statName);
+                    if (effectiveStat >= cap)
+                    {
+                        isAtCap = true;
+                    }
+                    else
+                    {
+                        int ghostBonus = GhostStats.TryGetValue(statName, out int ghost) ? ghost : 0;
+                        int maxUsefulBaseStat = cap - ghostBonus;
+
+                        if (currentBaseStat >= maxUsefulBaseStat)
+                        {
+                            isAtCap = true;
+                        }
+                        else
+                        {
+                            pointsToAdd = Math.Min(pointsToAdd, maxUsefulBaseStat - currentBaseStat);
+                        }
                     }
                 }
 
