@@ -41,6 +41,10 @@ namespace Stataria
         public bool WasRetroRPGranted = false;
         public Dictionary<string, RebirthAbility> RebirthAbilities { get; private set; } = new Dictionary<string, RebirthAbility>();
 
+        public Role ActiveRole { get; set; }
+        public int RoleSwitchCount { get; set; }
+        public Dictionary<string, Role> AvailableRoles { get; private set; } = new Dictionary<string, Role>();
+
         public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0;
         public HashSet<int> rewardedBosses = new();
 
@@ -65,6 +69,7 @@ namespace Stataria
             RebirthPoints = 0;
             RebirthAbilities = new Dictionary<string, RebirthAbility>();
             RegisterDefaultAbilities();
+            RegisterDefaultRoles();
             xpVerifier = new XPVerificationSystem(this);
         }
 
@@ -92,6 +97,9 @@ namespace Stataria
                 abilitiesData.Add(abilityTag);
             }
             tag["RebirthAbilities"] = abilitiesData;
+            if (ActiveRole != null)
+                tag["ActiveRoleID"] = ActiveRole.ID;
+            tag["RoleSwitchCount"] = RoleSwitchCount;
             tag["AutoAllocateEnabled"] = AutoAllocateEnabled;
             tag["AutoAllocateStats"] = AutoAllocateStats.ToList();
         }
@@ -129,6 +137,17 @@ namespace Stataria
                     }
                 }
             }
+            RegisterDefaultRoles();
+            if (tag.ContainsKey("ActiveRoleID"))
+            {
+                string activeRoleID = tag.GetString("ActiveRoleID");
+                if (AvailableRoles.ContainsKey(activeRoleID))
+                {
+                    ActiveRole = AvailableRoles[activeRoleID];
+                    ActiveRole.Status = RoleStatus.Active;
+                }
+            }
+            RoleSwitchCount = tag.ContainsKey("RoleSwitchCount") ? tag.GetInt("RoleSwitchCount") : 0;
             if (!WasRetroRPGranted && RebirthCount > 0)
             {
                 var config = ModContent.GetInstance<StatariaConfig>();
@@ -341,6 +360,62 @@ namespace Stataria
             }
         }
 
+        private void RegisterDefaultRoles()
+        {
+            AvailableRoles.Clear();
+
+            var critGod = new Role(
+                "CritGod",
+                "Crit God",
+                "A master of devastating precision, turning every strike into a potential killing blow.",
+                "Channel your inner perfectionist - every hit counts, every strike matters."
+            );
+            AvailableRoles["CritGod"] = critGod;
+
+            foreach (var role in AvailableRoles.Values)
+            {
+                if (ActiveRole?.ID == role.ID)
+                    role.Status = RoleStatus.Active;
+                else
+                    role.Status = RoleStatus.Available;
+            }
+        }
+
+        public bool SwitchToRole(string roleID)
+        {
+            if (!AvailableRoles.ContainsKey(roleID))
+                return false;
+
+            var newRole = AvailableRoles[roleID];
+            if (!newRole.CanActivate(this))
+                return false;
+
+            int cost = newRole.GetCurrentSwitchCost(this);
+
+            if (ActiveRole != null)
+            {
+                RebirthPoints -= cost;
+                RoleSwitchCount++;
+            }
+
+            if (ActiveRole != null)
+                ActiveRole.Status = RoleStatus.Available;
+
+            ActiveRole = newRole;
+            ActiveRole.Status = RoleStatus.Active;
+
+            return true;
+        }
+
+        public void ResetRoles()
+        {
+            if (ActiveRole != null)
+            {
+                ActiveRole.Status = RoleStatus.Available;
+                ActiveRole = null;
+            }
+            RoleSwitchCount = 0;
+        }
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (StatariaKeybinds.ToggleStatUI.JustPressed
@@ -350,6 +425,9 @@ namespace Stataria
                 {
                     if (StatariaUI.SkillTreeUI.CurrentState != null)
                         StatariaUI.SkillTreeUI.SetState(null);
+
+                    if (StatariaUI.RoleSelectionUI.CurrentState != null)
+                        StatariaUI.RoleSelectionUI.SetState(null);
 
                     StatariaUI.StatUI.SetState(StatariaUI.Panel);
                 }
@@ -835,6 +913,39 @@ namespace Stataria
             GainXP((long)(damageDone * config.generalBalance.DamageXP), "Projectile");
         }
 
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            ApplyCritGodEffects(item, ref modifiers);
+        }
+
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (proj.owner == Player.whoAmI)
+            {
+                Item item = Player.HeldItem;
+                ApplyCritGodEffects(item, ref modifiers);
+            }
+        }
+
+        private void ApplyCritGodEffects(Item item, ref NPC.HitModifiers modifiers)
+        {
+            if (ActiveRole?.ID != "CritGod" || ActiveRole.Status != RoleStatus.Active)
+                return;
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            float totalCrit = item.crit;
+            totalCrit += GetEffectiveStat("LUC") * config.statSettings.LUC_Crit;
+            totalCrit += config.roleSettings.CritGodCritChance;
+
+            if (totalCrit > 100f)
+            {
+                float excessCrit = totalCrit - 100f;
+                float critDamageBonus = excessCrit * config.roleSettings.CritGodExcessCritToDamage / 100f;
+                modifiers.CritDamage += critDamageBonus;
+            }
+        }
+
         public override void ModifyLuck(ref float luck)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -1001,6 +1112,7 @@ namespace Stataria
             }
 
             ApplyAbilityEffects1();
+            ApplyRoleEffects();
         }
 
         private void ApplyRogueStatEffects()
@@ -1596,6 +1708,19 @@ namespace Stataria
             }
         }
 
+        private void ApplyRoleEffects()
+        {
+            if (ActiveRole == null || ActiveRole.Status != RoleStatus.Active)
+                return;
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (ActiveRole.ID == "CritGod")
+            {
+                Player.GetModPlayer<CritGodPlayer>().EnableSummonCrits = true;
+            }
+        }
+
         public override void GetHealLife(Item item, bool quickHeal, ref int healValue)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -1817,6 +1942,11 @@ namespace Stataria
                 effectiveLUC += lucBonus;
 
             crit += effectiveLUC * config.statSettings.LUC_Crit;
+
+            if (ActiveRole?.ID == "CritGod" && ActiveRole.Status == RoleStatus.Active)
+            {
+                crit += config.roleSettings.CritGodCritChance;
+            }
         }
 
         public override bool CanConsumeAmmo(Item weapon, Item ammo)

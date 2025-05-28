@@ -13,6 +13,8 @@ namespace Stataria
         internal static UserInterface SkillTreeUI;
         internal static SkillTreeUI SkillTreePanel;
         internal static UserInterface XPVerificationUI;
+        internal static UserInterface RoleSelectionUI;
+        internal static RoleSelectionUI RoleSelectionPanel;
 
         public override void Load()
         {
@@ -25,6 +27,9 @@ namespace Stataria
             SkillTreePanel = new SkillTreeUI();
             SkillTreePanel.Activate();
             XPVerificationUI = new UserInterface();
+            RoleSelectionUI = new UserInterface();
+            RoleSelectionPanel = new RoleSelectionUI();
+            RoleSelectionPanel.Activate();
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -43,6 +48,10 @@ namespace Stataria
             if (XPVerificationUI?.CurrentState != null)
             {
                 XPVerificationUI.Update(gameTime);
+            }
+            if (RoleSelectionUI?.CurrentState != null)
+            {
+                RoleSelectionUI.Update(gameTime);
             }
         }
 
@@ -86,6 +95,19 @@ namespace Stataria
                         if (XPVerificationUI?.CurrentState != null)
                         {
                             XPVerificationUI.Draw(Main.spriteBatch, new GameTime());
+                        }
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Role Selection",
+                    delegate
+                    {
+                        if (RoleSelectionUI?.CurrentState != null)
+                        {
+                            RoleSelectionUI.Draw(Main.spriteBatch, new GameTime());
                         }
                         return true;
                     },

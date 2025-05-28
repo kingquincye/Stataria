@@ -27,6 +27,9 @@ namespace Stataria
         public RebirthAbilities rebirthAbilities = new RebirthAbilities();
 
         [SeparatePage]
+        public RoleSettings roleSettings = new RoleSettings();
+
+        [SeparatePage]
         public MultiplayerSettings multiplayerSettings = new MultiplayerSettings();
 
         [SeparatePage]
@@ -176,6 +179,18 @@ namespace Stataria
             [DefaultValue(40f)][Range(2f, 120f)] public float AutoClickerSpeedFactorAtLevel1 { get; set; } = 40f;
             [DefaultValue(-7f)][Range(-20f, 0f)] public float AutoClickerSpeedFactorImprovementPerLevel { get; set; } = -7f;
             [DefaultValue(false)] public bool AutoClickerPreventsEffects { get; set; } = false;
+        }
+
+        public class RoleSettings
+        {
+            [Header("Role_System")]
+            [DefaultValue(10)][Range(0, 1000)] public int BaseSwitchCost { get; set; } = 10;
+            [DefaultValue(0.5f)][Range(0f, 5f)] public float SwitchCostMultiplier { get; set; } = 0.5f;
+
+            [Header("Crit_God")]
+            [DefaultValue(50f)][Range(0f, 200f)] public float CritGodCritChance { get; set; } = 50f;
+            [DefaultValue(1f)][Range(0f, 10f)] public float CritGodExcessCritToDamage { get; set; } = 1f;
+            [DefaultValue(true)] public bool CritGodEnableSummonCrits { get; set; } = true;
         }
 
         public class MultiplayerSettings

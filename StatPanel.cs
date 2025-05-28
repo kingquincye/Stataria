@@ -629,6 +629,18 @@ namespace Stataria
                 skillTreeButton.OnLeftClick += OnSkillTreeButtonClick;
                 panel.Append(skillTreeButton);
 
+                var rolesButton = new UITextPanel<string>("Roles", textScale: 0.9f, large: false)
+                {
+                    Top = { Pixels = rebirthButtonY + 90f },
+                    Left = { Pixels = (totalWidth - 120f) / 2 },
+                    Width = { Pixels = 120f },
+                    Height = { Pixels = 30f },
+                    BackgroundColor = new Color(120, 80, 150, 200),
+                    BorderColor = new Color(160, 100, 200, 255)
+                };
+                rolesButton.OnLeftClick += OnRolesButtonClick;
+                panel.Append(rolesButton);
+
                 rebirthConfirmationText = new UIText("Are you sure you want to Rebirth?", 0.9f)
                 {
                     Top = { Pixels = rebirthButtonY + 85f },
@@ -636,7 +648,7 @@ namespace Stataria
                     TextColor = Color.Red
                 };
                 rebirthConfirmationY = rebirthButtonY + 45f;
-                bottomControlsTop = rebirthButtonY + 100f;
+                bottomControlsTop = rebirthButtonY + 135f;
             }
 
             bulkManager = new BulkAllocationManager();
@@ -897,6 +909,18 @@ namespace Stataria
                 skillTreeButton.OnLeftClick += OnSkillTreeButtonClick;
                 panel.Append(skillTreeButton);
 
+                var rolesButton = new UITextPanel<string>("Roles", textScale: 0.9f, large: false)
+                {
+                    Top = { Pixels = rebirthButtonY + 90f },
+                    Left = { Pixels = (totalWidth - 120f) / 2 },
+                    Width = { Pixels = 120f },
+                    Height = { Pixels = 30f },
+                    BackgroundColor = new Color(120, 80, 150, 200),
+                    BorderColor = new Color(160, 100, 200, 255)
+                };
+                rolesButton.OnLeftClick += OnRolesButtonClick;
+                panel.Append(rolesButton);
+
                 rebirthConfirmationText = new UIText("Are you sure you want to Rebirth?", 0.9f)
                 {
                     Top = { Pixels = rebirthButtonY + 85f },
@@ -904,7 +928,7 @@ namespace Stataria
                     TextColor = Color.Red
                 };
                 rebirthConfirmationY = rebirthButtonY + 45f;
-                bottomControlsTop = rebirthButtonY + 100f;
+                bottomControlsTop = rebirthButtonY + 135f;
             }
 
             bulkManager = new BulkAllocationManager();
@@ -1021,6 +1045,14 @@ namespace Stataria
             StatariaUI.StatUI.SetState(null);
             StatariaUI.SkillTreeUI.SetState(StatariaUI.SkillTreePanel);
             StatariaUI.SkillTreePanel.RefreshAbilitiesList();
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+        }
+
+        private void OnRolesButtonClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            StatariaUI.StatUI.SetState(null);
+            StatariaUI.RoleSelectionUI.SetState(StatariaUI.RoleSelectionPanel);
+            StatariaUI.RoleSelectionPanel.RefreshRolesList();
             SoundEngine.PlaySound(SoundID.MenuOpen);
         }
 

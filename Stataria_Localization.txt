@@ -63,6 +63,11 @@ Configs: {
 			Label: XP Verification
 			Tooltip: Configure the system that detects and validates abnormal XP gains.
 		}
+
+		roleSettings: {
+			Label: Role Settings
+			Tooltip: Configure role system mechanics, costs, and individual role effects.
+		}
 	}
 
 	GeneralBalance: {
@@ -1195,6 +1200,40 @@ Configs: {
 				XP sources that are exempt from verification. Add entries like 'Boss' to whitelist all XP from sources containing 'Boss' in their name.
 				Common sources include: 'Boss Bonus', 'Kill', 'Damage', 'Melee', 'Projectile'.
 				'''
+		}
+	}
+
+	RoleSettings: {
+		Tooltip: ""
+
+		Headers: {
+			Role_System: Role System
+			Crit_God: Crit God
+		}
+
+		BaseSwitchCost: {
+			Label: Base Switch Cost
+			Tooltip: Base Rebirth Point cost for switching roles (after the first free selection).
+		}
+
+		SwitchCostMultiplier: {
+			Label: Switch Cost Multiplier
+			Tooltip: Cost multiplier increase per role switch.
+		}
+
+		CritGodCritChance: {
+			Label: Crit Chance
+			Tooltip: Global crit chance bonus provided by Crit God.
+		}
+
+		CritGodExcessCritToDamage: {
+			Label: Excess Crit To Damage
+			Tooltip: How much crit damage is gained per 1% of crit chance over 100%.
+		}
+
+		CritGodEnableSummonCrits: {
+			Label: Enable Summon Crits
+			Tooltip: When enabled, the Crit God allows summons to crit.
 		}
 	}
 }
