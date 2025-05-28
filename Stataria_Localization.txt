@@ -1209,6 +1209,7 @@ Configs: {
 		Headers: {
 			Role_System: Role System
 			Crit_God: Crit God
+			Vampire: Vampire
 		}
 
 		BaseSwitchCost: {
@@ -1235,5 +1236,62 @@ Configs: {
 			Label: Enable Summon Crits
 			Tooltip: When enabled, the Crit God allows summons to crit.
 		}
+
+		VampireBleedTickInterval: {
+			Tooltip: Time between Bleed damage ticks in seconds.
+			Label: Bleed Tick Interval
+		}
+
+		VampireBleedDuration: {
+			Tooltip: How long the Bleed debuff lasts in seconds.
+			Label: Bleed Duration
+		}
+
+		VampireBleedDamagePercent: {
+			Tooltip: Percentage of enemy's max health dealt as damage per tick.
+			Label: Bleed Damage Percent
+		}
+
+		VampireBleedChance: {
+			Tooltip: Percentage chance for attacks to inflict Bleed on enemies.
+			Label: Bleed Chance
+		}
+
+		VampireMovementSpeed: {
+			Tooltip: Percentage increase to movement speed.
+			Label: Movement Speed Bonus
+		}
+
+		VampireHealthBonus: {
+			Tooltip: Percentage increase to maximum health.
+			Label: Health Bonus
+		}
+
+		RoleProximityRange: {
+			Tooltip: The maximum distance (in pixels) a player can be from an enemy to receive role-based kill effects.
+			Label: Role Proximity Range
+		}
+
+		EnableRoleProximity: {
+			Tooltip: When enabled, role effects from enemy kills only apply to players within a certain range of the enemy.
+			Label: Enable Role Proximity
+		}
+
+		VampireBleedHealPercent: {
+			Label: Bleed Heal Percent
+			Tooltip: Percentage of damage dealt to bleeding enemies that heals the vampire.
+		}
+
+		VampireKillHealPercent: {
+			Label: Kill Heal Percent
+			Tooltip: Percentage of max health restored when killing an enemy.
+		}
+	}
+}
+
+Buffs: {
+	BleedDebuff: {
+		Description: Losing health over time
+		DisplayName: Bleed
 	}
 }

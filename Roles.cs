@@ -10,7 +10,8 @@ namespace Stataria
     {
         Available,
         Active,
-        Locked
+        Locked,
+        Deactivated
     }
 
     public class Role
@@ -51,12 +52,15 @@ namespace Stataria
             if (Status == RoleStatus.Active)
                 return false;
 
+            if (Status == RoleStatus.Deactivated)
+                return true;
+
             return player.RebirthPoints >= GetCurrentSwitchCost(player);
         }
 
         public int GetCurrentSwitchCost(RPGPlayer player)
         {
-            if (player.ActiveRole == null)
+            if (player.ActiveRole == null || Status == RoleStatus.Deactivated)
                 return 0;
 
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -74,8 +78,27 @@ namespace Stataria
                 var effects = new List<string>
                 {
                     $"• +{config.roleSettings.CritGodCritChance}% Global Critical Strike Chance",
-                    $"• Excess Critical Strike Chance (over 100%) converts to +{config.roleSettings.CritGodExcessCritToDamage:0.##}% Critical Strike Damage per 1% excess",
-                    "• Your summons can now critically strike"
+                    $"• Excess Critical Strike Chance (over 100%) converts to +{config.roleSettings.CritGodExcessCritToDamage:0.##}% Critical Strike Damage per 1% excess"
+                };
+
+                if (config.roleSettings.CritGodEnableSummonCrits)
+                {
+                    effects.Add("• Your summons can now critically strike");
+                }
+
+                return string.Join("\n", effects);
+            }
+
+            if (ID == "Vampire")
+            {
+                var effects = new List<string>
+                {
+                    $"• +{config.roleSettings.VampireHealthBonus:0.##}% Max Health",
+                    $"• +{config.roleSettings.VampireMovementSpeed:0.##}% Movement Speed",
+                    $"• {config.roleSettings.VampireBleedChance:0.##}% chance to inflict Bleed on attack",
+                    $"• Bleed deals {config.roleSettings.VampireBleedDamagePercent:0.##}% of enemy's max health per {config.roleSettings.VampireBleedTickInterval:0.##}s",
+                    $"• Heal for {config.roleSettings.VampireBleedHealPercent:0.##}% of damage dealt to bleeding enemies",
+                    $"• Heal for {config.roleSettings.VampireKillHealPercent:0.##}% of max health on enemy kill"
                 };
 
                 return string.Join("\n", effects);

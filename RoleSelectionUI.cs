@@ -44,11 +44,11 @@ namespace Stataria
 
             rolePanel.OnLeftMouseDown += (evt, el) =>
             {
-                if (scrollbar != null && scrollbar.ContainsPoint(evt.MousePosition))
-                    return;
-
-                offset = new Vector2(evt.MousePosition.X - rolePanel.Left.Pixels, evt.MousePosition.Y - rolePanel.Top.Pixels);
-                dragging = true;
+                if (!IsClickingOnInteractiveElement(evt.MousePosition))
+                {
+                    offset = new Vector2(evt.MousePosition.X - rolePanel.Left.Pixels, evt.MousePosition.Y - rolePanel.Top.Pixels);
+                    dragging = true;
+                }
             };
             rolePanel.OnLeftMouseUp += (evt, el) => dragging = false;
 
@@ -97,7 +97,6 @@ namespace Stataria
             if (rpg == null) return;
 
             pointsText.SetText($"Rebirth Points: {rpg.RebirthPoints}");
-            activeRoleText.SetText($"Active Role: {(rpg.ActiveRole?.Name ?? "None")}");
 
             foreach (var kvp in rpg.AvailableRoles)
             {
@@ -110,6 +109,7 @@ namespace Stataria
         private UIPanel CreateRolePanel(Role role, RPGPlayer rpg, Player player)
         {
             bool isActive = role.Status == RoleStatus.Active;
+            bool isDeactivated = role.Status == RoleStatus.Deactivated;
             bool canAfford = role.CanActivate(rpg);
 
             var panel = new UIPanel();
@@ -123,6 +123,11 @@ namespace Stataria
             {
                 panel.BackgroundColor = new Color(40, 80, 40, 220);
                 panel.BorderColor = new Color(80, 160, 80, 255);
+            }
+            else if (isDeactivated)
+            {
+                panel.BackgroundColor = new Color(80, 80, 40, 220);
+                panel.BorderColor = new Color(160, 160, 80, 255);
             }
             else if (role.Status == RoleStatus.Locked)
             {
@@ -141,8 +146,9 @@ namespace Stataria
             nameText.Top.Set(currentY, 0f);
             nameText.Left.Set(0f, 0f);
             nameText.TextColor = isActive ? new Color(255, 215, 100) :
+                            (isDeactivated ? new Color(255, 255, 100) :
                             (role.Status == RoleStatus.Locked ? new Color(140, 140, 140) :
-                                new Color(220, 220, 255));
+                                new Color(220, 220, 255)));
             panel.Append(nameText);
             currentY += 30f;
 
@@ -155,13 +161,23 @@ namespace Stataria
                 panel.Append(activeIndicator);
                 currentY += 25f;
             }
+            else if (isDeactivated)
+            {
+                var deactivatedIndicator = new UIText("● DEACTIVATED", 1f);
+                deactivatedIndicator.Top.Set(currentY, 0f);
+                deactivatedIndicator.Left.Set(0f, 0f);
+                deactivatedIndicator.TextColor = new Color(255, 255, 100);
+                panel.Append(deactivatedIndicator);
+                currentY += 25f;
+            }
 
             var separator = new UIText(" ─────────────────────────────────────────────── ", 1f);
             separator.Top.Set(currentY - 5f, 0f);
             separator.HAlign = 0.5f;
             separator.TextColor = isActive ? new Color(80, 160, 80, 150) :
+                                (isDeactivated ? new Color(160, 160, 80, 150) :
                                 (role.Status == RoleStatus.Locked ? new Color(80, 80, 80, 150) :
-                                new Color(80, 110, 150, 150));
+                                new Color(80, 110, 150, 150)));
             panel.Append(separator);
             currentY += 12f;
 
@@ -196,21 +212,53 @@ namespace Stataria
 
             if (isActive)
             {
-                var statusPanel = new UIPanel();
+                var statusPanel = new UITextPanel<string>("DEACTIVATE", 1f, false);
                 statusPanel.Width.Set(200f, 0f);
                 statusPanel.Height.Set(35f, 0f);
                 statusPanel.HAlign = 0.5f;
                 statusPanel.Top.Set(currentY, 0f);
-                statusPanel.BackgroundColor = new Color(40, 120, 40, 200);
-                statusPanel.BorderColor = new Color(80, 200, 80, 255);
-                statusPanel.SetPadding(0f);
+                statusPanel.BackgroundColor = new Color(120, 80, 40, 200);
+                statusPanel.BorderColor = new Color(200, 140, 80, 255);
+                statusPanel.SetPadding(8f);
 
-                var statusText = new UIText("CURRENTLY ACTIVE", 1f);
-                statusText.HAlign = 0.5f;
-                statusText.VAlign = 0.5f;
-                statusText.TextColor = new Color(150, 255, 150);
-                statusPanel.Append(statusText);
+                statusPanel.OnLeftClick += (evt, el) =>
+                {
+                    if (rpg.DeactivateRole())
+                    {
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                        RefreshRolesList();
+
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                            rpg.SyncPlayer(-1, player.whoAmI, false);
+                    }
+                };
+
                 panel.Append(statusPanel);
+            }
+            else if (isDeactivated)
+            {
+                var reactivatePanel = new UITextPanel<string>("REACTIVATE", 1f, false);
+                reactivatePanel.Width.Set(200f, 0f);
+                reactivatePanel.Height.Set(35f, 0f);
+                reactivatePanel.HAlign = 0.5f;
+                reactivatePanel.Top.Set(currentY, 0f);
+                reactivatePanel.BackgroundColor = new Color(80, 120, 80, 200);
+                reactivatePanel.BorderColor = new Color(140, 200, 140, 255);
+                reactivatePanel.SetPadding(8f);
+
+                reactivatePanel.OnLeftClick += (evt, el) =>
+                {
+                    if (rpg.SwitchToRole(role.ID))
+                    {
+                        SoundEngine.PlaySound(SoundID.Research);
+                        RefreshRolesList();
+
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                            rpg.SyncPlayer(-1, player.whoAmI, false);
+                    }
+                };
+
+                panel.Append(reactivatePanel);
             }
             else if (role.Status == RoleStatus.Locked)
             {
@@ -270,13 +318,33 @@ namespace Stataria
             return panel;
         }
 
+        private bool IsClickingOnInteractiveElement(Vector2 mousePosition)
+        {
+            foreach (var child in rolesList._items)
+            {
+                if (child is UIPanel rolePanel)
+                {
+                    foreach (var panelChild in rolePanel.Children)
+                    {
+                        if (panelChild is UITextPanel<string> button && button.ContainsPoint(mousePosition))
+                            return true;
+                    }
+                }
+            }
+
+            if (scrollbar?.ContainsPoint(mousePosition) == true)
+                return true;
+
+            return false;
+        }
+
         private float CalculateRoleContentHeight(Role role, RPGPlayer rpg)
         {
             float height = PANEL_PADDING * 2;
 
             height += 30f;
 
-            if (role.Status == RoleStatus.Active)
+            if (role.Status == RoleStatus.Active || role.Status == RoleStatus.Deactivated)
                 height += 25f;
 
             height += 12f;
@@ -359,7 +427,16 @@ namespace Stataria
                 if (rpg != null)
                 {
                     pointsText.SetText($"Rebirth Points: {rpg.RebirthPoints}");
-                    activeRoleText.SetText($"Active Role: {(rpg.ActiveRole?.Name ?? "None")}");
+
+                    string activeRoleDisplay = "None";
+                    if (rpg.ActiveRole != null)
+                    {
+                        if (rpg.ActiveRole.Status == RoleStatus.Active)
+                            activeRoleDisplay = rpg.ActiveRole.Name;
+                        else if (rpg.ActiveRole.Status == RoleStatus.Deactivated)
+                            activeRoleDisplay = $"{rpg.ActiveRole.Name} (Deactivated)";
+                    }
+                    activeRoleText.SetText($"Active Role: {activeRoleDisplay}");
                 }
             }
         }

@@ -372,6 +372,14 @@ namespace Stataria
             );
             AvailableRoles["CritGod"] = critGod;
 
+            var vampire = new Role(
+                "Vampire",
+                "Vampire",
+                "A bloodthirsty warrior who grows stronger through combat, draining life from wounded foes.",
+                "Embrace the darkness - let your enemies' blood fuel your power."
+            );
+            AvailableRoles["Vampire"] = vampire;
+
             foreach (var role in AvailableRoles.Values)
             {
                 if (ActiveRole?.ID == role.ID)
@@ -390,20 +398,34 @@ namespace Stataria
             if (!newRole.CanActivate(this))
                 return false;
 
-            int cost = newRole.GetCurrentSwitchCost(this);
+            bool isReactivation = newRole.Status == RoleStatus.Deactivated;
+            int cost = isReactivation ? 0 : newRole.GetCurrentSwitchCost(this);
 
-            if (ActiveRole != null)
+            if (ActiveRole != null && ActiveRole.ID != roleID)
             {
                 RebirthPoints -= cost;
                 RoleSwitchCount++;
-            }
-
-            if (ActiveRole != null)
                 ActiveRole.Status = RoleStatus.Available;
+            }
+            else if (ActiveRole != null && ActiveRole.ID == roleID && ActiveRole.Status == RoleStatus.Deactivated)
+            {
+            }
+            else if (ActiveRole == null)
+            {
+            }
 
             ActiveRole = newRole;
             ActiveRole.Status = RoleStatus.Active;
 
+            return true;
+        }
+
+        public bool DeactivateRole()
+        {
+            if (ActiveRole == null || ActiveRole.Status != RoleStatus.Active)
+                return false;
+
+            ActiveRole.Status = RoleStatus.Deactivated;
             return true;
         }
 
@@ -416,6 +438,7 @@ namespace Stataria
             }
             RoleSwitchCount = 0;
         }
+
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (StatariaKeybinds.ToggleStatUI.JustPressed
