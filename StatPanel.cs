@@ -465,8 +465,11 @@ namespace Stataria
 
             statPanel.OnLeftMouseDown += (evt, el) =>
             {
-                offset = new Vector2(evt.MousePosition.X - statPanel.Left.Pixels, evt.MousePosition.Y - statPanel.Top.Pixels);
-                dragging = true;
+                if (!IsClickingOnInteractiveElement(evt.MousePosition))
+                {
+                    offset = new Vector2(evt.MousePosition.X - statPanel.Left.Pixels, evt.MousePosition.Y - statPanel.Top.Pixels);
+                    dragging = true;
+                }
             };
             statPanel.OnLeftMouseUp += (evt, el) =>
             {
@@ -945,6 +948,34 @@ namespace Stataria
             tooltipPanel.Append(tooltipText);
 
             statPanel.Recalculate();
+        }
+
+        private bool IsClickingOnInteractiveElement(Vector2 mousePosition)
+        {
+            foreach (var button in plusButtons)
+            {
+                if (button?.ContainsPoint(mousePosition) == true)
+                    return true;
+            }
+            foreach (var button in minusButtons)
+            {
+                if (button?.ContainsPoint(mousePosition) == true)
+                    return true;
+            }
+            if (resetButton?.ContainsPoint(mousePosition) == true)
+                return true;
+            if (rebirthButton?.ContainsPoint(mousePosition) == true)
+                return true;
+            if (autoButton?.ContainsPoint(mousePosition) == true)
+                return true;
+
+            foreach (var checkbox in autoCheckboxes.Values)
+            {
+                if (checkbox?.ContainsPoint(mousePosition) == true)
+                    return true;
+            }
+
+            return false;
         }
 
         private void OnRebirthButtonClick(UIMouseEvent evt, UIElement listeningElement)

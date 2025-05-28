@@ -32,15 +32,16 @@ namespace Stataria
         {
             tabPanel = new UIPanel();
             tabPanel.Width.Set(300f, 0f);
-            tabPanel.Height.Set(35f, 0f);
+            tabPanel.Height.Set(40f, 0f);
             tabPanel.BackgroundColor = Color.Transparent;
             tabPanel.BorderColor = Color.Transparent;
+            tabPanel.SetPadding(0f);
             Append(tabPanel);
 
             tabButtons = new UITextPanel<string>[3];
             string[] tabNames = { "Stats", "Abilities", "Roles" };
             float tabWidth = 80f;
-            float tabHeight = 30f;
+            float tabHeight = 35f;
             float spacing = 5f;
             float startX = (300f - (tabWidth * 3 + spacing * 2)) / 2f;
 
@@ -53,11 +54,13 @@ namespace Stataria
                 {
                     Width = { Pixels = tabWidth },
                     Height = { Pixels = tabHeight },
-                    Top = { Pixels = 2f },
+                    Top = { Pixels = 0f },
                     Left = { Pixels = startX + (tabWidth + spacing) * i },
                     BackgroundColor = i == 0 ? ActiveTabColor : InactiveTabColor,
                     BorderColor = i == 0 ? ActiveTabBorder : InactiveTabBorder
                 };
+
+                tabButtons[i].SetPadding(8f);
 
                 tabButtons[i].OnLeftClick += (evt, el) =>
                 {
@@ -166,7 +169,7 @@ namespace Stataria
                 var dimensions = activePanelDimensions.Value;
 
                 float tabX = dimensions.X + (dimensions.Width - tabPanel.Width.Pixels) / 2f;
-                float tabY = dimensions.Y - 60f;
+                float tabY = dimensions.Y - 40f;
 
                 tabPanel.Left.Set(tabX, 0f);
                 tabPanel.Top.Set(tabY, 0f);

@@ -45,8 +45,11 @@ namespace Stataria
                 if (scrollbar.ContainsPoint(evt.MousePosition))
                     return;
 
-                offset = new Vector2(evt.MousePosition.X - skillPanel.Left.Pixels, evt.MousePosition.Y - skillPanel.Top.Pixels);
-                dragging = true;
+                if (!IsClickingOnInteractiveElement(evt.MousePosition))
+                {
+                    offset = new Vector2(evt.MousePosition.X - skillPanel.Left.Pixels, evt.MousePosition.Y - skillPanel.Top.Pixels);
+                    dragging = true;
+                }
             };
             skillPanel.OnLeftMouseUp += (evt, el) => dragging = false;
 
@@ -103,6 +106,18 @@ namespace Stataria
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
             skillPanel.Append(showHiddenButton);
+        }
+
+        private bool IsClickingOnInteractiveElement(Vector2 mousePosition)
+        {
+            if (resetAbilitiesButton?.ContainsPoint(mousePosition) == true)
+                return true;
+            if (showHiddenButton?.ContainsPoint(mousePosition) == true)
+                return true;
+            if (scrollbar?.ContainsPoint(mousePosition) == true)
+                return true;
+
+            return false;
         }
 
         private void UpdateShowHiddenButton()

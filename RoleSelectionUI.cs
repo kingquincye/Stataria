@@ -46,8 +46,6 @@ namespace Stataria
             {
                 if (scrollbar != null && scrollbar.ContainsPoint(evt.MousePosition))
                     return;
-                if (rolesList != null && rolesList.ContainsPoint(evt.MousePosition))
-                    return;
 
                 offset = new Vector2(evt.MousePosition.X - rolePanel.Left.Pixels, evt.MousePosition.Y - rolePanel.Top.Pixels);
                 dragging = true;
