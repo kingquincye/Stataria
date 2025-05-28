@@ -14,7 +14,7 @@ namespace Stataria
 {
     public class SkillTreeUI : UIState
     {
-        private UIPanel mainPanel;
+        public UIPanel skillPanel;
         private UIScrollbar scrollbar;
         private UIList abilityList;
         private UIText titleText;
@@ -30,82 +30,68 @@ namespace Stataria
 
         public override void OnInitialize()
         {
-            mainPanel = new UIPanel();
-            mainPanel.Width.Set(500f, 0f);
-            mainPanel.Height.Set(MaxVisibleHeight, 0f);
-            mainPanel.HAlign = 0.5f;
-            mainPanel.VAlign = 0.5f;
-            mainPanel.SetPadding(10f);
-            mainPanel.BackgroundColor = new Color(73, 94, 171, 200);
-            mainPanel.BorderColor = new Color(50, 50, 150, 255);
-            Append(mainPanel);
+            skillPanel = new UIPanel();
+            skillPanel.Width.Set(500f, 0f);
+            skillPanel.Height.Set(MaxVisibleHeight, 0f);
+            skillPanel.HAlign = 0.5f;
+            skillPanel.VAlign = 0.5f;
+            skillPanel.SetPadding(10f);
+            skillPanel.BackgroundColor = new Color(73, 94, 171, 200);
+            skillPanel.BorderColor = new Color(50, 50, 150, 255);
+            Append(skillPanel);
 
-            mainPanel.OnLeftMouseDown += (evt, el) =>
+            skillPanel.OnLeftMouseDown += (evt, el) =>
             {
                 if (scrollbar.ContainsPoint(evt.MousePosition))
                     return;
 
-                offset = new Vector2(evt.MousePosition.X - mainPanel.Left.Pixels, evt.MousePosition.Y - mainPanel.Top.Pixels);
+                offset = new Vector2(evt.MousePosition.X - skillPanel.Left.Pixels, evt.MousePosition.Y - skillPanel.Top.Pixels);
                 dragging = true;
             };
-            mainPanel.OnLeftMouseUp += (evt, el) => dragging = false;
+            skillPanel.OnLeftMouseUp += (evt, el) => dragging = false;
 
             titleText = new UIText("Rebirth Abilities", 1.2f);
             titleText.Top.Set(0f, 0f);
             titleText.HAlign = 0.5f;
-            mainPanel.Append(titleText);
+            skillPanel.Append(titleText);
 
             pointsText = new UIText("Rebirth Points: 0", 1f);
             pointsText.Top.Set(35f, 0f);
             pointsText.HAlign = 0.5f;
             pointsText.TextColor = new Color(255, 230, 100);
-            mainPanel.Append(pointsText);
+            skillPanel.Append(pointsText);
 
             abilityList = new UIList();
             abilityList.Width.Set(-25f, 1f);
             abilityList.Height.Set(-120f, 1f);
             abilityList.Top.Set(70f, 0f);
             abilityList.ListPadding = 10f;
-            mainPanel.Append(abilityList);
+            skillPanel.Append(abilityList);
 
             scrollbar = new UIScrollbar();
             scrollbar.Height.Set(-140f, 1f);
             scrollbar.Top.Set(70f, 0f);
             scrollbar.Left.Set(-20f, 1f);
-            mainPanel.Append(scrollbar);
+            skillPanel.Append(scrollbar);
             abilityList.SetScrollbar(scrollbar);
-
-            var backButton = new UITextPanel<string>("Back", 0.9f, false);
-            backButton.Width.Set(60f, 0f);
-            backButton.Height.Set(30f, 0f);
-            backButton.Top.Set(10f, 0f);
-            backButton.Left.Set(10f, 0f);
-            backButton.BackgroundColor = new Color(73, 94, 171, 255);
-            backButton.OnLeftClick += (evt, el) =>
-            {
-                StatariaUI.SkillTreeUI.SetState(null);
-                StatariaUI.StatUI.SetState(StatariaUI.Panel);
-                SoundEngine.PlaySound(SoundID.MenuClose);
-            };
-            mainPanel.Append(backButton);
 
             resetAbilitiesButton = new UITextPanel<string>("RESET", 0.9f, false);
             resetAbilitiesButton.Width.Set(80f, 0f);
             resetAbilitiesButton.Height.Set(30f, 0f);
             resetAbilitiesButton.Top.Set(10f, 0f);
-            resetAbilitiesButton.Left.Set(mainPanel.Width.Pixels - 100f, 0f);
+            resetAbilitiesButton.Left.Set(skillPanel.Width.Pixels - 100f, 0f);
             resetAbilitiesButton.BackgroundColor = new Color(180, 80, 80, 255);
             resetAbilitiesButton.OnLeftClick += (evt, el) =>
             {
                 ResetAllAbilities();
                 SoundEngine.PlaySound(SoundID.MenuClose);
             };
-            mainPanel.Append(resetAbilitiesButton);
+            skillPanel.Append(resetAbilitiesButton);
 
             showHiddenButton = new UITextPanel<string>("Show Hidden", 0.9f, false);
             showHiddenButton.Width.Set(120f, 0f);
             showHiddenButton.Height.Set(30f, 0f);
-            showHiddenButton.Top.Set(mainPanel.Height.Pixels - 60f, 0f);
+            showHiddenButton.Top.Set(skillPanel.Height.Pixels - 60f, 0f);
             showHiddenButton.HAlign = 0.5f;
             showHiddenButton.BackgroundColor = new Color(100, 100, 100, 200);
             showHiddenButton.BorderColor = new Color(150, 150, 150, 200);
@@ -116,7 +102,7 @@ namespace Stataria
                 RefreshAbilitiesList();
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
-            mainPanel.Append(showHiddenButton);
+            skillPanel.Append(showHiddenButton);
         }
 
         private void UpdateShowHiddenButton()
@@ -349,15 +335,15 @@ namespace Stataria
         {
             base.Update(gameTime);
 
-            if (mainPanel.ContainsPoint(Main.MouseScreen))
+            if (skillPanel.ContainsPoint(Main.MouseScreen))
                 Main.LocalPlayer.mouseInterface = true;
 
             if (dragging)
             {
                 Vector2 mouse = Main.MouseScreen;
-                mainPanel.Left.Set(mouse.X - offset.X, 0f);
-                mainPanel.Top.Set(mouse.Y - offset.Y, 0f);
-                mainPanel.Recalculate();
+                skillPanel.Left.Set(mouse.X - offset.X, 0f);
+                skillPanel.Top.Set(mouse.Y - offset.Y, 0f);
+                skillPanel.Recalculate();
             }
 
             Player player = Main.LocalPlayer;

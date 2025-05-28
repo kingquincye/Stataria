@@ -15,6 +15,8 @@ namespace Stataria
         internal static UserInterface XPVerificationUI;
         internal static UserInterface RoleSelectionUI;
         internal static RoleSelectionUI RoleSelectionPanel;
+        internal static UserInterface TabBarInterface;
+        internal static TabBarUI TabBarPanel;
 
         public override void Load()
         {
@@ -30,6 +32,9 @@ namespace Stataria
             RoleSelectionUI = new UserInterface();
             RoleSelectionPanel = new RoleSelectionUI();
             RoleSelectionPanel.Activate();
+            TabBarInterface = new UserInterface();
+            TabBarPanel = new TabBarUI();
+            TabBarPanel.Activate();
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -52,6 +57,17 @@ namespace Stataria
             if (RoleSelectionUI?.CurrentState != null)
             {
                 RoleSelectionUI.Update(gameTime);
+            }
+            if (TabBarInterface?.CurrentState != null)
+            {
+                TabBarInterface.Update(gameTime);
+
+                if (StatUI?.CurrentState != null)
+                    TabBarPanel?.SetActiveTab(TabBarUI.TabType.Stats);
+                else if (SkillTreeUI?.CurrentState != null)
+                    TabBarPanel?.SetActiveTab(TabBarUI.TabType.Abilities);
+                else if (RoleSelectionUI?.CurrentState != null)
+                    TabBarPanel?.SetActiveTab(TabBarUI.TabType.Roles);
             }
         }
 
@@ -108,6 +124,19 @@ namespace Stataria
                         if (RoleSelectionUI?.CurrentState != null)
                         {
                             RoleSelectionUI.Draw(Main.spriteBatch, new GameTime());
+                        }
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Tab Bar",
+                    delegate
+                    {
+                        if (TabBarInterface?.CurrentState != null)
+                        {
+                            TabBarInterface.Draw(Main.spriteBatch, new GameTime());
                         }
                         return true;
                     },

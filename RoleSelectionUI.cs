@@ -16,7 +16,7 @@ namespace Stataria
 {
     public class RoleSelectionUI : UIState
     {
-        private UIPanel mainPanel;
+        public UIPanel rolePanel;
         private UIText titleText;
         private UIText pointsText;
         private UIText activeRoleText;
@@ -32,73 +32,58 @@ namespace Stataria
 
         public override void OnInitialize()
         {
-            mainPanel = new UIPanel();
-            mainPanel.Width.Set(700f, 0f);
-            mainPanel.Height.Set(600f, 0f);
-            mainPanel.HAlign = 0.5f;
-            mainPanel.VAlign = 0.5f;
-            mainPanel.SetPadding(15f);
-            mainPanel.BackgroundColor = new Color(25, 35, 60, 240);
-            mainPanel.BorderColor = new Color(100, 120, 180, 255);
-            Append(mainPanel);
+            rolePanel = new UIPanel();
+            rolePanel.Width.Set(700f, 0f);
+            rolePanel.Height.Set(600f, 0f);
+            rolePanel.HAlign = 0.5f;
+            rolePanel.VAlign = 0.5f;
+            rolePanel.SetPadding(15f);
+            rolePanel.BackgroundColor = new Color(25, 35, 60, 240);
+            rolePanel.BorderColor = new Color(100, 120, 180, 255);
+            Append(rolePanel);
 
-            mainPanel.OnLeftMouseDown += (evt, el) =>
+            rolePanel.OnLeftMouseDown += (evt, el) =>
             {
                 if (scrollbar != null && scrollbar.ContainsPoint(evt.MousePosition))
                     return;
                 if (rolesList != null && rolesList.ContainsPoint(evt.MousePosition))
                     return;
 
-                offset = new Vector2(evt.MousePosition.X - mainPanel.Left.Pixels, evt.MousePosition.Y - mainPanel.Top.Pixels);
+                offset = new Vector2(evt.MousePosition.X - rolePanel.Left.Pixels, evt.MousePosition.Y - rolePanel.Top.Pixels);
                 dragging = true;
             };
-            mainPanel.OnLeftMouseUp += (evt, el) => dragging = false;
+            rolePanel.OnLeftMouseUp += (evt, el) => dragging = false;
 
             titleText = new UIText("ROLE SELECTION", 1.6f);
             titleText.Top.Set(5f, 0f);
             titleText.HAlign = 0.5f;
             titleText.TextColor = new Color(220, 220, 255);
-            mainPanel.Append(titleText);
+            rolePanel.Append(titleText);
 
             pointsText = new UIText("Rebirth Points: 0", 1.2f);
             pointsText.Top.Set(40f, 0f);
             pointsText.HAlign = 0.5f;
             pointsText.TextColor = new Color(255, 215, 100);
-            mainPanel.Append(pointsText);
+            rolePanel.Append(pointsText);
 
             activeRoleText = new UIText("Active Role: None", 1f);
             activeRoleText.Top.Set(70f, 0f);
             activeRoleText.HAlign = 0.5f;
             activeRoleText.TextColor = new Color(100, 255, 100);
-            mainPanel.Append(activeRoleText);
-
-            var backButton = new UITextPanel<string>("Back", 1f, false);
-            backButton.Width.Set(80f, 0f);
-            backButton.Height.Set(35f, 0f);
-            backButton.Top.Set(5f, 0f);
-            backButton.Left.Set(5f, 0f);
-            backButton.BackgroundColor = new Color(60, 80, 120, 200);
-            backButton.BorderColor = new Color(100, 130, 180, 255);
-            backButton.OnLeftClick += (evt, el) =>
-            {
-                StatariaUI.RoleSelectionUI.SetState(null);
-                StatariaUI.StatUI.SetState(StatariaUI.Panel);
-                SoundEngine.PlaySound(SoundID.MenuClose);
-            };
-            mainPanel.Append(backButton);
+            rolePanel.Append(activeRoleText);
 
             rolesList = new UIList();
             rolesList.Width.Set(-25f, 1f);
             rolesList.Height.Set(-130f, 1f);
             rolesList.Top.Set(110f, 0f);
             rolesList.ListPadding = 20f;
-            mainPanel.Append(rolesList);
+            rolePanel.Append(rolesList);
 
             scrollbar = new UIScrollbar();
             scrollbar.Height.Set(-150f, 1f);
             scrollbar.Top.Set(110f, 0f);
             scrollbar.Left.Set(-20f, 1f);
-            mainPanel.Append(scrollbar);
+            rolePanel.Append(scrollbar);
             rolesList.SetScrollbar(scrollbar);
 
             RefreshRolesList();
@@ -358,15 +343,15 @@ namespace Stataria
         {
             base.Update(gameTime);
 
-            if (mainPanel.ContainsPoint(Main.MouseScreen))
+            if (rolePanel.ContainsPoint(Main.MouseScreen))
                 Main.LocalPlayer.mouseInterface = true;
 
             if (dragging)
             {
                 Vector2 mouse = Main.MouseScreen;
-                mainPanel.Left.Set(mouse.X - offset.X, 0f);
-                mainPanel.Top.Set(mouse.Y - offset.Y, 0f);
-                mainPanel.Recalculate();
+                rolePanel.Left.Set(mouse.X - offset.X, 0f);
+                rolePanel.Top.Set(mouse.Y - offset.Y, 0f);
+                rolePanel.Recalculate();
             }
 
             Player player = Main.LocalPlayer;

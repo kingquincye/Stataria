@@ -16,7 +16,7 @@ namespace Stataria
 {
     public class StatPanel : UIState
     {
-        private UIPanel panel;
+        public UIPanel statPanel;
         private UIText levelText;
         private UIText xpText;
         private UIText statPointsText;
@@ -438,7 +438,7 @@ namespace Stataria
         {
             InitializeStatDefinitions();
 
-            panel = new UIPanel();
+            statPanel = new UIPanel();
 
             float baseWidth = 340f;
             float heightPerStat = 35f;
@@ -454,21 +454,21 @@ namespace Stataria
             float columnWidth = baseWidth;
             float totalWidth = columnWidth * numColumns;
 
-            panel.Width.Set(totalWidth, 0f);
-            panel.HAlign = 0.5f;
-            panel.VAlign = 0.5f;
+            statPanel.Width.Set(totalWidth, 0f);
+            statPanel.HAlign = 0.5f;
+            statPanel.VAlign = 0.5f;
 
-            panel.SetPadding(0);
-            panel.BackgroundColor = new Color(63, 82, 151, 200);
-            panel.BorderColor = new Color(0, 0, 0, 255);
-            Append(panel);
+            statPanel.SetPadding(0);
+            statPanel.BackgroundColor = new Color(63, 82, 151, 200);
+            statPanel.BorderColor = new Color(0, 0, 0, 255);
+            Append(statPanel);
 
-            panel.OnLeftMouseDown += (evt, el) =>
+            statPanel.OnLeftMouseDown += (evt, el) =>
             {
-                offset = new Vector2(evt.MousePosition.X - panel.Left.Pixels, evt.MousePosition.Y - panel.Top.Pixels);
+                offset = new Vector2(evt.MousePosition.X - statPanel.Left.Pixels, evt.MousePosition.Y - statPanel.Top.Pixels);
                 dragging = true;
             };
-            panel.OnLeftMouseUp += (evt, el) =>
+            statPanel.OnLeftMouseUp += (evt, el) =>
             {
                 dragging = false;
             };
@@ -478,29 +478,29 @@ namespace Stataria
             levelText = new UIText("Level: 1");
             levelText.Top.Set(top, 0f);
             levelText.Left.Set(10f, 0f);
-            panel.Append(levelText);
+            statPanel.Append(levelText);
             levelText.OnMouseOver += (evt, el) => ShowTooltip(GetXPSystemTooltip());
             levelText.OnMouseOut += (evt, el) => HideTooltip();
 
             statPointsText = new UIText("Points: 0");
             statPointsText.Top.Set(top, 0f);
-            statPointsText.Left.Set(panel.Width.Pixels - 120f, 0f);
-            panel.Append(statPointsText);
+            statPointsText.Left.Set(statPanel.Width.Pixels - 120f, 0f);
+            statPanel.Append(statPointsText);
 
             top += 30f;
 
             xpText = new UIText("XP: 0 / 100");
             xpText.Top.Set(top, 0f);
             xpText.Left.Set(10f, 0f);
-            panel.Append(xpText);
+            statPanel.Append(xpText);
             xpText.OnMouseOver += (evt, el) => ShowTooltip(GetXPSystemTooltip());
             xpText.OnMouseOut += (evt, el) => HideTooltip();
 
             rebirthPointsText = new UIText("RP: 0");
             rebirthPointsText.Top.Set(top, 0f);
-            rebirthPointsText.Left.Set(panel.Width.Pixels - 120f, 0f);
+            rebirthPointsText.Left.Set(statPanel.Width.Pixels - 120f, 0f);
             rebirthPointsText.TextColor = new Color(190, 120, 190);
-            panel.Append(rebirthPointsText);
+            statPanel.Append(rebirthPointsText);
 
             top += 40f;
 
@@ -540,12 +540,12 @@ namespace Stataria
                         rpg.SyncPlayer(-1, player.whoAmI, false);
                 };
                 autoCheckboxes[stat.Name] = checkbox;
-                panel.Append(checkbox);
+                statPanel.Append(checkbox);
 
                 var statLabel = new UIText(stat.Name + ": 0");
                 statLabel.Top.Set(rowTop + 5f, 0f);
                 statLabel.Left.Set(40f + columnOffset, 0f);
-                panel.Append(statLabel);
+                statPanel.Append(statLabel);
                 statTexts[i] = statLabel;
 
                 var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
@@ -560,7 +560,7 @@ namespace Stataria
                 plusBtn.SetPadding(0f);
                 int localStatIndex = i;
                 plusBtn.OnLeftClick += (evt, el) => OnStatIncrease(localStatIndex);
-                panel.Append(plusBtn);
+                statPanel.Append(plusBtn);
                 plusButtons[i] = plusBtn;
 
                 var minusBtn = new UITextPanel<string>("-", textScale: 1.2f, large: false)
@@ -575,7 +575,7 @@ namespace Stataria
                 minusBtn.SetPadding(0f);
                 int minusStatIndex = i;
                 minusBtn.OnLeftClick += (evt, el) => OnStatDecrease(minusStatIndex);
-                panel.Append(minusBtn);
+                statPanel.Append(minusBtn);
                 minusButtons[i] = minusBtn;
 
                 statLabel.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
@@ -600,7 +600,7 @@ namespace Stataria
                 BorderColor = new Color(0, 0, 0, 255)
             };
             resetButton.OnLeftClick += OnResetStats;
-            panel.Append(resetButton);
+            statPanel.Append(resetButton);
 
             float rebirthButtonY = bottomControlsTop + 45f;
             if (config.rebirthSystem.EnableRebirthSystem)
@@ -615,40 +615,16 @@ namespace Stataria
                     BorderColor = new Color(190, 120, 190, 255)
                 };
                 rebirthButton.OnLeftClick += OnRebirthButtonClick;
-                panel.Append(rebirthButton);
-
-                skillTreeButton = new UITextPanel<string>("Abilities", textScale: 0.9f, large: false)
-                {
-                    Top = { Pixels = rebirthButtonY + 45f },
-                    Left = { Pixels = (totalWidth - 120f) / 2 },
-                    Width = { Pixels = 120f },
-                    Height = { Pixels = 30f },
-                    BackgroundColor = new Color(80, 150, 80, 200),
-                    BorderColor = new Color(100, 180, 100, 255)
-                };
-                skillTreeButton.OnLeftClick += OnSkillTreeButtonClick;
-                panel.Append(skillTreeButton);
-
-                var rolesButton = new UITextPanel<string>("Roles", textScale: 0.9f, large: false)
-                {
-                    Top = { Pixels = rebirthButtonY + 90f },
-                    Left = { Pixels = (totalWidth - 120f) / 2 },
-                    Width = { Pixels = 120f },
-                    Height = { Pixels = 30f },
-                    BackgroundColor = new Color(120, 80, 150, 200),
-                    BorderColor = new Color(160, 100, 200, 255)
-                };
-                rolesButton.OnLeftClick += OnRolesButtonClick;
-                panel.Append(rolesButton);
+                statPanel.Append(rebirthButton);
 
                 rebirthConfirmationText = new UIText("Are you sure you want to Rebirth?", 0.9f)
                 {
-                    Top = { Pixels = rebirthButtonY + 85f },
+                    Top = { Pixels = rebirthButtonY + 40f },
                     Left = { Pixels = 20f },
                     TextColor = Color.Red
                 };
                 rebirthConfirmationY = rebirthButtonY + 45f;
-                bottomControlsTop = rebirthButtonY + 135f;
+                bottomControlsTop = rebirthButtonY + 50f;
             }
 
             bulkManager = new BulkAllocationManager();
@@ -658,7 +634,7 @@ namespace Stataria
             else
                 bulkBaseY = bottomControlsTop + resetButton.Height.Pixels + 10f;
 
-            bulkManager.Initialize(panel, bulkBaseY);
+            bulkManager.Initialize(statPanel, bulkBaseY);
 
             autoButton = new UITextPanel<string>("Auto", textScale: 0.9f, large: false)
             {
@@ -686,11 +662,11 @@ namespace Stataria
             };
             autoButton.OnMouseOver += (evt, el) => ShowTooltip("Toggle automatic point allocation to checked stats");
             autoButton.OnMouseOut += (evt, el) => HideTooltip();
-            panel.Append(autoButton);
+            statPanel.Append(autoButton);
 
             float panelHeight = bulkBaseY + 120f;
-            panel.Height.Set(panelHeight, 0f);
-            panel.Recalculate();
+            statPanel.Height.Set(panelHeight, 0f);
+            statPanel.Recalculate();
 
             float tooltipY = panelHeight + 10f;
             tooltipPanel = new UIPanel();
@@ -700,7 +676,7 @@ namespace Stataria
             tooltipPanel.Top.Set(tooltipY, 0f);
             tooltipPanel.BackgroundColor = Color.Transparent;
             tooltipPanel.BorderColor = Color.Transparent;
-            panel.Append(tooltipPanel);
+            statPanel.Append(tooltipPanel);
             tooltipPanel.Recalculate();
 
             tooltipText = new UIText("", textScale: 1f);
@@ -729,7 +705,7 @@ namespace Stataria
             float totalWidth = columnWidth * numColumns;
             float heightPerStat = 35f;
 
-            panel.Width.Set(totalWidth, 0f);
+            statPanel.Width.Set(totalWidth, 0f);
 
             if (statTexts.Length != totalStats)
             {
@@ -750,28 +726,28 @@ namespace Stataria
             }
 
             autoCheckboxes.Clear();
-            panel.RemoveAllChildren();
+            statPanel.RemoveAllChildren();
 
             float top = 10f;
 
             levelText = new UIText("Level: 1");
             levelText.Top.Set(top, 0f);
             levelText.Left.Set(10f, 0f);
-            panel.Append(levelText);
+            statPanel.Append(levelText);
             levelText.OnMouseOver += (evt, el) => ShowTooltip(GetXPSystemTooltip());
             levelText.OnMouseOut += (evt, el) => HideTooltip();
 
             statPointsText = new UIText("Points: 0");
             statPointsText.Top.Set(top, 0f);
             statPointsText.Left.Set(totalWidth - 120f, 0f);
-            panel.Append(statPointsText);
+            statPanel.Append(statPointsText);
 
             top += 30f;
 
             xpText = new UIText("XP: 0 / 100");
             xpText.Top.Set(top, 0f);
             xpText.Left.Set(10f, 0f);
-            panel.Append(xpText);
+            statPanel.Append(xpText);
             xpText.OnMouseOver += (evt, el) => ShowTooltip(GetXPSystemTooltip());
             xpText.OnMouseOut += (evt, el) => HideTooltip();
 
@@ -779,7 +755,7 @@ namespace Stataria
             rebirthPointsText.Top.Set(top, 0f);
             rebirthPointsText.Left.Set(totalWidth - 120f, 0f);
             rebirthPointsText.TextColor = new Color(190, 120, 190);
-            panel.Append(rebirthPointsText);
+            statPanel.Append(rebirthPointsText);
 
             top += 40f;
 
@@ -820,12 +796,12 @@ namespace Stataria
                 checkbox.IsChecked = shouldBeChecked;
 
                 autoCheckboxes[statName] = checkbox;
-                panel.Append(checkbox);
+                statPanel.Append(checkbox);
 
                 var statLabel = new UIText(statName + ": 0");
                 statLabel.Top.Set(rowTop + 5f, 0f);
                 statLabel.Left.Set(40f + columnOffset, 0f);
-                panel.Append(statLabel);
+                statPanel.Append(statLabel);
                 statTexts[i] = statLabel;
 
                 var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
@@ -840,7 +816,7 @@ namespace Stataria
                 plusBtn.SetPadding(0f);
                 int localStatIndex = i;
                 plusBtn.OnLeftClick += (evt, el) => OnStatIncrease(localStatIndex);
-                panel.Append(plusBtn);
+                statPanel.Append(plusBtn);
                 plusButtons[i] = plusBtn;
 
                 var minusBtn = new UITextPanel<string>("-", textScale: 1.2f, large: false)
@@ -855,7 +831,7 @@ namespace Stataria
                 minusBtn.SetPadding(0f);
                 int minusStatIndex = i;
                 minusBtn.OnLeftClick += (evt, el) => OnStatDecrease(minusStatIndex);
-                panel.Append(minusBtn);
+                statPanel.Append(minusBtn);
                 minusButtons[i] = minusBtn;
 
                 statLabel.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
@@ -880,7 +856,7 @@ namespace Stataria
                 BorderColor = new Color(0, 0, 0, 255)
             };
             resetButton.OnLeftClick += OnResetStats;
-            panel.Append(resetButton);
+            statPanel.Append(resetButton);
 
             float rebirthButtonY = bottomControlsTop + 45f;
             if (config.rebirthSystem.EnableRebirthSystem)
@@ -895,40 +871,16 @@ namespace Stataria
                     BorderColor = new Color(190, 120, 190, 255)
                 };
                 rebirthButton.OnLeftClick += OnRebirthButtonClick;
-                panel.Append(rebirthButton);
-
-                skillTreeButton = new UITextPanel<string>("Abilities", textScale: 0.9f, large: false)
-                {
-                    Top = { Pixels = rebirthButtonY + 45f },
-                    Left = { Pixels = (totalWidth - 120f) / 2 },
-                    Width = { Pixels = 120f },
-                    Height = { Pixels = 30f },
-                    BackgroundColor = new Color(80, 150, 80, 200),
-                    BorderColor = new Color(100, 180, 100, 255)
-                };
-                skillTreeButton.OnLeftClick += OnSkillTreeButtonClick;
-                panel.Append(skillTreeButton);
-
-                var rolesButton = new UITextPanel<string>("Roles", textScale: 0.9f, large: false)
-                {
-                    Top = { Pixels = rebirthButtonY + 90f },
-                    Left = { Pixels = (totalWidth - 120f) / 2 },
-                    Width = { Pixels = 120f },
-                    Height = { Pixels = 30f },
-                    BackgroundColor = new Color(120, 80, 150, 200),
-                    BorderColor = new Color(160, 100, 200, 255)
-                };
-                rolesButton.OnLeftClick += OnRolesButtonClick;
-                panel.Append(rolesButton);
+                statPanel.Append(rebirthButton);
 
                 rebirthConfirmationText = new UIText("Are you sure you want to Rebirth?", 0.9f)
                 {
-                    Top = { Pixels = rebirthButtonY + 85f },
+                    Top = { Pixels = rebirthButtonY + 40f },
                     Left = { Pixels = 20f },
                     TextColor = Color.Red
                 };
                 rebirthConfirmationY = rebirthButtonY + 45f;
-                bottomControlsTop = rebirthButtonY + 135f;
+                bottomControlsTop = rebirthButtonY + 50f;
             }
 
             bulkManager = new BulkAllocationManager();
@@ -938,7 +890,7 @@ namespace Stataria
             else
                 bulkBaseY = bottomControlsTop + resetButton.Height.Pixels + 10f;
 
-            bulkManager.Initialize(panel, bulkBaseY);
+            bulkManager.Initialize(statPanel, bulkBaseY);
 
             autoButton = new UITextPanel<string>("Auto", textScale: 0.9f, large: false)
             {
@@ -966,14 +918,14 @@ namespace Stataria
             };
             autoButton.OnMouseOver += (evt, el) => ShowTooltip("Toggle automatic point allocation to checked stats");
             autoButton.OnMouseOut += (evt, el) => HideTooltip();
-            panel.Append(autoButton);
+            statPanel.Append(autoButton);
 
             autoAllocationEnabled = rpg.AutoAllocateEnabled;
             UpdateAutoButton();
 
             float panelHeight = bulkBaseY + 120f;
-            panel.Height.Set(panelHeight, 0f);
-            panel.Recalculate();
+            statPanel.Height.Set(panelHeight, 0f);
+            statPanel.Recalculate();
 
             float tooltipY = panelHeight + 10f;
             tooltipPanel = new UIPanel();
@@ -983,7 +935,7 @@ namespace Stataria
             tooltipPanel.Top.Set(tooltipY, 0f);
             tooltipPanel.BackgroundColor = Color.Transparent;
             tooltipPanel.BorderColor = Color.Transparent;
-            panel.Append(tooltipPanel);
+            statPanel.Append(tooltipPanel);
             tooltipPanel.Recalculate();
 
             tooltipText = new UIText("", textScale: 1f);
@@ -992,7 +944,7 @@ namespace Stataria
             tooltipText.Left.Set(4f, 0f);
             tooltipPanel.Append(tooltipText);
 
-            panel.Recalculate();
+            statPanel.Recalculate();
         }
 
         private void OnRebirthButtonClick(UIMouseEvent evt, UIElement listeningElement)
@@ -1012,8 +964,8 @@ namespace Stataria
             {
                 rebirthConfirmationText.SetText($"Requires level {currentLevelRequirement}!");
                 rebirthConfirmationText.TextColor = Color.Red;
-                if (!panel.HasChild(rebirthConfirmationText))
-                    panel.Append(rebirthConfirmationText);
+                if (!statPanel.HasChild(rebirthConfirmationText))
+                    statPanel.Append(rebirthConfirmationText);
                 requirementMessageShown = true;
                 requirementMessageTimer = RequirementMessageDuration;
                 return;
@@ -1023,7 +975,7 @@ namespace Stataria
             {
                 rebirthConfirmationText.SetText("Are you sure you want to Rebirth?");
                 rebirthConfirmationText.TextColor = Color.Red;
-                panel.Append(rebirthConfirmationText);
+                statPanel.Append(rebirthConfirmationText);
                 rebirthConfirmationShown = true;
 
                 rebirthButton.SetText("Confirm Rebirth");
@@ -1033,27 +985,11 @@ namespace Stataria
                 rpg.PerformRebirth();
 
                 rebirthConfirmationShown = false;
-                panel.RemoveChild(rebirthConfirmationText);
+                statPanel.RemoveChild(rebirthConfirmationText);
                 rebirthButton.SetText("Rebirth");
 
                 SoundEngine.PlaySound(SoundID.Item4);
             }
-        }
-
-        private void OnSkillTreeButtonClick(UIMouseEvent evt, UIElement listeningElement)
-        {
-            StatariaUI.StatUI.SetState(null);
-            StatariaUI.SkillTreeUI.SetState(StatariaUI.SkillTreePanel);
-            StatariaUI.SkillTreePanel.RefreshAbilitiesList();
-            SoundEngine.PlaySound(SoundID.MenuOpen);
-        }
-
-        private void OnRolesButtonClick(UIMouseEvent evt, UIElement listeningElement)
-        {
-            StatariaUI.StatUI.SetState(null);
-            StatariaUI.RoleSelectionUI.SetState(StatariaUI.RoleSelectionPanel);
-            StatariaUI.RoleSelectionPanel.RefreshRolesList();
-            SoundEngine.PlaySound(SoundID.MenuOpen);
         }
 
         private void UpdateAutoButton()
@@ -1341,7 +1277,7 @@ namespace Stataria
         {
             base.Update(gameTime);
 
-            if (panel.ContainsPoint(Main.MouseScreen))
+            if (statPanel.ContainsPoint(Main.MouseScreen))
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
@@ -1352,9 +1288,9 @@ namespace Stataria
             if (dragging)
             {
                 Vector2 mouse = Main.MouseScreen;
-                panel.Left.Set(mouse.X - offset.X, 0f);
-                panel.Top.Set(mouse.Y - offset.Y, 0f);
-                panel.Recalculate();
+                statPanel.Left.Set(mouse.X - offset.X, 0f);
+                statPanel.Top.Set(mouse.Y - offset.Y, 0f);
+                statPanel.Recalculate();
             }
 
             Player player = Main.LocalPlayer;
@@ -1469,14 +1405,14 @@ namespace Stataria
                 requirementMessageTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 bool clickedElsewhere =
                     Main.mouseLeft
-                    && panel.ContainsPoint(Main.MouseScreen)
+                    && statPanel.ContainsPoint(Main.MouseScreen)
                     && (rebirthButton == null || !rebirthButton.ContainsPoint(Main.MouseScreen))
                     && (rebirthConfirmationText == null || !rebirthConfirmationText.ContainsPoint(Main.MouseScreen));
 
                 if (requirementMessageTimer <= 0f || clickedElsewhere)
                 {
                     requirementMessageShown = false;
-                    panel.RemoveChild(rebirthConfirmationText);
+                    statPanel.RemoveChild(rebirthConfirmationText);
                 }
             }
 
@@ -1486,7 +1422,7 @@ namespace Stataria
                 Main.gameMenu))
             {
                 rebirthConfirmationShown = false;
-                panel.RemoveChild(rebirthConfirmationText);
+                statPanel.RemoveChild(rebirthConfirmationText);
                 rebirthButton.SetText("Rebirth");
             }
 

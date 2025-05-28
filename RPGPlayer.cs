@@ -425,15 +425,18 @@ namespace Stataria
                 {
                     if (StatariaUI.SkillTreeUI.CurrentState != null)
                         StatariaUI.SkillTreeUI.SetState(null);
-
                     if (StatariaUI.RoleSelectionUI.CurrentState != null)
                         StatariaUI.RoleSelectionUI.SetState(null);
 
                     StatariaUI.StatUI.SetState(StatariaUI.Panel);
+                    StatariaUI.TabBarInterface.SetState(StatariaUI.TabBarPanel);
                 }
                 else
                 {
                     StatariaUI.StatUI.SetState(null);
+                    StatariaUI.SkillTreeUI.SetState(null);
+                    StatariaUI.RoleSelectionUI.SetState(null);
+                    StatariaUI.TabBarInterface.SetState(null);
                 }
             }
         }
@@ -950,9 +953,7 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveLUC = LUC;
-            if (GhostStats.TryGetValue("LUC", out int lucBonus))
-                effectiveLUC += lucBonus;
+            int effectiveLUC = GetEffectiveStat("LUC");
 
             if (config.statSettings.LUC_EnableLuckBonus)
                 luck += effectiveLUC * config.statSettings.LUC_LuckBonus;
@@ -964,21 +965,15 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveVIT = VIT;
-            if (GhostStats.TryGetValue("VIT", out int vitBonus))
-                effectiveVIT += vitBonus;
+            int effectiveVIT = GetEffectiveStat("VIT");
 
             Player.statLifeMax2 += effectiveVIT * config.statSettings.VIT_HP;
 
-            int effectiveSTR = STR;
-            if (GhostStats.TryGetValue("STR", out int strBonus))
-                effectiveSTR += strBonus;
+            int effectiveSTR = GetEffectiveStat("STR");
 
             Player.GetArmorPenetration(DamageClass.Melee) += effectiveSTR * config.statSettings.STR_ArmorPen;
 
-            int effectiveINT = INT;
-            if (GhostStats.TryGetValue("INT", out int intBonus))
-                effectiveINT += intBonus;
+            int effectiveINT = GetEffectiveStat("INT");
 
             Player.statManaMax2 += effectiveINT * config.statSettings.INT_MP;
             float rawReduction = effectiveINT * config.statSettings.INT_ManaCostReduction / 100f;
@@ -986,9 +981,7 @@ namespace Stataria
             Player.manaCost -= diminishingReduction;
             Player.GetArmorPenetration(DamageClass.Magic) += effectiveINT * config.statSettings.INT_ArmorPen;
 
-            int effectiveEND = END;
-            if (GhostStats.TryGetValue("END", out int endBonus))
-                effectiveEND += endBonus;
+            int effectiveEND = GetEffectiveStat("END");
 
             if (config.statSettings.END_DefensePerX > 0)
             {
@@ -996,9 +989,7 @@ namespace Stataria
             }
             Player.aggro += effectiveEND * config.statSettings.END_Aggro;
 
-            int effectiveAGI = AGI;
-            if (GhostStats.TryGetValue("AGI", out int agiBonus))
-                effectiveAGI += agiBonus;
+            int effectiveAGI = GetEffectiveStat("AGI");
 
             float diminishedAGI = effectiveAGI <= 50 ? effectiveAGI : 50 + (effectiveAGI - 50) * 0.5f;
             Player.moveSpeed += diminishedAGI * (config.statSettings.AGI_MoveSpeed / 100f);
@@ -1007,26 +998,20 @@ namespace Stataria
             Player.jumpHeight += (int)(15 * jumpHeightMultiplier * config.statSettings.AGI_JumpHeight);
             Player.jumpSpeedBoost += effectiveAGI * config.statSettings.AGI_JumpSpeed;
 
-            int effectiveLUC = LUC;
-            if (GhostStats.TryGetValue("LUC", out int lucBonus))
-                effectiveLUC += lucBonus;
+            int effectiveLUC = GetEffectiveStat("LUC");
 
             if (config.statSettings.LUC_EnableFishing)
                 Player.fishingSkill += effectiveLUC * config.statSettings.LUC_Fishing;
 
             Player.aggro -= effectiveLUC * config.statSettings.LUC_AggroReduction;
 
-            int effectiveSPR = SPR;
-            if (GhostStats.TryGetValue("SPR", out int sprBonus))
-                effectiveSPR += sprBonus;
+            int effectiveSPR = GetEffectiveStat("SPR");
 
             Player.maxMinions += effectiveSPR / config.statSettings.SPR_MinionsPerX;
             Player.maxTurrets += effectiveSPR / config.statSettings.SPR_SentriesPerX;
             Player.GetDamage(DamageClass.Summon) += effectiveSPR * (config.statSettings.SPR_Damage / 100f);
 
-            int effectiveTCH = TCH;
-            if (GhostStats.TryGetValue("TCH", out int tchBonus))
-                effectiveTCH += tchBonus;
+            int effectiveTCH = GetEffectiveStat("TCH");
 
             if (config.statSettings.TCH_EnableMiningSpeed)
                 Player.pickSpeed -= effectiveTCH * config.statSettings.TCH_MiningSpeed * 0.01f;
@@ -1042,9 +1027,7 @@ namespace Stataria
 
             if (config.modIntegration.EnableCalamityIntegration && CalamitySupportHelper.CalamityLoaded)
             {
-                int effectiveRGE = RGE;
-                if (GhostStats.TryGetValue("RGE", out int rgeBonus))
-                    effectiveRGE += rgeBonus;
+                int effectiveRGE = GetEffectiveStat("RGE");
 
                 if (effectiveRGE >= 1)
                 {
@@ -1073,9 +1056,7 @@ namespace Stataria
                 ApplyHealerStatEffects();
             }
 
-            int effectiveDEX = DEX;
-            if (GhostStats.TryGetValue("DEX", out int dexBonus))
-                effectiveDEX += dexBonus;
+            int effectiveDEX = GetEffectiveStat("DEX");
 
             Player.GetArmorPenetration(DamageClass.Ranged) += effectiveDEX * config.statSettings.DEX_ArmorPen;
 
@@ -1091,9 +1072,7 @@ namespace Stataria
 
             if (config.modIntegration.EnableClickerClassIntegration && ClickerSupportHelper.ClickerClassLoaded)
             {
-                int effectiveCLK = CLK;
-                if (GhostStats.TryGetValue("CLK", out int clkBonus))
-                    effectiveCLK += clkBonus;
+                int effectiveCLK = GetEffectiveStat("CLK");
 
                 if (effectiveCLK > 0)
                 {
@@ -1122,9 +1101,7 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveRGE = RGE;
-            if (GhostStats.TryGetValue("RGE", out int rgeBonus))
-                effectiveRGE += rgeBonus;
+            int effectiveRGE = GetEffectiveStat("RGE");
 
             if (config.modIntegration.RGE_EnableStealthConsumptionReduction)
             {
@@ -1152,9 +1129,7 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectivePOW = POW;
-            if (GhostStats.TryGetValue("POW", out int powBonus))
-                effectivePOW += powBonus;
+            int effectivePOW = GetEffectiveStat("POW");
 
             float rage = CalamitySupportHelper.GetRage(Player);
             float rageMax = CalamitySupportHelper.GetRageMax(Player);
@@ -1199,9 +1174,7 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveBRD = BRD;
-            if (GhostStats.TryGetValue("BRD", out int brdBonus))
-                effectiveBRD += brdBonus;
+            int effectiveBRD = GetEffectiveStat("BRD");
 
             if (effectiveBRD > 0 && config.modIntegration.BRD_PointsPerMaxInspiration > 0)
             {
@@ -1234,9 +1207,7 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveHLR = HLR;
-            if (GhostStats.TryGetValue("HLR", out int hlrBonus))
-                effectiveHLR += hlrBonus;
+            int effectiveHLR = GetEffectiveStat("HLR");
 
             if (effectiveHLR > 0)
             {
@@ -1267,13 +1238,9 @@ namespace Stataria
             if (thoriumMod == null)
                 return;
 
-            int effectiveBRD = BRD;
-            if (GhostStats.TryGetValue("BRD", out int brdBonus))
-                effectiveBRD += brdBonus;
+            int effectiveBRD = GetEffectiveStat("BRD");
 
-            int effectiveHLR = HLR;
-            if (GhostStats.TryGetValue("HLR", out int hlrBonus))
-                effectiveHLR += hlrBonus;
+            int effectiveHLR = GetEffectiveStat("HLR");
 
             if (effectiveBRD > 0 && thoriumMod.TryFind("BardDamage", out DamageClass bardDamageClass))
             {
@@ -1417,9 +1384,7 @@ namespace Stataria
 
             CalculateGhostStats();
 
-            int effectiveVIT = VIT;
-            if (GhostStats.TryGetValue("VIT", out int vitBonus))
-                effectiveVIT += vitBonus;
+            int effectiveVIT = GetEffectiveStat("VIT");
 
             if (config.statSettings.UseCustomHpRegen)
             {
@@ -1448,9 +1413,7 @@ namespace Stataria
                 Player.lifeRegen += effectiveVIT / 2;
             }
 
-            int effectiveINT = INT;
-            if (GhostStats.TryGetValue("INT", out int intBonus))
-                effectiveINT += intBonus;
+            int effectiveINT = GetEffectiveStat("INT");
 
             Player.manaRegenBonus += effectiveINT / 2;
 
@@ -1725,9 +1688,7 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveVIT = VIT;
-            if (GhostStats.TryGetValue("VIT", out int vitBonus))
-                effectiveVIT += vitBonus;
+            int effectiveVIT = GetEffectiveStat("VIT");
 
             if (config.statSettings.EnableHealingPotionBoost && effectiveVIT > 0 && healValue > 0)
             {
@@ -1742,9 +1703,7 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveEND = END;
-            if (GhostStats.TryGetValue("END", out int endBonus))
-                effectiveEND += endBonus;
+            int effectiveEND = GetEffectiveStat("END");
 
             if (config.statSettings.EnableKnockbackResist)
             {
@@ -1801,9 +1760,7 @@ namespace Stataria
             if (!config.statSettings.EnableEnemyKnockback)
                 return;
 
-            int effectiveEND = END;
-            if (GhostStats.TryGetValue("END", out int endBonus))
-                effectiveEND += endBonus;
+            int effectiveEND = GetEffectiveStat("END");
 
             if (!info.DamageSource.TryGetCausingEntity(out Entity entity) || entity is not NPC npc)
                 return;
@@ -1824,37 +1781,21 @@ namespace Stataria
 
             float bonus = 0f;
 
-            int effectiveSTR = STR;
-            if (GhostStats.TryGetValue("STR", out int strBonus))
-                effectiveSTR += strBonus;
+            int effectiveSTR = GetEffectiveStat("STR");
 
-            int effectiveINT = INT;
-            if (GhostStats.TryGetValue("INT", out int intBonus))
-                effectiveINT += intBonus;
+            int effectiveINT = GetEffectiveStat("INT");
 
-            int effectiveDEX = DEX;
-            if (GhostStats.TryGetValue("DEX", out int dexBonus))
-                effectiveDEX += dexBonus;
+            int effectiveDEX = GetEffectiveStat("DEX");
 
-            int effectivePOW = POW;
-            if (GhostStats.TryGetValue("POW", out int powBonus))
-                effectivePOW += powBonus;
+            int effectivePOW = GetEffectiveStat("POW");
 
-            int effectiveRGE = RGE;
-            if (GhostStats.TryGetValue("RGE", out int rgeBonus))
-                effectiveRGE += rgeBonus;
+            int effectiveRGE = GetEffectiveStat("RGE");
 
-            int effectiveBRD = BRD;
-            if (GhostStats.TryGetValue("BRD", out int brdBonus))
-                effectiveBRD += brdBonus;
+            int effectiveBRD = GetEffectiveStat("BRD");
 
-            int effectiveHLR = HLR;
-            if (GhostStats.TryGetValue("HLR", out int hlrBonus))
-                effectiveHLR += hlrBonus;
+            int effectiveHLR = GetEffectiveStat("HLR");
 
-            int effectiveCLK = CLK;
-            if (GhostStats.TryGetValue("CLK", out int clkBonus))
-                effectiveCLK += clkBonus;
+            int effectiveCLK = GetEffectiveStat("CLK");
 
             bool isRogueWeapon = config.modIntegration.EnableCalamityIntegration &&
                                 CalamitySupportHelper.CalamityLoaded &&
@@ -1925,9 +1866,7 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveSTR = STR;
-            if (GhostStats.TryGetValue("STR", out int strBonus))
-                effectiveSTR += strBonus;
+            int effectiveSTR = GetEffectiveStat("STR");
 
             if (item.CountsAsClass(DamageClass.Melee))
                 knockback += effectiveSTR * (config.statSettings.STR_Knockback / 100f);
@@ -1937,9 +1876,7 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveLUC = LUC;
-            if (GhostStats.TryGetValue("LUC", out int lucBonus))
-                effectiveLUC += lucBonus;
+            int effectiveLUC = GetEffectiveStat("LUC");
 
             crit += effectiveLUC * config.statSettings.LUC_Crit;
 
@@ -1953,9 +1890,7 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveDEX = DEX;
-            if (GhostStats.TryGetValue("DEX", out int dexBonus))
-                effectiveDEX += dexBonus;
+            int effectiveDEX = GetEffectiveStat("DEX");
 
             if (weapon.useAmmo > 0 && effectiveDEX > 0)
             {
