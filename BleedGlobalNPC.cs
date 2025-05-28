@@ -22,7 +22,7 @@ namespace Stataria
 
         public override void PostAI(NPC npc)
         {
-            if (!isBleedActive)
+            if (!isBleedActive || npc.type == NPCID.TargetDummy)
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();

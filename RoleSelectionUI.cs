@@ -191,6 +191,19 @@ namespace Stataria
             panel.Append(descText);
             currentY += GetTextHeight(wrappedDescription, 0.95f) + SECTION_SPACING;
 
+            if (!string.IsNullOrEmpty(role.FlavorText))
+            {
+                string wrappedFlavorText = WrapText(role.FlavorText, 620f, 0.85f);
+                var flavorText = new UIText(wrappedFlavorText, 0.85f);
+                flavorText.Top.Set(currentY, 0f);
+                flavorText.Left.Set(15f, 0f);
+                flavorText.Width.Set(-25f, 1f);
+                flavorText.TextColor = role.Status == RoleStatus.Locked ?
+                                    new Color(120, 120, 100) : new Color(220, 200, 150);
+                panel.Append(flavorText);
+                currentY += GetTextHeight(wrappedFlavorText, 0.85f) + SECTION_SPACING;
+            }
+
             var effectsHeader = new UIText("Effects:", 1.1f);
             effectsHeader.Top.Set(currentY, 0f);
             effectsHeader.Left.Set(0f, 0f);
@@ -351,6 +364,12 @@ namespace Stataria
 
             string wrappedDesc = WrapText(role.Description, 620f, 0.95f);
             height += GetTextHeight(wrappedDesc, 0.95f) + SECTION_SPACING;
+
+            if (!string.IsNullOrEmpty(role.FlavorText))
+            {
+                string wrappedFlavorText = WrapText(role.FlavorText, 620f, 0.85f);
+                height += GetTextHeight(wrappedFlavorText, 0.85f) + SECTION_SPACING;
+            }
 
             height += 25f;
 

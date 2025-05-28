@@ -39,6 +39,13 @@ Mod integration stats:
 [*][b]CLK[/b]: Increases Clicker Damage, Radius, and Decreases Clicks Required for Click Effects (ClickerClass)
 [/list]
 
+Roles *NEW*:
+[list]
+[*][b]Crit God[/b]: A master of devastating precision, turning every strike into a potential killing blow.
+[*][b]Vampire[/b]: A bloodthirsty warrior who grows stronger through combat, draining life from wounded foes.
+[*][b]MORE TO COME IN FUTURE UPDATES![/b]
+[/list]
+
 Simple stat panel UI
   
 [b] Most things are configurable in the mods config so go crazy. You can make this as balanced as you want! [/b]

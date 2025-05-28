@@ -77,7 +77,7 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    $"• +{config.roleSettings.CritGodCritChance}% Global Critical Strike Chance",
+                    $"• +{config.roleSettings.CritGodCritChance}% Critical Strike Chance",
                     $"• Excess Critical Strike Chance (over 100%) converts to +{config.roleSettings.CritGodExcessCritToDamage:0.##}% Critical Strike Damage per 1% excess"
                 };
 

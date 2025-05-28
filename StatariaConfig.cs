@@ -129,10 +129,10 @@ namespace Stataria
             [DefaultValue(true)] public bool ResetBossRewardsOnRebirth { get; set; } = true;
             [DefaultValue(false)] public bool EnableDynamicRebirthLevelCap { get; set; } = false;
             [Range(1.1f, 10f)][DefaultValue(2f)][Increment(0.1f)] public float DynamicRebirthLevelCapMultiplier { get; set; } = 2f;
-            [DefaultValue(true)] public bool EnableRebirthBonusStatPoints { get; set; } = true;
+            [DefaultValue(false)] public bool EnableRebirthBonusStatPoints { get; set; } = false;
             [Range(0.1f, 10f)][DefaultValue(0.5f)] public float RebirthStatPointsMultiplier { get; set; } = 0.25f;
-            [DefaultValue(false)] public bool EnableRebirthStatPointRecalculation { get; set; } = false;
-            [DefaultValue(true)] public bool EnableProgressiveStatCaps { get; set; } = true;
+            [DefaultValue(true)] public bool EnableRebirthStatPointRecalculation { get; set; } = true;
+            [DefaultValue(false)] public bool EnableProgressiveStatCaps { get; set; } = false;
             [Range(0.1f, 10f)][DefaultValue(0.5f)] public float ProgressiveStatCapMultiplier { get; set; } = 0.5f;
 
             [Header("Rebirth_Points")]
@@ -184,8 +184,8 @@ namespace Stataria
         public class RoleSettings
         {
             [Header("Role_System")]
-            [DefaultValue(10)][Range(0, 1000)] public int BaseSwitchCost { get; set; } = 10;
-            [DefaultValue(0.5f)][Range(0f, 5f)] public float SwitchCostMultiplier { get; set; } = 0.5f;
+            [DefaultValue(50)][Range(0, 1000)] public int BaseSwitchCost { get; set; } = 50;
+            [DefaultValue(1f)][Range(0f, 5f)] public float SwitchCostMultiplier { get; set; } = 1f;
             [DefaultValue(true)] public bool EnableRoleProximity { get; set; } = true;
             [Range(500, 10000)][DefaultValue(1000)] public int RoleProximityRange { get; set; } = 1000;
 
@@ -198,9 +198,9 @@ namespace Stataria
             [DefaultValue(25f)][Range(0f, 200f)] public float VampireHealthBonus { get; set; } = 25f;
             [DefaultValue(15f)][Range(0f, 100f)] public float VampireMovementSpeed { get; set; } = 15f;
             [DefaultValue(15f)][Range(0f, 100f)] public float VampireBleedChance { get; set; } = 15f;
-            [DefaultValue(5f)][Range(0.1f, 50f)] public float VampireBleedDamagePercent { get; set; } = 5f;
-            [DefaultValue(3f)][Range(1f, 30f)] public float VampireBleedDuration { get; set; } = 5f;
-            [DefaultValue(1f)][Range(0.1f, 5f)] public float VampireBleedTickInterval { get; set; } = 1f;
+            [DefaultValue(1f)][Range(0.1f, 50f)] public float VampireBleedDamagePercent { get; set; } = 1f;
+            [DefaultValue(3f)][Range(1f, 30f)] public float VampireBleedDuration { get; set; } = 3f;
+            [DefaultValue(1.5f)][Range(0.1f, 5f)] public float VampireBleedTickInterval { get; set; } = 1.5f;
             [DefaultValue(10f)][Range(0f, 100f)] public float VampireBleedHealPercent { get; set; } = 10f;
             [DefaultValue(5f)][Range(0f, 50f)] public float VampireKillHealPercent { get; set; } = 5f;
         }

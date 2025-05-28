@@ -47,6 +47,9 @@ namespace Stataria
 
         private void TryApplyBleed(NPC target, int damageDone)
         {
+            if (target.type == NPCID.TargetDummy)
+                return;
+
             var config = ModContent.GetInstance<StatariaConfig>();
 
             if (Main.rand.NextFloat() < config.roleSettings.VampireBleedChance / 100f)

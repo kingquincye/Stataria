@@ -70,6 +70,8 @@ namespace Stataria
                     rpg.RebirthCount = 0;
                     rpg.RebirthPoints = 0;
                     rpg.WasRetroRPGranted = false;
+                    rpg.AutoAllocateEnabled = false;
+                    rpg.AutoAllocateStats.Clear();
                     foreach (var ability in rpg.RebirthAbilities.Values)
                     {
                         ability.IsUnlocked = false;
