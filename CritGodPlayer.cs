@@ -14,7 +14,12 @@ namespace Stataria
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (!EnableSummonCrits || (!proj.minion && !proj.sentry))
+            if (!EnableSummonCrits)
+                return;
+
+            bool isSummonProjectile = proj.minion || proj.sentry || proj.DamageType == DamageClass.Summon;
+
+            if (!isSummonProjectile || proj.owner != Player.whoAmI)
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();
