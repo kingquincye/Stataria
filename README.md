@@ -44,6 +44,7 @@ Mod integration stats:
     CLK: Increases Clicker Damage, Radius, and Decreases Clicks Required for Click Effects (ClickerClass)
 
 Roles *NEW*:
+
     Crit God: A master of devastating precision, turning every strike into a potential killing blow.
     Vampire: A bloodthirsty warrior who grows stronger through combat, draining life from wounded foes.
     MORE TO COME IN FUTURE UPDATES!
