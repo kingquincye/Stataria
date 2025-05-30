@@ -1,7 +1,7 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Stataria.Accessories
+namespace Stataria
 {
     public class ExtraAccessorySlot1 : BaseExtraAccessorySlot
     {
