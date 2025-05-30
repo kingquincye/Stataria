@@ -104,6 +104,27 @@ namespace Stataria
                 return string.Join("\n", effects);
             }
 
+            if (ID == "Beastmaster")
+            {
+                var effects = new List<string>
+                {
+                    $"• +{config.roleSettings.BeastmasterDamagePerUniqueMinion:0.##}% Summon Damage per unique active minion type",
+                    $"• +{config.roleSettings.BeastmasterBonusSlotsGained} Minion Slot{(config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : "")} per {config.roleSettings.BeastmasterSlotsPerBonusSlot} base minion slots"
+                };
+
+                if (config.roleSettings.BeastmasterReduceSPRSlotEfficiency)
+                {
+                    int sprRequirement = (int)(config.roleSettings.BeastmasterSlotsPerBonusSlot * config.roleSettings.BeastmasterSPRSlotPenaltyMultiplier);
+                    effects.Add($"• +{config.roleSettings.BeastmasterBonusSlotsGained} Minion Slot{(config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : "")} per {sprRequirement} SPR-gained minion slots (reduced efficiency)");
+                }
+                else
+                {
+                    effects.Add($"• +{config.roleSettings.BeastmasterBonusSlotsGained} Minion Slot{(config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : "")} per {config.roleSettings.BeastmasterSlotsPerBonusSlot} SPR-gained minion slots (normal efficiency)");
+                }
+
+                return string.Join("\n", effects);
+            }
+
             return "No effects defined.";
         }
     }

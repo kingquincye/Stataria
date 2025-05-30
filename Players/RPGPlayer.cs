@@ -44,6 +44,8 @@ namespace Stataria
         public Role ActiveRole { get; set; }
         public int RoleSwitchCount { get; set; }
         public Dictionary<string, Role> AvailableRoles { get; private set; } = new Dictionary<string, Role>();
+        private HashSet<int> currentMinionTypes = new HashSet<int>();
+        private int beastmasterBonusSlots = 0;
 
         public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0;
         public HashSet<int> rewardedBosses = new();
@@ -379,6 +381,14 @@ namespace Stataria
                 "Embrace the darkness - let your enemies' blood fuel your power."
             );
             AvailableRoles["Vampire"] = vampire;
+
+            var beastmaster = new Role(
+                "Beastmaster",
+                "Beastmaster",
+                "A master of minions who gains power from commanding diverse creatures and maximizing their potential.",
+                "Strength through diversity - the more varied your army, the stronger you become."
+            );
+            AvailableRoles["Beastmaster"] = beastmaster;
 
             foreach (var role in AvailableRoles.Values)
             {
@@ -972,6 +982,48 @@ namespace Stataria
             }
         }
 
+        private void UpdateBeastmasterEffects()
+        {
+            if (ActiveRole?.ID != "Beastmaster" || ActiveRole.Status != RoleStatus.Active)
+            {
+                currentMinionTypes.Clear();
+                beastmasterBonusSlots = 0;
+                return;
+            }
+
+            currentMinionTypes.Clear();
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile proj = Main.projectile[i];
+                if (proj.active && proj.owner == Player.whoAmI && proj.minion)
+                {
+                    currentMinionTypes.Add(proj.type);
+                }
+            }
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+            
+            int effectiveSPR = GetEffectiveStat("SPR");
+            int sprMinions = effectiveSPR / config.statSettings.SPR_MinionsPerX;
+            int totalSlots = Player.maxMinions - beastmasterBonusSlots;
+            int baseSlots = totalSlots - sprMinions;
+            
+            int bonusFromBaseSlots = (baseSlots / config.roleSettings.BeastmasterSlotsPerBonusSlot) * config.roleSettings.BeastmasterBonusSlotsGained;
+            
+            int bonusFromSPRSlots = 0;
+            if (config.roleSettings.BeastmasterReduceSPRSlotEfficiency)
+            {
+                int sprSlotRequirement = (int)(config.roleSettings.BeastmasterSlotsPerBonusSlot * config.roleSettings.BeastmasterSPRSlotPenaltyMultiplier);
+                bonusFromSPRSlots = (sprMinions / sprSlotRequirement) * config.roleSettings.BeastmasterBonusSlotsGained;
+            }
+            else
+            {
+                bonusFromSPRSlots = (sprMinions / config.roleSettings.BeastmasterSlotsPerBonusSlot) * config.roleSettings.BeastmasterBonusSlotsGained;
+            }
+            
+            beastmasterBonusSlots = bonusFromBaseSlots + bonusFromSPRSlots;
+        }
+
         public override void ModifyLuck(ref float luck)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -1033,6 +1085,17 @@ namespace Stataria
             Player.maxMinions += effectiveSPR / config.statSettings.SPR_MinionsPerX;
             Player.maxTurrets += effectiveSPR / config.statSettings.SPR_SentriesPerX;
             Player.GetDamage(DamageClass.Summon) += effectiveSPR * (config.statSettings.SPR_Damage / 100f);
+
+            if (ActiveRole?.ID == "Beastmaster" && ActiveRole.Status == RoleStatus.Active)
+            {
+                Player.maxMinions += beastmasterBonusSlots;
+                
+                if (currentMinionTypes.Count > 0)
+                {
+                    float damageBonus = currentMinionTypes.Count * (config.roleSettings.BeastmasterDamagePerUniqueMinion / 100f);
+                    Player.GetDamage(DamageClass.Summon) += damageBonus;
+                }
+            }
 
             int effectiveTCH = GetEffectiveStat("TCH");
 
@@ -1477,6 +1540,7 @@ namespace Stataria
             }
 
             ApplyAbilityEffects2();
+            UpdateBeastmasterEffects();
         }
 
         private void ApplyAbilityEffects1()

@@ -1210,6 +1210,7 @@ Configs: {
 			Role_System: Role System
 			Crit_God: Crit God
 			Vampire: Vampire
+			Beastmaster: Beastmaster
 		}
 
 		BaseSwitchCost: {
@@ -1285,6 +1286,31 @@ Configs: {
 		VampireKillHealPercent: {
 			Label: Kill Heal Percent
 			Tooltip: Percentage of max health restored when killing an enemy.
+		}
+
+		BeastmasterDamagePerUniqueMinion: {
+			Label: Damage Per Unique Minion
+			Tooltip: Percentage summon damage bonus gained per unique active minion type.
+		}
+
+		BeastmasterSlotsPerBonusSlot: {
+			Label: Slots Per Bonus Slot
+			Tooltip: Number of current minion slots needed to gain 1 additional minion slot.
+		}
+
+		BeastmasterBonusSlotsGained: {
+			Label: Bonus Slots Gained
+			Tooltip: Number of minion slots gained when the slot threshold is reached.
+		}
+
+		BeastmasterReduceSPRSlotEfficiency: {
+			Label: Reduce SPR Slot Efficiency
+			Tooltip: When enabled, SPR-gained minion slots are less efficient at earning bonus slots, encouraging diverse minion sources.
+		}
+
+		BeastmasterSPRSlotPenaltyMultiplier: {
+			Label: SPR Slot Penalty Multiplier
+			Tooltip: Multiplier for how many SPR-gained slots are needed per bonus slot. 2.0 means SPR slots need twice as many to earn a bonus.
 		}
 	}
 }

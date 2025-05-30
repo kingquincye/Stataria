@@ -203,6 +203,13 @@ namespace Stataria
             [DefaultValue(1.5f)][Range(0.1f, 5f)] public float VampireBleedTickInterval { get; set; } = 1.5f;
             [DefaultValue(10f)][Range(0f, 100f)] public float VampireBleedHealPercent { get; set; } = 10f;
             [DefaultValue(5f)][Range(0f, 50f)] public float VampireKillHealPercent { get; set; } = 5f;
+
+            [Header("Beastmaster")]
+            [DefaultValue(15f)][Range(0f, 100f)] public float BeastmasterDamagePerUniqueMinion { get; set; } = 15f;
+            [DefaultValue(3)][Range(1, 10)] public int BeastmasterSlotsPerBonusSlot { get; set; } = 3;
+            [DefaultValue(1)][Range(1, 5)] public int BeastmasterBonusSlotsGained { get; set; } = 1;
+            [DefaultValue(true)] public bool BeastmasterReduceSPRSlotEfficiency { get; set; } = true;
+            [DefaultValue(2f)][Range(1f, 10f)] public float BeastmasterSPRSlotPenaltyMultiplier { get; set; } = 2f;
         }
 
         public class MultiplayerSettings
