@@ -995,10 +995,15 @@ namespace Stataria
             for (int i = 0; i < Main.maxProjectiles; i++)
             {
                 Projectile proj = Main.projectile[i];
-                if (proj.active && proj.owner == Player.whoAmI && proj.minion)
-                {
-                    currentMinionTypes.Add(proj.type);
-                }
+                if (!proj.active || proj.owner != Player.whoAmI || !proj.minion)
+                    continue;
+
+                if (!ProjectileID.Sets.MinionSacrificable[proj.type])
+                    continue;
+
+                int weapon = proj.GetGlobalProjectile<BeastmasterGlobalProjectile>().summonWeaponType;
+                if (weapon > 0)
+                    currentMinionTypes.Add(weapon);
             }
 
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -1090,9 +1095,10 @@ namespace Stataria
             {
                 Player.maxMinions += beastmasterBonusSlots;
                 
-                if (currentMinionTypes.Count > 0)
+                int uniqueWeapons = Math.Max(0, currentMinionTypes.Count - 1);
+                if (uniqueWeapons > 0)
                 {
-                    float damageBonus = currentMinionTypes.Count * (config.roleSettings.BeastmasterDamagePerUniqueMinion / 100f);
+                    float damageBonus = uniqueWeapons * (config.roleSettings.BeastmasterDamagePerUniqueMinion / 100f);
                     Player.GetDamage(DamageClass.Summon) += damageBonus;
                 }
             }
