@@ -1212,6 +1212,7 @@ Configs: {
 			Vampire: Vampire
 			Beastmaster: Beastmaster
 			Apex_Summoner: Apex Summoner
+			Black_Knight: Black Knight
 		}
 
 		BaseSwitchCost: {
@@ -1318,6 +1319,56 @@ Configs: {
 			Tooltip: Percentage summon damage bonus gained per unused minion slot when exactly one minion type is active.
 			Label: Damage Per Unused Slot
 		}
+
+		BlackKnightINTToMeleeDamage: {
+			Label: INT To Melee Damage
+			Tooltip: Percentage of melee damage bonus gained per point of INT.
+		}
+
+		BlackKnightSTRToMagicDamage: {
+			Label: STR To Magic Damage
+			Tooltip: Percentage of magic damage bonus gained per point of STR.
+		}
+
+		BlackKnightMaxDarkFocusStacks: {
+			Label: Max Dark Focus Stacks
+			Tooltip: Maximum number of Dark Focus stacks that can be accumulated from magic critical hits.
+		}
+
+		BlackKnightDarkFocusCritChancePerStack: {
+			Label: Dark Focus Crit Chance Per Stack
+			Tooltip: Critical hit chance bonus per Dark Focus stack when consumed by melee attacks.
+		}
+
+		BlackKnightDarkFocusCritDamagePerStack: {
+			Label: Dark Focus Crit Damage Per Stack
+			Tooltip: Critical hit damage bonus per Dark Focus stack when consumed by melee attacks.
+		}
+
+		BlackKnightManaRestoreOnMeleeCrit: {
+			Label: Mana Restore On Melee Crit
+			Tooltip: Amount of mana restored when dealing a melee critical hit.
+		}
+
+		BlackKnightArcaneSurgeDuration: {
+			Label: Arcane Surge Duration
+			Tooltip: Duration in seconds that the Arcane Surge buff lasts after a melee critical hit.
+		}
+
+		BlackKnightArcaneSurgeMagicDamage: {
+			Label: Arcane Surge Magic Damage
+			Tooltip: Base percentage magic damage bonus provided by the Arcane Surge buff.
+		}
+
+		BlackKnightArcaneSurgeScaleWithDamage: {
+			Label: Arcane Surge Scale With Damage
+			Tooltip: When enabled, Arcane Surge magic damage bonus increases based on the damage dealt by the triggering melee critical hit.
+		}
+
+		BlackKnightArcaneSurgeDamageScaling: {
+			Label: Arcane Surge Damage Scaling
+			Tooltip: Additional magic damage bonus per point of damage dealt by the melee critical hit that triggered Arcane Surge.
+		}
 	}
 }
 
@@ -1325,5 +1376,15 @@ Buffs: {
 	BleedDebuff: {
 		Description: Losing health over time
 		DisplayName: Bleed
+	}
+
+	ArcaneSurgeBuff: {
+		DisplayName: Arcane Surge Buff
+		Description: Arcane power surging through your spells
+	}
+
+	DarkFocusBuff: {
+		DisplayName: Dark Focus Buff
+		Description: Magical energy focused through combat prowess
 	}
 }

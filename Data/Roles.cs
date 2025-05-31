@@ -137,6 +137,26 @@ namespace Stataria
                 return string.Join("\n", effects);
             }
 
+            if (ID == "BlackKnight")
+            {
+                var effects = new List<string>
+                {
+                    $"• Melee weapons gain +{config.roleSettings.BlackKnightINTToMeleeDamage:0.##}% damage per INT",
+                    $"• Magic weapons gain +{config.roleSettings.BlackKnightSTRToMagicDamage:0.##}% damage per STR",
+                    $"• Magic crits grant Dark Focus stacks (max {config.roleSettings.BlackKnightMaxDarkFocusStacks})",
+                    $"• Melee attacks consume Dark Focus: +{config.roleSettings.BlackKnightDarkFocusCritChancePerStack:0.##}% crit chance and +{config.roleSettings.BlackKnightDarkFocusCritDamagePerStack:0.##}% crit damage per stack",
+                    $"• Melee crits restore {config.roleSettings.BlackKnightManaRestoreOnMeleeCrit} mana",
+                    $"• Melee crits grant Arcane Surge: +{config.roleSettings.BlackKnightArcaneSurgeMagicDamage:0.##}% magic damage for {config.roleSettings.BlackKnightArcaneSurgeDuration:0.##}s"
+                };
+
+                if (config.roleSettings.BlackKnightArcaneSurgeScaleWithDamage)
+                {
+                    effects.Add($"• Arcane Surge scales with melee crit damage (+{config.roleSettings.BlackKnightArcaneSurgeDamageScaling:0.##}% per damage point)");
+                }
+
+                return string.Join("\n", effects);
+            }
+
             return "No effects defined.";
         }
     }

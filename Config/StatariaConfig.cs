@@ -213,6 +213,18 @@ namespace Stataria
 
             [Header("Apex_Summoner")]
             [DefaultValue(20f)][Range(0f, 100f)] public float ApexSummonerDamagePerUnusedSlot { get; set; } = 20f;
+
+            [Header("Black_Knight")]
+            [DefaultValue(1f)][Range(0f, 10f)] public float BlackKnightINTToMeleeDamage { get; set; } = 1f;
+            [DefaultValue(1f)][Range(0f, 10f)] public float BlackKnightSTRToMagicDamage { get; set; } = 1f;
+            [DefaultValue(5)][Range(1, 20)] public int BlackKnightMaxDarkFocusStacks { get; set; } = 5;
+            [DefaultValue(5f)][Range(0f, 50f)] public float BlackKnightDarkFocusCritChancePerStack { get; set; } = 5f;
+            [DefaultValue(10f)][Range(0f, 100f)] public float BlackKnightDarkFocusCritDamagePerStack { get; set; } = 10f;
+            [DefaultValue(10)][Range(1, 100)] public int BlackKnightManaRestoreOnMeleeCrit { get; set; } = 10;
+            [DefaultValue(5f)][Range(1f, 30f)] public float BlackKnightArcaneSurgeDuration { get; set; } = 5f;
+            [DefaultValue(20f)][Range(0f, 100f)] public float BlackKnightArcaneSurgeMagicDamage { get; set; } = 20f;
+            [DefaultValue(false)] public bool BlackKnightArcaneSurgeScaleWithDamage { get; set; } = false;
+            [DefaultValue(0.1f)][Range(0f, 1f)] public float BlackKnightArcaneSurgeDamageScaling { get; set; } = 0.1f;
         }
 
         public class MultiplayerSettings

@@ -12,6 +12,7 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
 using Terraria.GameInput;
+using Stataria.Buffs;
 
 namespace Stataria
 {
@@ -48,6 +49,7 @@ namespace Stataria
         private int beastmasterBonusSlots = 0;
         private HashSet<int> apexSummonerMinionTypes = new HashSet<int>();
         private float apexSummonerDamageBonus = 0f;
+        private int arcaneSurgeDamageBonus = 0;
 
         public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0;
         public HashSet<int> rewardedBosses = new();
@@ -399,6 +401,14 @@ namespace Stataria
                 "Perfection through focus - one minion, unlimited potential."
             );
             AvailableRoles["ApexSummoner"] = apexSummoner;
+
+            var blackKnight = new Role(
+                "BlackKnight",
+                "Black Knight",
+                "A versatile warrior-mage who blends martial prowess with arcane mastery, gaining power through the synergy of sword and spell.",
+                "Steel and sorcery united - let magic fuel your blade, and let your blade focus your magic."
+            );
+            AvailableRoles["BlackKnight"] = blackKnight;
 
             foreach (var role in AvailableRoles.Values)
             {
@@ -930,6 +940,8 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
+            HandleBlackKnightMechanics(item, target, hit, damageDone);
+
             if (config.advanced.BlacklistedNPCs.Any(entry =>
                 entry.Equals(Lang.GetNPCNameValue(target.type), StringComparison.OrdinalIgnoreCase) ||
                 entry.Equals(target.TypeName, StringComparison.OrdinalIgnoreCase) ||
@@ -948,6 +960,9 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
+            Item heldItem = Player.HeldItem;
+            HandleBlackKnightMechanics(heldItem, target, hit, damageDone, proj);
+
             if (config.advanced.BlacklistedNPCs.Any(entry =>
                 entry.Equals(Lang.GetNPCNameValue(target.type), StringComparison.OrdinalIgnoreCase) ||
                 entry.Equals(target.TypeName, StringComparison.OrdinalIgnoreCase) ||
@@ -962,6 +977,7 @@ namespace Stataria
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
             ApplyCritGodEffects(item, ref modifiers);
+            ApplyBlackKnightMeleeEffects(item, ref modifiers);
         }
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
@@ -970,6 +986,7 @@ namespace Stataria
             {
                 Item item = Player.HeldItem;
                 ApplyCritGodEffects(item, ref modifiers);
+                ApplyBlackKnightProjectileEffects(proj, ref modifiers);
             }
         }
 
@@ -1076,6 +1093,115 @@ namespace Stataria
                     apexSummonerDamageBonus = unusedSlots *
                         (cfg.roleSettings.ApexSummonerDamagePerUnusedSlot / 100f);
                 }
+            }
+        }
+
+        public float GetArcaneSurgeDamageBonus()
+        {
+            if (!Player.HasBuff(ModContent.BuffType<ArcaneSurgeBuff>()))
+                return 0f;
+            
+            return arcaneSurgeDamageBonus;
+        }
+
+        private void ApplyBlackKnightMeleeEffects(Item item, ref NPC.HitModifiers modifiers)
+        {
+            if (ActiveRole?.ID != "BlackKnight" || ActiveRole.Status != RoleStatus.Active)
+                return;
+
+            if (!item.CountsAsClass(DamageClass.Melee))
+                return;
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+            
+            if (Player.HasBuff(ModContent.BuffType<DarkFocusBuff>()))
+            {
+                int buffIndex = Player.FindBuffIndex(ModContent.BuffType<DarkFocusBuff>());
+                if (buffIndex >= 0)
+                {
+                    int stacks = Math.Min((Player.buffTime[buffIndex] + 59) / 60, config.roleSettings.BlackKnightMaxDarkFocusStacks);
+                    float critDamageBonus = stacks * config.roleSettings.BlackKnightDarkFocusCritDamagePerStack / 100f;
+                    modifiers.CritDamage += critDamageBonus;
+                }
+            }
+        }
+
+        // Add new method for Black Knight projectile effects
+        private void ApplyBlackKnightProjectileEffects(Projectile proj, ref NPC.HitModifiers modifiers)
+        {
+            if (ActiveRole?.ID != "BlackKnight" || ActiveRole.Status != RoleStatus.Active)
+                return;
+
+            Item heldItem = Player.HeldItem;
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (heldItem.CountsAsClass(DamageClass.Melee) && Player.HasBuff(ModContent.BuffType<DarkFocusBuff>()))
+            {
+                int buffIndex = Player.FindBuffIndex(ModContent.BuffType<DarkFocusBuff>());
+                if (buffIndex >= 0)
+                {
+                    int stacks = Math.Min((Player.buffTime[buffIndex] + 59) / 60, config.roleSettings.BlackKnightMaxDarkFocusStacks);
+                    float critDamageBonus = stacks * config.roleSettings.BlackKnightDarkFocusCritDamagePerStack / 100f;
+                    modifiers.CritDamage += critDamageBonus;
+                }
+            }
+        }
+
+        private void HandleBlackKnightMechanics(Item item, NPC target, NPC.HitInfo hit, int damageDone, Projectile proj = null)
+        {
+            if (ActiveRole?.ID != "BlackKnight" || ActiveRole.Status != RoleStatus.Active)
+                return;
+
+            if (target.friendly || target.lifeMax <= 5)
+                return;
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (item.CountsAsClass(DamageClass.Magic) && hit.Crit)
+            {
+                int currentBuffIndex = Player.FindBuffIndex(ModContent.BuffType<DarkFocusBuff>());
+                int maxStacks = config.roleSettings.BlackKnightMaxDarkFocusStacks;
+                
+                if (currentBuffIndex >= 0)
+                {
+                    int currentStacks = Math.Min((Player.buffTime[currentBuffIndex] + 59) / 60, maxStacks);
+                    if (currentStacks < maxStacks)
+                    {
+                        Player.buffTime[currentBuffIndex] = (currentStacks + 1) * 60;
+                    }
+                }
+                else
+                {
+                    Player.AddBuff(ModContent.BuffType<DarkFocusBuff>(), 60);
+                }
+            }
+
+            if (item.CountsAsClass(DamageClass.Melee) && Player.HasBuff(ModContent.BuffType<DarkFocusBuff>()))
+            {
+                Player.ClearBuff(ModContent.BuffType<DarkFocusBuff>());
+            }
+
+            if (item.CountsAsClass(DamageClass.Melee) && hit.Crit)
+            {
+                int manaRestore = config.roleSettings.BlackKnightManaRestoreOnMeleeCrit;
+                Player.statMana += manaRestore;
+                if (Player.statMana > Player.statManaMax2)
+                    Player.statMana = Player.statManaMax2;
+
+                int surgeDuration = (int)(config.roleSettings.BlackKnightArcaneSurgeDuration * 60f);
+                
+                if (config.roleSettings.BlackKnightArcaneSurgeScaleWithDamage)
+                {
+                    float scaledBonus = config.roleSettings.BlackKnightArcaneSurgeMagicDamage + 
+                                    (damageDone * config.roleSettings.BlackKnightArcaneSurgeDamageScaling);
+                    arcaneSurgeDamageBonus = (int)scaledBonus;
+                }
+                else
+                {
+                    arcaneSurgeDamageBonus = (int)config.roleSettings.BlackKnightArcaneSurgeMagicDamage;
+                }
+
+                Player.AddBuff(ModContent.BuffType<ArcaneSurgeBuff>(), surgeDuration);
             }
         }
 
@@ -2000,6 +2126,24 @@ namespace Stataria
                 bonus += effectivePOW * 0.001f;
             }
 
+            if (ActiveRole?.ID == "BlackKnight" && ActiveRole.Status == RoleStatus.Active)
+            {
+                if (item.CountsAsClass(DamageClass.Melee))
+                {
+                    bonus += effectiveINT * (config.roleSettings.BlackKnightINTToMeleeDamage / 100f);
+                }
+
+                if (item.CountsAsClass(DamageClass.Magic))
+                {
+                    bonus += effectiveSTR * (config.roleSettings.BlackKnightSTRToMagicDamage / 100f);
+
+                    if (Player.HasBuff(ModContent.BuffType<ArcaneSurgeBuff>()))
+                    {
+                        bonus += GetArcaneSurgeDamageBonus() / 100f;
+                    }
+                }
+            }
+
             if (config.generalBalance.UseMultiplicativeDamage)
             {
                 damage *= 1f + bonus;
@@ -2031,6 +2175,20 @@ namespace Stataria
             if (ActiveRole?.ID == "CritGod" && ActiveRole.Status == RoleStatus.Active)
             {
                 crit += config.roleSettings.CritGodCritChance;
+            }
+
+            if (ActiveRole?.ID == "BlackKnight" && ActiveRole.Status == RoleStatus.Active)
+            {
+                if (item.CountsAsClass(DamageClass.Melee) && Player.HasBuff(ModContent.BuffType<DarkFocusBuff>()))
+                {
+                    int buffIndex = Player.FindBuffIndex(ModContent.BuffType<DarkFocusBuff>());
+                    if (buffIndex >= 0)
+                    {
+                        int stacks = Math.Min((Player.buffTime[buffIndex] + 59) / 60, config.roleSettings.BlackKnightMaxDarkFocusStacks);
+                        float critBonus = stacks * config.roleSettings.BlackKnightDarkFocusCritChancePerStack;
+                        crit += critBonus;
+                    }
+                }
             }
         }
 
