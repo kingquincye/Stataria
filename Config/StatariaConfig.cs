@@ -210,6 +210,9 @@ namespace Stataria
             [DefaultValue(1)][Range(1, 5)] public int BeastmasterBonusSlotsGained { get; set; } = 1;
             [DefaultValue(true)] public bool BeastmasterReduceSPRSlotEfficiency { get; set; } = true;
             [DefaultValue(2f)][Range(1f, 10f)] public float BeastmasterSPRSlotPenaltyMultiplier { get; set; } = 2f;
+
+            [Header("Apex_Summoner")]
+            [DefaultValue(20f)][Range(0f, 100f)] public float ApexSummonerDamagePerUnusedSlot { get; set; } = 20f;
         }
 
         public class MultiplayerSettings

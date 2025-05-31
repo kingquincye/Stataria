@@ -46,6 +46,8 @@ namespace Stataria
         public Dictionary<string, Role> AvailableRoles { get; private set; } = new Dictionary<string, Role>();
         private HashSet<int> currentMinionTypes = new HashSet<int>();
         private int beastmasterBonusSlots = 0;
+        private HashSet<int> apexSummonerMinionTypes = new HashSet<int>();
+        private float apexSummonerDamageBonus = 0f;
 
         public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0;
         public HashSet<int> rewardedBosses = new();
@@ -389,6 +391,14 @@ namespace Stataria
                 "Strength through diversity - the more varied your army, the stronger you become."
             );
             AvailableRoles["Beastmaster"] = beastmaster;
+
+            var apexSummoner = new Role(
+                "ApexSummoner",
+                "Apex Summoner",
+                "A focused summoner who achieves maximum power through singular dedication, gaining massive damage when commanding only one minion type.",
+                "Perfection through focus - one minion, unlimited potential."
+            );
+            AvailableRoles["ApexSummoner"] = apexSummoner;
 
             foreach (var role in AvailableRoles.Values)
             {
@@ -1001,7 +1011,7 @@ namespace Stataria
                 if (!ProjectileID.Sets.MinionSacrificable[proj.type])
                     continue;
 
-                int weapon = proj.GetGlobalProjectile<BeastmasterGlobalProjectile>().summonWeaponType;
+                int weapon = proj.GetGlobalProjectile<SummonSourceGlobalProjectile>().summonWeaponType;
                 if (weapon > 0)
                     currentMinionTypes.Add(weapon);
             }
@@ -1027,6 +1037,46 @@ namespace Stataria
             }
             
             beastmasterBonusSlots = bonusFromBaseSlots + bonusFromSPRSlots;
+        }
+
+        private void UpdateApexSummonerEffects()
+        {
+            apexSummonerDamageBonus = 0f;
+            if (ActiveRole?.ID != "ApexSummoner" || ActiveRole.Status != RoleStatus.Active)
+            {
+                apexSummonerMinionTypes.Clear();
+                return;
+            }
+
+            apexSummonerMinionTypes.Clear();
+            float slotsUsed = 0f;
+
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile proj = Main.projectile[i];
+                if (!proj.active || proj.owner != Player.whoAmI || !proj.minion)
+                    continue;
+
+                if (!ProjectileID.Sets.MinionSacrificable[proj.type])
+                    continue;
+
+                int weapon = proj.GetGlobalProjectile<SummonSourceGlobalProjectile>().summonWeaponType;
+                if (weapon > 0)
+                    apexSummonerMinionTypes.Add(weapon);
+
+                slotsUsed += proj.minionSlots;
+            }
+
+            if (apexSummonerMinionTypes.Count == 1)
+            {
+                int unusedSlots = (int)Math.Floor(Player.maxMinions - slotsUsed);
+                if (unusedSlots > 0)
+                {
+                    var cfg = ModContent.GetInstance<StatariaConfig>();
+                    apexSummonerDamageBonus = unusedSlots *
+                        (cfg.roleSettings.ApexSummonerDamagePerUnusedSlot / 100f);
+                }
+            }
         }
 
         public override void ModifyLuck(ref float luck)
@@ -1101,6 +1151,10 @@ namespace Stataria
                     float damageBonus = uniqueWeapons * (config.roleSettings.BeastmasterDamagePerUniqueMinion / 100f);
                     Player.GetDamage(DamageClass.Summon) += damageBonus;
                 }
+            }
+            if (ActiveRole?.ID == "ApexSummoner" && ActiveRole.Status == RoleStatus.Active)
+            {
+                Player.GetDamage(DamageClass.Summon) += apexSummonerDamageBonus;
             }
 
             int effectiveTCH = GetEffectiveStat("TCH");
@@ -1547,6 +1601,7 @@ namespace Stataria
 
             ApplyAbilityEffects2();
             UpdateBeastmasterEffects();
+            UpdateApexSummonerEffects();
         }
 
         private void ApplyAbilityEffects1()

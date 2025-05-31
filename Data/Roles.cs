@@ -125,6 +125,18 @@ namespace Stataria
                 return string.Join("\n", effects);
             }
 
+            if (ID == "ApexSummoner")
+            {
+                var effects = new List<string>
+                {
+                    "• Massive summon damage bonus when you have exactly one type of minion active",
+                    $"• +{config.roleSettings.ApexSummonerDamagePerUnusedSlot:0.##}% Summon Damage per unused minion slot",
+                    "• Bonus is lost if multiple minion types are summoned"
+                };
+
+                return string.Join("\n", effects);
+            }
+
             return "No effects defined.";
         }
     }

@@ -1211,6 +1211,7 @@ Configs: {
 			Crit_God: Crit God
 			Vampire: Vampire
 			Beastmaster: Beastmaster
+			Apex_Summoner: Apex Summoner
 		}
 
 		BaseSwitchCost: {
@@ -1311,6 +1312,11 @@ Configs: {
 		BeastmasterSPRSlotPenaltyMultiplier: {
 			Label: SPR Slot Penalty Multiplier
 			Tooltip: Multiplier for how many SPR-gained slots are needed per bonus slot. 2.0 means SPR slots need twice as many to earn a bonus.
+		}
+
+		ApexSummonerDamagePerUnusedSlot: {
+			Tooltip: Percentage summon damage bonus gained per unused minion slot when exactly one minion type is active.
+			Label: Damage Per Unused Slot
 		}
 	}
 }

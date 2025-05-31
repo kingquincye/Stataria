@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 
 namespace Stataria
 {
-    public class BeastmasterGlobalProjectile : GlobalProjectile
+    public class SummonSourceGlobalProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
 
@@ -24,11 +24,11 @@ namespace Stataria
             if (source is EntitySource_Parent parent && parent.Entity is Projectile parentProj)
             {
                 summonWeaponType =
-                    parentProj.GetGlobalProjectile<BeastmasterGlobalProjectile>().summonWeaponType;
+                    parentProj.GetGlobalProjectile<SummonSourceGlobalProjectile>().summonWeaponType;
             }
         }
 
         public override GlobalProjectile NewInstance(Projectile projectile)
-            => new BeastmasterGlobalProjectile();
+            => new SummonSourceGlobalProjectile();
     }
 }
