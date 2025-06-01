@@ -1379,12 +1379,22 @@ Buffs: {
 	}
 
 	ArcaneSurgeBuff: {
-		DisplayName: Arcane Surge Buff
+		DisplayName: Arcane Surge
 		Description: Arcane power surging through your spells
 	}
 
 	DarkFocusBuff: {
-		DisplayName: Dark Focus Buff
+		DisplayName: Dark Focus
 		Description: Magical energy focused through combat prowess
+	}
+
+	ClericAuraBuff: {
+		DisplayName: Cleric Aura
+		Description: Within a protective divine aura
+	}
+
+	DivineInterventionBuff: {
+		Description: Mods.Stataria.Buffs.DivineInterventionBuff.Description
+		DisplayName: Divine Intervention Buff
 	}
 }
