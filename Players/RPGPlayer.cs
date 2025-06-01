@@ -1126,7 +1126,6 @@ namespace Stataria
             }
         }
 
-        // Add new method for Black Knight projectile effects
         private void ApplyBlackKnightProjectileEffects(Projectile proj, ref NPC.HitModifiers modifiers)
         {
             if (ActiveRole?.ID != "BlackKnight" || ActiveRole.Status != RoleStatus.Active)
@@ -2206,8 +2205,6 @@ namespace Stataria
             }
             return true;
         }
-
-
 
        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {

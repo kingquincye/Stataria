@@ -282,7 +282,6 @@ namespace Stataria
             }
 
             RPGPlayer rpgPlayer = null;
-            NPC targetNpc = null;
 
             RPGPlayer GetRPGPlayer(object playerArg)
             {
@@ -297,21 +296,6 @@ namespace Stataria
                 Logger.Warn($"ModCall '{message}': Expected Player or playerID as second argument.");
                 return null;
             }
-
-            NPC GetNPC(object npcArg)
-            {
-                if (npcArg is NPC npc)
-                {
-                    return npc;
-                }
-                else if (npcArg is int npcID && npcID >= 0 && npcID < Main.maxNPCs)
-                {
-                    return Main.npc[npcID];
-                }
-                Logger.Warn($"ModCall '{message}': Expected NPC or npcID as second argument.");
-                return null;
-            }
-
 
             switch (message)
             {
