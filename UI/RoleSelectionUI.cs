@@ -240,9 +240,6 @@ namespace Stataria
                     {
                         SoundEngine.PlaySound(SoundID.MenuTick);
                         RefreshRolesList();
-
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                            rpg.SyncPlayer(-1, player.whoAmI, false);
                     }
                 };
 
@@ -265,9 +262,6 @@ namespace Stataria
                     {
                         SoundEngine.PlaySound(SoundID.Research);
                         RefreshRolesList();
-
-                        if (Main.netMode == NetmodeID.MultiplayerClient)
-                            rpg.SyncPlayer(-1, player.whoAmI, false);
                     }
                 };
 
@@ -312,9 +306,6 @@ namespace Stataria
                         {
                             SoundEngine.PlaySound(SoundID.Research);
                             RefreshRolesList();
-
-                            if (Main.netMode == NetmodeID.MultiplayerClient)
-                                rpg.SyncPlayer(-1, player.whoAmI, false);
                         }
                     };
                 }

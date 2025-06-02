@@ -447,6 +447,11 @@ namespace Stataria
             ActiveRole = newRole;
             ActiveRole.Status = RoleStatus.Active;
 
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                SyncPlayer(-1, Player.whoAmI, false);
+            }
+
             return true;
         }
 
@@ -456,6 +461,12 @@ namespace Stataria
                 return false;
 
             ActiveRole.Status = RoleStatus.Deactivated;
+            
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                SyncPlayer(-1, Player.whoAmI, false);
+            }
+            
             return true;
         }
 
@@ -2206,7 +2217,7 @@ namespace Stataria
             return true;
         }
 
-       public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             var packet = ModContent.GetInstance<Stataria>().GetPacket();
             packet.Write((byte)StatariaMessageType.SyncPlayer);
@@ -2245,6 +2256,18 @@ namespace Stataria
             {
                 packet.Write(bossId);
             }
+
+            if (ActiveRole != null)
+            {
+                packet.Write(true);
+                packet.Write(ActiveRole.ID);
+                packet.Write((byte)ActiveRole.Status);
+            }
+            else
+            {
+                packet.Write(false);
+            }
+            packet.Write(RoleSwitchCount);
 
             packet.Send(toWho, fromWho);
         }

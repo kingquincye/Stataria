@@ -161,6 +161,39 @@ namespace Stataria
                 {
                     rpg.rewardedBosses.Add(reader.ReadInt32());
                 }
+
+                bool hasActiveRole = reader.ReadBoolean();
+                if (hasActiveRole)
+                {
+                    string roleID = reader.ReadString();
+                    RoleStatus roleStatus = (RoleStatus)reader.ReadByte();
+
+                    if (rpg.AvailableRoles.ContainsKey(roleID))
+                    {
+                        foreach (var role in rpg.AvailableRoles.Values)
+                        {
+                            if (role.Status == RoleStatus.Active || role.Status == RoleStatus.Deactivated)
+                                role.Status = RoleStatus.Available;
+                        }
+
+                        rpg.ActiveRole = rpg.AvailableRoles[roleID];
+                        rpg.ActiveRole.Status = roleStatus;
+                    }
+                }
+                else
+                {
+                    if (rpg.ActiveRole != null)
+                    {
+                        rpg.ActiveRole.Status = RoleStatus.Available;
+                        rpg.ActiveRole = null;
+                    }
+                }
+                rpg.RoleSwitchCount = reader.ReadInt32();
+
+                if (Main.netMode == NetmodeID.Server)
+                {
+                    rpg.SyncPlayer(toWho: -1, fromWho: whoAmI, newPlayer: false);
+                }
             }
             else if (msgType == StatariaMessageType.SyncGlobalBosses)
             {
@@ -263,6 +296,11 @@ namespace Stataria
                             rpg.RebirthAbilities[abilityId].AbilityData["Enabled"] = isEnabled;
                         }
                     }
+                }
+                
+                if (Main.netMode == NetmodeID.Server)
+                {
+                    rpg.SyncAbilities(toWho: -1, fromWho: whoAmI);
                 }
             }
         }
