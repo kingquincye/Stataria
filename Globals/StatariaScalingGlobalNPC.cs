@@ -30,7 +30,7 @@ namespace Stataria
         };
 
         private float damageMult = 1f;
-        private bool hasBeenScaled = false;
+        public bool hasBeenScaled = false;
 
         private bool IsProblematicCrawler(NPC npc)
         {
@@ -160,6 +160,7 @@ namespace Stataria
         {
             if (Main.netMode == NetmodeID.Server)
             {
+                ApplyScalingOnSpawn(npc);
                 Stataria.SyncNPCScaling(npc.whoAmI);
             }
         }
@@ -203,9 +204,11 @@ namespace Stataria
                 }
             }
 
-            CalculateEnemyLevel(npc);
-
-            TryMakeElite(npc);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                CalculateEnemyLevel(npc);
+                TryMakeElite(npc);
+            }
 
             ApplyScaling(npc);
 
@@ -281,7 +284,9 @@ namespace Stataria
 
             if (config.enemyScaling.EnableLevelVariation)
             {
-                int variation = Main.rand.Next(-config.enemyScaling.MaxLevelVariation, config.enemyScaling.MaxLevelVariation + 1);
+                int worldSeed = Main.worldName?.GetHashCode() ?? 0;
+                Random npcRandom = new Random(npc.whoAmI + worldSeed);
+                int variation = npcRandom.Next(-config.enemyScaling.MaxLevelVariation, config.enemyScaling.MaxLevelVariation + 1);
                 baseLevel += variation;
 
                 if (config.enemyScaling.EnableMinimumLevelDifference &&
@@ -345,10 +350,12 @@ namespace Stataria
             if (!config.enemyScaling.EnableEliteEnemies || npc.boss || npc.townNPC || npc.friendly || NPCID.Sets.CountsAsCritter[npc.type] || npc.lifeMax <= 9)
                 return;
 
-            IsElite = Main.rand.NextFloat() < config.enemyScaling.EliteEnemyChance;
+            int worldSeed = Main.worldName?.GetHashCode() ?? 0;
+            Random npcRandom = new Random(npc.whoAmI + 1000 + worldSeed);
+            IsElite = npcRandom.NextDouble() < config.enemyScaling.EliteEnemyChance;
         }
 
-        private void ApplyScaling(NPC npc)
+        public void ApplyScaling(NPC npc)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
@@ -505,21 +512,34 @@ namespace Stataria
             spriteBatch.DrawString(font, levelText, textPos, textColor);
         }
 
-        public override void AI(NPC npc)
-        {
-            if (!hasBeenScaled && !npc.townNPC && !npc.friendly && !NPCID.Sets.CountsAsCritter[npc.type] && npc.lifeMax > 9)
-            {
-                ApplyScalingOnSpawn(npc);
-                hasBeenScaled = true;
-            }
-        }
-
         public override void PostAI(NPC npc)
         {
-            if (!hasBeenScaled && !npc.townNPC && !npc.friendly && !NPCID.Sets.CountsAsCritter[npc.type] && npc.lifeMax > 9)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
-                ApplyScalingOnSpawn(npc);
-                hasBeenScaled = true;
+                if (npc.active && !this.hasBeenScaled)
+                {
+                    if (Stataria.pendingNpcScaling.TryGetValue(npc.whoAmI, out var scalingData))
+                    {
+                        this.IsElite = scalingData.IsElite;
+                        this.Level = scalingData.Level;
+                        this.ApplyScaling(npc);
+                        this.hasBeenScaled = true;
+
+                        Stataria.pendingNpcScaling.Remove(npc.whoAmI);
+                    }
+                }
+            }
+            else
+            {
+                if (!this.hasBeenScaled && !npc.townNPC && !npc.friendly && !NPCID.Sets.CountsAsCritter[npc.type] && npc.lifeMax > 9)
+                {
+                    ApplyScalingOnSpawn(npc);
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        Stataria.SyncNPCScaling(npc.whoAmI);
+                    }
+                }
             }
         }
 

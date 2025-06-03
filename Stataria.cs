@@ -24,6 +24,8 @@ namespace Stataria
 
     public class Stataria : Mod
     {
+        public static Dictionary<int, (bool IsElite, int Level)> pendingNpcScaling = new Dictionary<int, (bool, int)>();
+
         public override void Load()
         {
             StatariaLogger.GlobalDebugMode = false;
@@ -231,11 +233,24 @@ namespace Stataria
                 bool isElite = reader.ReadBoolean();
                 int level = reader.ReadInt32();
 
-                if (npcIndex >= 0 && npcIndex < Main.maxNPCs && Main.npc[npcIndex].active)
+                if (npcIndex >= 0 && npcIndex < Main.maxNPCs && Main.npc[npcIndex] != null)
                 {
-                    var npcData = Main.npc[npcIndex].GetGlobalNPC<StatariaScalingGlobalNPC>();
-                    npcData.IsElite = isElite;
-                    npcData.Level = level;
+                    if (Main.npc[npcIndex].active)
+                    {
+                        var npcData = Main.npc[npcIndex].GetGlobalNPC<StatariaScalingGlobalNPC>();
+
+                        if (!npcData.hasBeenScaled)
+                        {
+                            npcData.IsElite = isElite;
+                            npcData.Level = level;
+                            npcData.ApplyScaling(Main.npc[npcIndex]);
+                            npcData.hasBeenScaled = true;
+                        }
+                    }
+                    else
+                    {
+                        pendingNpcScaling[npcIndex] = (isElite, level);
+                    }
                 }
             }
             else if (msgType == StatariaMessageType.SyncAbilities)
