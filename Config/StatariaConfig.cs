@@ -239,6 +239,7 @@ namespace Stataria
             [Range(1f, 30f)][DefaultValue(10f)] public float DivineInterventionDuration { get; set; } = 10f;
             [Range(30f, 600f)][DefaultValue(120f)] public float DivineInterventionCooldown { get; set; } = 120f;
             [DefaultValue(true)] public bool EnableDivineInterventionCooldownBar { get; set; } = true;
+            public List<string> DivineInterventionExemptBuffs { get; set; } = new List<string>();
 
             [Header("Guardian")]
             [DefaultValue(300f)][Range(100f, 1000f)] public float GuardianAuraRadius { get; set; } = 300f;

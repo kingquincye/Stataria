@@ -1465,6 +1465,16 @@ Configs: {
 				WARNING: Due to Terraria limitations, eyes may remain permanently red if disabled while vampire role is active.
 				'''
 		}
+
+		DivineInterventionExemptBuffs: {
+			Label: Divine Intervention Exempt Buffs
+			Tooltip:
+				'''
+				List of buff IDs or names that Divine Intervention will NOT remove.
+				Enter buff IDs (numbers) or exact buff names.
+				Examples: "123", "Tipsy", "SomeModdedBuff"
+				'''
+		}
 	}
 }
 

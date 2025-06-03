@@ -58,9 +58,6 @@ namespace Stataria
 
             lastCalamityIntegrationState = !(config.modIntegration.EnableCalamityIntegration && CalamitySupportHelper.CalamityLoaded);
             lastThoriumIntegrationState = !(config.modIntegration.EnableThoriumIntegration && ThoriumSupportHelper.ThoriumLoaded);
-
-            StatariaLogger.Info($"Mod integration OnWorldLoad: CalamityLoaded={CalamitySupportHelper.CalamityLoaded}, Calamity integration enabled={config.modIntegration.EnableCalamityIntegration}");
-            StatariaLogger.Info($"Mod integration OnWorldLoad: ThoriumLoaded={ThoriumSupportHelper.ThoriumLoaded}, Thorium integration enabled={config.modIntegration.EnableThoriumIntegration}");
         }
 
         public override void PostUpdateEverything()
@@ -173,7 +170,6 @@ namespace Stataria
                     try
                     {
                         StatariaUI.Panel.ReInitializePanel();
-                        StatariaLogger.Info($"Calamity integration: Panel reinitialized, state changed from {lastCalamityIntegrationState} to {currentCalamityState}");
                     }
                     catch (System.Exception e)
                     {
@@ -191,7 +187,6 @@ namespace Stataria
                     try
                     {
                         StatariaUI.Panel.ReInitializePanel();
-                        StatariaLogger.Info($"Thorium integration: Panel reinitialized, state changed from {lastThoriumIntegrationState} to {currentThoriumState}");
                     }
                     catch (System.Exception e)
                     {
