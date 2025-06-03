@@ -17,8 +17,8 @@ namespace Stataria
     {
         public override bool InstancePerEntity => true;
 
-        public bool IsElite { get; private set; }
-        public int Level { get; private set; }
+        public bool IsElite { get; set; }
+        public int Level { get; set; }
 
         private static readonly HashSet<int> CrawlerNpcTypes = new HashSet<int>
         {
@@ -31,11 +31,6 @@ namespace Stataria
 
         private float damageMult = 1f;
         private bool hasBeenScaled = false;
-
-        private bool hasBeenSynced = false;
-        private bool needsSync = false;
-        private byte syncAttempts = 0;
-        private int postUpdateTimer = 0;
 
         private bool IsProblematicCrawler(NPC npc)
         {
@@ -163,29 +158,9 @@ namespace Stataria
 
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
-
-
-            var config = ModContent.GetInstance<StatariaConfig>();
-
-            if (Main.netMode == NetmodeID.SinglePlayer && config.enemyScaling.ImmediateSyncInSingleplayer)
-            {
-                hasBeenSynced = true;
-                needsSync = false;
-                syncAttempts = 0;
-            }
-
             if (Main.netMode == NetmodeID.Server)
             {
-                needsSync = true;
-                hasBeenSynced = false;
-                syncAttempts = 0;
-
-                if ((config.enemyScaling.PrioritizeBossSync && npc.boss) ||
-                    config.enemyScaling.SyncDelayFrames <= 0)
-                {
-                    Stataria.SyncNPCScaling(npc.whoAmI);
-                    hasBeenSynced = true;
-                }
+                Stataria.SyncNPCScaling(npc.whoAmI);
             }
         }
 
@@ -242,11 +217,6 @@ namespace Stataria
             IsElite = false;
             Level = 1;
             hasBeenScaled = false;
-            hasBeenSynced = false;
-            needsSync = false;
-            syncAttempts = 0;
-
-
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
@@ -542,32 +512,6 @@ namespace Stataria
                 ApplyScalingOnSpawn(npc);
                 hasBeenScaled = true;
             }
-
-            if (hasBeenSynced || Main.netMode != NetmodeID.Server)
-                return;
-
-            var config = ModContent.GetInstance<StatariaConfig>();
-
-            if (needsSync && syncAttempts < config.enemyScaling.MaxSyncAttempts)
-            {
-                Stataria.SyncNPCScaling(npc.whoAmI);
-                hasBeenSynced = true;
-                needsSync = false;
-                syncAttempts = 0;
-                return;
-            }
-
-            if (needsSync && !hasBeenSynced)
-            {
-                postUpdateTimer++;
-                if (postUpdateTimer >= config.enemyScaling.SyncDelayFrames)
-                {
-                    Stataria.SyncNPCScaling(npc.whoAmI);
-                    hasBeenSynced = true;
-                    needsSync = false;
-                    postUpdateTimer = 0;
-                }
-            }
         }
 
         public override void PostAI(NPC npc)
@@ -576,23 +520,6 @@ namespace Stataria
             {
                 ApplyScalingOnSpawn(npc);
                 hasBeenScaled = true;
-            }
-
-            if (Main.netMode != NetmodeID.Server)
-                return;
-
-            var config = ModContent.GetInstance<StatariaConfig>();
-
-            if (needsSync && !hasBeenSynced)
-            {
-                syncAttempts++;
-
-                if (syncAttempts >= config.enemyScaling.MaxSyncAttempts)
-                {
-                    Stataria.SyncNPCScaling(npc.whoAmI);
-                    hasBeenSynced = true;
-                    needsSync = false;
-                }
             }
         }
 

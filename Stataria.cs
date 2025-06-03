@@ -24,8 +24,6 @@ namespace Stataria
 
     public class Stataria : Mod
     {
-        private static HashSet<int> syncedNPCs = new HashSet<int>();
-
         public override void Load()
         {
             StatariaLogger.GlobalDebugMode = false;
@@ -34,9 +32,6 @@ namespace Stataria
 
             base.Load();
 
-
-
-            syncedNPCs.Clear();
             StatariaLogger.Info("Stataria mod loading completed");
         }
 
@@ -46,8 +41,6 @@ namespace Stataria
 
             StatariaUI.StatUI = null;
             StatariaUI.Panel = null;
-
-            syncedNPCs.Clear();
         }
 
 
@@ -96,9 +89,6 @@ namespace Stataria
             if (npc == null || !npc.active)
                 return;
 
-            if (syncedNPCs.Contains(npcIndex))
-                return;
-
             var scalingData = npc.GetGlobalNPC<StatariaScalingGlobalNPC>();
 
             var packet = ModContent.GetInstance<Stataria>().GetPacket();
@@ -107,13 +97,6 @@ namespace Stataria
             packet.Write(scalingData.IsElite);
             packet.Write(scalingData.Level);
             packet.Send(toWho, fromWho);
-
-            syncedNPCs.Add(npcIndex);
-        }
-
-        public static void ClearSyncedNPCs()
-        {
-            syncedNPCs.Clear();
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
@@ -251,14 +234,8 @@ namespace Stataria
                 if (npcIndex >= 0 && npcIndex < Main.maxNPCs && Main.npc[npcIndex].active)
                 {
                     var npcData = Main.npc[npcIndex].GetGlobalNPC<StatariaScalingGlobalNPC>();
-
-                    var eliteProperty = typeof(StatariaScalingGlobalNPC).GetProperty("IsElite");
-                    if (eliteProperty != null)
-                        eliteProperty.SetValue(npcData, isElite, null);
-
-                    var levelProperty = typeof(StatariaScalingGlobalNPC).GetProperty("Level");
-                    if (levelProperty != null)
-                        levelProperty.SetValue(npcData, level, null);
+                    npcData.IsElite = isElite;
+                    npcData.Level = level;
                 }
             }
             else if (msgType == StatariaMessageType.SyncAbilities)

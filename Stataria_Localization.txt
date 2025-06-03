@@ -352,7 +352,6 @@ Configs: {
 			Enemy_Scaling: Enemy Scaling
 			Multiplayer_Scaling: Multiplayer Scaling
 			Elite_Enemies: Elite Enemies
-			Sync_Settings: Sync Settings
 		}
 
 		EnableEnemyScaling: {
@@ -453,31 +452,6 @@ Configs: {
 		EliteScaleMultiplier: {
 			Label: Elite Scale Multiplier
 			Tooltip: How much larger elite enemies appear. 1.15 = 15% size increase.
-		}
-
-		SyncDelayFrames: {
-			Label: Sync Delay Frames
-			Tooltip:
-				'''
-				Controls how quickly enemy stats are synchronized in multiplayer. 
-				Lower values improve consistency but may increase network traffic during high spawn rates. Setting to 0 forces immediate syncing of all enemies (may impact performance).
-				60 = 1 second
-				'''
-		}
-
-		ImmediateSyncInSingleplayer: {
-			Label: Immediate Sync In Singleplayer
-			Tooltip: When enabled, enemies in singleplayer are scaled instantly for the best experience. Disable only if you want to test multiplayer behavior in a singleplayer world.
-		}
-
-		PrioritizeBossSync: {
-			Label: Prioritize Boss Sync
-			Tooltip: When enabled, boss enemies are always scaled and synced immediately regardless of other settings. This ensures consistent boss battles even during high spawn rates.
-		}
-
-		MaxSyncAttempts: {
-			Label: Max Sync Attempts
-			Tooltip: The maximum number of times the system will try to sync an enemy's stats in multiplayer. Higher values increase reliability but may impact performance during very high spawn rates.
 		}
 
 		EnableDefenseCap: {

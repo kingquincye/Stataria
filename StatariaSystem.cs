@@ -13,20 +13,14 @@ namespace Stataria
 
         private HashSet<int> syncedPlayers = new();
 
-        private int clearSyncTimer = 0;
-        private const int CLEAR_SYNC_INTERVAL = 3600;
-
         public override void OnWorldLoad()
         {
             killedBossesGlobal.Clear();
             syncedPlayers.Clear();
-
-            Stataria.ClearSyncedNPCs();
         }
 
         public override void OnWorldUnload()
         {
-            Stataria.ClearSyncedNPCs();
         }
 
         public static void SyncGlobalBosses(int toWho = -1, int fromWho = -1)
@@ -92,32 +86,6 @@ namespace Stataria
 
         public override void PostUpdateEverything()
         {
-            if (Main.netMode != NetmodeID.Server)
-                return;
-
-            var config = ModContent.GetInstance<StatariaConfig>();
-
-            int clearInterval = config.enemyScaling.SyncDelayFrames <= 0
-                ? 600
-                : 3600;
-
-            clearSyncTimer++;
-            if (clearSyncTimer >= clearInterval)
-            {
-                int activeNPCs = Main.npc.Count(n => n.active);
-
-                if (activeNPCs < 10 || config.enemyScaling.SyncDelayFrames <= 0)
-                {
-                    Stataria.ClearSyncedNPCs();
-                }
-
-                clearSyncTimer = 0;
-            }
-
-            if (Main.player.Count(p => p.active) == 0)
-            {
-                Stataria.ClearSyncedNPCs();
-            }
         }
     }
 }

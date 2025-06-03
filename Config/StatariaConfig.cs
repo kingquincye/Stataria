@@ -282,12 +282,6 @@ namespace Stataria
             [DefaultValue(false)] public bool EnableMinimumLevelDifference { get; set; } = false;
             [Range(1, 100)][DefaultValue(25)] public int MinimumLevelDifference { get; set; } = 25;
 
-            [Header("Sync_Settings")]
-            [Range(0, 300)][DefaultValue(2)] public int SyncDelayFrames { get; set; } = 2;
-            [DefaultValue(true)] public bool ImmediateSyncInSingleplayer { get; set; } = true;
-            [DefaultValue(true)] public bool PrioritizeBossSync { get; set; } = true;
-            [Range(1, 30)][DefaultValue(5)] public int MaxSyncAttempts { get; set; } = 5;
-
             [Header("Multiplayer_Scaling")]
             [Range(0, 2)][DefaultValue(1)][Slider][SliderColor(150, 0, 150)][Increment(1)][DrawTicks] public int ScalingType { get; set; } = 1;
             [Range(1, 1000)][DefaultValue(5)] public int LevelsPerPlayer { get; set; } = 5;
