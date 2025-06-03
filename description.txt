@@ -43,11 +43,6 @@ Mod integration stats:
     HLR: Increases Radiant Damage, Healing Power, and Improved Life Recovery (Thorium)
     CLK: Increases Clicker Damage, Radius, and Decreases Clicks Required for Click Effects (ClickerClass)
 
-Roles *NEW*:
-    Crit God: A master of devastating precision, turning every strike into a potential killing blow.
-    Vampire: A bloodthirsty warrior who grows stronger through combat, draining life from wounded foes.
-    MORE TO COME IN FUTURE UPDATES!
-
 Has a very simple UI.
 
 Most features and stat scaling values are fully configurable in the mod config.

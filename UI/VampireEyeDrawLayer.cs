@@ -22,6 +22,7 @@ namespace Stataria
         {
             Player player = drawInfo.drawPlayer;
             RPGPlayer rpgPlayer = player.GetModPlayer<RPGPlayer>();
+            var config = ModContent.GetInstance<StatariaConfig>();
 
             if (!originalEyeColors.ContainsKey(player.whoAmI))
             {
@@ -29,7 +30,8 @@ namespace Stataria
             }
 
             if (rpgPlayer != null && rpgPlayer.ActiveRole != null &&
-                rpgPlayer.ActiveRole.ID == "Vampire" && rpgPlayer.ActiveRole.Status == RoleStatus.Active)
+                rpgPlayer.ActiveRole.ID == "Vampire" && rpgPlayer.ActiveRole.Status == RoleStatus.Active &&
+                config.roleSettings.VampireEnableEyeColorChange)
             {
                 drawInfo.drawPlayer.eyeColor = Color.Red;
             }

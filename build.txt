@@ -1,7 +1,7 @@
 displayName = Stataria
 name = Stataria
 author = KQE
-version = 3.4.0.1
+version = 3.5
 description = 
 side = Both
 homepage = https://github.com/kingquincye/Stataria

@@ -1456,6 +1456,15 @@ Configs: {
 			Label: Disable END Effects
 			Tooltip: When enabled, Guardians do not benefit from END knockback resistance and damage reduction.
 		}
+
+		VampireEnableEyeColorChange: {
+			Label: Vampire Enable Eye Color Change
+			Tooltip:
+				'''
+				When enabled, vampire eyes turn red while the role is active. 
+				WARNING: Due to Terraria limitations, eyes may remain permanently red if disabled while vampire role is active.
+				'''
+		}
 	}
 }
 

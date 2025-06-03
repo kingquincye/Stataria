@@ -195,6 +195,7 @@ namespace Stataria
             [DefaultValue(true)] public bool CritGodEnableSummonCrits { get; set; } = true;
 
             [Header("Vampire")]
+            [DefaultValue(false)] public bool VampireEnableEyeColorChange { get; set; } = false;
             [DefaultValue(25f)][Range(0f, 200f)] public float VampireHealthBonus { get; set; } = 25f;
             [DefaultValue(15f)][Range(0f, 100f)] public float VampireMovementSpeed { get; set; } = 15f;
             [DefaultValue(15f)][Range(0f, 100f)] public float VampireBleedChance { get; set; } = 15f;

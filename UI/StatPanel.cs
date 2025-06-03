@@ -90,13 +90,37 @@ namespace Stataria
 
                     tooltips.Add($"+{effectiveVIT * cfg.statSettings.VIT_HP} Max Health (+{cfg.statSettings.VIT_HP} per point)");
 
-                    if (cfg.statSettings.UseCustomHpRegen)
+                    bool isCleric = rpg.ActiveRole?.ID == "Cleric" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    bool isGuardian = rpg.ActiveRole?.ID == "Guardian" && rpg.ActiveRole.Status == RoleStatus.Active;
+
+                    if (isCleric && cfg.roleSettings.ClericDisableVitRegen)
                     {
-                        tooltips.Add($"+{effectiveVIT * cfg.statSettings.CustomHpRegenPerVIT:0.#} HP/sec (+{cfg.statSettings.CustomHpRegenPerVIT:0.#} per point)");
+                        tooltips.Add("VIT regeneration effects disabled");
+                    }
+                    else if (isGuardian && cfg.roleSettings.GuardianReduceVitEffects)
+                    {
+                        float reductionFactor = 1f - (cfg.roleSettings.GuardianVitEffectReduction / 100f);
+                        if (cfg.statSettings.UseCustomHpRegen)
+                        {
+                            float reducedRegen = effectiveVIT * cfg.statSettings.CustomHpRegenPerVIT * reductionFactor;
+                            tooltips.Add($"+{reducedRegen:0.#} HP/sec (+{cfg.statSettings.CustomHpRegenPerVIT * reductionFactor:0.#} per point, Guardian reduced)");
+                        }
+                        else
+                        {
+                            float reducedRegen = effectiveVIT * 0.5f * reductionFactor;
+                            tooltips.Add($"+{reducedRegen:0.#} Life Regen (+{0.5f * reductionFactor:0.#} per point, Guardian reduced)");
+                        }
                     }
                     else
                     {
-                        tooltips.Add($"+{effectiveVIT * 0.5f:0.#} Life Regen (+0.5 per point)");
+                        if (cfg.statSettings.UseCustomHpRegen)
+                        {
+                            tooltips.Add($"+{effectiveVIT * cfg.statSettings.CustomHpRegenPerVIT:0.#} HP/sec (+{cfg.statSettings.CustomHpRegenPerVIT:0.#} per point)");
+                        }
+                        else
+                        {
+                            tooltips.Add($"+{effectiveVIT * 0.5f:0.#} Life Regen (+0.5 per point)");
+                        }
                     }
 
                     if (cfg.statSettings.EnableHealingPotionBoost)
@@ -118,9 +142,19 @@ namespace Stataria
                     var player = Main.LocalPlayer;
                     var rpg = player.GetModPlayer<RPGPlayer>();
                     int effectiveSTR = rpg.GetEffectiveStat("STR");
-                    return $"+{effectiveSTR * cfg.statSettings.STR_Damage:0.#}% Melee Damage (+{cfg.statSettings.STR_Damage:0.#}% per point)" +
-                        $"\n+{effectiveSTR * cfg.statSettings.STR_Knockback:0.#}% Melee Knockback (+{cfg.statSettings.STR_Knockback:0.#}% per point)" +
-                        $"\n+{effectiveSTR * cfg.statSettings.STR_ArmorPen} Melee Armor Pen. (+{cfg.statSettings.STR_ArmorPen} per point)";
+                    var tooltips = new List<string>();
+
+                    tooltips.Add($"+{effectiveSTR * cfg.statSettings.STR_Damage:0.#}% Melee Damage (+{cfg.statSettings.STR_Damage:0.#}% per point)");
+                    tooltips.Add($"+{effectiveSTR * cfg.statSettings.STR_Knockback:0.#}% Melee Knockback (+{cfg.statSettings.STR_Knockback:0.#}% per point)");
+                    tooltips.Add($"+{effectiveSTR * cfg.statSettings.STR_ArmorPen} Melee Armor Pen. (+{cfg.statSettings.STR_ArmorPen} per point)");
+
+                    bool isBlackKnight = rpg.ActiveRole?.ID == "BlackKnight" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    if (isBlackKnight)
+                    {
+                        tooltips.Add($"Black Knight: +{effectiveSTR * cfg.roleSettings.BlackKnightSTRToMagicDamage:0.#}% Magic Damage (+{cfg.roleSettings.BlackKnightSTRToMagicDamage:0.#}% per point)");
+                    }
+
+                    return string.Join("\n", tooltips);
                 }
             });
 
@@ -156,11 +190,21 @@ namespace Stataria
                     int effectiveINT = rpg.GetEffectiveStat("INT");
                     float rawReduction = effectiveINT * cfg.statSettings.INT_ManaCostReduction / 100f;
                     float diminishingReduction = 1f - (1f / (1f + rawReduction));
-                    return $"+{effectiveINT * cfg.statSettings.INT_MP} Max Mana (+{cfg.statSettings.INT_MP} per point)" +
-                        $"\n+{effectiveINT * 0.5f:0.#} Mana Regen (+0.5 per point)" +
-                        $"\n+{effectiveINT * cfg.statSettings.INT_Damage:0.#}% Magic Damage (+{cfg.statSettings.INT_Damage:0.#}% per point)" +
-                        $"\n-{diminishingReduction:P1} Mana Cost (Diminishing)" +
-                        $"\n+{effectiveINT * cfg.statSettings.INT_ArmorPen} Magic Armor Pen. (+{cfg.statSettings.INT_ArmorPen} per point)";
+                    var tooltips = new List<string>();
+
+                    tooltips.Add($"+{effectiveINT * cfg.statSettings.INT_MP} Max Mana (+{cfg.statSettings.INT_MP} per point)");
+                    tooltips.Add($"+{effectiveINT * 0.5f:0.#} Mana Regen (+0.5 per point)");
+                    tooltips.Add($"+{effectiveINT * cfg.statSettings.INT_Damage:0.#}% Magic Damage (+{cfg.statSettings.INT_Damage:0.#}% per point)");
+                    tooltips.Add($"-{diminishingReduction:P1} Mana Cost (Diminishing)");
+                    tooltips.Add($"+{effectiveINT * cfg.statSettings.INT_ArmorPen} Magic Armor Pen. (+{cfg.statSettings.INT_ArmorPen} per point)");
+
+                    bool isBlackKnight = rpg.ActiveRole?.ID == "BlackKnight" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    if (isBlackKnight)
+                    {
+                        tooltips.Add($"Black Knight: +{effectiveINT * cfg.roleSettings.BlackKnightINTToMeleeDamage:0.#}% Melee Damage (+{cfg.roleSettings.BlackKnightINTToMeleeDamage:0.#}% per point)");
+                    }
+
+                    return string.Join("\n", tooltips);
                 }
             });
 
@@ -203,19 +247,30 @@ namespace Stataria
                     var player = Main.LocalPlayer;
                     var rpg = player.GetModPlayer<RPGPlayer>();
                     int effectiveEND = rpg.GetEffectiveStat("END");
-                    var tooltips = new List<string>
+                    var tooltips = new List<string>();
+                    bool isGuardian = rpg.ActiveRole?.ID == "Guardian" && rpg.ActiveRole.Status == RoleStatus.Active;
+
+                    tooltips.Add($"+{effectiveEND / cfg.statSettings.END_DefensePerX} Defense (+1 per {cfg.statSettings.END_DefensePerX} points)");
+                    
+                    if (isGuardian)
                     {
-                        $"+{effectiveEND / cfg.statSettings.END_DefensePerX} Defense (+1 per {cfg.statSettings.END_DefensePerX} points)"
-                    };
-                    if (cfg.statSettings.EnableKnockbackResist)
+                        tooltips.Add("Immune to knockback (Guardian)");
+                    }
+                    else if (cfg.statSettings.EnableKnockbackResist)
                     {
                         tooltips.Add($"+{Math.Min(effectiveEND, 100):0.#}% Knockback Resist (+1% per point)");
                     }
-                    if (cfg.statSettings.EnableDR)
+
+                    if (isGuardian && cfg.roleSettings.GuardianDisableEndEffects)
+                    {
+                        tooltips.Add("END damage reduction disabled (Guardian)");
+                    }
+                    else if (cfg.statSettings.EnableDR)
                     {
                         float drPercent = 100f * (1f - (1f / (1f + effectiveEND * 0.01f)));
                         tooltips.Add($"-{drPercent:0.#}% Damage Taken (Diminishing)");
                     }
+
                     if (cfg.statSettings.EnableEnemyKnockback)
                     {
                         tooltips.Add("Knocks Back Non-Bosses");
@@ -281,9 +336,27 @@ namespace Stataria
                     int effectiveSPR = rpg.GetEffectiveStat("SPR");
                     int minionSlots = effectiveSPR / cfg.statSettings.SPR_MinionsPerX;
                     int sentrySlots = effectiveSPR / cfg.statSettings.SPR_SentriesPerX;
-                    return $"+{effectiveSPR * cfg.statSettings.SPR_Damage:0.#}% Summon Damage (+{cfg.statSettings.SPR_Damage:0.#}% per point)" +
-                        $"\n+{minionSlots} Minion Slot{(minionSlots != 1 ? "s" : "")} (+1 per {cfg.statSettings.SPR_MinionsPerX} points)" +
-                        $"\n+{sentrySlots} Sentry Slot{(sentrySlots != 1 ? "s" : "")} (+1 per {cfg.statSettings.SPR_SentriesPerX} points)";
+                    var tooltips = new List<string>();
+
+                    tooltips.Add($"+{effectiveSPR * cfg.statSettings.SPR_Damage:0.#}% Summon Damage (+{cfg.statSettings.SPR_Damage:0.#}% per point)");
+                    tooltips.Add($"+{minionSlots} Minion Slot{(minionSlots != 1 ? "s" : "")} (+1 per {cfg.statSettings.SPR_MinionsPerX} points)");
+                    tooltips.Add($"+{sentrySlots} Sentry Slot{(sentrySlots != 1 ? "s" : "")} (+1 per {cfg.statSettings.SPR_SentriesPerX} points)");
+
+                    bool isBeastmaster = rpg.ActiveRole?.ID == "Beastmaster" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    bool isApexSummoner = rpg.ActiveRole?.ID == "ApexSummoner" && rpg.ActiveRole.Status == RoleStatus.Active;
+
+                    if (isBeastmaster)
+                    {
+                        tooltips.Add($"Beastmaster: +{cfg.roleSettings.BeastmasterBonusSlotsGained} slot{(cfg.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : "")} per {cfg.roleSettings.BeastmasterSlotsPerBonusSlot} total slots");
+                        tooltips.Add($"Beastmaster: +{cfg.roleSettings.BeastmasterDamagePerUniqueMinion:0.#}% damage per unique minion type");
+                    }
+
+                    if (isApexSummoner)
+                    {
+                        tooltips.Add($"Apex Summoner: +{cfg.roleSettings.ApexSummonerDamagePerUnusedSlot:0.#}% damage per unused slot (single minion type only)");
+                    }
+
+                    return string.Join("\n", tooltips);
                 }
             });
 
