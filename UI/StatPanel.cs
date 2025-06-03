@@ -1258,6 +1258,11 @@ namespace Stataria
 
             rpg.StatPoints -= amount;
             SoundEngine.PlaySound(SoundID.MenuTick);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                rpg.SyncPlayer(-1, player.whoAmI, false);
+            }
         }
 
         private void OnStatDecrease(int index)
@@ -1284,6 +1289,11 @@ namespace Stataria
 
             rpg.StatPoints += amount;
             SoundEngine.PlaySound(SoundID.MenuTick);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                rpg.SyncPlayer(-1, player.whoAmI, false);
+            }
         }
 
         private void OnResetStats(UIMouseEvent evt, UIElement listeningElement)
@@ -1302,6 +1312,11 @@ namespace Stataria
 
             rpg.StatPoints += total;
             SoundEngine.PlaySound(SoundID.MenuClose);
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                rpg.SyncPlayer(-1, player.whoAmI, false);
+            }
         }
 
         public override void Update(GameTime gameTime)

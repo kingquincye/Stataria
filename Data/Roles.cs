@@ -178,6 +178,34 @@ namespace Stataria
                 return string.Join("\n", effects);
             }
 
+            if (ID == "Guardian")
+            {
+                var effects = new List<string>
+                {
+                    $"• +{config.roleSettings.GuardianHealthBonus:0.##}% Max Health",
+                    $"• +{config.roleSettings.GuardianDefenseBonus} Defense",
+                    $"• -{config.roleSettings.GuardianMovementSpeedPenalty:0.##}% Movement Speed",
+                    $"• -{config.roleSettings.GuardianDamagePenalty:0.##}% Damage Output",
+                    $"• {config.roleSettings.GuardianDamageReduction:0.##}% Damage Reduction",
+                    $"• Protective aura (radius: {config.roleSettings.GuardianAuraRadius:0.#} pixels)",
+                    $"• Teammates in aura: +{config.roleSettings.GuardianTeammateDefenseBonus:0.##}% defense",
+                    $"• Teammates in aura: {config.roleSettings.GuardianTeammateDamageReduction:0.##}% Damage Reduction",
+                    "• Immune to knockback"
+                };
+
+                if (config.roleSettings.GuardianReduceVitEffects && config.roleSettings.GuardianVitEffectReduction > 0)
+                {
+                    effects.Add($"• VIT effects reduced by {config.roleSettings.GuardianVitEffectReduction:0.##}%");
+                }
+
+                if (config.roleSettings.GuardianDisableEndEffects)
+                {
+                    effects.Add("• END knockback resistance and damage reduction disabled");
+                }
+
+                return string.Join("\n", effects);
+            }
+
             return "No effects defined.";
         }
     }

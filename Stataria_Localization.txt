@@ -1215,6 +1215,7 @@ Configs: {
 			Apex_Summoner: Apex Summoner
 			Black_Knight: Black Knight
 			Cleric: Cleric
+			Guardian: Guardian
 		}
 
 		BaseSwitchCost: {
@@ -1426,6 +1427,61 @@ Configs: {
 			Tooltip: The radius in pixels of the Cleric's protective aura.
 			Label: Cleric Aura Radius
 		}
+
+		GuardianAuraRadius: {
+			Label: Aura Radius
+			Tooltip: The radius in pixels of the Guardian's protective aura.
+		}
+
+		GuardianTeammateDefenseBonus: {
+			Label: Teammate Defense Bonus
+			Tooltip: Percentage increase to defense for teammates within the Guardian's aura.
+		}
+
+		GuardianTeammateDamageReduction: {
+			Label: Damage Share Percent
+			Tooltip: Percentage of damage reduction for the Guardian's teammates.
+		}
+
+		GuardianMovementSpeedPenalty: {
+			Label: Movement Speed Penalty
+			Tooltip: Percentage decrease to the Guardian's movement speed.
+		}
+
+		GuardianDamageReduction: {
+			Label: Damage Reduction
+			Tooltip: Percentage damage reduction for the Guardian (applied after other reductions).
+		}
+
+		GuardianHealthBonus: {
+			Label: Health Bonus
+			Tooltip: Percentage increase to the Guardian's max health.
+		}
+
+		GuardianDamagePenalty: {
+			Label: Damage Penalty
+			Tooltip: Percentage decrease to the Guardian's damage output for balance.
+		}
+
+		GuardianDefenseBonus: {
+			Label: Defense Bonus
+			Tooltip: Flat defense bonus for the Guardian.
+		}
+
+		GuardianReduceVitEffects: {
+			Label: Reduce VIT Effects
+			Tooltip: When enabled, VIT-based health regeneration effects are reduced for Guardians by the specified percentage.
+		}
+
+		GuardianVitEffectReduction: {
+			Label: VIT Effect Reduction
+			Tooltip: Percentage reduction to VIT effects for Guardians when not completely disabled.
+		}
+
+		GuardianDisableEndEffects: {
+			Label: Disable END Effects
+			Tooltip: When enabled, Guardians do not benefit from END knockback resistance and damage reduction.
+		}
 	}
 }
 
@@ -1452,6 +1508,11 @@ Buffs: {
 
 	DivineInterventionBuff: {
 		Description: Protected from harmful debuffs by divine grace
-		DisplayName: Divine Intervention Buff
+		DisplayName: Divine Intervention
+	}
+
+	GuardianAuraBuff: {
+		DisplayName: Guardian Aura
+		Description: Within a protective guardian aura
 	}
 }

@@ -421,6 +421,14 @@ namespace Stataria
             );
             AvailableRoles["Cleric"] = cleric;
 
+            var guardian = new Role(
+                "Guardian",
+                "Guardian",
+                "A stalwart protector who shields allies from harm by sharing their burden and reflecting damage back to attackers.",
+                "Stand as the unbreakable shield - let your allies' pain become your strength, and your resolve become their salvation."
+            );
+            AvailableRoles["Guardian"] = guardian;
+
             foreach (var role in AvailableRoles.Values)
             {
                 if (ActiveRole?.ID == role.ID)
@@ -472,12 +480,12 @@ namespace Stataria
                 return false;
 
             ActiveRole.Status = RoleStatus.Deactivated;
-            
+
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 SyncPlayer(-1, Player.whoAmI, false);
             }
-            
+
             return true;
         }
 
@@ -521,10 +529,10 @@ namespace Stataria
             {
                 var config = ModContent.GetInstance<StatariaConfig>();
                 var clericPlayer = Player.GetModPlayer<ClericPlayer>();
-                
+
                 clericPlayer.ActivateDivineIntervention();
                 divineInterventionCooldownTimer = (int)(config.roleSettings.DivineInterventionCooldown * 60f);
-                
+
                 if (Main.netMode != NetmodeID.Server)
                 {
                     Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, Player.position);
@@ -936,7 +944,11 @@ namespace Stataria
                 LevelUp();
             }
 
-            if (Main.netMode == NetmodeID.Server)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                SyncPlayer(-1, Player.whoAmI, false);
+            }
+            else if (Main.netMode == NetmodeID.Server)
             {
                 SyncPlayer(-1, Player.whoAmI, false);
             }
@@ -1072,14 +1084,14 @@ namespace Stataria
             }
 
             var config = ModContent.GetInstance<StatariaConfig>();
-            
+
             int effectiveSPR = GetEffectiveStat("SPR");
             int sprMinions = effectiveSPR / config.statSettings.SPR_MinionsPerX;
             int totalSlots = Player.maxMinions - beastmasterBonusSlots;
             int baseSlots = totalSlots - sprMinions;
-            
+
             int bonusFromBaseSlots = (baseSlots / config.roleSettings.BeastmasterSlotsPerBonusSlot) * config.roleSettings.BeastmasterBonusSlotsGained;
-            
+
             int bonusFromSPRSlots = 0;
             if (config.roleSettings.BeastmasterReduceSPRSlotEfficiency)
             {
@@ -1090,7 +1102,7 @@ namespace Stataria
             {
                 bonusFromSPRSlots = (sprMinions / config.roleSettings.BeastmasterSlotsPerBonusSlot) * config.roleSettings.BeastmasterBonusSlotsGained;
             }
-            
+
             beastmasterBonusSlots = bonusFromBaseSlots + bonusFromSPRSlots;
         }
 
@@ -1138,7 +1150,7 @@ namespace Stataria
         {
             if (!Player.HasBuff(ModContent.BuffType<ArcaneSurgeBuff>()))
                 return 0f;
-            
+
             return arcaneSurgeDamageBonus;
         }
 
@@ -1151,7 +1163,7 @@ namespace Stataria
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();
-            
+
             if (Player.HasBuff(ModContent.BuffType<DarkFocusBuff>()))
             {
                 int buffIndex = Player.FindBuffIndex(ModContent.BuffType<DarkFocusBuff>());
@@ -1198,7 +1210,7 @@ namespace Stataria
             {
                 int currentBuffIndex = Player.FindBuffIndex(ModContent.BuffType<DarkFocusBuff>());
                 int maxStacks = config.roleSettings.BlackKnightMaxDarkFocusStacks;
-                
+
                 if (currentBuffIndex >= 0)
                 {
                     int currentStacks = Math.Min((Player.buffTime[currentBuffIndex] + 59) / 60, maxStacks);
@@ -1226,10 +1238,10 @@ namespace Stataria
                     Player.statMana = Player.statManaMax2;
 
                 int surgeDuration = (int)(config.roleSettings.BlackKnightArcaneSurgeDuration * 60f);
-                
+
                 if (config.roleSettings.BlackKnightArcaneSurgeScaleWithDamage)
                 {
-                    float scaledBonus = config.roleSettings.BlackKnightArcaneSurgeMagicDamage + 
+                    float scaledBonus = config.roleSettings.BlackKnightArcaneSurgeMagicDamage +
                                     (damageDone * config.roleSettings.BlackKnightArcaneSurgeDamageScaling);
                     arcaneSurgeDamageBonus = (int)scaledBonus;
                 }
@@ -1307,7 +1319,7 @@ namespace Stataria
             if (ActiveRole?.ID == "Beastmaster" && ActiveRole.Status == RoleStatus.Active)
             {
                 Player.maxMinions += beastmasterBonusSlots;
-                
+
                 int uniqueWeapons = Math.Max(0, currentMinionTypes.Count - 1);
                 if (uniqueWeapons > 0)
                 {
@@ -1695,6 +1707,7 @@ namespace Stataria
 
             int effectiveVIT = GetEffectiveStat("VIT");
             bool isCleric = ActiveRole?.ID == "Cleric" && ActiveRole.Status == RoleStatus.Active;
+            bool isGuardian = ActiveRole?.ID == "Guardian" && ActiveRole.Status == RoleStatus.Active;
             bool blockVITRegen = isCleric && config.roleSettings.ClericDisableVitRegen;
 
             if (config.statSettings.UseCustomHpRegen && !blockVITRegen)
@@ -1704,6 +1717,13 @@ namespace Stataria
                 else if (Player.statLife < Player.statLifeMax2 && !Player.dead)
                 {
                     float hpPerSecond = effectiveVIT * config.statSettings.CustomHpRegenPerVIT;
+
+                    if (isGuardian && config.roleSettings.GuardianReduceVitEffects)
+                    {
+                        float reductionFactor = 1f - (config.roleSettings.GuardianVitEffectReduction / 100f);
+                        hpPerSecond *= reductionFactor;
+                    }
+
                     regenCarryover += hpPerSecond / 60f;
 
                     if (regenCarryover >= 1f)
@@ -1715,13 +1735,18 @@ namespace Stataria
                             Player.statLife = Player.statLifeMax2;
 
                         if (Main.netMode != NetmodeID.SinglePlayer)
-                            Player.HealEffect(healAmount, true);
+                            Player.HealEffect(healAmount, false);
                     }
                 }
             }
             else if (!blockVITRegen)
             {
-                Player.lifeRegen += effectiveVIT / 2;
+                float vitRegenMultiplier = 1f;
+                if (isGuardian && config.roleSettings.GuardianReduceVitEffects)
+                {
+                    vitRegenMultiplier = 1f - (config.roleSettings.GuardianVitEffectReduction / 100f);
+                }
+                Player.lifeRegen += (int)((effectiveVIT / 2) * vitRegenMultiplier);
             }
 
             int effectiveINT = GetEffectiveStat("INT");
@@ -2020,17 +2045,24 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
 
             int effectiveEND = GetEffectiveStat("END");
+            bool isGuardian = ActiveRole?.ID == "Guardian" && ActiveRole.Status == RoleStatus.Active;
 
-            if (config.statSettings.EnableKnockbackResist)
+            if (config.statSettings.EnableKnockbackResist && !isGuardian)
             {
                 float kbResist = Math.Min(effectiveEND * 0.01f, 1f);
                 modifiers.Knockback *= 1f - kbResist;
             }
 
-            if (config.statSettings.EnableDR)
+            if (config.statSettings.EnableDR && (!isGuardian || !config.roleSettings.GuardianDisableEndEffects))
             {
                 float diminishingDR = 1f - (1f / (1f + effectiveEND * 0.01f));
                 modifiers.FinalDamage *= 1f - diminishingDR;
+            }
+
+            if (isGuardian)
+            {
+                float guardianDR = config.roleSettings.GuardianDamageReduction / 100f;
+                modifiers.FinalDamage *= (1f - guardianDR);
             }
 
             if (RebirthAbilities.TryGetValue("LastStand", out RebirthAbility lastStand) &&

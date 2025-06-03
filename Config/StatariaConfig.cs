@@ -238,6 +238,19 @@ namespace Stataria
             [Range(1f, 30f)][DefaultValue(10f)] public float DivineInterventionDuration { get; set; } = 10f;
             [Range(30f, 600f)][DefaultValue(120f)] public float DivineInterventionCooldown { get; set; } = 120f;
             [DefaultValue(true)] public bool EnableDivineInterventionCooldownBar { get; set; } = true;
+
+            [Header("Guardian")]
+            [DefaultValue(300f)][Range(100f, 1000f)] public float GuardianAuraRadius { get; set; } = 300f;
+            [DefaultValue(25f)][Range(0f, 100f)] public float GuardianTeammateDefenseBonus { get; set; } = 25f;
+            [DefaultValue(30f)][Range(0f, 80f)] public float GuardianTeammateDamageReduction { get; set; } = 30f;
+            [DefaultValue(25f)][Range(0f, 50f)] public float GuardianMovementSpeedPenalty { get; set; } = 25f;
+            [DefaultValue(75f)][Range(0f, 75f)] public float GuardianDamageReduction { get; set; } = 75f;
+            [DefaultValue(50f)][Range(0f, 200f)] public float GuardianHealthBonus { get; set; } = 50f;
+            [DefaultValue(50f)][Range(0f, 100f)] public float GuardianDamagePenalty { get; set; } = 50f;
+            [DefaultValue(25)][Range(0, 100)] public int GuardianDefenseBonus { get; set; } = 25;
+            [DefaultValue(true)] public bool GuardianReduceVitEffects { get; set; } = true;
+            [DefaultValue(50f)][Range(0f, 100f)] public float GuardianVitEffectReduction { get; set; } = 50f;
+            [DefaultValue(true)] public bool GuardianDisableEndEffects { get; set; } = true;
         }
 
         public class MultiplayerSettings

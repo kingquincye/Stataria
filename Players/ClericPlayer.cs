@@ -143,7 +143,7 @@ namespace Stataria
                         teammate.statLife = teammate.statLifeMax2;
                     
                     if (Main.netMode != NetmodeID.Server)
-                        teammate.HealEffect(teammateHeal, true);
+                        teammate.HealEffect(teammateHeal, false);
                 }
             }
         }
