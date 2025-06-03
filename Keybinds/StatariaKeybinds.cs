@@ -8,6 +8,7 @@ namespace Stataria
     {
         public static ModKeybind ToggleStatUI;
         public static ModKeybind TeleportKey;
+        public static ModKeybind DivineInterventionKey;
 
         public override void Load()
         {
@@ -15,12 +16,14 @@ namespace Stataria
                 return;
             ToggleStatUI = KeybindLoader.RegisterKeybind(Mod, "Toggle Stat Panel", "K");
             TeleportKey = KeybindLoader.RegisterKeybind(Mod, "AGI Teleport", "Q");
+            DivineInterventionKey = KeybindLoader.RegisterKeybind(Mod, "Divine Intervention", "G");
         }
 
         public override void Unload()
         {
             ToggleStatUI = null;
             TeleportKey = null;
+            DivineInterventionKey = null;
         }
     }
 }

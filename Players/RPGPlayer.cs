@@ -34,6 +34,7 @@ namespace Stataria
         public int lastStandImmunityTimer = 0;
         private bool wasLastStandTriggered = false;
         private int lastStandHealAmount;
+        public int divineInterventionCooldownTimer = 0;
 
         private bool appliedPotionReduction = false;
         private bool appliedManaSickReduction = false;
@@ -92,6 +93,7 @@ namespace Stataria
             tag["HLR"] = HLR; tag["CLK"] = CLK;
             tag["RewardedBosses"] = new List<int>(rewardedBosses);
             tag["lastStandCooldownTimer"] = lastStandCooldownTimer;
+            tag["divineInterventionCooldownTimer"] = divineInterventionCooldownTimer;
             tag["RebirthCount"] = RebirthCount;
             tag["RebirthPoints"] = RebirthPoints;
             tag["WasRetroRPGranted"] = WasRetroRPGranted;
@@ -127,6 +129,7 @@ namespace Stataria
             if (tag.ContainsKey("RewardedBosses"))
                 rewardedBosses = tag.Get<List<int>>("RewardedBosses").ToHashSet();
             lastStandCooldownTimer = tag.ContainsKey("lastStandCooldownTimer") ? tag.GetInt("lastStandCooldownTimer") : 0;
+            divineInterventionCooldownTimer = tag.ContainsKey("divineInterventionCooldownTimer") ? tag.GetInt("divineInterventionCooldownTimer") : 0;
             RebirthCount = tag.ContainsKey("RebirthCount") ? tag.GetInt("RebirthCount") : 0;
             RebirthPoints = tag.ContainsKey("RebirthPoints") ? tag.GetInt("RebirthPoints") : 0;
             WasRetroRPGranted = tag.ContainsKey("WasRetroRPGranted") ? tag.GetBool("WasRetroRPGranted") : false;
@@ -410,6 +413,14 @@ namespace Stataria
             );
             AvailableRoles["BlackKnight"] = blackKnight;
 
+            var cleric = new Role(
+                "Cleric",
+                "Cleric",
+                "A divine healer who protects and empowers allies within their sacred aura, sacrificing personal defense for team support.",
+                "Embrace your calling as a beacon of hope - your strength lies not in steel, but in the divine protection you provide to others."
+            );
+            AvailableRoles["Cleric"] = cleric;
+
             foreach (var role in AvailableRoles.Values)
             {
                 if (ActiveRole?.ID == role.ID)
@@ -501,6 +512,22 @@ namespace Stataria
                     StatariaUI.SkillTreeUI.SetState(null);
                     StatariaUI.RoleSelectionUI.SetState(null);
                     StatariaUI.TabBarInterface.SetState(null);
+                }
+            }
+            if (StatariaKeybinds.DivineInterventionKey.JustPressed &&
+                !Terraria.GameInput.PlayerInput.WritingText &&
+                ActiveRole?.ID == "Cleric" && ActiveRole.Status == RoleStatus.Active &&
+                divineInterventionCooldownTimer <= 0)
+            {
+                var config = ModContent.GetInstance<StatariaConfig>();
+                var clericPlayer = Player.GetModPlayer<ClericPlayer>();
+                
+                clericPlayer.ActivateDivineIntervention();
+                divineInterventionCooldownTimer = (int)(config.roleSettings.DivineInterventionCooldown * 60f);
+                
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, Player.position);
                 }
             }
         }
@@ -1667,8 +1694,10 @@ namespace Stataria
             CalculateGhostStats();
 
             int effectiveVIT = GetEffectiveStat("VIT");
+            bool isCleric = ActiveRole?.ID == "Cleric" && ActiveRole.Status == RoleStatus.Active;
+            bool blockVITRegen = isCleric && config.roleSettings.ClericDisableVitRegen;
 
-            if (config.statSettings.UseCustomHpRegen)
+            if (config.statSettings.UseCustomHpRegen && !blockVITRegen)
             {
                 if (customRegenDelayTimer > 0)
                     customRegenDelayTimer--;
@@ -1690,7 +1719,7 @@ namespace Stataria
                     }
                 }
             }
-            else
+            else if (!blockVITRegen)
             {
                 Player.lifeRegen += effectiveVIT / 2;
             }
@@ -1734,6 +1763,9 @@ namespace Stataria
                     }
                 }
             }
+
+            if (divineInterventionCooldownTimer > 0)
+                divineInterventionCooldownTimer--;
 
             ApplyAbilityEffects2();
             UpdateBeastmasterEffects();
@@ -2241,6 +2273,7 @@ namespace Stataria
             packet.Write(HLR);
             packet.Write(CLK);
             packet.Write(lastStandCooldownTimer);
+            packet.Write(divineInterventionCooldownTimer);
             packet.Write(RebirthCount);
             packet.Write(RebirthPoints);
 

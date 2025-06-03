@@ -26,8 +26,7 @@ namespace Stataria
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();
-            //float radius = config.roleSettings.ClericAuraRadius;
-            float radius = 300f;
+            float radius = config.roleSettings.ClericAuraRadius;
 
             Vector2 position = player.Center - Main.screenPosition;
             
@@ -72,7 +71,8 @@ namespace Stataria
                 }
             }
 
-            Lighting.AddLight(player.Center, 0.4f, 0.4f, 0.1f);
+            float lightStrength = Math.Min(radius / 500f, 1f);
+            Lighting.AddLight(player.Center, 0.4f * lightStrength, 0.4f * lightStrength, 0.1f * lightStrength);
         }
     }
 }

@@ -1,6 +1,7 @@
 Keybinds: {
 	"Toggle Stat Panel.DisplayName": Toggle Stat Panel
 	"AGI Teleport.DisplayName": Teleport
+	"Divine Intervention.DisplayName": Divine Intervention
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1213,6 +1214,7 @@ Configs: {
 			Beastmaster: Beastmaster
 			Apex_Summoner: Apex Summoner
 			Black_Knight: Black Knight
+			Cleric: Cleric
 		}
 
 		BaseSwitchCost: {
@@ -1369,6 +1371,61 @@ Configs: {
 			Label: Arcane Surge Damage Scaling
 			Tooltip: Additional magic damage bonus per point of damage dealt by the melee critical hit that triggered Arcane Surge.
 		}
+
+		EnableDivineInterventionCooldownBar: {
+			Tooltip: Shows a cooldown bar for the Divine Intervention ability.
+			Label: Enable Divine Intervention Cooldown Bar
+		}
+
+		DivineInterventionCooldown: {
+			Tooltip: Cooldown in seconds before Divine Intervention can be used again.
+			Label: Divine Intervention Cooldown
+		}
+
+		DivineInterventionDuration: {
+			Tooltip: Duration in seconds that Divine Intervention protects against debuffs.
+			Label: Divine Intervention Duration
+		}
+
+		ClericRegenInterval: {
+			Tooltip: Time in seconds between regeneration ticks.
+			Label: Cleric Regen Interval
+		}
+
+		ClericTeammateRegenPercent: {
+			Tooltip: Percentage of max health teammates regenerate per interval while in the aura.
+			Label: Cleric Teammate Regen Percent
+		}
+
+		ClericSelfRegenPercent: {
+			Tooltip: Percentage of max health the Cleric regenerates per interval.
+			Label: Cleric Self Regen Percent
+		}
+
+		ClericTeammateHealthBonus: {
+			Tooltip: Percentage increase to max health for teammates within the Cleric's aura.
+			Label: Cleric Teammate Health Bonus
+		}
+
+		ClericDisableVitRegen: {
+			Tooltip: When enabled, Clerics do not benefit from VIT-based health regeneration to prevent them from being unkillable.
+			Label: Cleric Disable Vit Regen
+		}
+
+		ClericDefensePenalty: {
+			Tooltip: Percentage decrease to the Cleric's defense for balance.
+			Label: Cleric Defense Penalty
+		}
+
+		ClericHealthBonus: {
+			Tooltip: Percentage increase to the Cleric's max health.
+			Label: Cleric Health Bonus
+		}
+
+		ClericAuraRadius: {
+			Tooltip: The radius in pixels of the Cleric's protective aura.
+			Label: Cleric Aura Radius
+		}
 	}
 }
 
@@ -1394,7 +1451,7 @@ Buffs: {
 	}
 
 	DivineInterventionBuff: {
-		Description: Mods.Stataria.Buffs.DivineInterventionBuff.Description
+		Description: Protected from harmful debuffs by divine grace
 		DisplayName: Divine Intervention Buff
 	}
 }

@@ -157,6 +157,27 @@ namespace Stataria
                 return string.Join("\n", effects);
             }
 
+            if (ID == "Cleric")
+            {
+                var effects = new List<string>
+                {
+                    $"• +{config.roleSettings.ClericHealthBonus:0.##}% Max Health",
+                    $"• -{config.roleSettings.ClericDefensePenalty:0.##}% Defense",
+                    $"• Radiates protective aura (radius: {config.roleSettings.ClericAuraRadius:0.#} pixels)",
+                    $"• Teammates in aura: +{config.roleSettings.ClericTeammateHealthBonus:0.##}% max health",
+                    $"• Self regeneration: {config.roleSettings.ClericSelfRegenPercent:0.##}% max health per {config.roleSettings.ClericRegenInterval:0.##}s",
+                    $"• Teammate regeneration: {config.roleSettings.ClericTeammateRegenPercent:0.##}% max health per {config.roleSettings.ClericRegenInterval:0.##}s",
+                    $"• Divine Intervention: Grants debuff immunity to team within aura for {config.roleSettings.DivineInterventionDuration:0.##}s"
+                };
+
+                if (config.roleSettings.ClericDisableVitRegen)
+                {
+                    effects.Add("• VIT regeneration effects disabled for balance");
+                }
+
+                return string.Join("\n", effects);
+            }
+
             return "No effects defined.";
         }
     }

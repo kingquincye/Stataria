@@ -225,6 +225,19 @@ namespace Stataria
             [DefaultValue(20f)][Range(0f, 100f)] public float BlackKnightArcaneSurgeMagicDamage { get; set; } = 20f;
             [DefaultValue(false)] public bool BlackKnightArcaneSurgeScaleWithDamage { get; set; } = false;
             [DefaultValue(0.1f)][Range(0f, 1f)] public float BlackKnightArcaneSurgeDamageScaling { get; set; } = 0.1f;
+
+            [Header("Cleric")]
+            [Range(100f, 1000f)][DefaultValue(300f)] public float ClericAuraRadius { get; set; } = 300f;
+            [Range(0f, 100f)][DefaultValue(30f)] public float ClericHealthBonus { get; set; } = 30f;
+            [Range(0f, 90f)][DefaultValue(50f)] public float ClericDefensePenalty { get; set; } = 50f;
+            [DefaultValue(true)] public bool ClericDisableVitRegen { get; set; } = true;
+            [Range(0f, 100f)][DefaultValue(15f)] public float ClericTeammateHealthBonus { get; set; } = 15f;
+            [Range(0.1f, 10f)][DefaultValue(4f)] public float ClericSelfRegenPercent { get; set; } = 4f;
+            [Range(0.1f, 10f)][DefaultValue(2f)] public float ClericTeammateRegenPercent { get; set; } = 2f;
+            [Range(1f, 10f)][DefaultValue(3f)] public float ClericRegenInterval { get; set; } = 3f;
+            [Range(1f, 30f)][DefaultValue(10f)] public float DivineInterventionDuration { get; set; } = 10f;
+            [Range(30f, 600f)][DefaultValue(120f)] public float DivineInterventionCooldown { get; set; } = 120f;
+            [DefaultValue(true)] public bool EnableDivineInterventionCooldownBar { get; set; } = true;
         }
 
         public class MultiplayerSettings

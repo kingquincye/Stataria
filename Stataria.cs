@@ -145,6 +145,7 @@ namespace Stataria
                 rpg.HLR = reader.ReadInt32();
                 rpg.CLK = reader.ReadInt32();
                 rpg.lastStandCooldownTimer = reader.ReadInt32();
+                rpg.divineInterventionCooldownTimer = reader.ReadInt32();
                 rpg.RebirthCount = reader.ReadInt32();
                 rpg.RebirthPoints = reader.ReadInt32();
                 rpg.AutoAllocateEnabled = reader.ReadBoolean();
@@ -297,7 +298,7 @@ namespace Stataria
                         }
                     }
                 }
-                
+
                 if (Main.netMode == NetmodeID.Server)
                 {
                     rpg.SyncAbilities(toWho: -1, fromWho: whoAmI);

@@ -26,18 +26,27 @@ namespace Stataria.Buffs
             if (isCleric)
             {
                 buffName = "Cleric Aura (Self)";
-                //tip = $"You are radiating divine protection\nAura radius: {config.roleSettings.ClericAuraRadius:0.#} pixels";
+                tip = $"You are radiating divine protection\nAura radius: {config.roleSettings.ClericAuraRadius:0.#} pixels";
             }
             else
             {
                 buffName = "Cleric Aura";
-                //tip = $"Within a Cleric's protective aura\n+{config.roleSettings.ClericTeammateHealthBonus:0.#}% max health\nReceiving divine regeneration";
+                tip = $"Within a Cleric's protective aura\n+{config.roleSettings.ClericTeammateHealthBonus:0.#}% max health\nReceiving divine regeneration";
             }
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            // ToDo: Effects to go here.
+            var config = ModContent.GetInstance<StatariaConfig>();
+            var rpgPlayer = player.GetModPlayer<RPGPlayer>();
+            
+            bool isCleric = rpgPlayer?.ActiveRole?.ID == "Cleric" && rpgPlayer.ActiveRole.Status == RoleStatus.Active;
+            
+            if (!isCleric)
+            {
+                float healthBonus = config.roleSettings.ClericTeammateHealthBonus / 100f;
+                player.statLifeMax2 = (int)(player.statLifeMax2 * (1f + healthBonus));
+            }
         }
     }
 }
