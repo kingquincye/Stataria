@@ -26,7 +26,6 @@ namespace Stataria.Buffs
                 {
                     float timeLeft = player.buffTime[buffIndex] / 60f;
                     
-                    // Get the actual damage bonus from the global player
                     var rpgPlayer = player.GetModPlayer<RPGPlayer>();
                     float damageBonus = rpgPlayer.GetArcaneSurgeDamageBonus();
                     

@@ -175,6 +175,9 @@ namespace Stataria
                 rejectAllButton.BorderColor = new Color(255, 100, 100, 200);
                 acceptAllButton.TextColor = Color.White;
                 rejectAllButton.TextColor = Color.White;
+
+                acceptAllButton.IgnoresMouseInteraction = false;
+                rejectAllButton.IgnoresMouseInteraction = false;
             }
             else
             {
@@ -186,6 +189,9 @@ namespace Stataria
                 rejectAllButton.BorderColor = new Color(0, 0, 0, 0);
                 acceptAllButton.TextColor = new Color(0, 0, 0, 0);
                 rejectAllButton.TextColor = new Color(0, 0, 0, 0);
+
+                acceptAllButton.IgnoresMouseInteraction = true;
+                rejectAllButton.IgnoresMouseInteraction = true;
             }
 
             panel.Recalculate();

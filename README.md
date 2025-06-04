@@ -1,6 +1,6 @@
 Stataria adds a full RPG stat and leveling system to Terraria!
 
-Hey, if you're enjoying the journey, feel free to support it and fuel my modding addiction xD --> https://ko-fi.com/kingquincye (Keeps me motivated to mold this mod into it's best state!!!)
+Hey, if you're enjoying the journey, feel free to support it and fuel my modding addiction xD --> https://ko-fi.com/kingquincye
 
 DEFAULT KEYBIND: K
 
@@ -48,7 +48,7 @@ Has a very simple UI.
 Most features and stat scaling values are fully configurable in the mod config.
 You can make Stataria as balanced or as broken as you want!
 
-Multiplayer is not fully tested (sometimes there are syncing problems, sometimes rejoining the server fixes them), so if you run into issues, please report them. Thorium team effects boosted from mod does not work on others in multiplayer!
+Multiplayer is not fully tested (sometimes there are syncing problems, sometimes rejoining the server fixes them), so if you run into issues, please report them!
 
 Don't forget to bind a key to open the Stat Panel under Controls > Keybindings.
 

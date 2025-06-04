@@ -26,7 +26,6 @@ namespace Stataria.Buffs
                 int buffIndex = player.FindBuffIndex(Type);
                 if (buffIndex >= 0)
                 {
-                    // Calculate stacks based on buff time (each stack = 1 second base duration)
                     int stacks = Math.Min((player.buffTime[buffIndex] + 59) / 60, config.roleSettings.BlackKnightMaxDarkFocusStacks);
                     int maxStacks = config.roleSettings.BlackKnightMaxDarkFocusStacks;
                     

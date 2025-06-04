@@ -43,7 +43,7 @@ Simple stat panel UI
   
 [b] Most things are configurable in the mods config so go crazy. You can make this as balanced as you want! [/b]
 
-[b] Multiplayer is not fully tested (sometimes there are syncing problems, sometimes rejoining server fixes them), so if anything happens or problems arrise, please let me know! Thorium team effects boosted from mod does not work on others in multiplayer![/b]
+[b] Multiplayer is not fully tested (sometimes there are syncing problems, sometimes rejoining server fixes them), so if anything happens or problems arise, please let me know![/b]
 
 [b] Don’t forget to bind a key to open the Stat Panel under Controls > Keybindings.[/b]
 

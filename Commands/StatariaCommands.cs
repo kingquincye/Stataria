@@ -19,7 +19,7 @@ namespace Stataria
 
         public override string Command => "stataria";
 
-        public override string Usage => "/stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal>";
+        public override string Usage => "/stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>";
 
         public override string Description => "Commands for Stataria mod";
 

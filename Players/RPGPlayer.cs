@@ -577,7 +577,7 @@ namespace Stataria
 
             Level = 1;
             XP = 0;
-            XPToNext = (int)(100 * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
 
             if (config.rebirthSystem.ResetStatsOnRebirth)
             {

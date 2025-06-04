@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ID;
 using Steamworks;
 
 namespace Stataria
@@ -11,15 +12,16 @@ namespace Stataria
         private static string logFilePath;
         private static bool initialized = false;
         public static bool GlobalDebugMode = false;
-
+        private static bool isServer = false;
         private const string AdminSteamID = ""; // your steamID
         private static bool isAdmin = false;
 
         public static void Initialize(Mod mod)
         {
             CheckAdminStatus();
+            isServer = Main.netMode == NetmodeID.Server;
 
-            if (isAdmin || GlobalDebugMode)
+            if (isAdmin || GlobalDebugMode || isServer)
             {
                 InitializeLogger(mod);
             }
@@ -37,6 +39,7 @@ namespace Stataria
                         isAdmin = (steamId.m_SteamID.ToString() == AdminSteamID);
                     }
                 }
+                isServer = Main.netMode == NetmodeID.Server;
             }
             catch (Exception)
             {
@@ -71,6 +74,10 @@ namespace Stataria
             else if (GlobalDebugMode)
             {
                 Info("Logging enabled via debug mode");
+            }
+            else if (isServer)
+            {
+                Info("Logging enabled for server");
             }
         }
 
@@ -107,11 +114,13 @@ namespace Stataria
 
             CheckAdminStatus();
 
-            if ((GlobalDebugMode || isAdmin) && !initialized)
+            isServer = Main.netMode == NetmodeID.Server;
+
+            if ((GlobalDebugMode || isAdmin || isServer) && !initialized)
             {
                 InitializeLogger(mod);
             }
-            else if (!GlobalDebugMode && !isAdmin && initialized)
+            else if (!GlobalDebugMode && !isAdmin && !isServer && initialized)
             {
                 initialized = false;
             }
@@ -119,7 +128,7 @@ namespace Stataria
 
         public static void Info(string message)
         {
-            if (isAdmin || GlobalDebugMode)
+            if (isAdmin || GlobalDebugMode || isServer)
             {
                 WriteLog($"[INFO] {message}");
             }
@@ -127,7 +136,7 @@ namespace Stataria
 
         public static void Warning(string message)
         {
-            if (isAdmin || GlobalDebugMode)
+            if (isAdmin || GlobalDebugMode || isServer)
             {
                 WriteLog($"[WARNING] {message}");
             }
@@ -135,7 +144,7 @@ namespace Stataria
 
         public static void Error(string message)
         {
-            if (isAdmin || GlobalDebugMode)
+            if (isAdmin || GlobalDebugMode || isServer)
             {
                 WriteLog($"[ERROR] {message}");
             }
@@ -143,7 +152,7 @@ namespace Stataria
 
         public static void Debug(string message)
         {
-            if (isAdmin || GlobalDebugMode)
+            if (isAdmin || GlobalDebugMode || isServer)
             {
                 WriteLog($"[DEBUG] {message}");
             }
@@ -151,7 +160,7 @@ namespace Stataria
 
         private static void WriteLog(string logMessage)
         {
-            if (!initialized || (!isAdmin && !GlobalDebugMode))
+            if (!initialized || (!isAdmin && !GlobalDebugMode && !isServer))
                 return;
 
             try
@@ -171,7 +180,7 @@ namespace Stataria
 
         public static bool IsLoggingActive()
         {
-            return initialized && (isAdmin || GlobalDebugMode);
+            return initialized && (isAdmin || GlobalDebugMode || isServer);
         }
     }
 }
