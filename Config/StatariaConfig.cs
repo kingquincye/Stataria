@@ -109,14 +109,6 @@ namespace Stataria
             [DefaultValue(300)][Range(100, 500)] public int BarWidth { get; set; } = 300;
             [DefaultValue(20)][Range(10, 50)] public int BarHeight { get; set; } = 20;
             [DefaultValue(3)][Range(0, 20)] public int BarPadding { get; set; } = 3;
-
-            [Header("Boss_Bars")]
-            [Range(50, 200)][DefaultValue(100)] public int BossBarScale { get; set; } = 100;
-            [Range(1, 10)][DefaultValue(4)] public int MaxVisibleBossBars { get; set; } = 4;
-            [DefaultValue(true)] public bool ShowBossHealthText { get; set; } = true;
-            [DefaultValue(true)] public bool ShowBossName { get; set; } = true;
-            [Range(300, 1000)][DefaultValue(600)] public int BossBarWidth { get; set; } = 600;
-            [Range(0f, 0.95f)][DefaultValue(0.95f)][Slider][SliderColor(150, 0, 150)] public float BossBarYOffsetPercent { get; set; } = 0.95f;
         }
 
         public class RebirthSystem

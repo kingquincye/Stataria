@@ -547,16 +547,6 @@ namespace Stataria
         {
             base.OnKill(npc);
             hasBeenScaled = false;
-
-            if (BossHealthHelper.IsBoss(npc))
-            {
-                int mainPartId = BossHealthHelper.GetMainPartId(npc.type);
-
-                if (npc.type == mainPartId)
-                {
-                    BossHealthHelper.ResetBossEncounter(mainPartId);
-                }
-            }
         }
 
         public override void SaveData(NPC npc, TagCompound tag)
