@@ -109,6 +109,18 @@ namespace Stataria
             [DefaultValue(300)][Range(100, 500)] public int BarWidth { get; set; } = 300;
             [DefaultValue(20)][Range(10, 50)] public int BarHeight { get; set; } = 20;
             [DefaultValue(3)][Range(0, 20)] public int BarPadding { get; set; } = 3;
+
+            [Header("Boss_Bars")]
+            [DefaultValue(1f)][Range(0.5f, 3f)] public float BossBarScale { get; set; } = 1f;
+            [DefaultValue(true)] public bool ShowBossHealthText { get; set; } = true;
+            [DefaultValue(true)] public bool ShowBossName { get; set; } = true;
+            [DefaultValue(456)][Range(200, 800)] public int BossBarWidth { get; set; } = 456;
+            [DefaultValue(50f)][Range(0f, 100f)] public float BossBarXOffsetPercent { get; set; } = 50f;
+            [DefaultValue(5f)][Range(0f, 100f)] public float BossBarYOffsetPercent { get; set; } = 5f;
+            [DefaultValue(5)][Range(1, 20)] public int MaxVisibleBossBars { get; set; } = 5;
+            public List<int> MiniBossNPCIDs { get; set; } = new List<int>();
+            public List<int> ForcedBossNPCIDs { get; set; } = new List<int>();
+            public List<int> ExcludedBossNPCIDs { get; set; } = new List<int>();
         }
 
         public class RebirthSystem

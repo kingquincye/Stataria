@@ -1083,7 +1083,7 @@ Configs: {
 
 		Headers: {
 			Resource_Bars_Settings: Resource Bars Settings
-			Boss_Bars: Boss Bars
+			Boss_Bars: Boss Health Bars
 		}
 
 		Tooltip: ""
@@ -1093,34 +1093,54 @@ Configs: {
 			Tooltip: Space between adjacent bars in pixels.
 		}
 
-		BossBarScale: {
-			Label: Boss Bar Scale
-			Tooltip: Controls the size of boss health bars as a percentage of default size.
+		ExcludedBossNPCIDs: {
+			Tooltip: List of NPC IDs to NEVER show boss bars for (takes priority over all other settings)
+			Label: Excluded Boss NPC IDs
 		}
 
-		ShowBossHealthText: {
-			Label: Show Boss Health Text
-			Tooltip: When enabled, displays boss health numbers above the health bar.
+		ForcedBossNPCIDs: {
+			Tooltip: List of NPC IDs to always treat as bosses
+			Label: Forced Boss NPC IDs
 		}
 
-		ShowBossName: {
-			Label: Show Boss Name
-			Tooltip: When enabled, displays the boss name above its health bar.
-		}
-
-		BossBarWidth: {
-			Label: Boss Bar Width
-			Tooltip: Adjusts the width of boss health bars in pixels.
-		}
-
-		BossBarYOffsetPercent: {
-			Label: Boss Bar Y Offset Percent
-			Tooltip: Controls the vertical position of boss health bars as a percentage of screen height.
+		MiniBossNPCIDs: {
+			Tooltip: List of NPC IDs to treat as mini-bosses (will show boss bars)
+			Label: Mini Boss NPC IDs
 		}
 
 		MaxVisibleBossBars: {
+			Tooltip: Maximum number of boss bars to display simultaneously
 			Label: Max Visible Boss Bars
-			Tooltip: Maximum number of boss health bars to display on screen at the same time.
+		}
+
+		BossBarYOffsetPercent: {
+			Tooltip: Vertical position of boss bars as percentage of screen height
+			Label: Vertical Position (%)
+		}
+
+		BossBarXOffsetPercent: {
+			Tooltip: Horizontal position of boss bars as percentage of screen width
+			Label: Horizontal Position (%)
+		}
+
+		BossBarWidth: {
+			Tooltip: Width of boss health bars in pixels
+			Label: Boss Bar Width
+		}
+
+		ShowBossName: {
+			Tooltip: Display boss names above health bars
+			Label: Show Boss Names
+		}
+
+		ShowBossHealthText: {
+			Tooltip: Display current/max health numbers on boss bars
+			Label: Show Health Numbers
+		}
+
+		BossBarScale: {
+			Tooltip: Overall scale multiplier for boss health bars
+			Label: Boss Bar Scale
 		}
 	}
 
