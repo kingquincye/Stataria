@@ -36,29 +36,24 @@ namespace Stataria
         private void InitializeBossDefinitions()
         {
             BossPartGroups.Clear();
+            TreatAsBoss.Clear();
+            ExcludeFromBossBar.Clear();
 
             BossPartGroups[NPCID.Creeper] = NPCID.BrainofCthulhu;
-
             BossPartGroups[NPCID.SkeletronHand] = NPCID.SkeletronHead;
-
             BossPartGroups[NPCID.PrimeCannon] = NPCID.SkeletronPrime;
             BossPartGroups[NPCID.PrimeLaser] = NPCID.SkeletronPrime;
             BossPartGroups[NPCID.PrimeSaw] = NPCID.SkeletronPrime;
             BossPartGroups[NPCID.PrimeVice] = NPCID.SkeletronPrime;
-
             BossPartGroups[NPCID.GolemHead] = NPCID.Golem;
             BossPartGroups[NPCID.GolemFistLeft] = NPCID.Golem;
             BossPartGroups[NPCID.GolemFistRight] = NPCID.Golem;
-
             BossPartGroups[NPCID.MoonLordHand] = NPCID.MoonLordCore;
             BossPartGroups[NPCID.MoonLordHead] = NPCID.MoonLordCore;
-
             BossPartGroups[NPCID.PirateShipCannon] = NPCID.PirateShip;
-
             BossPartGroups[NPCID.MartianSaucerCannon] = NPCID.MartianSaucerCore;
             BossPartGroups[NPCID.MartianSaucerTurret] = NPCID.MartianSaucerCore;
 
-            TreatAsBoss.Clear();
             TreatAsBoss.Add(NPCID.DD2DarkMageT1);
             TreatAsBoss.Add(NPCID.DD2DarkMageT3);
             TreatAsBoss.Add(NPCID.DD2OgreT2);
@@ -83,9 +78,58 @@ namespace Stataria
             TreatAsBoss.Add(NPCID.WyvernHead);
             TreatAsBoss.Add(NPCID.EaterofWorldsHead);
 
-            ExcludeFromBossBar.Clear();
             ExcludeFromBossBar.Add(NPCID.TorchGod);
             ExcludeFromBossBar.Add(NPCID.None);
+
+            if (ModLoader.HasMod("CalamityMod"))
+            {
+                AddCalamityBossDefinitions();
+            }
+        }
+
+        private void AddCalamityBossDefinitions()
+        {
+            try
+            {
+                Mod calamity = ModLoader.GetMod("CalamityMod");
+
+                BossPartGroups[calamity.Find<ModNPC>("RavagerHead").Type] = calamity.Find<ModNPC>("RavagerBody").Type;
+                BossPartGroups[calamity.Find<ModNPC>("RavagerClawRight").Type] = calamity.Find<ModNPC>("RavagerBody").Type;
+                BossPartGroups[calamity.Find<ModNPC>("RavagerClawLeft").Type] = calamity.Find<ModNPC>("RavagerBody").Type;
+                BossPartGroups[calamity.Find<ModNPC>("RavagerLegRight").Type] = calamity.Find<ModNPC>("RavagerBody").Type;
+                BossPartGroups[calamity.Find<ModNPC>("RavagerLegLeft").Type] = calamity.Find<ModNPC>("RavagerBody").Type;
+                BossPartGroups[calamity.Find<ModNPC>("DarkEnergy").Type] = calamity.Find<ModNPC>("CeaselessVoid").Type;
+
+                TreatAsBoss.Add(calamity.Find<ModNPC>("CrimulanPaladin").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("SplitCrimulanPaladin").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("EbonianPaladin").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("SplitEbonianPaladin").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("EbonianPaladin").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("GiantClam").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("PerforatorHeadSmall").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("PerforatorHeadMedium").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("PerforatorHeadLarge").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("ThiccWaifu").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("Horse").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("GreatSandShark").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("PlaguebringerMiniboss").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("ArmoredDiggerHead").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("Cataclysm").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("Catastrophe").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("SupremeCataclysm").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("SupremeCatastrophe").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("ProvSpawnDefense").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("ProvSpawnOffense").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("ProvSpawnHealer").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("ProfanedGuardianDefender").Type);
+                TreatAsBoss.Add(calamity.Find<ModNPC>("ProfanedGuardianHealer").Type);
+
+                ExcludeFromBossBar.Add(calamity.Find<ModNPC>("SlimeGodCore").Type);
+            }
+            catch (Exception ex)
+            {
+                StatariaLogger.Error($"Failed to load Calamity boss definitions: {ex.Message}");
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch, IBigProgressBar currentBar, BigProgressBarInfo info)
