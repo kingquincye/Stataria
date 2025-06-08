@@ -116,7 +116,7 @@ namespace Stataria
             [DefaultValue(true)] public bool ShowBossName { get; set; } = true;
             [DefaultValue(456)][Range(200, 800)] public int BossBarWidth { get; set; } = 456;
             [DefaultValue(50f)][Range(0f, 100f)] public float BossBarXOffsetPercent { get; set; } = 50f;
-            [DefaultValue(5f)][Range(0f, 100f)] public float BossBarYOffsetPercent { get; set; } = 5f;
+            [DefaultValue(96f)][Range(0f, 100f)] public float BossBarYOffsetPercent { get; set; } = 96f;
             [DefaultValue(5)][Range(1, 20)] public int MaxVisibleBossBars { get; set; } = 5;
             public List<int> MiniBossNPCIDs { get; set; } = new List<int>();
             public List<int> ForcedBossNPCIDs { get; set; } = new List<int>();

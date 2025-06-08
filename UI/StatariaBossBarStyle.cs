@@ -22,6 +22,11 @@ namespace Stataria
         private static readonly Dictionary<int, int> BossPartGroups = new Dictionary<int, int>();
         private static readonly HashSet<int> TreatAsBoss = new HashSet<int>();
         private static readonly HashSet<int> ExcludeFromBossBar = new HashSet<int>();
+        private Color borderColor = Color.White * 0.8f;
+        private Color textColor = Color.White;
+        private Color textShadowColor = Color.Black * 0.7f;
+        private Color bgColor = Color.DarkGray * 0.6f;
+        private float textScale = 0.8f;
 
         public override void Load()
         {
@@ -34,8 +39,12 @@ namespace Stataria
 
             BossPartGroups[NPCID.Creeper] = NPCID.BrainofCthulhu;
 
-            BossPartGroups[NPCID.EaterofWorldsBody] = NPCID.EaterofWorldsHead;
-            BossPartGroups[NPCID.EaterofWorldsTail] = NPCID.EaterofWorldsHead;
+            BossPartGroups[NPCID.SkeletronHand] = NPCID.SkeletronHead;
+
+            BossPartGroups[NPCID.PrimeCannon] = NPCID.SkeletronPrime;
+            BossPartGroups[NPCID.PrimeLaser] = NPCID.SkeletronPrime;
+            BossPartGroups[NPCID.PrimeSaw] = NPCID.SkeletronPrime;
+            BossPartGroups[NPCID.PrimeVice] = NPCID.SkeletronPrime;
 
             BossPartGroups[NPCID.GolemHead] = NPCID.Golem;
             BossPartGroups[NPCID.GolemFistLeft] = NPCID.Golem;
@@ -44,12 +53,24 @@ namespace Stataria
             BossPartGroups[NPCID.MoonLordHand] = NPCID.MoonLordCore;
             BossPartGroups[NPCID.MoonLordHead] = NPCID.MoonLordCore;
 
+            BossPartGroups[NPCID.PirateShipCannon] = NPCID.PirateShip;
+
+            BossPartGroups[NPCID.MartianSaucerCannon] = NPCID.MartianSaucerCore;
+            BossPartGroups[NPCID.MartianSaucerTurret] = NPCID.MartianSaucerCore;
+
             TreatAsBoss.Clear();
             TreatAsBoss.Add(NPCID.DD2DarkMageT1);
             TreatAsBoss.Add(NPCID.DD2DarkMageT3);
             TreatAsBoss.Add(NPCID.DD2OgreT2);
             TreatAsBoss.Add(NPCID.DD2OgreT3);
             TreatAsBoss.Add(NPCID.DD2Betsy);
+            TreatAsBoss.Add(NPCID.PirateShip);
+            TreatAsBoss.Add(NPCID.MourningWood);
+            TreatAsBoss.Add(NPCID.Pumpking);
+            TreatAsBoss.Add(NPCID.Everscream);
+            TreatAsBoss.Add(NPCID.SantaNK1);
+            TreatAsBoss.Add(NPCID.IceQueen);
+            TreatAsBoss.Add(NPCID.MartianSaucerCore);
             TreatAsBoss.Add(NPCID.IceGolem);
             TreatAsBoss.Add(NPCID.SandElemental);
             TreatAsBoss.Add(NPCID.Paladin);
@@ -65,7 +86,6 @@ namespace Stataria
             ExcludeFromBossBar.Clear();
             ExcludeFromBossBar.Add(NPCID.TorchGod);
             ExcludeFromBossBar.Add(NPCID.None);
-            ExcludeFromBossBar.Add(NPCID.MoonLordFreeEye);
         }
 
         public override void Draw(SpriteBatch spriteBatch, IBigProgressBar currentBar, BigProgressBarInfo info)
@@ -140,6 +160,41 @@ namespace Stataria
             currentlyDisplayedBars = newBars;
         }
 
+        private void CalculateEoWChainHealth(NPC headNpc, out float currentLife, out float maxLife)
+        {
+            currentLife = 0f;
+            maxLife = 0f;
+            
+            NPC currentSegment = headNpc;
+            int segmentsChecked = 0;
+            
+            while (currentSegment != null && currentSegment.active && segmentsChecked < 100)
+            {
+                currentLife += currentSegment.life;
+                maxLife += currentSegment.lifeMax;
+                
+                int nextIndex = (int)currentSegment.ai[0];
+                if (nextIndex >= 0 && nextIndex < Main.maxNPCs)
+                {
+                    NPC nextSegment = Main.npc[nextIndex];
+                    if (nextSegment.active && nextSegment.ai[1] == currentSegment.whoAmI)
+                    {
+                        currentSegment = nextSegment;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+                
+                segmentsChecked++;
+            }
+        }
+
         private bool IsBossForBar(NPC npc)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -184,6 +239,12 @@ namespace Stataria
             
             if (npc.type == NPCID.TheDestroyer)
             {
+                return;
+            }
+
+            if (npc.type == NPCID.EaterofWorldsHead)
+            {
+                CalculateEoWChainHealth(npc, out currentLife, out maxLife);
                 return;
             }
 
@@ -243,6 +304,17 @@ namespace Stataria
             if (NPCID.Sets.BossHeadTextures[npc.type] >= 0)
             {
                 return NPCID.Sets.BossHeadTextures[npc.type];
+            }
+
+            var headTextureOverrides = new Dictionary<int, int>
+            {
+                [NPCID.MoonLordCore] = NPCID.Sets.BossHeadTextures[NPCID.MoonLordHead],
+                [NPCID.Golem] = NPCID.Sets.BossHeadTextures[NPCID.GolemHead],
+            };
+
+            if (headTextureOverrides.ContainsKey(npc.type))
+            {
+                return headTextureOverrides[npc.type];
             }
 
             if (npc.ModNPC != null)
@@ -305,16 +377,15 @@ namespace Stataria
 
             float lifePercent = barData.MaxHp > 0 ? barData.CurrentHp / barData.MaxHp : 0f;
 
-            Rectangle bgRect = new Rectangle((int)position.X - 2, (int)position.Y - 2, width + 4, height + 4);
-            spriteBatch.Draw(TextureAssets.MagicPixel.Value, bgRect, Color.Black * 0.7f);
-
             Rectangle barRect = new Rectangle((int)position.X, (int)position.Y, width, height);
-            spriteBatch.Draw(TextureAssets.MagicPixel.Value, barRect, Color.DarkGray * 0.8f);
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, barRect, bgColor);
 
             if (lifePercent > 0)
             {
                 DrawHealthGradient(spriteBatch, barRect, lifePercent);
             }
+
+            DrawBarBorders(spriteBatch, position, width, height);
 
             if (barData.HeadTextureId >= 0)
             {
@@ -330,6 +401,19 @@ namespace Stataria
             {
                 DrawBossName(spriteBatch, barData, position, height);
             }
+        }
+
+        private void DrawBarBorders(SpriteBatch spriteBatch, Vector2 position, int width, int height)
+        {
+            int borderThickness = 1;
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, 
+                new Rectangle((int)position.X, (int)position.Y, width, borderThickness), borderColor);
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, 
+                new Rectangle((int)position.X, (int)position.Y + height - borderThickness, width, borderThickness), borderColor);
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, 
+                new Rectangle((int)position.X, (int)position.Y, borderThickness, height), borderColor);
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, 
+                new Rectangle((int)position.X + width - borderThickness, (int)position.Y, borderThickness, height), borderColor);
         }
 
         private void DrawHealthGradient(SpriteBatch spriteBatch, Rectangle area, float healthPercent)
@@ -372,28 +456,30 @@ namespace Stataria
         private void DrawHealthText(SpriteBatch spriteBatch, BossBarUIData barData, Vector2 position, int height)
         {
             string healthText = $"{(int)barData.CurrentHp} / {(int)barData.MaxHp}";
-            Vector2 textSize = FontAssets.MouseText.Value.MeasureString(healthText);
+            DynamicSpriteFont font = FontAssets.ItemStack.Value;
+            Vector2 textSize = font.MeasureString(healthText) * textScale;
 
             Vector2 textPos = new Vector2(
                 position.X + (barData.CurrentWidth / 2f) - (textSize.X / 2f),
                 position.Y + (height / 2f) - (textSize.Y / 2f)
             );
 
-            spriteBatch.DrawString(FontAssets.MouseText.Value, healthText, textPos + Vector2.One, Color.Black);
-            spriteBatch.DrawString(FontAssets.MouseText.Value, healthText, textPos, Color.White);
+            spriteBatch.DrawString(font, healthText, textPos + new Vector2(1, 1) * textScale, textShadowColor, 0f, Vector2.Zero, textScale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, healthText, textPos, textColor, 0f, Vector2.Zero, textScale, SpriteEffects.None, 0f);
         }
 
         private void DrawBossName(SpriteBatch spriteBatch, BossBarUIData barData, Vector2 position, int height)
         {
-            Vector2 textSize = FontAssets.MouseText.Value.MeasureString(barData.DisplayName);
+            DynamicSpriteFont font = FontAssets.ItemStack.Value;
+            Vector2 textSize = font.MeasureString(barData.DisplayName) * textScale;
 
             Vector2 textPos = new Vector2(
                 position.X + (barData.CurrentWidth / 2f) - (textSize.X / 2f),
                 position.Y - textSize.Y - 4f
             );
 
-            spriteBatch.DrawString(FontAssets.MouseText.Value, barData.DisplayName, textPos + Vector2.One, Color.Black);
-            spriteBatch.DrawString(FontAssets.MouseText.Value, barData.DisplayName, textPos, Color.White);
+            spriteBatch.DrawString(font, barData.DisplayName, textPos + new Vector2(1, 1) * textScale, textShadowColor, 0f, Vector2.Zero, textScale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, barData.DisplayName, textPos, textColor, 0f, Vector2.Zero, textScale, SpriteEffects.None, 0f);
         }
     }
 
