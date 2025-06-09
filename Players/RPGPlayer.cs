@@ -18,6 +18,7 @@ namespace Stataria
 {
     public class RPGPlayer : ModPlayer
     {
+        public TabBarUI.TabType LastActiveTab { get; set; } = TabBarUI.TabType.Stats;
         public int xpBarTimer = 0;
         private const int xpBarDuration = 120;
         public int levelCapMessageTimer = 0;
@@ -82,6 +83,7 @@ namespace Stataria
 
         public override void SaveData(TagCompound tag)
         {
+            tag["LastActiveTab"] = (int)LastActiveTab;
             tag["Level"] = Level;
             tag["XP"] = XP;
             tag["XPToNext"] = XPToNext;
@@ -114,6 +116,9 @@ namespace Stataria
 
         public override void LoadData(TagCompound tag)
         {
+            LastActiveTab = tag.ContainsKey("LastActiveTab")
+                ? (TabBarUI.TabType)tag.GetInt("LastActiveTab")
+                : TabBarUI.TabType.Stats;
             Level = tag.GetInt("Level");
             XP = tag.GetAsLong("XP");
             XPToNext = tag.GetAsLong("XPToNext");
@@ -501,28 +506,31 @@ namespace Stataria
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (StatariaKeybinds.ToggleStatUI.JustPressed
+            if (StatariaKeybinds.ToggleStatariaUI.JustPressed
                 && !Terraria.GameInput.PlayerInput.WritingText)
             {
-                if (StatariaUI.StatUI.CurrentState == null)
-                {
-                    if (StatariaUI.SkillTreeUI.CurrentState != null)
-                        StatariaUI.SkillTreeUI.SetState(null);
-                    if (StatariaUI.RoleSelectionUI.CurrentState != null)
-                        StatariaUI.RoleSelectionUI.SetState(null);
-                    if (StatariaUI.SocketingUI.CurrentState != null)
-                        StatariaUI.SocketingUI.SetState(null);
+                bool anyUIOpen = StatariaUI.StatUI.CurrentState != null ||
+                                StatariaUI.SkillTreeUI.CurrentState != null ||
+                                StatariaUI.RoleSelectionUI.CurrentState != null ||
+                                StatariaUI.SocketingUI.CurrentState != null;
 
-                    StatariaUI.StatUI.SetState(StatariaUI.Panel);
-                    StatariaUI.TabBarInterface.SetState(StatariaUI.TabBarPanel);
-                }
-                else
+                if (anyUIOpen)
                 {
+                    if (StatariaUI.TabBarPanel != null)
+                    {
+                        LastActiveTab = StatariaUI.TabBarPanel.CurrentTab;
+                    }
+
                     StatariaUI.StatUI.SetState(null);
                     StatariaUI.SkillTreeUI.SetState(null);
                     StatariaUI.RoleSelectionUI.SetState(null);
                     StatariaUI.SocketingUI.SetState(null);
                     StatariaUI.TabBarInterface.SetState(null);
+                }
+                else
+                {
+                    StatariaUI.TabBarInterface.SetState(StatariaUI.TabBarPanel);
+                    OpenUIOnTab(LastActiveTab);
                 }
             }
             if (StatariaKeybinds.DivineInterventionKey.JustPressed &&
@@ -540,6 +548,51 @@ namespace Stataria
                 {
                     Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, Player.position);
                 }
+            }
+        }
+
+        private void OpenUIOnTab(TabBarUI.TabType tab)
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            switch (tab)
+            {
+                case TabBarUI.TabType.Stats:
+                    StatariaUI.StatUI.SetState(StatariaUI.Panel);
+                    break;
+                case TabBarUI.TabType.Abilities:
+                    if (config.rebirthSystem.EnableRebirthSystem && config.rebirthSystem.EnableRebirthAbilities)
+                    {
+                        StatariaUI.SkillTreeUI.SetState(StatariaUI.SkillTreePanel);
+                        StatariaUI.SkillTreePanel?.RefreshAbilitiesList();
+                    }
+                    else
+                    {
+                        LastActiveTab = TabBarUI.TabType.Stats;
+                        StatariaUI.StatUI.SetState(StatariaUI.Panel);
+                    }
+                    break;
+                case TabBarUI.TabType.Roles:
+                    StatariaUI.RoleSelectionUI.SetState(StatariaUI.RoleSelectionPanel);
+                    StatariaUI.RoleSelectionPanel?.RefreshRolesList();
+                    break;
+                case TabBarUI.TabType.Socketing:
+                    if (config.socketingSystem.EnableSocketingSystem)
+                    {
+                        StatariaUI.SocketingUI.SetState(StatariaUI.SocketingPanel);
+                        StatariaUI.SocketingPanel?.RefreshUI();
+                    }
+                    else
+                    {
+                        LastActiveTab = TabBarUI.TabType.Stats;
+                        StatariaUI.StatUI.SetState(StatariaUI.Panel);
+                    }
+                    break;
+            }
+
+            if (StatariaUI.TabBarPanel != null)
+            {
+                StatariaUI.TabBarPanel.SetActiveTab(LastActiveTab);
             }
         }
 

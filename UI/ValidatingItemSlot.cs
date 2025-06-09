@@ -196,12 +196,24 @@ namespace Stataria
             {
                 Vector2 itemPosition = position + size * 0.5f;
 
-                float itemScale = ItemSlot.DrawItemIcon(currentItem, _itemSlotContext, spriteBatch,
-                    itemPosition, scale, targetSize * 0.8f, Color.White);
+                float maxItemSize = targetSize * 0.75f;
+                Texture2D itemTexture = Terraria.GameContent.TextureAssets.Item[currentItem.type].Value;
+                float itemScale = Math.Min(maxItemSize / itemTexture.Width, maxItemSize / itemTexture.Height);
+                itemScale = Math.Min(itemScale, scale * 0.9f);
+
+                float finalItemScale = ItemSlot.DrawItemIcon(currentItem, _itemSlotContext, spriteBatch,
+                    itemPosition, itemScale, maxItemSize, Color.White);
 
                 if (currentItem.stack > 1)
                 {
-                    Vector2 stackPosition = position + new Vector2(6f, size.Y - 16f) * scale;
+                    Vector2 stackPosition = position + new Vector2(
+                        size.X - 20f * scale,
+                        size.Y - 14f * scale
+                    );
+
+                    stackPosition.X = Math.Max(stackPosition.X, position.X + 2f * scale);
+                    stackPosition.Y = Math.Max(stackPosition.Y, position.Y + size.Y - 16f * scale);
+
                     Terraria.UI.Chat.ChatManager.DrawColorCodedStringWithShadow(spriteBatch,
                         Terraria.GameContent.FontAssets.ItemStack.Value,
                         currentItem.stack.ToString(),
@@ -209,7 +221,7 @@ namespace Stataria
                         Color.White,
                         0f,
                         Vector2.Zero,
-                        new Vector2(scale * 0.8f),
+                        new Vector2(scale * 0.7f),
                         -1f,
                         scale);
                 }

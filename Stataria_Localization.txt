@@ -1,5 +1,5 @@
 Keybinds: {
-	"Toggle Stat Panel.DisplayName": Toggle Stat Panel
+	"Toggle Stataria UI.DisplayName": Toggle Stataria UI
 	"AGI Teleport.DisplayName": Teleport
 	"Divine Intervention.DisplayName": Divine Intervention
 }
@@ -322,6 +322,11 @@ Configs: {
 		ProgressiveStatCapMultiplier: {
 			Label: Progressive Stat Cap Multiplier
 			Tooltip: Percentage increase to stat caps per rebirth. 0.5 means +50% cap increase per rebirth.
+		}
+
+		EnableRebirthAbilities: {
+			Label: Enable Rebirth Abilities
+			Tooltip: When enabled, allows players to unlock and use rebirth abilities with rebirth points.
 		}
 	}
 

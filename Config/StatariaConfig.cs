@@ -156,6 +156,7 @@ namespace Stataria
         {
             [Header("Rebirth_System")]
             [DefaultValue(true)] public bool EnableRebirthSystem { get; set; } = true;
+            [DefaultValue(true)] public bool EnableRebirthAbilities { get; set; } = true;
             [Range(1, 10000)][DefaultValue(50)] public int RebirthLevelRequirement { get; set; } = 50;
             [Range(0f, 10f)][DefaultValue(0.5f)] public float RebirthXPMultiplier { get; set; } = 0.5f;
             [DefaultValue(true)] public bool ResetStatsOnRebirth { get; set; } = true;
