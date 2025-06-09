@@ -17,6 +17,8 @@ namespace Stataria
         internal static RoleSelectionUI RoleSelectionPanel;
         internal static UserInterface TabBarInterface;
         internal static TabBarUI TabBarPanel;
+        internal static UserInterface SocketingUI;
+        internal static SocketingUI SocketingPanel;
 
         public override void Load()
         {
@@ -35,6 +37,9 @@ namespace Stataria
             TabBarInterface = new UserInterface();
             TabBarPanel = new TabBarUI();
             TabBarPanel.Activate();
+            SocketingUI = new UserInterface();
+            SocketingPanel = new SocketingUI();
+            SocketingPanel.Activate();
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -58,6 +63,10 @@ namespace Stataria
             {
                 RoleSelectionUI.Update(gameTime);
             }
+            if (SocketingUI?.CurrentState != null)
+            {
+                SocketingUI.Update(gameTime);
+            }
             if (TabBarInterface?.CurrentState != null)
             {
                 TabBarInterface.Update(gameTime);
@@ -68,6 +77,8 @@ namespace Stataria
                     TabBarPanel?.SetActiveTab(TabBarUI.TabType.Abilities);
                 else if (RoleSelectionUI?.CurrentState != null)
                     TabBarPanel?.SetActiveTab(TabBarUI.TabType.Roles);
+                else if (SocketingUI?.CurrentState != null)
+                    TabBarPanel?.SetActiveTab(TabBarUI.TabType.Socketing);
             }
         }
 
@@ -124,6 +135,19 @@ namespace Stataria
                         if (RoleSelectionUI?.CurrentState != null)
                         {
                             RoleSelectionUI.Draw(Main.spriteBatch, new GameTime());
+                        }
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Socketing",
+                    delegate
+                    {
+                        if (SocketingUI?.CurrentState != null)
+                        {
+                            SocketingUI.Draw(Main.spriteBatch, new GameTime());
                         }
                         return true;
                     },

@@ -5,6 +5,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.Audio;
 using Terraria.ID;
 using System;
+using Terraria.ModLoader;
 
 namespace Stataria
 {
@@ -14,7 +15,8 @@ namespace Stataria
         {
             Stats,
             Abilities,
-            Roles
+            Roles,
+            Socketing
         }
 
         private UIPanel tabPanel;
@@ -38,14 +40,14 @@ namespace Stataria
             tabPanel.SetPadding(0f);
             Append(tabPanel);
 
-            tabButtons = new UITextPanel<string>[3];
-            string[] tabNames = { "Stats", "Abilities", "Roles" };
+            tabButtons = new UITextPanel<string>[4];
+            string[] tabNames = { "Stats", "Abilities", "Roles", "Socketing" };
             float tabWidth = 80f;
             float tabHeight = 35f;
             float spacing = 5f;
-            float startX = (300f - (tabWidth * 3 + spacing * 2)) / 2f;
+            float startX = (300f - (tabWidth * 4 + spacing * 3)) / 2f;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 int tabIndex = i;
                 TabType tabType = (TabType)i;
@@ -76,6 +78,8 @@ namespace Stataria
         {
             if (currentTab == newTab) return;
 
+            var config = ModContent.GetInstance<StatariaConfig>();
+
             currentTab = newTab;
             UpdateTabAppearance();
 
@@ -84,19 +88,32 @@ namespace Stataria
                 case TabType.Stats:
                     StatariaUI.SkillTreeUI?.SetState(null);
                     StatariaUI.RoleSelectionUI?.SetState(null);
+                    StatariaUI.SocketingUI?.SetState(null);
                     StatariaUI.StatUI?.SetState(StatariaUI.Panel);
                     break;
                 case TabType.Abilities:
                     StatariaUI.StatUI?.SetState(null);
                     StatariaUI.RoleSelectionUI?.SetState(null);
+                    StatariaUI.SocketingUI?.SetState(null);
                     StatariaUI.SkillTreeUI?.SetState(StatariaUI.SkillTreePanel);
                     StatariaUI.SkillTreePanel?.RefreshAbilitiesList();
                     break;
                 case TabType.Roles:
                     StatariaUI.StatUI?.SetState(null);
                     StatariaUI.SkillTreeUI?.SetState(null);
+                    StatariaUI.SocketingUI?.SetState(null);
                     StatariaUI.RoleSelectionUI?.SetState(StatariaUI.RoleSelectionPanel);
                     StatariaUI.RoleSelectionPanel?.RefreshRolesList();
+                    break;
+                case TabType.Socketing:
+                    if (config.socketingSystem.EnableSocketingSystem)
+                    {
+                        StatariaUI.StatUI?.SetState(null);
+                        StatariaUI.SkillTreeUI?.SetState(null);
+                        StatariaUI.RoleSelectionUI?.SetState(null);
+                        StatariaUI.SocketingUI?.SetState(StatariaUI.SocketingPanel);
+                        StatariaUI.SocketingPanel?.RefreshUI();
+                    }
                     break;
             }
         }
@@ -162,6 +179,10 @@ namespace Stataria
             else if (StatariaUI.RoleSelectionUI?.CurrentState != null && StatariaUI.RoleSelectionPanel?.rolePanel != null)
             {
                 activePanelDimensions = StatariaUI.RoleSelectionPanel.rolePanel.GetOuterDimensions();
+            }
+            else if (StatariaUI.SocketingUI?.CurrentState != null && StatariaUI.SocketingPanel?.socketingPanel != null)
+            {
+                activePanelDimensions = StatariaUI.SocketingPanel.socketingPanel.GetOuterDimensions();
             }
 
             if (activePanelDimensions.HasValue)

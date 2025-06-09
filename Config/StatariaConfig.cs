@@ -21,6 +21,9 @@ namespace Stataria
         public ResourceBarsConfig resourceBars = new ResourceBarsConfig();
 
         [SeparatePage]
+        public SocketingSystem socketingSystem = new SocketingSystem();
+
+        [SeparatePage]
         public RebirthSystem rebirthSystem = new RebirthSystem();
 
         [SeparatePage]
@@ -121,6 +124,32 @@ namespace Stataria
             public List<int> MiniBossNPCIDs { get; set; } = new List<int>();
             public List<int> ForcedBossNPCIDs { get; set; } = new List<int>();
             public List<int> ExcludedBossNPCIDs { get; set; } = new List<int>();
+        }
+
+        public class SocketingSystem
+        {
+            [Header("Socketing_System")]
+            [DefaultValue(true)] public bool EnableSocketingSystem { get; set; } = true;
+            [DefaultValue(true)] public bool ShowSocketedCoresInTooltip { get; set; } = true;
+
+            [Header("Core_Effects")]
+            [Range(0f, 100f)][DefaultValue(5f)] public float PowerT1Effect { get; set; } = 5f;
+            [Range(0f, 100f)][DefaultValue(10f)] public float PowerT2Effect { get; set; } = 10f;
+            [Range(0f, 100f)][DefaultValue(25f)] public float PowerT3Effect { get; set; } = 25f;
+            
+            [Range(0f, 100f)][DefaultValue(5f)] public float ForceT1Effect { get; set; } = 5f;
+            [Range(0f, 100f)][DefaultValue(10f)] public float ForceT2Effect { get; set; } = 10f;
+            [Range(0f, 100f)][DefaultValue(25f)] public float ForceT3Effect { get; set; } = 25f;
+            
+            [Range(0f, 100f)][DefaultValue(5f)] public float PrecisionT1Effect { get; set; } = 5f;
+            [Range(0f, 100f)][DefaultValue(10f)] public float PrecisionT2Effect { get; set; } = 10f;
+            [Range(0f, 100f)][DefaultValue(25f)] public float PrecisionT3Effect { get; set; } = 25f;
+
+            [Header("Cost_Configuration")]
+            [Range(0, 1000)][DefaultValue(15)] public int ExtractCost { get; set; } = 15;
+            [Range(0, 1000)][DefaultValue(25)] public int BaseExpandCost { get; set; } = 25;
+            [Range(0f, 500f)][DefaultValue(50f)] public float ExpandCostIncrease { get; set; } = 50f;
+            [Range(0, 10)][DefaultValue(3)] public int MaxExpandedSlots { get; set; } = 3;
         }
 
         public class RebirthSystem

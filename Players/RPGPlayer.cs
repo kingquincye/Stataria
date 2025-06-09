@@ -510,6 +510,8 @@ namespace Stataria
                         StatariaUI.SkillTreeUI.SetState(null);
                     if (StatariaUI.RoleSelectionUI.CurrentState != null)
                         StatariaUI.RoleSelectionUI.SetState(null);
+                    if (StatariaUI.SocketingUI.CurrentState != null)
+                        StatariaUI.SocketingUI.SetState(null);
 
                     StatariaUI.StatUI.SetState(StatariaUI.Panel);
                     StatariaUI.TabBarInterface.SetState(StatariaUI.TabBarPanel);
@@ -519,6 +521,7 @@ namespace Stataria
                     StatariaUI.StatUI.SetState(null);
                     StatariaUI.SkillTreeUI.SetState(null);
                     StatariaUI.RoleSelectionUI.SetState(null);
+                    StatariaUI.SocketingUI.SetState(null);
                     StatariaUI.TabBarInterface.SetState(null);
                 }
             }

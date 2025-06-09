@@ -69,6 +69,11 @@ Configs: {
 			Label: Role Settings
 			Tooltip: Configure role system mechanics, costs, and individual role effects.
 		}
+
+		socketingSystem: {
+			Label: Socketing System
+			Tooltip: Configure the socketing system for weapons, cores, and upgrade costs.
+		}
 	}
 
 	GeneralBalance: {
@@ -1496,6 +1501,91 @@ Configs: {
 				'''
 		}
 	}
+
+	SocketingSystem: {
+		Tooltip: ""
+
+		Headers: {
+			Socketing_System: Socketing System
+			Core_Effects: Core Effects
+			Cost_Configuration: Cost Configuration
+		}
+
+		EnableSocketingSystem: {
+			Label: Enable Socketing System
+			Tooltip: Enables or disables the entire socketing system including the UI tab.
+		}
+
+		ShowSocketedCoresInTooltip: {
+			Label: Show Socketed Cores In Tooltip
+			Tooltip: When enabled, socketed cores and their effects will be displayed in item tooltips.
+		}
+
+		PowerT1Effect: {
+			Label: Power T.1 Effect
+			Tooltip: Percentage damage bonus provided by Core of Power T.1.
+		}
+
+		PowerT2Effect: {
+			Label: Power T.2 Effect
+			Tooltip: Percentage damage bonus provided by Core of Power T.2.
+		}
+
+		PowerT3Effect: {
+			Label: Power T.3 Effect
+			Tooltip: Percentage damage bonus provided by Core of Power T.3.
+		}
+
+		ForceT1Effect: {
+			Label: Force T.1 Effect
+			Tooltip: Percentage knockback bonus provided by Core of Force T.1.
+		}
+
+		ForceT2Effect: {
+			Label: Force T.2 Effect
+			Tooltip: Percentage knockback bonus provided by Core of Force T.2.
+		}
+
+		ForceT3Effect: {
+			Label: Force T.3 Effect
+			Tooltip: Percentage knockback bonus provided by Core of Force T.3.
+		}
+
+		PrecisionT1Effect: {
+			Label: Precision T.1 Effect
+			Tooltip: Percentage critical hit chance bonus provided by Core of Precision T.1.
+		}
+
+		PrecisionT2Effect: {
+			Label: Precision T.2 Effect
+			Tooltip: Percentage critical hit chance bonus provided by Core of Precision T.2.
+		}
+
+		PrecisionT3Effect: {
+			Label: Precision T.3 Effect
+			Tooltip: Percentage critical hit chance bonus provided by Core of Precision T.3.
+		}
+
+		ExtractCost: {
+			Label: Extract Cost
+			Tooltip: Rebirth Points cost to extract a socketed core from an item.
+		}
+
+		BaseExpandCost: {
+			Label: Base Expand Cost
+			Tooltip: Base Rebirth Points cost to expand an item's socket slots.
+		}
+
+		ExpandCostIncrease: {
+			Label: Expand Cost Increase
+			Tooltip: Percentage increase in expand cost for each additional slot expansion.
+		}
+
+		MaxExpandedSlots: {
+			Label: Max Expanded Slots
+			Tooltip: Maximum number of additional slots that can be added to an item through expansion.
+		}
+	}
 }
 
 Buffs: {
@@ -1527,5 +1617,52 @@ Buffs: {
 	GuardianAuraBuff: {
 		DisplayName: Guardian Aura
 		Description: Within a protective guardian aura
+	}
+}
+
+Items: {
+	CoreOfForceT1: {
+		DisplayName: Core Of Force T.1
+		Tooltip: Can be socketed into weapons to increase knockback
+	}
+
+	CoreOfForceT2: {
+		DisplayName: Core Of Force T.2
+		Tooltip: Can be socketed into weapons to increase knockback
+	}
+
+	CoreOfForceT3: {
+		DisplayName: Core Of Force T.3
+		Tooltip: Can be socketed into weapons to increase knockback
+	}
+
+	CoreOfPowerT1: {
+		DisplayName: Core Of Power T.1
+		Tooltip: Can be socketed into weapons to increase damage
+	}
+
+	CoreOfPowerT2: {
+		DisplayName: Core Of Power T.2
+		Tooltip: Can be socketed into weapons to increase damage
+	}
+
+	CoreOfPowerT3: {
+		DisplayName: Core Of Power T.3
+		Tooltip: Can be socketed into weapons to increase damage
+	}
+
+	CoreOfPrecisionT1: {
+		DisplayName: Core Of Precision T.1
+		Tooltip: Can be socketed into weapons to increase critical hit chance
+	}
+
+	CoreOfPrecisionT2: {
+		DisplayName: Core Of Precision T.2
+		Tooltip: Can be socketed into weapons to increase critical hit chance
+	}
+
+	CoreOfPrecisionT3: {
+		DisplayName: Core Of Precision T.3
+		Tooltip: Can be socketed into weapons to increase critical hit chance
 	}
 }
