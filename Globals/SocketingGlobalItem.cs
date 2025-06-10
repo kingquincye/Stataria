@@ -113,8 +113,8 @@ namespace Stataria
             if (!IsWeapon(item) || SocketedCores.Count == 0)
                 return;
 
-            var config = ModContent.GetInstance<StatariaConfig>().socketingSystem;
-            if (!config.ShowSocketedCoresInTooltip)
+            var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
+            if (!clientConfig.ShowSocketedCoresInTooltip)
                 return;
 
             tooltips.Add(new TooltipLine(Mod, "SocketedCoresHeader", "Socketed Cores:")

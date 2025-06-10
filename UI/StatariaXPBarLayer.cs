@@ -10,7 +10,8 @@ namespace Stataria
     {
         protected override bool IsVisible(Player player, RPGPlayer rpgPlayer, StatariaConfig config)
         {
-            return rpgPlayer.xpBarTimer > 0 && config.uiSettings.ShowXPBarAbovePlayer;
+            var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
+            return rpgPlayer.xpBarTimer > 0 && clientConfig.uiSettings.ShowXPBarAbovePlayer;
         }
 
         protected override float GetProgress(Player player, RPGPlayer rpgPlayer, StatariaConfig config)

@@ -943,25 +943,26 @@ namespace Stataria
             {
                 xpBarTimer = xpBarDuration;
 
-                bool showPopup = config.uiSettings.ShowXPGainPopups;
+                var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
+                bool showPopup = clientConfig.uiSettings.ShowXPGainPopups;
 
                 if (source.Contains("Melee") || source.Contains("Proj") || source.Contains("Damage"))
                 {
-                    showPopup = showPopup && config.uiSettings.ShowDamageXPPopups;
+                    showPopup = showPopup && clientConfig.uiSettings.ShowDamageXPPopups;
 
                     if (config.generalBalance.DamageXP <= 0)
                         showPopup = false;
                 }
                 else if (source.Contains("Kill"))
                 {
-                    showPopup = showPopup && config.uiSettings.ShowKillXPPopups;
+                    showPopup = showPopup && clientConfig.uiSettings.ShowKillXPPopups;
 
                     if (config.generalBalance.KillXP <= 0)
                         showPopup = false;
                 }
                 else if (source.Contains("Boss"))
                 {
-                    showPopup = showPopup && config.uiSettings.ShowBossXPPopups;
+                    showPopup = showPopup && clientConfig.uiSettings.ShowBossXPPopups;
 
                     if ((config.generalBalance.UseFlatBossXP && config.generalBalance.DefaultFlatBossXP <= 0) ||
                         (!config.generalBalance.UseFlatBossXP && config.generalBalance.BossXP <= 0))

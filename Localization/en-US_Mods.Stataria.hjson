@@ -15,10 +15,6 @@ Configs: {
 			Tooltip: Configure XP gain, level caps, and other general balance options.
 		}
 
-		uiSettings: {
-			Label: UI Settings
-			Tooltip: Customize the appearance and behavior of XP bars, level indicators, and other UI elements.
-		}
 
 		rebirthSystem: {
 			Label: Rebirth System
@@ -50,10 +46,6 @@ Configs: {
 			Tooltip: Configure special abilities that players can unlock with Rebirth Points.
 		}
 
-		resourceBars: {
-			Label: Resource Bars
-			Tooltip: Customize the appearance and position of health, mana, and boss health bars.
-		}
 
 		advanced: {
 			Tooltip: Only for the mighty. Be warned.
@@ -70,11 +62,25 @@ Configs: {
 			Tooltip: Configure role system mechanics, costs, and individual role effects.
 		}
 
-		socketingSystem: {
-			Label: Socketing System
-			Tooltip: Configure the socketing system for weapons, cores, and upgrade costs.
-		}
-	}
+                socketingSystem: {
+                        Label: Socketing System
+                        Tooltip: Configure the socketing system for weapons, cores, and upgrade costs.
+                }
+        }
+
+        StatariaClientConfig: {
+                DisplayName: Stataria Client Config
+
+                uiSettings: {
+                        Label: UI Settings
+                        Tooltip: Customize the appearance and behavior of XP bars, level indicators, and other UI elements.
+                }
+
+                resourceBars: {
+                        Label: Resource Bars
+                        Tooltip: Customize the appearance and position of health, mana, and boss health bars.
+                }
+        }
 
 	GeneralBalance: {
 		Tooltip: ""

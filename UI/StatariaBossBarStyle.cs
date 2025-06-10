@@ -139,7 +139,7 @@ namespace Stataria
 
         private void DrawAllBossBars(SpriteBatch spriteBatch)
         {
-            var config = ModContent.GetInstance<StatariaConfig>();
+            var config = ModContent.GetInstance<StatariaClientConfig>();
 
             UpdateBossBarData();
 
@@ -155,7 +155,7 @@ namespace Stataria
 
         private void UpdateBossBarData()
         {
-            var config = ModContent.GetInstance<StatariaConfig>();
+            var config = ModContent.GetInstance<StatariaClientConfig>();
             var newBars = new List<BossBarUIData>();
 
             for (int i = 0; i < Main.maxNPCs; i++)
@@ -241,7 +241,7 @@ namespace Stataria
 
         private bool IsBossForBar(NPC npc)
         {
-            var config = ModContent.GetInstance<StatariaConfig>();
+            var config = ModContent.GetInstance<StatariaClientConfig>();
 
             if (ExcludeFromBossBar.Contains(npc.type)) return false;
 
@@ -257,7 +257,7 @@ namespace Stataria
             return false;
         }
 
-        private BossBarUIData CreateBossBarData(NPC npc, StatariaConfig config)
+        private BossBarUIData CreateBossBarData(NPC npc, StatariaClientConfig config)
         {
             var barData = new BossBarUIData
             {
@@ -369,7 +369,7 @@ namespace Stataria
             return -1;
         }
 
-        private void CalculateBarPositions(StatariaConfig config)
+        private void CalculateBarPositions(StatariaClientConfig config)
         {
             if (currentlyDisplayedBars.Count == 0) return;
 
@@ -412,7 +412,7 @@ namespace Stataria
             }
         }
 
-        private void DrawSingleBossBar(SpriteBatch spriteBatch, BossBarUIData barData, StatariaConfig config)
+        private void DrawSingleBossBar(SpriteBatch spriteBatch, BossBarUIData barData, StatariaClientConfig config)
         {
             Vector2 position = barData.CalculatedPosition;
             int width = barData.CurrentWidth;

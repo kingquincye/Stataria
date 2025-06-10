@@ -14,11 +14,6 @@ namespace Stataria
         [SeparatePage]
         public XPVerification xpVerification = new XPVerification();
 
-        [SeparatePage]
-        public UISettings uiSettings = new UISettings();
-
-        [SeparatePage]
-        public ResourceBarsConfig resourceBars = new ResourceBarsConfig();
 
         [SeparatePage]
         public SocketingSystem socketingSystem = new SocketingSystem();
@@ -130,7 +125,6 @@ namespace Stataria
         {
             [Header("Socketing_System")]
             [DefaultValue(true)] public bool EnableSocketingSystem { get; set; } = true;
-            [DefaultValue(true)] public bool ShowSocketedCoresInTooltip { get; set; } = true;
 
             [Header("Core_Effects")]
             [Range(0f, 100f)][DefaultValue(5f)] public float PowerT1Effect { get; set; } = 5f;
@@ -191,11 +185,9 @@ namespace Stataria
             [Range(0f, 100f)][DefaultValue(10f)] public float LastStandHealPercent { get; set; } = 10f;
             [Range(0, 10)][DefaultValue(3)] public int LastStandImmunityTime { get; set; } = 3;
             [Range(0, 300)][DefaultValue(180)] public int LastStandCooldown { get; set; } = 180;
-            [DefaultValue(true)] public bool EnableLastStandCooldownBar { get; set; } = true;
 
             [Header("Teleport")]
             [Range(1, 60)][DefaultValue(3)] public int TeleportCooldown { get; set; } = 3;
-            [DefaultValue(true)] public bool EnableTeleportCooldownBar { get; set; } = true;
 
             [Header("Extra_Accessory_Slots")]
             [Range(1, 29)][DefaultValue(5)] public int MaxExtraAccessorySlots { get; set; } = 5;
@@ -272,7 +264,6 @@ namespace Stataria
             [Range(1f, 10f)][DefaultValue(3f)] public float ClericRegenInterval { get; set; } = 3f;
             [Range(1f, 30f)][DefaultValue(10f)] public float DivineInterventionDuration { get; set; } = 10f;
             [Range(30f, 600f)][DefaultValue(120f)] public float DivineInterventionCooldown { get; set; } = 120f;
-            [DefaultValue(true)] public bool EnableDivineInterventionCooldownBar { get; set; } = true;
             public List<string> DivineInterventionExemptBuffs { get; set; } = new List<string>();
 
             [Header("Guardian")]
@@ -310,9 +301,6 @@ namespace Stataria
             [Range(0f, 5f)][DefaultValue(0.02f)] public float EnemyDefenseScaling { get; set; } = 0.02f;
             [Range(0f, 10f)][DefaultValue(0.2f)] public float BossHealthScaling { get; set; } = 0.2f;
             [Range(0f, 10f)][DefaultValue(0.1f)] public float BossDamageScaling { get; set; } = 0.1f;
-            [DefaultValue(true)] public bool ShowEnemyLevelIndicator { get; set; } = true;
-            [DefaultValue(true)] public bool ShowEnemyLevelBehindWalls { get; set; } = true;
-            [Range(0f, 2f)][DefaultValue(1f)] public float EnemyIndicatorOpacity { get; set; } = 1f;
             [DefaultValue(true)] public bool EnableLevelVariation { get; set; } = true;
             [Range(1, 100)][DefaultValue(10)] public int MaxLevelVariation { get; set; } = 10;
             [DefaultValue(false)] public bool EnableMinimumLevelDifference { get; set; } = false;
@@ -461,10 +449,30 @@ namespace Stataria
             [Range(0f, 10f)][DefaultValue(2f)] public float CLK_EffectThreshold { get; set; } = 2f;
         }
 
-        public class Advanced
-        {
-            [Header("XP_Blacklist")]
-            public List<string> BlacklistedNPCs { get; set; } = new List<string>();
-        }
+    public class Advanced
+    {
+        [Header("XP_Blacklist")]
+        public List<string> BlacklistedNPCs { get; set; } = new List<string>();
     }
+
+    public class StatariaClientConfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [SeparatePage]
+        public StatariaConfig.UISettings uiSettings = new StatariaConfig.UISettings();
+
+        [SeparatePage]
+        public StatariaConfig.ResourceBarsConfig resourceBars = new StatariaConfig.ResourceBarsConfig();
+
+        [DefaultValue(true)] public bool ShowEnemyLevelIndicator { get; set; } = true;
+        [DefaultValue(true)] public bool ShowEnemyLevelBehindWalls { get; set; } = true;
+        [Range(0f, 2f)][DefaultValue(1f)] public float EnemyIndicatorOpacity { get; set; } = 1f;
+
+        [DefaultValue(true)] public bool EnableLastStandCooldownBar { get; set; } = true;
+        [DefaultValue(true)] public bool EnableTeleportCooldownBar { get; set; } = true;
+        [DefaultValue(true)] public bool EnableDivineInterventionCooldownBar { get; set; } = true;
+        [DefaultValue(true)] public bool ShowSocketedCoresInTooltip { get; set; } = true;
+    }
+}
 }

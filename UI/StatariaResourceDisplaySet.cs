@@ -40,7 +40,7 @@ namespace Stataria
         public override void PreDrawResources(PlayerStatsSnapshot snapshot)
         {
             pixelTexture = TextureAssets.MagicPixel.Value;
-            var config = ModContent.GetInstance<StatariaConfig>();
+            var config = ModContent.GetInstance<StatariaClientConfig>();
 
             float screenPosX = Main.screenWidth * config.resourceBars.PositionXPercent;
             float screenPosY = Main.screenHeight * config.resourceBars.PositionYPercent;
