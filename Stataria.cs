@@ -301,42 +301,33 @@ namespace Stataria
             {
                 int playerIndex = reader.ReadInt32();
                 int itemSlot = reader.ReadInt32();
-
+                
+                if (playerIndex < 0 || playerIndex >= Main.maxPlayers)
+                    return;
+                    
+                Player player = Main.player[playerIndex];
+                if (player == null || !player.active)
+                    return;
+                    
                 Item item = null;
-
-                if (playerIndex == -2)
+                if (itemSlot >= 0 && itemSlot < player.inventory.Length)
                 {
-                    int worldItemIndex = itemSlot;
-                    if (worldItemIndex >= 0 && worldItemIndex < Main.maxItems && Main.item[worldItemIndex].active)
-                    {
-                        item = Main.item[worldItemIndex];
-                    }
+                    item = player.inventory[itemSlot];
                 }
-                else if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                else if (itemSlot == -1)
                 {
-                    Player player = Main.player[playerIndex];
-                    if (player != null && player.active)
-                    {
-                        if (itemSlot >= 0 && itemSlot < player.inventory.Length)
-                        {
-                            item = player.inventory[itemSlot];
-                        }
-                        else if (itemSlot == -1)
-                        {
-                            if (StatariaUI.SocketingPanel != null)
-                                item = StatariaUI.SocketingPanel.SocketingItemSlot;
-                        }
-                    }
+                    if (StatariaUI.SocketingPanel != null)
+                        item = StatariaUI.SocketingPanel.SocketingItemSlot;
                 }
-
+                
                 if (item == null || item.IsAir)
                     return;
-
+                    
                 var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
-
+                
                 int coreCount = reader.ReadInt32();
                 socketingData.SocketedCores.Clear();
-
+                
                 for (int i = 0; i < coreCount; i++)
                 {
                     CoreType type = (CoreType)reader.ReadInt32();
@@ -344,30 +335,30 @@ namespace Stataria
                     int count = reader.ReadInt32();
                     socketingData.SocketedCores.Add(new SocketedCore(type, tier, count));
                 }
-
+                
                 socketingData.ExpandedSlots = reader.ReadInt32();
                 socketingData.MaxSlots = SocketingGlobalItem.GetBaseSlots(item) + socketingData.ExpandedSlots;
-
-                if (Main.netMode == NetmodeID.Server && playerIndex != -2)
+                
+                if (Main.netMode == NetmodeID.Server)
                 {
                     var packet = ModContent.GetInstance<Stataria>().GetPacket();
                     packet.Write((byte)StatariaMessageType.SyncSocketedItem);
                     packet.Write(playerIndex);
                     packet.Write(itemSlot);
                     packet.Write(coreCount);
-
+                    
                     foreach (var core in socketingData.SocketedCores)
                     {
                         packet.Write((int)core.Type);
                         packet.Write(core.Tier);
                         packet.Write(core.Count);
                     }
-
+                    
                     packet.Write(socketingData.ExpandedSlots);
                     packet.Send(-1, whoAmI);
                 }
-
-                if (playerIndex >= 0 && Main.LocalPlayer.whoAmI == playerIndex && StatariaUI.SocketingUI?.CurrentState != null)
+                
+                if (Main.LocalPlayer.whoAmI == playerIndex && StatariaUI.SocketingUI?.CurrentState != null)
                 {
                     StatariaUI.SocketingPanel?.RefreshUI();
                 }

@@ -302,52 +302,6 @@ namespace Stataria
             return -1;
         }
 
-        public override bool OnPickup(Item item, Player player)
-        {
-            if (Main.netMode != NetmodeID.SinglePlayer && IsWeapon(item) && SocketedCores.Count > 0)
-            {
-                SyncSocketedItem(player, item, FindItemSlotInInventory(player, item));
-            }
-            return true;
-        }
-
-        public override void PostUpdate(Item item)
-        {
-            if (Main.netMode == NetmodeID.Server && item.whoAmI >= 0 && IsWeapon(item) && SocketedCores.Count > 0)
-            {
-                if (Main.GameUpdateCount % 60 == 0)
-                {
-                    SyncWorldItem(item);
-                }
-            }
-        }
-
-        public static void SyncWorldItem(Item item)
-        {
-            if (Main.netMode != NetmodeID.Server || !IsWeapon(item))
-                return;
-
-            var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
-            if (socketingData.SocketedCores.Count == 0 && socketingData.ExpandedSlots == 0)
-                return;
-
-            var packet = ModContent.GetInstance<Stataria>().GetPacket();
-            packet.Write((byte)StatariaMessageType.SyncSocketedItem);
-            packet.Write(-2);
-            packet.Write(item.whoAmI);
-            packet.Write(socketingData.SocketedCores.Count);
-
-            foreach (var core in socketingData.SocketedCores)
-            {
-                packet.Write((int)core.Type);
-                packet.Write(core.Tier);
-                packet.Write(core.Count);
-            }
-
-            packet.Write(socketingData.ExpandedSlots);
-            packet.Send();
-        }
-
         public override void NetSend(Item item, BinaryWriter writer)
         {
             writer.Write(SocketedCores.Count);
