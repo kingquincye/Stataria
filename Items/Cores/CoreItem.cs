@@ -33,8 +33,8 @@ namespace Stataria.Items.Cores
             return Tier switch
             {
                 1 => Item.buyPrice(0, 0, 50, 0),
-                2 => Item.buyPrice(0, 2, 0, 0),
-                3 => Item.buyPrice(0, 10, 0, 0),
+                2 => Item.buyPrice(0, 10, 0, 0),
+                3 => Item.buyPrice(1, 0, 0, 0),
                 _ => 0
             };
         }

@@ -1517,7 +1517,7 @@ Configs: {
 		}
 
 		EnableSocketingSystem: {
-			Label: Enable Socketing System
+			Label: Enable Socketing System (Experimental)
 			Tooltip: Enables or disables the entire socketing system including the UI tab.
 		}
 

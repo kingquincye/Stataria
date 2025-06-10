@@ -120,7 +120,7 @@ namespace Stataria
             [DefaultValue(456)][Range(200, 800)] public int BossBarWidth { get; set; } = 456;
             [DefaultValue(50f)][Range(0f, 100f)] public float BossBarXOffsetPercent { get; set; } = 50f;
             [DefaultValue(96f)][Range(0f, 100f)] public float BossBarYOffsetPercent { get; set; } = 96f;
-            [DefaultValue(5)][Range(1, 20)] public int MaxVisibleBossBars { get; set; } = 5;
+            [DefaultValue(4)][Range(1, 20)] public int MaxVisibleBossBars { get; set; } = 4;
             public List<int> MiniBossNPCIDs { get; set; } = new List<int>();
             public List<int> ForcedBossNPCIDs { get; set; } = new List<int>();
             public List<int> ExcludedBossNPCIDs { get; set; } = new List<int>();
@@ -146,10 +146,10 @@ namespace Stataria
             [Range(0f, 100f)][DefaultValue(25f)] public float PrecisionT3Effect { get; set; } = 25f;
 
             [Header("Cost_Configuration")]
-            [Range(0, 1000)][DefaultValue(15)] public int ExtractCost { get; set; } = 15;
-            [Range(0, 1000)][DefaultValue(25)] public int BaseExpandCost { get; set; } = 25;
+            [Range(0, 1000)][DefaultValue(10)] public int ExtractCost { get; set; } = 10;
+            [Range(0, 1000)][DefaultValue(20)] public int BaseExpandCost { get; set; } = 20;
             [Range(0f, 500f)][DefaultValue(50f)] public float ExpandCostIncrease { get; set; } = 50f;
-            [Range(0, 10)][DefaultValue(3)] public int MaxExpandedSlots { get; set; } = 3;
+            [Range(0, 50)][DefaultValue(10)] public int MaxExpandedSlots { get; set; } = 10;
         }
 
         public class RebirthSystem

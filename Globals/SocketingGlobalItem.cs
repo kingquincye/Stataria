@@ -6,6 +6,7 @@ using System.Linq;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 using System.IO;
+using Microsoft.CodeAnalysis;
 
 namespace Stataria
 {
@@ -144,11 +145,12 @@ namespace Stataria
 
         public static bool IsWeapon(Item item)
         {
-            return item.damage > 0 && (item.CountsAsClass(DamageClass.Melee) ||
-                   item.CountsAsClass(DamageClass.Ranged) ||
-                   item.CountsAsClass(DamageClass.Magic) ||
-                   item.CountsAsClass(DamageClass.Summon) ||
-                   item.CountsAsClass(DamageClass.Throwing));
+            return item.DamageType != DamageClass.Default;
+        }
+
+        public static bool CanReceiveDamage(Item item)
+        {
+            return item.damage > 0;
         }
 
         public static bool CanReceiveKnockback(Item item)
@@ -158,7 +160,7 @@ namespace Stataria
 
         public static bool CanReceiveCrit(Item item)
         {
-            return item.crit >= 0 && !item.CountsAsClass(DamageClass.Summon);
+            return item.damage > 0 && item.crit >= 0 && !item.CountsAsClass(DamageClass.Summon);
         }
 
         public static int GetBaseSlots(Item item)
@@ -204,7 +206,7 @@ namespace Stataria
 
             return type switch
             {
-                CoreType.Power => true,
+                CoreType.Power => CanReceiveDamage(item),
                 CoreType.Force => CanReceiveKnockback(item),
                 CoreType.Precision => CanReceiveCrit(item),
                 _ => false
@@ -276,7 +278,7 @@ namespace Stataria
             var packet = ModContent.GetInstance<Stataria>().GetPacket();
             packet.Write((byte)StatariaMessageType.SyncSocketedItem);
             packet.Write(player.whoAmI);
-            packet.Write(itemSlot); // -1 for UI slot, otherwise inventory index
+            packet.Write(itemSlot);
             packet.Write(socketingData.SocketedCores.Count);
 
             foreach (var core in socketingData.SocketedCores)
@@ -306,16 +308,14 @@ namespace Stataria
             {
                 SyncSocketedItem(player, item, FindItemSlotInInventory(player, item));
             }
-            return true; // Allow the pickup to proceed normally
+            return true;
         }
 
         public override void PostUpdate(Item item)
         {
-            // Sync socketed items when they're world items (dropped items)
             if (Main.netMode == NetmodeID.Server && item.whoAmI >= 0 && IsWeapon(item) && SocketedCores.Count > 0)
             {
-                // Only sync occasionally to avoid spam
-                if (Main.GameUpdateCount % 60 == 0) // Every second
+                if (Main.GameUpdateCount % 60 == 0)
                 {
                     SyncWorldItem(item);
                 }
@@ -333,8 +333,8 @@ namespace Stataria
 
             var packet = ModContent.GetInstance<Stataria>().GetPacket();
             packet.Write((byte)StatariaMessageType.SyncSocketedItem);
-            packet.Write(-2); // Special code for world items
-            packet.Write(item.whoAmI); // Use item's world ID instead of slot
+            packet.Write(-2);
+            packet.Write(item.whoAmI);
             packet.Write(socketingData.SocketedCores.Count);
 
             foreach (var core in socketingData.SocketedCores)
@@ -347,7 +347,7 @@ namespace Stataria
             packet.Write(socketingData.ExpandedSlots);
             packet.Send();
         }
-        
+
         public override void NetSend(Item item, BinaryWriter writer)
         {
             writer.Write(SocketedCores.Count);
@@ -364,7 +364,7 @@ namespace Stataria
         {
             int coreCount = reader.ReadInt32();
             SocketedCores.Clear();
-            
+
             for (int i = 0; i < coreCount; i++)
             {
                 CoreType type = (CoreType)reader.ReadInt32();
@@ -372,7 +372,7 @@ namespace Stataria
                 int count = reader.ReadInt32();
                 SocketedCores.Add(new SocketedCore(type, tier, count));
             }
-            
+
             ExpandedSlots = reader.ReadInt32();
             MaxSlots = GetBaseSlots(item) + ExpandedSlots;
         }
