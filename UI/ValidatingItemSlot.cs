@@ -63,6 +63,7 @@ namespace Stataria
         {
             Item currentItem = _itemArray[_itemIndex];
             Item mouseItem = Main.mouseItem;
+            bool itemChanged = false;
 
             if ((currentItem.IsAir || currentItem.stack <= 0) && !mouseItem.IsAir)
             {
@@ -71,9 +72,7 @@ namespace Stataria
                     _itemArray[_itemIndex] = mouseItem.Clone();
                     Main.mouseItem = new Item();
                     SoundEngine.PlaySound(SoundID.Grab);
-                }
-                else
-                {
+                    itemChanged = true;
                 }
             }
             else if (!currentItem.IsAir && mouseItem.IsAir)
@@ -81,6 +80,7 @@ namespace Stataria
                 Main.mouseItem = currentItem.Clone();
                 _itemArray[_itemIndex] = new Item();
                 SoundEngine.PlaySound(SoundID.Grab);
+                itemChanged = true;
             }
             else if (!currentItem.IsAir && !mouseItem.IsAir)
             {
@@ -95,6 +95,7 @@ namespace Stataria
 
                     _itemArray[_itemIndex] = currentItem;
                     SoundEngine.PlaySound(SoundID.Grab);
+                    itemChanged = true;
                 }
                 else
                 {
@@ -103,10 +104,17 @@ namespace Stataria
                         _itemArray[_itemIndex] = mouseItem.Clone();
                         Main.mouseItem = currentItem.Clone();
                         SoundEngine.PlaySound(SoundID.Grab);
+                        itemChanged = true;
                     }
-                    else
-                    {
-                    }
+                }
+            }
+
+            if (itemChanged && Main.netMode != NetmodeID.SinglePlayer)
+            {
+                Item newItem = _itemArray[_itemIndex];
+                if (!newItem.IsAir && SocketingGlobalItem.IsWeapon(newItem))
+                {
+                    SocketingGlobalItem.SyncSocketedItem(Main.LocalPlayer, newItem, -1);
                 }
             }
         }

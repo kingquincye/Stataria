@@ -19,7 +19,8 @@ namespace Stataria
         BossXP,
         SyncRewardedBosses,
         SyncEliteStatus,
-        SyncAbilities
+        SyncAbilities,
+        SyncSocketedItem
     }
 
     public class Stataria : Mod
@@ -294,6 +295,81 @@ namespace Stataria
                 if (Main.netMode == NetmodeID.Server)
                 {
                     rpg.SyncAbilities(toWho: -1, fromWho: whoAmI);
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncSocketedItem)
+            {
+                int playerIndex = reader.ReadInt32();
+                int itemSlot = reader.ReadInt32();
+
+                Item item = null;
+
+                if (playerIndex == -2)
+                {
+                    int worldItemIndex = itemSlot;
+                    if (worldItemIndex >= 0 && worldItemIndex < Main.maxItems && Main.item[worldItemIndex].active)
+                    {
+                        item = Main.item[worldItemIndex];
+                    }
+                }
+                else if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    Player player = Main.player[playerIndex];
+                    if (player != null && player.active)
+                    {
+                        if (itemSlot >= 0 && itemSlot < player.inventory.Length)
+                        {
+                            item = player.inventory[itemSlot];
+                        }
+                        else if (itemSlot == -1)
+                        {
+                            if (StatariaUI.SocketingPanel != null)
+                                item = StatariaUI.SocketingPanel.SocketingItemSlot;
+                        }
+                    }
+                }
+
+                if (item == null || item.IsAir)
+                    return;
+
+                var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
+
+                int coreCount = reader.ReadInt32();
+                socketingData.SocketedCores.Clear();
+
+                for (int i = 0; i < coreCount; i++)
+                {
+                    CoreType type = (CoreType)reader.ReadInt32();
+                    int tier = reader.ReadInt32();
+                    int count = reader.ReadInt32();
+                    socketingData.SocketedCores.Add(new SocketedCore(type, tier, count));
+                }
+
+                socketingData.ExpandedSlots = reader.ReadInt32();
+                socketingData.MaxSlots = SocketingGlobalItem.GetBaseSlots(item) + socketingData.ExpandedSlots;
+
+                if (Main.netMode == NetmodeID.Server && playerIndex != -2)
+                {
+                    var packet = ModContent.GetInstance<Stataria>().GetPacket();
+                    packet.Write((byte)StatariaMessageType.SyncSocketedItem);
+                    packet.Write(playerIndex);
+                    packet.Write(itemSlot);
+                    packet.Write(coreCount);
+
+                    foreach (var core in socketingData.SocketedCores)
+                    {
+                        packet.Write((int)core.Type);
+                        packet.Write(core.Tier);
+                        packet.Write(core.Count);
+                    }
+
+                    packet.Write(socketingData.ExpandedSlots);
+                    packet.Send(-1, whoAmI);
+                }
+
+                if (playerIndex >= 0 && Main.LocalPlayer.whoAmI == playerIndex && StatariaUI.SocketingUI?.CurrentState != null)
+                {
+                    StatariaUI.SocketingPanel?.RefreshUI();
                 }
             }
         }

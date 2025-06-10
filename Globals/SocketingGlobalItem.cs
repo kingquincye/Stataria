@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
+using System.IO;
 
 namespace Stataria
 {
@@ -260,6 +261,120 @@ namespace Stataria
             return SocketedCores
                 .Where(core => core.Type == type)
                 .Sum(core => core.GetEffectValue() * core.Count);
+        }
+
+        public static void SyncSocketedItem(Player player, Item item, int itemSlot = -1)
+        {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+                return;
+
+            if (!IsWeapon(item) || item.IsAir)
+                return;
+
+            var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
+
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
+            packet.Write((byte)StatariaMessageType.SyncSocketedItem);
+            packet.Write(player.whoAmI);
+            packet.Write(itemSlot); // -1 for UI slot, otherwise inventory index
+            packet.Write(socketingData.SocketedCores.Count);
+
+            foreach (var core in socketingData.SocketedCores)
+            {
+                packet.Write((int)core.Type);
+                packet.Write(core.Tier);
+                packet.Write(core.Count);
+            }
+
+            packet.Write(socketingData.ExpandedSlots);
+            packet.Send();
+        }
+
+        public static int FindItemSlotInInventory(Player player, Item targetItem)
+        {
+            for (int i = 0; i < player.inventory.Length; i++)
+            {
+                if (player.inventory[i] == targetItem)
+                    return i;
+            }
+            return -1;
+        }
+
+        public override bool OnPickup(Item item, Player player)
+        {
+            if (Main.netMode != NetmodeID.SinglePlayer && IsWeapon(item) && SocketedCores.Count > 0)
+            {
+                SyncSocketedItem(player, item, FindItemSlotInInventory(player, item));
+            }
+            return true; // Allow the pickup to proceed normally
+        }
+
+        public override void PostUpdate(Item item)
+        {
+            // Sync socketed items when they're world items (dropped items)
+            if (Main.netMode == NetmodeID.Server && item.whoAmI >= 0 && IsWeapon(item) && SocketedCores.Count > 0)
+            {
+                // Only sync occasionally to avoid spam
+                if (Main.GameUpdateCount % 60 == 0) // Every second
+                {
+                    SyncWorldItem(item);
+                }
+            }
+        }
+
+        public static void SyncWorldItem(Item item)
+        {
+            if (Main.netMode != NetmodeID.Server || !IsWeapon(item))
+                return;
+
+            var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
+            if (socketingData.SocketedCores.Count == 0 && socketingData.ExpandedSlots == 0)
+                return;
+
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
+            packet.Write((byte)StatariaMessageType.SyncSocketedItem);
+            packet.Write(-2); // Special code for world items
+            packet.Write(item.whoAmI); // Use item's world ID instead of slot
+            packet.Write(socketingData.SocketedCores.Count);
+
+            foreach (var core in socketingData.SocketedCores)
+            {
+                packet.Write((int)core.Type);
+                packet.Write(core.Tier);
+                packet.Write(core.Count);
+            }
+
+            packet.Write(socketingData.ExpandedSlots);
+            packet.Send();
+        }
+        
+        public override void NetSend(Item item, BinaryWriter writer)
+        {
+            writer.Write(SocketedCores.Count);
+            foreach (var core in SocketedCores)
+            {
+                writer.Write((int)core.Type);
+                writer.Write(core.Tier);
+                writer.Write(core.Count);
+            }
+            writer.Write(ExpandedSlots);
+        }
+
+        public override void NetReceive(Item item, BinaryReader reader)
+        {
+            int coreCount = reader.ReadInt32();
+            SocketedCores.Clear();
+            
+            for (int i = 0; i < coreCount; i++)
+            {
+                CoreType type = (CoreType)reader.ReadInt32();
+                int tier = reader.ReadInt32();
+                int count = reader.ReadInt32();
+                SocketedCores.Add(new SocketedCore(type, tier, count));
+            }
+            
+            ExpandedSlots = reader.ReadInt32();
+            MaxSlots = GetBaseSlots(item) + ExpandedSlots;
         }
     }
 }

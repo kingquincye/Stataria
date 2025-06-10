@@ -262,10 +262,14 @@ namespace Stataria
             socketingData.ExpandSlots();
 
             SoundEngine.PlaySound(SoundID.Research);
-            RefreshUI();
 
-            if (Main.netMode == NetmodeID.MultiplayerClient)
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                SocketingGlobalItem.SyncSocketedItem(player, weapon, -1);
                 rpg.SyncPlayer(-1, player.whoAmI, false);
+            }
+
+            RefreshUI();
         }
 
         private void OnAttachClick(UIMouseEvent evt, UIElement listeningElement)
@@ -288,6 +292,12 @@ namespace Stataria
             socketingData.AttachCore(type, tier);
 
             SoundEngine.PlaySound(SoundID.Grab);
+
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                SocketingGlobalItem.SyncSocketedItem(player, weapon, -1);
+            }
+
             RefreshUI();
             selectedCompatibleCore = null;
         }
@@ -316,11 +326,15 @@ namespace Stataria
             player.QuickSpawnItem(player.GetSource_FromThis(), coreItemType, 1);
 
             SoundEngine.PlaySound(SoundID.Grab);
+
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                SocketingGlobalItem.SyncSocketedItem(player, weapon, -1);
+                rpg.SyncPlayer(-1, player.whoAmI, false);
+            }
+
             RefreshUI();
             selectedAttachedCore = null;
-
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                rpg.SyncPlayer(-1, player.whoAmI, false);
         }
 
         private int GetCoreItemType(CoreType type, int tier)
@@ -564,12 +578,32 @@ namespace Stataria
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
             var config = ModContent.GetInstance<StatariaConfig>().socketingSystem;
 
+            if (Main.netMode == NetmodeID.MultiplayerClient && hasWeapon)
+            {
+                Item weapon = SocketingItemSlot;
+                var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
+
+                if (selectedCompatibleCore.HasValue)
+                {
+                    var (type, tier) = selectedCompatibleCore.Value;
+                    canAttach = socketingData.CanAttachCore(type, weapon, player) &&
+                            player.HasItem(GetCoreItemType(type, tier));
+                }
+
+                if (selectedAttachedCore.HasValue)
+                {
+                    canExtract = socketingData.SocketedCores.Any(c =>
+                        c.Type == selectedAttachedCore.Value.Type &&
+                        c.Tier == selectedAttachedCore.Value.Tier);
+                }
+            }
+
             if (hasWeapon)
             {
                 Item weapon = SocketingItemSlot;
                 var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
                 bool canExpand = socketingData.ExpandedSlots < config.MaxExpandedSlots &&
-                               rpg.RebirthPoints >= socketingData.GetExpandCost();
+                            rpg.RebirthPoints >= socketingData.GetExpandCost();
 
                 expandButton.BackgroundColor = canExpand
                     ? new Color(80, 120, 80, 200)
