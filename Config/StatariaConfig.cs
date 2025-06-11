@@ -9,43 +9,43 @@ namespace Stataria
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         [SeparatePage]
-        public GeneralBalance generalBalance = new GeneralBalance();
+        public GeneralBalance generalBalance { get; set; } = new GeneralBalance();
 
         [SeparatePage]
-        public XPVerification xpVerification = new XPVerification();
+        public XPVerification xpVerification { get; set; } = new XPVerification();
 
         [SeparatePage]
-        public UISettings uiSettings = new UISettings();
+        public UISettings uiSettings { get; set; } = new UISettings();
 
         [SeparatePage]
-        public ResourceBarsConfig resourceBars = new ResourceBarsConfig();
+        public ResourceBarsConfig resourceBars { get; set; } = new ResourceBarsConfig();
 
         [SeparatePage]
-        public SocketingSystem socketingSystem = new SocketingSystem();
+        public SocketingSystem socketingSystem { get; set; } = new SocketingSystem();
 
         [SeparatePage]
-        public RebirthSystem rebirthSystem = new RebirthSystem();
+        public RebirthSystem rebirthSystem { get; set; } = new RebirthSystem();
 
         [SeparatePage]
-        public RebirthAbilities rebirthAbilities = new RebirthAbilities();
+        public RebirthAbilities rebirthAbilities { get; set; } = new RebirthAbilities();
 
         [SeparatePage]
-        public RoleSettings roleSettings = new RoleSettings();
+        public RoleSettings roleSettings { get; set; } = new RoleSettings();
 
         [SeparatePage]
-        public MultiplayerSettings multiplayerSettings = new MultiplayerSettings();
+        public MultiplayerSettings multiplayerSettings { get; set; } = new MultiplayerSettings();
 
         [SeparatePage]
-        public EnemyScaling enemyScaling = new EnemyScaling();
+        public EnemyScaling enemyScaling { get; set; } = new EnemyScaling();
 
         [SeparatePage]
-        public StatSettings statSettings = new StatSettings();
+        public StatSettings statSettings { get; set; } = new StatSettings();
 
         [SeparatePage]
-        public ModIntegration modIntegration = new ModIntegration();
+        public ModIntegration modIntegration { get; set; } = new ModIntegration();
 
         [SeparatePage]
-        public Advanced advanced = new Advanced();
+        public Advanced advanced { get; set; } = new Advanced();
 
         public class GeneralBalance
         {
@@ -73,22 +73,12 @@ namespace Stataria
         {
             [Header("XP_Verification")]
             [DefaultValue(true)] public bool EnableXPVerification { get; set; } = true;
-
             [Range(1000, 10000000)][DefaultValue(100000)] public int BaseXPThreshold { get; set; } = 100000;
-
             [Range(0.01f, 10f)][DefaultValue(0.5f)] public float LevelScalingFactor { get; set; } = 0.5f;
-
             [Range(0f, 10f)][DefaultValue(1f)] public float RebirthScalingFactor { get; set; } = 1f;
-
             [Range(0.1f, 5f)][DefaultValue(1.5f)] public float RelativeXPThreshold { get; set; } = 1.5f;
-
             [Range(0f, 0.5f)][DefaultValue(0.1f)] public float RebirthRelativeThresholdReduction { get; set; } = 0.1f;
-
-            public List<string> WhitelistedSources { get; set; } = new List<string>
-            {
-                "Boss Bonus",
-                "Boss HP"
-            };
+            public List<string> WhitelistedSources { get; set; } = new List<string>{"Boss Bonus", "Boss HP"};
         }
 
         public class UISettings
@@ -136,11 +126,9 @@ namespace Stataria
             [Range(0f, 100f)][DefaultValue(5f)] public float PowerT1Effect { get; set; } = 5f;
             [Range(0f, 100f)][DefaultValue(10f)] public float PowerT2Effect { get; set; } = 10f;
             [Range(0f, 100f)][DefaultValue(25f)] public float PowerT3Effect { get; set; } = 25f;
-            
             [Range(0f, 100f)][DefaultValue(5f)] public float ForceT1Effect { get; set; } = 5f;
             [Range(0f, 100f)][DefaultValue(10f)] public float ForceT2Effect { get; set; } = 10f;
             [Range(0f, 100f)][DefaultValue(25f)] public float ForceT3Effect { get; set; } = 25f;
-            
             [Range(0f, 100f)][DefaultValue(5f)] public float PrecisionT1Effect { get; set; } = 5f;
             [Range(0f, 100f)][DefaultValue(10f)] public float PrecisionT2Effect { get; set; } = 10f;
             [Range(0f, 100f)][DefaultValue(25f)] public float PrecisionT3Effect { get; set; } = 25f;
@@ -164,7 +152,7 @@ namespace Stataria
             [DefaultValue(false)] public bool EnableDynamicRebirthLevelCap { get; set; } = false;
             [Range(1.1f, 10f)][DefaultValue(2f)][Increment(0.1f)] public float DynamicRebirthLevelCapMultiplier { get; set; } = 2f;
             [DefaultValue(false)] public bool EnableRebirthBonusStatPoints { get; set; } = false;
-            [Range(0.1f, 10f)][DefaultValue(0.5f)] public float RebirthStatPointsMultiplier { get; set; } = 0.25f;
+            [Range(0.1f, 10f)][DefaultValue(0.25f)] public float RebirthStatPointsMultiplier { get; set; } = 0.25f;
             [DefaultValue(true)] public bool EnableRebirthStatPointRecalculation { get; set; } = true;
             [DefaultValue(false)] public bool EnableProgressiveStatCaps { get; set; } = false;
             [Range(0.1f, 10f)][DefaultValue(0.5f)] public float ProgressiveStatCapMultiplier { get; set; } = 0.5f;
@@ -182,7 +170,7 @@ namespace Stataria
             [DefaultValue(false)] public bool UsePercentageGhostStats { get; set; } = false;
             [Range(0.1f, 10f)][DefaultValue(0.5f)] public float GhostStatsPercentage { get; set; } = 0.5f;
             [Range(1, 1000)][DefaultValue(10)] public int GhostStatsFlatAmount { get; set; } = 10;
-            public List<string> GhostStatsAffectedStats { get; set; } = new List<string> { "VIT", "END" };
+            public List<string> GhostStatsAffectedStats { get; set; } = new List<string> {"VIT", "END"};
         }
 
         public class RebirthAbilities
@@ -393,7 +381,9 @@ namespace Stataria
             [DefaultValue(5)] public int END_DefensePerX { get; set; } = 5;
             [DefaultValue(10)] public int END_Aggro { get; set; } = 10;
             [DefaultValue(false)] public bool EnableKnockbackResist { get; set; } = false;
+            [Range(0f, 10f)][DefaultValue(1f)] public float END_KnockbackResistPerPoint { get; set; } = 1f;
             [DefaultValue(false)] public bool EnableDR { get; set; } = false;
+            [Range(0f, 10f)][DefaultValue(1f)] public float END_DRPerPoint { get; set; } = 1f;
             [DefaultValue(false)] public bool EnableEnemyKnockback { get; set; } = false;
             [DefaultValue(0.1f)] public float END_EnemyKnockbackMultiplier { get; set; } = 0.1f;
 
@@ -437,7 +427,7 @@ namespace Stataria
             [DefaultValue(75)] public int RGE_StealthConsumptionReductionThreshold { get; set; } = 75;
 
             [Header("POW_CalamityEnhancements")]
-            [Range(0f, 10f)][DefaultValue(1f)] public float POW_RageDamage { get; set; } = 0.5f;
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float POW_RageDamage { get; set; } = 0.5f;
             [DefaultValue(5)] public int POW_RageDuration { get; set; } = 5;
             [Range(0, 100000)][DefaultValue(2000)] public int POW_MaxRageDurationBonus { get; set; } = 2000;
             [DefaultValue(2)] public int POW_AdrenalineDuration { get; set; } = 2;
@@ -456,7 +446,7 @@ namespace Stataria
             [DefaultValue(1)] public int HLR_ArmorPen { get; set; } = 1;
 
             [Header("CLK_Settings")]
-            [Range(0f, 10f)][DefaultValue(1f)] public float CLK_Damage { get; set; } = 0.5f;
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float CLK_Damage { get; set; } = 0.5f;
             [Range(0f, 10f)][DefaultValue(1f)] public float CLK_Radius { get; set; } = 1f;
             [Range(0f, 10f)][DefaultValue(2f)] public float CLK_EffectThreshold { get; set; } = 2f;
         }

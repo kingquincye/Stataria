@@ -258,7 +258,8 @@ namespace Stataria
                     }
                     else if (cfg.statSettings.EnableKnockbackResist)
                     {
-                        tooltips.Add($"+{Math.Min(effectiveEND, 100):0.#}% Knockback Resist (+1% per point)");
+                        float knockbackResist = Math.Min(effectiveEND * cfg.statSettings.END_KnockbackResistPerPoint, 100f);
+                        tooltips.Add($"+{knockbackResist:0.#}% Knockback Resist (+{cfg.statSettings.END_KnockbackResistPerPoint:0.#}% per point)");
                     }
 
                     if (isGuardian && cfg.roleSettings.GuardianDisableEndEffects)
@@ -267,7 +268,7 @@ namespace Stataria
                     }
                     else if (cfg.statSettings.EnableDR)
                     {
-                        float drPercent = 100f * (1f - (1f / (1f + effectiveEND * 0.01f)));
+                        float drPercent = 100f * (1f - (1f / (1f + effectiveEND * (config.statSettings.END_DRPerPoint / 100f))));
                         tooltips.Add($"-{drPercent:0.#}% Damage Taken (Diminishing)");
                     }
 

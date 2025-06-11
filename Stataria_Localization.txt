@@ -832,6 +832,16 @@ Configs: {
 			Label: CLK Cap
 			Tooltip: ""
 		}
+
+		END_KnockbackResistPerPoint: {
+			Label: Knockback Resist
+			Tooltip: Percentage of knockback resistance gained.
+		}
+
+		END_DRPerPoint: {
+			Label: Damage Reduction
+			Tooltip: Percentage of damage reduction gained. Reduces incoming damage from all sources.
+		}
 	}
 
 	ModIntegration: {

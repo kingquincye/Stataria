@@ -2105,13 +2105,13 @@ namespace Stataria
 
             if (config.statSettings.EnableKnockbackResist && !isGuardian)
             {
-                float kbResist = Math.Min(effectiveEND * 0.01f, 1f);
+                float kbResist = Math.Min(effectiveEND * (config.statSettings.END_KnockbackResistPerPoint / 100f), 1f);
                 modifiers.Knockback *= 1f - kbResist;
             }
 
             if (config.statSettings.EnableDR && (!isGuardian || !config.roleSettings.GuardianDisableEndEffects))
             {
-                float diminishingDR = 1f - (1f / (1f + effectiveEND * 0.01f));
+                float diminishingDR = 1f - (1f / (1f + (effectiveEND * config.statSettings.END_DRPerPoint / 100f)));
                 modifiers.FinalDamage *= 1f - diminishingDR;
             }
 
