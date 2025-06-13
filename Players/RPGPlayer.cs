@@ -220,6 +220,10 @@ namespace Stataria
 
             RebirthAbilities.Clear();
 
+            RebirthAbilities["EnhancedFortune"] = new RebirthAbility(
+                "Enhanced Fortune", "Grants additional luck per level when toggled on, improving drop rates and other luck-based mechanics.", 30, true, config.rebirthAbilities.MaxEnhancedFortuneLevel
+            ) { AbilityType = RebirthAbilityType.Toggleable };
+
             RebirthAbilities["ReducedPotionSickness"] = new RebirthAbility(
             "Reduced Potion Sickness", "Reduces potion sickness duration by 50%", 20, false, 1);
 

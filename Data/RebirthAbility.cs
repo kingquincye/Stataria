@@ -119,6 +119,13 @@ namespace Stataria
                 }
                 MaxLevel = maxLevel;
             }
+            else if (Name == "Enhanced Fortune")
+            {
+                float luckPerLevel = config.rebirthAbilities.LuckPerAbilityLevel;
+                int maxLevel = config.rebirthAbilities.MaxEnhancedFortuneLevel;
+                description = $"Grants +{luckPerLevel} luck per level when toggled on, improving drop rates and other luck-based mechanics.";
+                MaxLevel = maxLevel;
+            }
 
             if (IsUnlocked && IsStackable)
             {

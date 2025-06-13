@@ -45,6 +45,9 @@ namespace Stataria
         public ModIntegration modIntegration { get; set; } = new ModIntegration();
 
         [SeparatePage]
+        public ExtraLuckSettings extraLuckSettings { get; set; } = new ExtraLuckSettings();
+
+        [SeparatePage]
         public Advanced advanced { get; set; } = new Advanced();
 
         public class GeneralBalance
@@ -201,6 +204,10 @@ namespace Stataria
             [DefaultValue(40f)][Range(2f, 120f)] public float AutoClickerSpeedFactorAtLevel1 { get; set; } = 40f;
             [DefaultValue(-7f)][Range(-20f, 0f)] public float AutoClickerSpeedFactorImprovementPerLevel { get; set; } = -7f;
             [DefaultValue(false)] public bool AutoClickerPreventsEffects { get; set; } = false;
+
+            [Header("Enhanced_Fortune")]
+            [DefaultValue(0.1f)][Range(0f, 10f)] public float LuckPerAbilityLevel { get; set; } = 0.1f;
+            [Range(1, 50)][DefaultValue(10)] public int MaxEnhancedFortuneLevel { get; set; } = 10;
         }
 
         public class RoleSettings
@@ -449,6 +456,13 @@ namespace Stataria
             [Range(0f, 10f)][DefaultValue(0.5f)] public float CLK_Damage { get; set; } = 0.5f;
             [Range(0f, 10f)][DefaultValue(1f)] public float CLK_Radius { get; set; } = 1f;
             [Range(0f, 10f)][DefaultValue(2f)] public float CLK_EffectThreshold { get; set; } = 2f;
+        }
+
+        public class ExtraLuckSettings
+        {
+            [Header("Extra_Luck_System")]
+            [DefaultValue(false)] public bool EnableExtraLuckSystem { get; set; } = false;
+            [Range(-15f, 15f)][DefaultValue(2f)] public float BaseExtraLuck { get; set; } = 2f;
         }
 
         public class Advanced

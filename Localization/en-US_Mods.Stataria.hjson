@@ -74,6 +74,11 @@ Configs: {
 			Label: Socketing System
 			Tooltip: Configure the socketing system for weapons, cores, and upgrade costs.
 		}
+
+		extraLuckSettings: {
+			Tooltip: Configure the enhanced luck system that affects drop rates and other luck-based mechanics.
+			Label: Extra Luck Settings
+		}
 	}
 
 	GeneralBalance: {
@@ -1002,6 +1007,7 @@ Configs: {
 			Extra_Accessory_Slots: Extra Accessory Slots
 			Enhanced_Spawns: Enhanced Spawns
 			Auto_Clicker: Auto Clicker
+			Enhanced_Fortune: Enhanced Fortune
 		}
 
 		LastStandHealPercent: {
@@ -1077,6 +1083,16 @@ Configs: {
 		AutoClickerPreventsEffects: {
 			Label: Prevents Effects
 			Tooltip: If enabled, auto-clicks from this ability will NOT trigger item click effects. If false, they WILL attempt to trigger effects.
+		}
+
+		MaxEnhancedFortuneLevel: {
+			Tooltip: Max level for the ability.
+			Label: Max Enhanced Fortune Level
+		}
+
+		LuckPerAbilityLevel: {
+			Tooltip: Amount of extra luck granted per level of the Enhanced Fortune rebirth ability.
+			Label: Luck Per Ability Level
 		}
 	}
 
@@ -1600,6 +1616,21 @@ Configs: {
 			Label: Max Expanded Slots
 			Tooltip: Maximum number of additional slots that can be added to an item through expansion.
 		}
+	}
+
+	ExtraLuckSettings: {
+		BaseExtraLuck: {
+			Tooltip: Base amount of extra luck provided by the server to all players. Positive values improve luck, negative values worsen it.
+			Label: Base Extra Luck
+		}
+
+		EnableExtraLuckSystem: {
+			Tooltip: When enabled, allows the server to provide base extra luck and players to gain additional luck through rebirth abilities.
+			Label: Enable Extra Luck System
+		}
+
+		Headers.Extra_Luck_System: Extra Luck System
+		Tooltip: ""
 	}
 }
 
