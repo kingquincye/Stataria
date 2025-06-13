@@ -40,15 +40,15 @@ namespace Stataria
         public override void PreDrawResources(PlayerStatsSnapshot snapshot)
         {
             pixelTexture = TextureAssets.MagicPixel.Value;
-            var config = ModContent.GetInstance<StatariaConfig>();
+            var config = ModContent.GetInstance<StatariaClientConfig>();
 
-            float screenPosX = Main.screenWidth * config.resourceBars.PositionXPercent;
-            float screenPosY = Main.screenHeight * config.resourceBars.PositionYPercent;
+            float screenPosX = Main.screenWidth * config.PositionXPercent;
+            float screenPosY = Main.screenHeight * config.PositionYPercent;
 
             basePosition = new Vector2(screenPosX, screenPosY);
-            barWidth = config.resourceBars.BarWidth;
-            barHeight = config.resourceBars.BarHeight;
-            barPadding = config.resourceBars.BarPadding;
+            barWidth = config.BarWidth;
+            barHeight = config.BarHeight;
+            barPadding = config.BarPadding;
         }
 
         public override void DrawLife(SpriteBatch spriteBatch)

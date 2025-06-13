@@ -139,7 +139,7 @@ namespace Stataria
 
         private void DrawAllBossBars(SpriteBatch spriteBatch)
         {
-            var config = ModContent.GetInstance<StatariaConfig>();
+            var config = ModContent.GetInstance<StatariaClientConfig>();
 
             UpdateBossBarData();
 
@@ -155,7 +155,7 @@ namespace Stataria
 
         private void UpdateBossBarData()
         {
-            var config = ModContent.GetInstance<StatariaConfig>();
+            var config = ModContent.GetInstance<StatariaClientConfig>();
             var newBars = new List<BossBarUIData>();
 
             for (int i = 0; i < Main.maxNPCs; i++)
@@ -196,9 +196,9 @@ namespace Stataria
 
             newBars.Sort((a, b) => a.DistanceToPlayer.CompareTo(b.DistanceToPlayer));
             
-            if (config.resourceBars.MaxVisibleBossBars > 0 && newBars.Count > config.resourceBars.MaxVisibleBossBars)
+            if (config.MaxVisibleBossBars > 0 && newBars.Count > config.MaxVisibleBossBars)
             {
-                newBars = newBars.Take(config.resourceBars.MaxVisibleBossBars).ToList();
+                newBars = newBars.Take(config.MaxVisibleBossBars).ToList();
             }
 
             currentlyDisplayedBars = newBars;
@@ -241,23 +241,23 @@ namespace Stataria
 
         private bool IsBossForBar(NPC npc)
         {
-            var config = ModContent.GetInstance<StatariaConfig>();
+            var config = ModContent.GetInstance<StatariaClientConfig>();
 
             if (ExcludeFromBossBar.Contains(npc.type)) return false;
 
-            if (config.resourceBars.ExcludedBossNPCIDs?.Contains(npc.type) == true) return false;
+            if (config.ExcludedBossNPCIDs?.Contains(npc.type) == true) return false;
 
             if (npc.boss && !npc.friendly) return true;
 
             if (TreatAsBoss.Contains(npc.type)) return true;
 
-            if (config.resourceBars.MiniBossNPCIDs?.Contains(npc.type) == true) return true;
-            if (config.resourceBars.ForcedBossNPCIDs?.Contains(npc.type) == true) return true;
+            if (config.MiniBossNPCIDs?.Contains(npc.type) == true) return true;
+            if (config.ForcedBossNPCIDs?.Contains(npc.type) == true) return true;
 
             return false;
         }
 
-        private BossBarUIData CreateBossBarData(NPC npc, StatariaConfig config)
+        private BossBarUIData CreateBossBarData(NPC npc, StatariaClientConfig config)
         {
             var barData = new BossBarUIData
             {
@@ -369,23 +369,23 @@ namespace Stataria
             return -1;
         }
 
-        private void CalculateBarPositions(StatariaConfig config)
+        private void CalculateBarPositions(StatariaClientConfig config)
         {
             if (currentlyDisplayedBars.Count == 0) return;
 
-            float anchorX = Main.screenWidth * (config.resourceBars.BossBarXOffsetPercent / 100f);
-            float anchorY = Main.screenHeight * (config.resourceBars.BossBarYOffsetPercent / 100f);
+            float anchorX = Main.screenWidth * (config.BossBarXOffsetPercent / 100f);
+            float anchorY = Main.screenHeight * (config.BossBarYOffsetPercent / 100f);
 
-            bool expandDown = config.resourceBars.BossBarYOffsetPercent < 50f;
+            bool expandDown = config.BossBarYOffsetPercent < 50f;
 
-            float barWidth = config.resourceBars.BossBarWidth * config.resourceBars.BossBarScale;
-            float barHeight = 22f * config.resourceBars.BossBarScale;
-            float verticalSpacing = 6f * config.resourceBars.BossBarScale;
+            float barWidth = config.BossBarWidth * config.BossBarScale;
+            float barHeight = 22f * config.BossBarScale;
+            float verticalSpacing = 6f * config.BossBarScale;
 
             float nameHeight = 0f;
-            if (config.resourceBars.ShowBossName)
+            if (config.ShowBossName)
             {
-                nameHeight = FontAssets.MouseText.Value.LineSpacing * config.resourceBars.BossBarScale;
+                nameHeight = FontAssets.MouseText.Value.LineSpacing * config.BossBarScale;
             }
 
             float totalEntryHeight = nameHeight + barHeight + verticalSpacing;
@@ -407,12 +407,12 @@ namespace Stataria
                 currentlyDisplayedBars[i].CalculatedPosition = new Vector2(anchorX - barWidth / 2f, barY);
                 currentlyDisplayedBars[i].CurrentWidth = (int)barWidth;
                 currentlyDisplayedBars[i].CurrentHeight = (int)barHeight;
-                currentlyDisplayedBars[i].CurrentScale = config.resourceBars.BossBarScale;
+                currentlyDisplayedBars[i].CurrentScale = config.BossBarScale;
                 currentlyDisplayedBars[i].NameHeight = nameHeight;
             }
         }
 
-        private void DrawSingleBossBar(SpriteBatch spriteBatch, BossBarUIData barData, StatariaConfig config)
+        private void DrawSingleBossBar(SpriteBatch spriteBatch, BossBarUIData barData, StatariaClientConfig config)
         {
             Vector2 position = barData.CalculatedPosition;
             int width = barData.CurrentWidth;
@@ -436,12 +436,12 @@ namespace Stataria
                 DrawBossIcon(spriteBatch, barData, position, scale);
             }
 
-            if (config.resourceBars.ShowBossHealthText)
+            if (config.ShowBossHealthText)
             {
                 DrawHealthText(spriteBatch, barData, position, height);
             }
 
-            if (config.resourceBars.ShowBossName)
+            if (config.ShowBossName)
             {
                 DrawBossName(spriteBatch, barData, position, height);
             }

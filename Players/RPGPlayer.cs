@@ -939,6 +939,7 @@ namespace Stataria
         public void ApplyXPDirectly(long amount, string source)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
+            var configClient = ModContent.GetInstance<StatariaClientConfig>();
             int effectiveLevelCap = GetEffectiveLevelCap();
 
             XP += amount;
@@ -947,25 +948,25 @@ namespace Stataria
             {
                 xpBarTimer = xpBarDuration;
 
-                bool showPopup = config.uiSettings.ShowXPGainPopups;
+                bool showPopup = configClient.ShowXPGainPopups;
 
                 if (source.Contains("Melee") || source.Contains("Proj") || source.Contains("Damage"))
                 {
-                    showPopup = showPopup && config.uiSettings.ShowDamageXPPopups;
+                    showPopup = showPopup && configClient.ShowDamageXPPopups;
 
                     if (config.generalBalance.DamageXP <= 0)
                         showPopup = false;
                 }
                 else if (source.Contains("Kill"))
                 {
-                    showPopup = showPopup && config.uiSettings.ShowKillXPPopups;
+                    showPopup = showPopup && configClient.ShowKillXPPopups;
 
                     if (config.generalBalance.KillXP <= 0)
                         showPopup = false;
                 }
                 else if (source.Contains("Boss"))
                 {
-                    showPopup = showPopup && config.uiSettings.ShowBossXPPopups;
+                    showPopup = showPopup && configClient.ShowBossXPPopups;
 
                     if ((config.generalBalance.UseFlatBossXP && config.generalBalance.DefaultFlatBossXP <= 0) ||
                         (!config.generalBalance.UseFlatBossXP && config.generalBalance.BossXP <= 0))

@@ -9,7 +9,8 @@ namespace Stataria
     {
         protected override bool IsVisible(Player player, RPGPlayer rpgPlayer, StatariaConfig config)
         {
-            if (!config.roleSettings.EnableDivineInterventionCooldownBar) return false;
+            var configClient = ModContent.GetInstance<StatariaClientConfig>();
+            if (!configClient.EnableDivineInterventionCooldownBar) return false;
             
             if (rpgPlayer.ActiveRole?.ID != "Cleric" || rpgPlayer.ActiveRole.Status != RoleStatus.Active) 
                 return false;

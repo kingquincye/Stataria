@@ -8,16 +8,11 @@ ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
 
 Configs: {
 	StatariaConfig: {
-		DisplayName: Stataria Config
+		DisplayName: Server Config
 
 		generalBalance: {
 			Label: General Balance
 			Tooltip: Configure XP gain, level caps, and other general balance options.
-		}
-
-		uiSettings: {
-			Label: UI Settings
-			Tooltip: Customize the appearance and behavior of XP bars, level indicators, and other UI elements.
 		}
 
 		rebirthSystem: {
@@ -48,11 +43,6 @@ Configs: {
 		rebirthAbilities: {
 			Label: Rebirth Abilities
 			Tooltip: Configure special abilities that players can unlock with Rebirth Points.
-		}
-
-		resourceBars: {
-			Label: Resource Bars
-			Tooltip: Customize the appearance and position of health, mana, and boss health bars.
 		}
 
 		advanced: {
@@ -153,51 +143,6 @@ Configs: {
 		EnableStatPointRecalculation: {
 			Tooltip: When enabled, players will automatically receive additional stat points if Stat Points Per Level is increased.
 			Label: Enable Stat Point Recalculation
-		}
-	}
-
-	UISettings: {
-		Tooltip: ""
-		Headers.UI_Settings: UI Settings
-
-		ShowXPBarAbovePlayer: {
-			Label: Show XP Bar Above Player
-			Tooltip: Toggles the floating XP bar that appears above your character when gaining XP.
-		}
-
-		ShowXPGainPopups: {
-			Label: Show XP Gain Popups
-			Tooltip: Enables whether you see the XP gain popups or not. If disabled, nothing will be shown at all.
-		}
-
-		ShowDamageXPPopups: {
-			Label: Show Damage XP Popups
-			Tooltip: When XP gain popups is enabled, this shows the damage XP popup if enabled.
-		}
-
-		ShowKillXPPopups: {
-			Label: Show Kill XP Popups
-			Tooltip: When XP gain popups is enabled, this shows the kill XP popup if enabled.
-		}
-
-		ShowBossXPPopups: {
-			Label: Show Boss Bonus XP Popups
-			Tooltip: When XP gain popups is enabled, this shows the bonus XP from bosses if enabled.
-		}
-
-		ShowLevelIndicator: {
-			Label: Show Level Indicator
-			Tooltip: Shows your current level above your character's head, visible to all players in multiplayer.
-		}
-
-		ShowRebirthTitle: {
-			Label: Show Rebirth Title
-			Tooltip: Displays your rebirth status below your level indicator when you have rebirth levels.
-		}
-
-		IndicatorOpacity: {
-			Label: Indicator Opacity
-			Tooltip: Controls the transparency of level and rebirth indicators shown above your character.
 		}
 	}
 
@@ -399,16 +344,6 @@ Configs: {
 			Tooltip: Additional multiplier applied to boss damage scaling. Higher values make bosses hit harder.
 		}
 
-		ShowEnemyLevelIndicator: {
-			Label: Show Enemy Level Indicator
-			Tooltip: When enabled, displays enemy levels above their heads.
-		}
-
-		EnemyIndicatorOpacity: {
-			Label: Enemy Indicator Opacity
-			Tooltip: Controls the transparency of level indicators shown above enemies.
-		}
-
 		ScalingType: {
 			Label: Scaling Type
 			Tooltip: Determines how enemy scaling is calculated: 0 = Player Count (fixed bonus per player), 1 = Highest Level (scales to strongest player), 2 = Average Level (scales to party average).
@@ -490,11 +425,6 @@ Configs: {
 		LevelsPerPlayer: {
 			Label: Levels Per Player
 			Tooltip: Number of extra enemy levels added per active player when using Player Count scaling (Type 0).
-		}
-
-		ShowEnemyLevelBehindWalls: {
-			Label: Show Enemy Level Behind Walls
-			Tooltip: Show enemy level indicators even if the enemy is hidden behind walls. Otherwise, levels are only shown when you have line of sight.
 		}
 
 		MinimumLevelDifference: {
@@ -1025,19 +955,9 @@ Configs: {
 			Tooltip: Time before Last Stand can activate again in seconds.
 		}
 
-		EnableLastStandCooldownBar: {
-			Label: Enable Last Stand Cooldown Bar
-			Tooltip: Displays a bar showing the remaining cooldown for Last Stand.
-		}
-
 		TeleportCooldown: {
 			Label: Teleport Cooldown
 			Tooltip: Sets the teleport ability's cooldown (in seconds).
-		}
-
-		EnableTeleportCooldownBar: {
-			Label: Enable Teleport Cooldown Bar
-			Tooltip: Turns teleport cooldown bar on.
 		}
 
 		GoldenTouchPercentPerLevel: {
@@ -1093,90 +1013,6 @@ Configs: {
 		LuckPerAbilityLevel: {
 			Tooltip: Amount of extra luck granted per level of the Enhanced Fortune rebirth ability.
 			Label: Luck Per Ability Level
-		}
-	}
-
-	ResourceBarsConfig: {
-		BarHeight: {
-			Label: Bar Height
-			Tooltip: Adjusts the height of resource bars in pixels.
-		}
-
-		BarWidth: {
-			Tooltip: Adjusts the width of resource bars in pixels.
-			Label: Bar Width
-		}
-
-		PositionYPercent: {
-			Tooltip: Controls the vertical position of resource bars as a percentage of screen height.
-			Label: Position Y Percent
-		}
-
-		PositionXPercent: {
-			Tooltip: Controls the horizontal position of resource bars as a percentage of screen width.
-			Label: Position X Percent
-		}
-
-		Headers: {
-			Resource_Bars_Settings: Resource Bars Settings
-			Boss_Bars: Boss Health Bars
-		}
-
-		Tooltip: ""
-
-		BarPadding: {
-			Label: Bar Padding
-			Tooltip: Space between adjacent bars in pixels.
-		}
-
-		ExcludedBossNPCIDs: {
-			Tooltip: List of NPC IDs to NEVER show boss bars for (takes priority over all other settings)
-			Label: Excluded Boss NPC IDs
-		}
-
-		ForcedBossNPCIDs: {
-			Tooltip: List of NPC IDs to always treat as bosses
-			Label: Forced Boss NPC IDs
-		}
-
-		MiniBossNPCIDs: {
-			Tooltip: List of NPC IDs to treat as mini-bosses (will show boss bars)
-			Label: Mini Boss NPC IDs
-		}
-
-		MaxVisibleBossBars: {
-			Tooltip: Maximum number of boss bars to display simultaneously
-			Label: Max Visible Boss Bars
-		}
-
-		BossBarYOffsetPercent: {
-			Tooltip: Vertical position of boss bars as percentage of screen height
-			Label: Vertical Position (%)
-		}
-
-		BossBarXOffsetPercent: {
-			Tooltip: Horizontal position of boss bars as percentage of screen width
-			Label: Horizontal Position (%)
-		}
-
-		BossBarWidth: {
-			Tooltip: Width of boss health bars in pixels
-			Label: Boss Bar Width
-		}
-
-		ShowBossName: {
-			Tooltip: Display boss names above health bars
-			Label: Show Boss Names
-		}
-
-		ShowBossHealthText: {
-			Tooltip: Display current/max health numbers on boss bars
-			Label: Show Health Numbers
-		}
-
-		BossBarScale: {
-			Tooltip: Overall scale multiplier for boss health bars
-			Label: Boss Bar Scale
 		}
 	}
 
@@ -1403,11 +1239,6 @@ Configs: {
 			Tooltip: Additional magic damage bonus per point of damage dealt by the melee critical hit that triggered Arcane Surge.
 		}
 
-		EnableDivineInterventionCooldownBar: {
-			Tooltip: Shows a cooldown bar for the Divine Intervention ability.
-			Label: Enable Divine Intervention Cooldown Bar
-		}
-
 		DivineInterventionCooldown: {
 			Tooltip: Cooldown in seconds before Divine Intervention can be used again.
 			Label: Divine Intervention Cooldown
@@ -1537,19 +1368,14 @@ Configs: {
 		Tooltip: ""
 
 		Headers: {
-			Socketing_System: Socketing System
 			Core_Effects: Core Effects
 			Cost_Configuration: Cost Configuration
+			Socketing_System: Socketing System
 		}
 
 		EnableSocketingSystem: {
 			Label: Enable Socketing System (Experimental)
 			Tooltip: Enables or disables the entire socketing system including the UI tab.
-		}
-
-		ShowSocketedCoresInTooltip: {
-			Label: Show Socketed Cores In Tooltip
-			Tooltip: When enabled, socketed cores and their effects will be displayed in item tooltips.
 		}
 
 		PowerT1Effect: {
@@ -1631,6 +1457,181 @@ Configs: {
 
 		Headers.Extra_Luck_System: Extra Luck System
 		Tooltip: ""
+	}
+
+	StatariaClientConfig: {
+		EnableDivineInterventionCooldownBar: {
+			Label: Enable Divine Intervention Cooldown Bar
+			Tooltip: Shows a cooldown bar for the Divine Intervention ability.
+		}
+
+		EnableTeleportCooldownBar: {
+			Label: Enable Teleport Cooldown Bar
+			Tooltip: Turns teleport cooldown bar on.
+		}
+
+		EnableLastStandCooldownBar: {
+			Label: Enable Last Stand Cooldown Bar
+			Tooltip: Displays a bar showing the remaining cooldown for Last Stand.
+		}
+
+		Headers: {
+			Cooldown_Bars: Cooldown Bars
+			Socketing_System: Socketing System
+			Enemy_Level_Indicators: Enemy Level Indicators
+			BossBars: Boss Bars
+			ResourceBars: Resource Bars
+			CooldownBars: Cooldown Bars
+			SocketingSystem: Socketing System
+			General: General
+		}
+
+		ShowSocketedCoresInTooltip: {
+			Label: Show Socketed Cores In Tooltip
+			Tooltip: When enabled, socketed cores and their effects will be displayed in item tooltips.
+		}
+
+		EnemyIndicatorOpacity: {
+			Label: Enemy Indicator Opacity
+			Tooltip: Controls the transparency of level indicators shown above enemies.
+		}
+
+		ShowEnemyLevelBehindWalls: {
+			Label: Show Enemy Level Behind Walls
+			Tooltip: Show enemy level indicators even if the enemy is hidden behind walls. Otherwise, levels are only shown when you have line of sight.
+		}
+
+		ShowEnemyLevelIndicator: {
+			Label: Show Enemy Level Indicator
+			Tooltip: When enabled, displays enemy levels above their heads.
+		}
+
+		resourceBars: {
+			Label: Resource Bars
+			Tooltip: Customize the appearance and position of health, mana, and boss health bars.
+		}
+
+		uiSettings: {
+			Label: UI Settings
+			Tooltip: Customize the appearance and behavior of XP bars, level indicators, and other UI elements.
+		}
+
+		DisplayName: Client Config
+
+		BossBarXOffsetPercent: {
+			Tooltip: Vertical position of boss bars as percentage of screen height
+			Label: Boss Bar X Offset Percent
+		}
+
+		BossBarWidth: {
+			Tooltip: Width of boss health bars in pixels
+			Label: Boss Bar Width
+		}
+
+		ShowBossName: {
+			Tooltip: Display boss names above health bars
+			Label: Show Boss Name
+		}
+
+		ShowBossHealthText: {
+			Tooltip: Display current/max health numbers on boss bars
+			Label: Show Health Numbers
+		}
+
+		BossBarScale: {
+			Tooltip: Overall scale multiplier for boss health bars
+			Label: Boss Bar Scale
+		}
+
+		BarPadding: {
+			Tooltip: Space between adjacent bars in pixels.
+			Label: Bar Padding
+		}
+
+		BarHeight: {
+			Tooltip: Adjusts the height of resource bars in pixels.
+			Label: Bar Height
+		}
+
+		BarWidth: {
+			Tooltip: Adjusts the width of resource bars in pixels.
+			Label: Bar Width
+		}
+
+		PositionYPercent: {
+			Tooltip: Controls the vertical position of resource bars as a percentage of screen height.
+			Label: Position Y Percent
+		}
+
+		PositionXPercent: {
+			Tooltip: Controls the horizontal position of resource bars as a percentage of screen width.
+			Label: Position X Percent
+		}
+
+		IndicatorOpacity: {
+			Tooltip: Controls the transparency of level and rebirth indicators shown above your character.
+			Label: Indicator Opacity
+		}
+
+		ShowRebirthTitle: {
+			Tooltip: Displays your rebirth status below your level indicator when you have rebirth levels.
+			Label: Show Rebirth Title
+		}
+
+		ShowLevelIndicator: {
+			Tooltip: Shows your current level above your character's head, visible to all players in multiplayer.
+			Label: Show Level Indicator
+		}
+
+		ShowBossXPPopups: {
+			Tooltip: When XP gain popups is enabled, this shows the bonus XP from bosses if enabled.
+			Label: Show Boss XP Popups
+		}
+
+		ShowKillXPPopups: {
+			Tooltip: When XP gain popups is enabled, this shows the kill XP popup if enabled.
+			Label: Show Kill XP Popups
+		}
+
+		ShowDamageXPPopups: {
+			Tooltip: When XP gain popups is enabled, this shows the damage XP popup if enabled.
+			Label: Show Damage XP Popups
+		}
+
+		ShowXPGainPopups: {
+			Tooltip: Enables whether you see the XP gain popups or not. If disabled, nothing will be shown at all.
+			Label: Show XP Gain Popups
+		}
+
+		ShowXPBarAbovePlayer: {
+			Tooltip: Toggles the floating XP bar that appears above your character when gaining XP.
+			Label: Show XP Bar Above Player
+		}
+
+		BossBarYOffsetPercent: {
+			Label: Boss Bar Y Offset Percent
+			Tooltip: Vertical position of boss bars as percentage of screen height
+		}
+
+		MaxVisibleBossBars: {
+			Label: Max Visible Boss Bars
+			Tooltip: Maximum number of boss bars to display simultaneously
+		}
+
+		MiniBossNPCIDs: {
+			Label: Mini Boss NPC IDs
+			Tooltip: List of NPC IDs to treat as mini-bosses (will show boss bars)
+		}
+
+		ForcedBossNPCIDs: {
+			Label: Forced Boss NPC IDs
+			Tooltip: List of NPC IDs to always treat as bosses
+		}
+
+		ExcludedBossNPCIDs: {
+			Label: Excluded Boss NPC IDs
+			Tooltip: List of NPC IDs to NEVER show boss bars for (takes priority over all other settings)
+		}
 	}
 }
 

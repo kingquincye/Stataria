@@ -20,14 +20,15 @@ namespace Stataria
             Player player = drawInfo.drawPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
             var config = ModContent.GetInstance<StatariaConfig>();
+            var configClient = ModContent.GetInstance<StatariaClientConfig>();
 
-            if (!config.uiSettings.ShowRebirthTitle || !config.rebirthSystem.EnableRebirthSystem || rpg.RebirthCount <= 0)
+            if (!configClient.ShowRebirthTitle || !config.rebirthSystem.EnableRebirthSystem || rpg.RebirthCount <= 0)
                 return;
 
             Vector2 pos = player.MountedCenter - Main.screenPosition;
             pos.Y -= 50f;
 
-            float opacity = config.uiSettings.IndicatorOpacity;
+            float opacity = configClient.IndicatorOpacity;
 
             string rebirthText = $"Rebirth {rpg.RebirthCount}";
             DynamicSpriteFont font = FontAssets.MouseText.Value;

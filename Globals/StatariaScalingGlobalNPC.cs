@@ -448,8 +448,9 @@ namespace Stataria
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
+            var configClient = ModContent.GetInstance<StatariaClientConfig>();
 
-            if (!config.enemyScaling.EnableEnemyScaling || !config.enemyScaling.ShowEnemyLevelIndicator)
+            if (!config.enemyScaling.EnableEnemyScaling || !configClient.ShowEnemyLevelIndicator)
                 return;
 
             if (npc.townNPC || npc.friendly || NPCID.Sets.CountsAsCritter[npc.type] || npc.lifeMax <= 9)
@@ -490,10 +491,10 @@ namespace Stataria
                 );
             }
 
-            if (isBehindWall && !config.enemyScaling.ShowEnemyLevelBehindWalls)
+            if (isBehindWall && !configClient.ShowEnemyLevelBehindWalls)
                 return;
 
-            float opacity = config.enemyScaling.EnemyIndicatorOpacity;
+            float opacity = configClient.EnemyIndicatorOpacity;
 
             string levelText = $"Lv.{Level}";
             DynamicSpriteFont font = FontAssets.MouseText.Value;

@@ -20,14 +20,15 @@ namespace Stataria
             Player player = drawInfo.drawPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
             var config = ModContent.GetInstance<StatariaConfig>();
+            var configClient = ModContent.GetInstance<StatariaClientConfig>();
 
-            if (!config.uiSettings.ShowLevelIndicator)
+            if (!configClient.ShowLevelIndicator)
                 return;
 
             Vector2 pos = player.MountedCenter - Main.screenPosition;
             pos.Y -= 70f;
 
-            float opacity = config.uiSettings.IndicatorOpacity;
+            float opacity = configClient.IndicatorOpacity;
 
             string levelText = $"Lv.{rpg.Level}";
             DynamicSpriteFont font = FontAssets.MouseText.Value;

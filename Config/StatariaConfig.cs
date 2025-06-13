@@ -15,12 +15,6 @@ namespace Stataria
         public XPVerification xpVerification { get; set; } = new XPVerification();
 
         [SeparatePage]
-        public UISettings uiSettings { get; set; } = new UISettings();
-
-        [SeparatePage]
-        public ResourceBarsConfig resourceBars { get; set; } = new ResourceBarsConfig();
-
-        [SeparatePage]
         public SocketingSystem socketingSystem { get; set; } = new SocketingSystem();
 
         [SeparatePage]
@@ -84,46 +78,10 @@ namespace Stataria
             public List<string> WhitelistedSources { get; set; } = new List<string>{"Boss Bonus", "Boss HP"};
         }
 
-        public class UISettings
-        {
-            [Header("UI_Settings")]
-            [DefaultValue(true)] public bool ShowXPBarAbovePlayer { get; set; } = true;
-            [DefaultValue(true)] public bool ShowXPGainPopups { get; set; } = true;
-            [DefaultValue(true)] public bool ShowDamageXPPopups { get; set; } = true;
-            [DefaultValue(true)] public bool ShowKillXPPopups { get; set; } = true;
-            [DefaultValue(true)] public bool ShowBossXPPopups { get; set; } = true;
-            [DefaultValue(true)] public bool ShowLevelIndicator { get; set; } = true;
-            [DefaultValue(true)] public bool ShowRebirthTitle { get; set; } = true;
-            [Range(0f, 2f)][DefaultValue(1f)] public float IndicatorOpacity { get; set; } = 1f;
-        }
-
-        public class ResourceBarsConfig
-        {
-            [Header("Resource_Bars_Settings")]
-            [DefaultValue(0.79f)][Range(0f, 0.95f)][Slider][SliderColor(150, 0, 150)] public float PositionXPercent { get; set; } = 0.79f;
-            [DefaultValue(0.01f)][Range(0f, 0.95f)][Slider][SliderColor(150, 0, 150)] public float PositionYPercent { get; set; } = 0.01f;
-            [DefaultValue(300)][Range(100, 500)] public int BarWidth { get; set; } = 300;
-            [DefaultValue(20)][Range(10, 50)] public int BarHeight { get; set; } = 20;
-            [DefaultValue(3)][Range(0, 20)] public int BarPadding { get; set; } = 3;
-
-            [Header("Boss_Bars")]
-            [DefaultValue(1f)][Range(0.5f, 3f)] public float BossBarScale { get; set; } = 1f;
-            [DefaultValue(true)] public bool ShowBossHealthText { get; set; } = true;
-            [DefaultValue(true)] public bool ShowBossName { get; set; } = true;
-            [DefaultValue(456)][Range(200, 800)] public int BossBarWidth { get; set; } = 456;
-            [DefaultValue(50f)][Range(0f, 100f)] public float BossBarXOffsetPercent { get; set; } = 50f;
-            [DefaultValue(96f)][Range(0f, 100f)] public float BossBarYOffsetPercent { get; set; } = 96f;
-            [DefaultValue(4)][Range(1, 20)] public int MaxVisibleBossBars { get; set; } = 4;
-            public List<int> MiniBossNPCIDs { get; set; } = new List<int>();
-            public List<int> ForcedBossNPCIDs { get; set; } = new List<int>();
-            public List<int> ExcludedBossNPCIDs { get; set; } = new List<int>();
-        }
-
         public class SocketingSystem
         {
             [Header("Socketing_System")]
             [DefaultValue(true)] public bool EnableSocketingSystem { get; set; } = true;
-            [DefaultValue(true)] public bool ShowSocketedCoresInTooltip { get; set; } = true;
 
             [Header("Core_Effects")]
             [Range(0f, 100f)][DefaultValue(5f)] public float PowerT1Effect { get; set; } = 5f;
@@ -182,11 +140,9 @@ namespace Stataria
             [Range(0f, 100f)][DefaultValue(10f)] public float LastStandHealPercent { get; set; } = 10f;
             [Range(0, 10)][DefaultValue(3)] public int LastStandImmunityTime { get; set; } = 3;
             [Range(0, 300)][DefaultValue(180)] public int LastStandCooldown { get; set; } = 180;
-            [DefaultValue(true)] public bool EnableLastStandCooldownBar { get; set; } = true;
 
             [Header("Teleport")]
             [Range(1, 60)][DefaultValue(3)] public int TeleportCooldown { get; set; } = 3;
-            [DefaultValue(true)] public bool EnableTeleportCooldownBar { get; set; } = true;
 
             [Header("Extra_Accessory_Slots")]
             [Range(1, 29)][DefaultValue(5)] public int MaxExtraAccessorySlots { get; set; } = 5;
@@ -267,7 +223,6 @@ namespace Stataria
             [Range(1f, 10f)][DefaultValue(3f)] public float ClericRegenInterval { get; set; } = 3f;
             [Range(1f, 30f)][DefaultValue(10f)] public float DivineInterventionDuration { get; set; } = 10f;
             [Range(30f, 600f)][DefaultValue(120f)] public float DivineInterventionCooldown { get; set; } = 120f;
-            [DefaultValue(true)] public bool EnableDivineInterventionCooldownBar { get; set; } = true;
             public List<string> DivineInterventionExemptBuffs { get; set; } = new List<string>();
 
             [Header("Guardian")]
@@ -305,9 +260,6 @@ namespace Stataria
             [Range(0f, 5f)][DefaultValue(0.02f)] public float EnemyDefenseScaling { get; set; } = 0.02f;
             [Range(0f, 10f)][DefaultValue(0.2f)] public float BossHealthScaling { get; set; } = 0.2f;
             [Range(0f, 10f)][DefaultValue(0.1f)] public float BossDamageScaling { get; set; } = 0.1f;
-            [DefaultValue(true)] public bool ShowEnemyLevelIndicator { get; set; } = true;
-            [DefaultValue(true)] public bool ShowEnemyLevelBehindWalls { get; set; } = true;
-            [Range(0f, 2f)][DefaultValue(1f)] public float EnemyIndicatorOpacity { get; set; } = 1f;
             [DefaultValue(true)] public bool EnableLevelVariation { get; set; } = true;
             [Range(1, 100)][DefaultValue(10)] public int MaxLevelVariation { get; set; } = 10;
             [DefaultValue(false)] public bool EnableMinimumLevelDifference { get; set; } = false;
@@ -470,5 +422,50 @@ namespace Stataria
             [Header("XP_Blacklist")]
             public List<string> BlacklistedNPCs { get; set; } = new List<string>();
         }
+    }
+
+    public class StatariaClientConfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [Header("General")]
+        [DefaultValue(true)] public bool ShowXPBarAbovePlayer { get; set; } = true;
+        [DefaultValue(true)] public bool ShowXPGainPopups { get; set; } = true;
+        [DefaultValue(true)] public bool ShowDamageXPPopups { get; set; } = true;
+        [DefaultValue(true)] public bool ShowKillXPPopups { get; set; } = true;
+        [DefaultValue(true)] public bool ShowBossXPPopups { get; set; } = true;
+        [DefaultValue(true)] public bool ShowLevelIndicator { get; set; } = true;
+        [DefaultValue(true)] public bool ShowRebirthTitle { get; set; } = true;
+        [Range(0f, 2f)][DefaultValue(1f)] public float IndicatorOpacity { get; set; } = 1f;
+        [DefaultValue(true)] public bool ShowEnemyLevelIndicator { get; set; } = true;
+        [DefaultValue(true)] public bool ShowEnemyLevelBehindWalls { get; set; } = true;
+        [Range(0f, 2f)][DefaultValue(1f)] public float EnemyIndicatorOpacity { get; set; } = 1f;
+
+        [Header("SocketingSystem")]
+        [DefaultValue(true)] public bool ShowSocketedCoresInTooltip { get; set; } = true;
+
+        [Header("CooldownBars")]
+        [DefaultValue(true)] public bool EnableLastStandCooldownBar { get; set; } = true;
+        [DefaultValue(true)] public bool EnableTeleportCooldownBar { get; set; } = true;
+        [DefaultValue(true)] public bool EnableDivineInterventionCooldownBar { get; set; } = true;
+
+        [Header("ResourceBars")]
+        [DefaultValue(0.79f)][Range(0f, 0.95f)][Slider][SliderColor(150, 0, 150)] public float PositionXPercent { get; set; } = 0.79f;
+        [DefaultValue(0.01f)][Range(0f, 0.95f)][Slider][SliderColor(150, 0, 150)] public float PositionYPercent { get; set; } = 0.01f;
+        [DefaultValue(300)][Range(100, 500)] public int BarWidth { get; set; } = 300;
+        [DefaultValue(20)][Range(10, 50)] public int BarHeight { get; set; } = 20;
+        [DefaultValue(3)][Range(0, 20)] public int BarPadding { get; set; } = 3;
+
+        [Header("BossBars")]
+        [DefaultValue(1f)][Range(0.5f, 3f)] public float BossBarScale { get; set; } = 1f;
+        [DefaultValue(true)] public bool ShowBossHealthText { get; set; } = true;
+        [DefaultValue(true)] public bool ShowBossName { get; set; } = true;
+        [DefaultValue(456)][Range(200, 800)] public int BossBarWidth { get; set; } = 456;
+        [DefaultValue(50f)][Range(0f, 100f)] public float BossBarXOffsetPercent { get; set; } = 50f;
+        [DefaultValue(96f)][Range(0f, 100f)] public float BossBarYOffsetPercent { get; set; } = 96f;
+        [DefaultValue(4)][Range(1, 20)] public int MaxVisibleBossBars { get; set; } = 4;
+        public List<int> MiniBossNPCIDs { get; set; } = new List<int>();
+        public List<int> ForcedBossNPCIDs { get; set; } = new List<int>();
+        public List<int> ExcludedBossNPCIDs { get; set; } = new List<int>();
     }
 }
