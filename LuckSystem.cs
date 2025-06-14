@@ -8,7 +8,11 @@ namespace Stataria
     {
         public override void Load()
         {
-            On_Player.RollLuck += RollLuck_Patch;
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config.extraLuckSettings.EnableExtraLuckSystem)
+            {
+                On_Player.RollLuck += RollLuck_Patch;
+            }
         }
 
         public override void Unload()
@@ -19,11 +23,6 @@ namespace Stataria
         private int RollLuck_Patch(On_Player.orig_RollLuck orig, Player self, int chance)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
-
-            if (!config.extraLuckSettings.EnableExtraLuckSystem)
-            {
-                return orig(self, chance);
-            }
 
             float extraLuck = config.extraLuckSettings.BaseExtraLuck;
 

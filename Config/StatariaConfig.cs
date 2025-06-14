@@ -413,7 +413,7 @@ namespace Stataria
         public class ExtraLuckSettings
         {
             [Header("Extra_Luck_System")]
-            [DefaultValue(false)] public bool EnableExtraLuckSystem { get; set; } = false;
+            [DefaultValue(false)][ReloadRequired] public bool EnableExtraLuckSystem { get; set; } = false;
             [Range(-15f, 15f)][DefaultValue(2f)] public float BaseExtraLuck { get; set; } = 2f;
         }
 

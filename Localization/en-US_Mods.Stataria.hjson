@@ -1446,12 +1446,12 @@ Configs: {
 
 	ExtraLuckSettings: {
 		BaseExtraLuck: {
-			Tooltip: Base amount of extra luck provided by the server to all players. Positive values improve luck, negative values worsen it.
+			Tooltip: Base amount of extra luck provided to all players. Positive values improve luck, negative values worsen it. Calculations are exponetial so high values will show interesting effects! (Does not change in-game luck)
 			Label: Base Extra Luck
 		}
 
 		EnableExtraLuckSystem: {
-			Tooltip: When enabled, allows the server to provide base extra luck and players to gain additional luck through rebirth abilities.
+			Tooltip: When enabled, provides base extra luck and players to gain additional luck through rebirth abilities. This system is exponetial! (Does not change in-game luck)
 			Label: Enable Extra Luck System
 		}
 
