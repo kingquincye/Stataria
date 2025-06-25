@@ -690,7 +690,7 @@ Configs: {
 
 		EnableStatCaps: {
 			Label: Enable Stat Caps
-			Tooltip: Enables a stat cap for all stats.
+			Tooltip: Enables a stat cap for all stats. Set a cap to -1 to make it unlimited.
 		}
 
 		VIT_Cap: {

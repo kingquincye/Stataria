@@ -287,20 +287,20 @@ namespace Stataria
         {
             [Header("Stat_Caps")]
             [DefaultValue(false)] public bool EnableStatCaps { get; set; } = false;
-            [Range(0, 10000)][DefaultValue(1000)] public int VIT_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int STR_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int AGI_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int INT_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int LUC_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int END_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int POW_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int DEX_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int SPR_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int TCH_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int RGE_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int BRD_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int HLR_Cap { get; set; } = 1000;
-            [Range(0, 10000)][DefaultValue(1000)] public int CLK_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int VIT_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int STR_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int AGI_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int INT_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int LUC_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int END_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int POW_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int DEX_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int SPR_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int TCH_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int RGE_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int BRD_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int HLR_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int CLK_Cap { get; set; } = 1000;
 
             [Header("VIT_Settings")]
             [Range(0, 1000)][DefaultValue(2)] public int VIT_HP { get; set; } = 2;

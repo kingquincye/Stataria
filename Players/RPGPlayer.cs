@@ -721,7 +721,61 @@ namespace Stataria
             foreach (string statName in config.rebirthSystem.GhostStatsAffectedStats)
             {
                 string normalizedStat = statName.ToUpper();
-                GhostStats[normalizedStat] = ghostStatValue;
+                
+                int cap = int.MaxValue;
+                if (config.statSettings.EnableStatCaps)
+                {
+                    switch (normalizedStat)
+                    {
+                        case "VIT": cap = config.statSettings.VIT_Cap; break;
+                        case "STR": cap = config.statSettings.STR_Cap; break;
+                        case "AGI": cap = config.statSettings.AGI_Cap; break;
+                        case "INT": cap = config.statSettings.INT_Cap; break;
+                        case "LUC": cap = config.statSettings.LUC_Cap; break;
+                        case "END": cap = config.statSettings.END_Cap; break;
+                        case "POW": cap = config.statSettings.POW_Cap; break;
+                        case "DEX": cap = config.statSettings.DEX_Cap; break;
+                        case "SPR": cap = config.statSettings.SPR_Cap; break;
+                        case "TCH": cap = config.statSettings.TCH_Cap; break;
+                        case "RGE": cap = config.statSettings.RGE_Cap; break;
+                        case "BRD": cap = config.statSettings.BRD_Cap; break;
+                        case "HLR": cap = config.statSettings.HLR_Cap; break;
+                        case "CLK": cap = config.statSettings.CLK_Cap; break;
+                    }
+
+                    if (cap != -1 && config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
+                    {
+                        float capMultiplier = 1f + (RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                        cap = (int)(cap * capMultiplier);
+                    }
+                }
+
+                int baseStat = 0;
+                switch (normalizedStat)
+                {
+                    case "VIT": baseStat = VIT; break;
+                    case "STR": baseStat = STR; break;
+                    case "AGI": baseStat = AGI; break;
+                    case "INT": baseStat = INT; break;
+                    case "LUC": baseStat = LUC; break;
+                    case "END": baseStat = END; break;
+                    case "POW": baseStat = POW; break;
+                    case "DEX": baseStat = DEX; break;
+                    case "SPR": baseStat = SPR; break;
+                    case "TCH": baseStat = TCH; break;
+                    case "RGE": baseStat = RGE; break;
+                    case "BRD": baseStat = BRD; break;
+                    case "HLR": baseStat = HLR; break;
+                    case "CLK": baseStat = CLK; break;
+                }
+
+                int clampedGhostValue = ghostStatValue;
+                if (config.statSettings.EnableStatCaps && cap != -1)
+                {
+                    clampedGhostValue = Math.Max(0, Math.Min(ghostStatValue, cap - baseStat));
+                }
+
+                GhostStats[normalizedStat] = clampedGhostValue;
             }
         }
 
@@ -801,13 +855,16 @@ namespace Stataria
 
             if (capsEnabled)
             {
-                if (config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
+                int finalCap = cap;
+                if (finalCap != -1)
                 {
-                    float capMultiplier = 1f + (RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
-                    cap = (int)(cap * capMultiplier);
+                    if (config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
+                    {
+                        float capMultiplier = 1f + (RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                        finalCap = (int)(finalCap * capMultiplier);
+                    }
+                    totalStat = Math.Min(totalStat, finalCap);
                 }
-
-                totalStat = Math.Min(totalStat, cap);
             }
 
             return totalStat;
@@ -1644,18 +1701,11 @@ namespace Stataria
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();
-            int statsCount = AutoAllocateStats.Count;
-
-            if (StatPoints < statsCount)
-                return;
-
-            int completeSetCount = StatPoints / statsCount;
-
-            int totalPointsToAllocate = 0;
-
+            
+            var availableStats = new List<string>();
+            
             foreach (string statName in AutoAllocateStats)
             {
-                int pointsToAdd = completeSetCount;
                 bool isAtCap = false;
 
                 if (config.statSettings.EnableStatCaps)
@@ -1682,55 +1732,116 @@ namespace Stataria
                         default: continue;
                     }
 
-                    if (config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
+                    if (cap != -1)
                     {
-                        float capMultiplier = 1f + (RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
-                        cap = (int)(cap * capMultiplier);
-                    }
+                        if (config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
+                        {
+                            float capMultiplier = 1f + (RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                            cap = (int)(cap * capMultiplier);
+                        }
 
-                    int effectiveStat = GetEffectiveStat(statName);
-                    if (effectiveStat >= cap)
-                    {
-                        isAtCap = true;
-                    }
-                    else
-                    {
-                        int ghostBonus = GhostStats.TryGetValue(statName, out int ghost) ? ghost : 0;
-                        int maxUsefulBaseStat = cap - ghostBonus;
-
-                        if (currentBaseStat >= maxUsefulBaseStat)
+                        int effectiveStat = GetEffectiveStat(statName);
+                        if (effectiveStat >= cap)
                         {
                             isAtCap = true;
                         }
                         else
                         {
-                            pointsToAdd = Math.Min(pointsToAdd, maxUsefulBaseStat - currentBaseStat);
+                            int ghostBonus = GhostStats.TryGetValue(statName, out int ghost) ? ghost : 0;
+                            int maxUsefulBaseStat = cap - ghostBonus;
+
+                            if (currentBaseStat >= maxUsefulBaseStat)
+                            {
+                                isAtCap = true;
+                            }
                         }
                     }
                 }
 
-                if (isAtCap || pointsToAdd <= 0)
-                    continue;
-
-                switch (statName)
+                if (!isAtCap)
                 {
-                    case "VIT": VIT += pointsToAdd; break;
-                    case "STR": STR += pointsToAdd; break;
-                    case "AGI": AGI += pointsToAdd; break;
-                    case "INT": INT += pointsToAdd; break;
-                    case "LUC": LUC += pointsToAdd; break;
-                    case "END": END += pointsToAdd; break;
-                    case "POW": POW += pointsToAdd; break;
-                    case "DEX": DEX += pointsToAdd; break;
-                    case "SPR": SPR += pointsToAdd; break;
-                    case "TCH": TCH += pointsToAdd; break;
-                    case "RGE": RGE += pointsToAdd; break;
-                    case "BRD": BRD += pointsToAdd; break;
-                    case "HLR": HLR += pointsToAdd; break;
-                    case "CLK": CLK += pointsToAdd; break;
+                    availableStats.Add(statName);
+                }
+            }
+
+            if (availableStats.Count == 0)
+                return;
+
+            int statsCount = availableStats.Count;
+            if (StatPoints < statsCount)
+                return;
+
+            int completeSetCount = StatPoints / statsCount;
+            int totalPointsToAllocate = 0;
+
+            foreach (string statName in availableStats)
+            {
+                int pointsToAdd = completeSetCount;
+
+                if (config.statSettings.EnableStatCaps)
+                {
+                    int cap = 0;
+                    int currentBaseStat = 0;
+
+                    switch (statName)
+                    {
+                        case "VIT": currentBaseStat = VIT; cap = config.statSettings.VIT_Cap; break;
+                        case "STR": currentBaseStat = STR; cap = config.statSettings.STR_Cap; break;
+                        case "AGI": currentBaseStat = AGI; cap = config.statSettings.AGI_Cap; break;
+                        case "INT": currentBaseStat = INT; cap = config.statSettings.INT_Cap; break;
+                        case "LUC": currentBaseStat = LUC; cap = config.statSettings.LUC_Cap; break;
+                        case "END": currentBaseStat = END; cap = config.statSettings.END_Cap; break;
+                        case "POW": currentBaseStat = POW; cap = config.statSettings.POW_Cap; break;
+                        case "DEX": currentBaseStat = DEX; cap = config.statSettings.DEX_Cap; break;
+                        case "SPR": currentBaseStat = SPR; cap = config.statSettings.SPR_Cap; break;
+                        case "TCH": currentBaseStat = TCH; cap = config.statSettings.TCH_Cap; break;
+                        case "RGE": currentBaseStat = RGE; cap = config.statSettings.RGE_Cap; break;
+                        case "BRD": currentBaseStat = BRD; cap = config.statSettings.BRD_Cap; break;
+                        case "HLR": currentBaseStat = HLR; cap = config.statSettings.HLR_Cap; break;
+                        case "CLK": currentBaseStat = CLK; cap = config.statSettings.CLK_Cap; break;
+                        default: continue;
+                    }
+
+                    if (cap != -1)
+                    {
+                        if (config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
+                        {
+                            float capMultiplier = 1f + (RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                            cap = (int)(cap * capMultiplier);
+                        }
+
+                        int ghostBonus = GhostStats.TryGetValue(statName, out int ghost) ? ghost : 0;
+                        int maxUsefulBaseStat = cap - ghostBonus;
+
+                        if (currentBaseStat + pointsToAdd > maxUsefulBaseStat)
+                        {
+                            pointsToAdd = Math.Max(0, maxUsefulBaseStat - currentBaseStat);
+                        }
+                    }
                 }
 
-                totalPointsToAllocate += pointsToAdd;
+                if (pointsToAdd > 0)
+                {
+                    switch (statName)
+                    {
+                        case "VIT": VIT += pointsToAdd; break;
+                        case "STR": STR += pointsToAdd; break;
+                        case "AGI": AGI += pointsToAdd; break;
+                        case "INT": INT += pointsToAdd; break;
+                        case "LUC": LUC += pointsToAdd; break;
+                        case "END": END += pointsToAdd; break;
+                        case "POW": POW += pointsToAdd; break;
+                        case "DEX": DEX += pointsToAdd; break;
+                        case "SPR": SPR += pointsToAdd; break;
+                        case "TCH": TCH += pointsToAdd; break;
+                        case "RGE": RGE += pointsToAdd; break;
+                        case "BRD": BRD += pointsToAdd; break;
+                        case "HLR": HLR += pointsToAdd; break;
+                        case "CLK": CLK += pointsToAdd; break;
+                    }
+
+                    totalPointsToAllocate += pointsToAdd;
+                }
             }
 
             StatPoints -= totalPointsToAllocate;

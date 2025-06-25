@@ -258,7 +258,7 @@ namespace Stataria
             return (int)(config.BaseExpandCost * multiplier);
         }
 
-        private float GetTotalCoreEffect(CoreType type)
+        public float GetTotalCoreEffect(CoreType type)
         {
             return SocketedCores
                 .Where(core => core.Type == type)

@@ -284,9 +284,7 @@ namespace Stataria
 
             if (config.enemyScaling.EnableLevelVariation)
             {
-                int worldSeed = Main.worldName?.GetHashCode() ?? 0;
-                Random npcRandom = new Random(npc.whoAmI + worldSeed);
-                int variation = npcRandom.Next(-config.enemyScaling.MaxLevelVariation, config.enemyScaling.MaxLevelVariation + 1);
+                int variation = Main.rand.Next(-config.enemyScaling.MaxLevelVariation, config.enemyScaling.MaxLevelVariation + 1);
                 baseLevel += variation;
 
                 if (config.enemyScaling.EnableMinimumLevelDifference &&
@@ -350,9 +348,7 @@ namespace Stataria
             if (!config.enemyScaling.EnableEliteEnemies || npc.boss || npc.townNPC || npc.friendly || NPCID.Sets.CountsAsCritter[npc.type] || npc.lifeMax <= 9)
                 return;
 
-            int worldSeed = Main.worldName?.GetHashCode() ?? 0;
-            Random npcRandom = new Random(npc.whoAmI + 1000 + worldSeed);
-            IsElite = npcRandom.NextDouble() < config.enemyScaling.EliteEnemyChance;
+            IsElite = Main.rand.NextDouble() < config.enemyScaling.EliteEnemyChance;
         }
 
         public void ApplyScaling(NPC npc)

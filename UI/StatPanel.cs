@@ -1302,29 +1302,32 @@ namespace Stataria
                 int currentBaseStat = stat.GetValue(rpg);
                 int cap = stat.GetCap(config);
 
-                if (config.rebirthSystem.EnableProgressiveStatCaps && rpg.RebirthCount > 0)
+                if (cap != -1)
                 {
-                    float capMultiplier = 1f + (rpg.RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
-                    cap = (int)(cap * capMultiplier);
+                    if (config.rebirthSystem.EnableProgressiveStatCaps && rpg.RebirthCount > 0)
+                    {
+                        float capMultiplier = 1f + (rpg.RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                        cap = (int)(cap * capMultiplier);
+                    }
+
+                    int effectiveCurrentStat = rpg.GetEffectiveStat(stat.Name);
+
+                    if (effectiveCurrentStat >= cap)
+                    {
+                        return;
+                    }
+
+                    int ghostBonus = rpg.GhostStats.TryGetValue(stat.Name, out int ghost) ? ghost : 0;
+                    int maxUsefulBaseStat = cap - ghostBonus;
+
+                    if (currentBaseStat + amount > maxUsefulBaseStat)
+                    {
+                        amount = Math.Max(0, maxUsefulBaseStat - currentBaseStat);
+                    }
+
+                    if (amount <= 0)
+                        return;
                 }
-
-                int effectiveCurrentStat = rpg.GetEffectiveStat(stat.Name);
-
-                if (effectiveCurrentStat >= cap)
-                {
-                    return;
-                }
-
-                int ghostBonus = rpg.GhostStats.TryGetValue(stat.Name, out int ghost) ? ghost : 0;
-                int maxUsefulBaseStat = cap - ghostBonus;
-
-                if (currentBaseStat + amount > maxUsefulBaseStat)
-                {
-                    amount = Math.Max(0, maxUsefulBaseStat - currentBaseStat);
-                }
-
-                if (amount <= 0)
-                    return;
             }
 
             int currentValue = stat.GetValue(rpg);
@@ -1454,21 +1457,25 @@ namespace Stataria
                     {
                         int cap = stat.GetCap(config);
 
-                        if (config.rebirthSystem.EnableProgressiveStatCaps && rpg.RebirthCount > 0)
+                        if (cap != -1)
                         {
-                            float capMultiplier = 1f + (rpg.RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
-                            cap = (int)(cap * capMultiplier);
-                        }
+                            if (config.rebirthSystem.EnableProgressiveStatCaps && rpg.RebirthCount > 0)
+                            {
+                                float capMultiplier = 1f + (rpg.RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
+                                cap = (int)(cap * capMultiplier);
+                            }
 
-                        int effectiveStat = rpg.GetEffectiveStat(stat.Name);
-                        canAdd = effectiveStat < cap;
+                            int effectiveStat = rpg.GetEffectiveStat(stat.Name);
+                            canAdd = effectiveStat < cap;
 
-                        if (canAdd && rpg.GhostStats.TryGetValue(stat.Name, out int ghostBonus))
-                        {
-                            int maxUsefulBaseStat = cap - ghostBonus;
-                            canAdd = value < maxUsefulBaseStat;
+                            if (canAdd && rpg.GhostStats.TryGetValue(stat.Name, out int ghostBonus))
+                            {
+                                int maxUsefulBaseStat = cap - ghostBonus;
+                                canAdd = value < maxUsefulBaseStat;
+                            }
                         }
                     }
+
 
                     plusButtons[i].BackgroundColor = canAdd
                         ? new Color(150, 150, 150, 20)
