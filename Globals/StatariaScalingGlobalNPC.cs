@@ -42,6 +42,43 @@ namespace Stataria
             return npc.realLife >= 0 && npc.realLife != npc.whoAmI;
         }
 
+        private bool IsSplittingWormSegment(NPC npc)
+        {
+            return npc.ai[0] >= 0 && npc.ai[0] < Main.maxNPCs && 
+                npc.ai[1] >= 0 && npc.ai[1] < Main.maxNPCs;
+        }
+
+        private NPC FindSplittingWormHead(NPC segment)
+        {
+            NPC current = segment;
+            int segmentsChecked = 0;
+            
+            while (current != null && current.active && segmentsChecked < 100)
+            {
+                int prevIndex = (int)current.ai[1];
+                if (prevIndex >= 0 && prevIndex < Main.maxNPCs)
+                {
+                    NPC prevSegment = Main.npc[prevIndex];
+                    if (prevSegment.active && prevSegment.ai[0] == current.whoAmI)
+                    {
+                        current = prevSegment;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+                
+                segmentsChecked++;
+            }
+            
+            return current;
+        }
+
         private NPC GetWormHead(NPC segment)
         {
             if (segment.realLife >= 0 && segment.realLife < Main.npc.Length)
@@ -186,6 +223,23 @@ namespace Stataria
 
             if (npc.townNPC || npc.friendly || NPCID.Sets.CountsAsCritter[npc.type] || npc.lifeMax <= 9)
                 return;
+
+            if (IsSplittingWormSegment(npc))
+            {
+                NPC head = FindSplittingWormHead(npc);
+                
+                if (head != null && head.active && head.whoAmI != npc.whoAmI)
+                {
+                    var headScaling = head.GetGlobalNPC<StatariaScalingGlobalNPC>();
+                    
+                    Level = headScaling.Level;
+                    IsElite = headScaling.IsElite;
+                    
+                    ApplyScaling(npc);
+                    hasBeenScaled = true;
+                    return;
+                }
+            }
 
             if (IsWormSegment(npc))
             {
@@ -458,8 +512,12 @@ namespace Stataria
             if (npc.realLife >= 0 && npc.realLife != npc.whoAmI)
                 return;
 
-            if (npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail)
-                return;
+            if (IsSplittingWormSegment(npc))
+            {
+                NPC head = FindSplittingWormHead(npc);
+                if (head != null && head.whoAmI != npc.whoAmI)
+                    return;
+            }
 
             bool isBehindWall = false;
 
