@@ -37,12 +37,14 @@ namespace Stataria
         {
             CalamitySupportHelper.Initialize();
             ThoriumSupportHelper.Initialize();
+            GenericModSupportHelper.Initialize();
         }
 
         public override void OnWorldLoad()
         {
             CalamitySupportHelper.Initialize();
             ThoriumSupportHelper.Initialize();
+            GenericModSupportHelper.Initialize();
 
             if (CalamitySupportHelper.CalamityLoaded)
             {

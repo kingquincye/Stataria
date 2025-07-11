@@ -252,7 +252,6 @@ namespace Stataria
         {
             [Header("Enemy_Scaling")]
             [DefaultValue(true)] public bool EnableEnemyScaling { get; set; } = true;
-            [DefaultValue(true)] public bool ScaleCrawlerEnemies { get; set; } = true;
             [Range(0f, 5f)][DefaultValue(0.10f)] public float EnemyHealthScaling { get; set; } = 0.10f;
             [Range(0f, 5f)][DefaultValue(0.05f)] public float EnemyDamageScaling { get; set; } = 0.05f;
             [DefaultValue(true)] public bool EnableDefenseCap { get; set; } = true;
@@ -301,6 +300,11 @@ namespace Stataria
             [Range(-1, 10000)][DefaultValue(1000)] public int BRD_Cap { get; set; } = 1000;
             [Range(-1, 10000)][DefaultValue(1000)] public int HLR_Cap { get; set; } = 1000;
             [Range(-1, 10000)][DefaultValue(1000)] public int CLK_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int BLH_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int HNT_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int GMB_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int SHM_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int THR_Cap { get; set; } = 1000;
 
             [Header("VIT_Settings")]
             [Range(0, 1000)][DefaultValue(2)] public int VIT_HP { get; set; } = 2;
@@ -374,6 +378,7 @@ namespace Stataria
             [DefaultValue(true)] public bool EnableCalamityIntegration { get; set; } = true;
             [DefaultValue(true)] public bool EnableThoriumIntegration { get; set; } = true;
             [DefaultValue(true)] public bool EnableClickerClassIntegration { get; set; } = true;
+            [DefaultValue(true)] public bool EnableGenericModIntegration { get; set; } = true;
 
             [Header("RGE_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float RGE_Damage { get; set; } = 0.5f;
@@ -408,6 +413,36 @@ namespace Stataria
             [Range(0f, 10f)][DefaultValue(0.5f)] public float CLK_Damage { get; set; } = 0.5f;
             [Range(0f, 10f)][DefaultValue(1f)] public float CLK_Radius { get; set; } = 1f;
             [Range(0f, 10f)][DefaultValue(2f)] public float CLK_EffectThreshold { get; set; } = 2f;
+
+            [Header("BLH_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float BLH_Damage { get; set; } = 0.5f;
+
+            [Header("STD_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float STD_Damage { get; set; } = 0.5f;
+
+            [Header("KI_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float KI_Damage { get; set; } = 0.5f;
+
+            [Header("HNT_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float HNT_Damage { get; set; } = 0.5f;
+
+            [Header("DVF_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float DVF_Damage { get; set; } = 0.5f;
+
+            [Header("GMB_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float GMB_Damage { get; set; } = 0.5f;
+
+            [Header("SHM_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float SHM_Damage { get; set; } = 0.5f;
+
+            [Header("GRD_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float GRD_Damage { get; set; } = 0.5f;
+
+            [Header("ALC_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float ALC_Damage { get; set; } = 0.5f;
+
+            [Header("THR_Settings")]
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float THR_Damage { get; set; } = 0.5f;
         }
 
         public class ExtraLuckSettings
@@ -420,7 +455,17 @@ namespace Stataria
         public class Advanced
         {
             [Header("XP_Blacklist")]
-            public List<string> BlacklistedNPCs { get; set; } = new List<string>();
+            public List<string> XPBlacklistedNPCs { get; set; } = new List<string>();
+
+            [Header("Scaling_Blacklist")]
+            public List<string> ScalingBlacklistedNPCs { get; set; } = new List<string>
+            {
+                "Blood Crawler", "Blood Crawler Wall",
+                "Jungle Creeper", "Jungle Creeper Wall",
+                "Wall Creeper", "Wall Creeper Wall",
+                "Black Recluse", "Black Recluse Wall",
+                "Desert Scorpion Walk", "Desert Scorpion Wall"
+            };
         }
     }
 

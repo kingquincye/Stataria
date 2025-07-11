@@ -251,7 +251,7 @@ namespace Stataria
                     bool isGuardian = rpg.ActiveRole?.ID == "Guardian" && rpg.ActiveRole.Status == RoleStatus.Active;
 
                     tooltips.Add($"+{effectiveEND / cfg.statSettings.END_DefensePerX} Defense (+1 per {cfg.statSettings.END_DefensePerX} points)");
-                    
+
                     if (isGuardian)
                     {
                         tooltips.Add("Immune to knockback (Guardian)");
@@ -501,6 +501,91 @@ namespace Stataria
                     return string.Join("\n", tooltips);
                 }
             });
+            
+            GenericModSupportHelper.Initialize();
+            var visibleMods = GenericModSupportHelper.GetVisibleMods();
+
+            foreach (var modDef in visibleMods)
+            {
+                string statName = modDef.StatName;
+                string displayName = modDef.DisplayName;
+                
+                statDefinitions.Add(new StatDefinition
+                {
+                    Name = statName,
+                    GetValue = player => GetGenericModStatValue(player, statName),
+                    SetValue = (player, value) => SetGenericModStatValue(player, statName, value),
+                    GetCap = cfg => GetGenericModStatCap(cfg, statName),
+                    IsModLoaded = () => modDef.ShouldShowStat(),
+                    GetTooltip = cfg => GetGenericModTooltip(cfg, statName, displayName)
+                });
+            }
+        }
+
+        private static int GetGenericModStatValue(RPGPlayer player, string statName)
+        {
+            return statName switch
+            {
+                "BLH" => player.BLH,
+                "HNT" => player.HNT,
+                "GMB" => player.GMB,
+                "SHM" => player.SHM,
+                "THR" => player.THR,
+                _ => 0
+            };
+        }
+
+        private static void SetGenericModStatValue(RPGPlayer player, string statName, int value)
+        {
+            switch (statName)
+            {
+                case "BLH": player.BLH = value; break;
+                case "HNT": player.HNT = value; break;
+                case "GMB": player.GMB = value; break;
+                case "SHM": player.SHM = value; break;
+                case "THR": player.THR = value; break;
+            }
+        }
+
+        private static int GetGenericModStatCap(StatariaConfig cfg, string statName)
+        {
+            return statName switch
+            {
+                "BLH" => cfg.statSettings.BLH_Cap,
+                "HNT" => cfg.statSettings.HNT_Cap,
+                "GMB" => cfg.statSettings.GMB_Cap,
+                "SHM" => cfg.statSettings.SHM_Cap,
+                "THR" => cfg.statSettings.THR_Cap,
+                _ => 1000
+            };
+        }
+
+        private static string GetGenericModTooltip(StatariaConfig cfg, string statName, string displayName)
+        {
+            var player = Main.LocalPlayer;
+            var rpg = player.GetModPlayer<RPGPlayer>();
+            int effectiveStat = rpg.GetEffectiveStat(statName);
+            float damageBonus = rpg.GetGenericModDamageBonus(statName, cfg);
+            
+            return $"+{damageBonus:0.#}% {displayName} Damage (+{GetDamagePerPoint(cfg, statName):0.#}% per point)";
+        }
+
+        private static float GetDamagePerPoint(StatariaConfig cfg, string statName)
+        {
+            return statName switch
+            {
+                "BLH" => cfg.modIntegration.BLH_Damage,
+                "STD" => cfg.modIntegration.STD_Damage,
+                "KI" => cfg.modIntegration.KI_Damage,
+                "HNT" => cfg.modIntegration.HNT_Damage,
+                "DVF" => cfg.modIntegration.DVF_Damage,
+                "GMB" => cfg.modIntegration.GMB_Damage,
+                "SHM" => cfg.modIntegration.SHM_Damage,
+                "GRD" => cfg.modIntegration.GRD_Damage,
+                "ALC" => cfg.modIntegration.ALC_Damage,
+                "THR" => cfg.modIntegration.THR_Damage,
+                _ => 0.5f
+            };
         }
 
         private List<StatDefinition> GetActiveStats()

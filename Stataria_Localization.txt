@@ -777,6 +777,56 @@ Configs: {
 			Label: Damage Reduction
 			Tooltip: Percentage of damage reduction gained. Reduces incoming damage from all sources.
 		}
+
+		BLH_Cap: {
+			Label: BLH Cap
+			Tooltip: ""
+		}
+
+		STD_Cap: {
+			Label: STD Cap
+			Tooltip: ""
+		}
+
+		KI_Cap: {
+			Label: KI Cap
+			Tooltip: ""
+		}
+
+		HNT_Cap: {
+			Label: HNT Cap
+			Tooltip: ""
+		}
+
+		DVF_Cap: {
+			Label: DVF Cap
+			Tooltip: ""
+		}
+
+		GMB_Cap: {
+			Label: GMB Cap
+			Tooltip: ""
+		}
+
+		SHM_Cap: {
+			Label: SHM Cap
+			Tooltip: ""
+		}
+
+		GRD_Cap: {
+			Label: GRD Cap
+			Tooltip: ""
+		}
+
+		ALC_Cap: {
+			Label: ALC Cap
+			Tooltip: ""
+		}
+
+		THR_Cap: {
+			Label: THR Cap
+			Tooltip: ""
+		}
 	}
 
 	ModIntegration: {
@@ -789,6 +839,16 @@ Configs: {
 			BRD_Settings: BRD Settings
 			HLR_Settings: HLR Settings
 			CLK_Settings: CLK Settings
+			BLH_Settings: BLH Settings
+			STD_Settings: STD Settings
+			KI_Settings: KI Settings
+			HNT_Settings: HNT Settings
+			DVF_Settings: DVF Settings
+			GMB_Settings: GMB Settings
+			SHM_Settings: SHM Settings
+			GRD_Settings: GRD Settings
+			ALC_Settings: ALC Settings
+			THR_Settings: THR Settings
 		}
 
 		EnableCalamityIntegration: {
@@ -925,6 +985,61 @@ Configs: {
 			Label: Max Rage Duration Bonus
 			Tooltip: The maximum bonus to rage duration from POW. This prevents issues where high POW values can cause rage to increase instead of decrease when activated.
 		}
+
+		EnableGenericModIntegration: {
+			Label: Enable Generic Mod Integration
+			Tooltip: Enable or disable integration with various smaller mods that add damage classes.
+		}
+
+		BLH_Damage: {
+			Label: Damage
+			Tooltip: Percentage Blood Hunter damage increase.
+		}
+
+		STD_Damage: {
+			Label: Damage
+			Tooltip: Percentage Stand damage increase
+		}
+
+		KI_Damage: {
+			Label: Damage
+			Tooltip: Percentage Ki damage increase
+		}
+
+		HNT_Damage: {
+			Label: Damage
+			Tooltip: Percentage Hunter damage increase.
+		}
+
+		DVF_Damage: {
+			Label: Damage
+			Tooltip: Percentage Devil Fruit damage increase.
+		}
+
+		GMB_Damage: {
+			Label: Damage
+			Tooltip: Percentage Gambling damage increase.
+		}
+
+		SHM_Damage: {
+			Label: Damage
+			Tooltip: Percentage Shamanic damage increase.
+		}
+
+		GRD_Damage: {
+			Label: Damage
+			Tooltip: Percentage Opposing damage increase.
+		}
+
+		ALC_Damage: {
+			Label: Damage
+			Tooltip: Percentage Chemical damage increase.
+		}
+
+		THR_Damage: {
+			Label: Damage
+			Tooltip: Percentage Throwing damage increase.
+		}
 	}
 
 	RebirthAbilities: {
@@ -1017,12 +1132,21 @@ Configs: {
 	}
 
 	Advanced: {
-		BlacklistedNPCs: {
+		XPBlacklistedNPCs: {
 			Tooltip: List of NPC names or IDs that should not give XP when killed (e.g., Zombie or 3 for zombies)
 			Label: Blacklisted NPCs
 		}
 
-		Headers.XP_Blacklist: XP Blacklist
+		ScalingBlacklistedNPCs: {
+			Tooltip: List of NPC names or IDs that should not be affected by the enemy scaling system (e.g., 'Blood Crawler' or 65).
+			Label: Scaling Blacklisted NPCs
+		}
+
+		Headers: {
+			XP_Blacklist: XP Blacklist
+			Scaling_Blacklist: Scaling Blacklist
+		}
+
 		Tooltip: ""
 	}
 

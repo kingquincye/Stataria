@@ -65,7 +65,7 @@ namespace Stataria
                     rpg.XP = 0L;
                     rpg.XPToNext = (long)(100L * Math.Pow(rpg.Level, cfg.generalBalance.LevelScalingFactor));
                     rpg.StatPoints = 0;
-                    rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = 0;
+                    rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = rpg.BLH = rpg.HNT = rpg.GMB = rpg.SHM = rpg.THR = 0;
                     rpg.rewardedBosses.Clear();
                     rpg.RebirthCount = 0;
                     rpg.RebirthPoints = 0;
@@ -188,7 +188,7 @@ namespace Stataria
                             caller.Reply($"{args[1].ToUpper()} set to {val}", Color.Green);
                         }
                         else
-                            caller.Reply("Unknown stat name. Valid: vit, str, agi, int, luc, end, pow, dex, spr, tch, rge, brd, hlr, clk", Color.Red);
+                            caller.Reply("Unknown stat name. Valid: vit, str, agi, int, luc, end, pow, dex, spr, tch, rge, brd, hlr, clk, blh, hnt, gmb, shm, thr", Color.Red);
                     }
                     else caller.Reply("Usage: /stataria setstat <name> <value>", Color.Red);
                     break;
@@ -565,7 +565,7 @@ namespace Stataria
             rpg.XP = 0L;
             rpg.XPToNext = (long)(100L * Math.Pow(rpg.Level, cfg.generalBalance.LevelScalingFactor));
             rpg.StatPoints = 0;
-            rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = 0;
+            rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = rpg.BLH = rpg.HNT = rpg.GMB = rpg.SHM = rpg.THR = 0;
             rpg.rewardedBosses.Clear();
             rpg.RebirthCount = 0;
             rpg.RebirthPoints = 0;
@@ -612,6 +612,11 @@ namespace Stataria
                 case "brd": rpg.BRD = value; return true;
                 case "hlr": rpg.HLR = value; return true;
                 case "clk": rpg.CLK = value; return true;
+                case "blh": rpg.BLH = value; return true;
+                case "hnt": rpg.HNT = value; return true;
+                case "gmb": rpg.GMB = value; return true;
+                case "shm": rpg.SHM = value; return true;
+                case "thr": rpg.THR = value; return true;
                 default: return false;
             }
         }

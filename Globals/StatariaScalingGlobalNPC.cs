@@ -19,23 +19,8 @@ namespace Stataria
 
         public bool IsElite { get; set; }
         public int Level { get; set; }
-
-        private static readonly HashSet<int> CrawlerNpcTypes = new HashSet<int>
-        {
-            NPCID.BloodCrawler, NPCID.BloodCrawlerWall,
-            NPCID.JungleCreeper, NPCID.JungleCreeperWall,
-            NPCID.WallCreeper, NPCID.WallCreeperWall,
-            NPCID.BlackRecluse, NPCID.BlackRecluseWall,
-            NPCID.DesertScorpionWalk, NPCID.DesertScorpionWall
-        };
-
         private float damageMult = 1f;
         public bool hasBeenScaled = false;
-
-        private bool IsProblematicCrawler(NPC npc)
-        {
-            return CrawlerNpcTypes.Contains(npc.type);
-        }
 
         private bool IsWormSegment(NPC npc)
         {
@@ -208,8 +193,9 @@ namespace Stataria
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();
-
-            if (!config.enemyScaling.ScaleCrawlerEnemies && IsProblematicCrawler(npc))
+            if (config.advanced.ScalingBlacklistedNPCs.Any(entry =>
+                entry.Equals(Lang.GetNPCNameValue(npc.type), StringComparison.OrdinalIgnoreCase) ||
+                (int.TryParse(entry, out int id) && id == npc.type)))
             {
                 hasBeenScaled = true;
                 return;
@@ -565,6 +551,37 @@ namespace Stataria
 
             Color textColor = IsElite ? new Color(255, 50, 50) * opacity : Color.White * opacity;
             spriteBatch.DrawString(font, levelText, textPos, textColor);
+        }
+
+        public override void AI(NPC npc)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+            {
+                if (npc.active && !this.hasBeenScaled)
+                {
+                    if (Stataria.pendingNpcScaling.TryGetValue(npc.whoAmI, out var scalingData))
+                    {
+                        this.IsElite = scalingData.IsElite;
+                        this.Level = scalingData.Level;
+                        this.ApplyScaling(npc);
+                        this.hasBeenScaled = true;
+
+                        Stataria.pendingNpcScaling.Remove(npc.whoAmI);
+                    }
+                }
+            }
+            else
+            {
+                if (!this.hasBeenScaled && !npc.townNPC && !npc.friendly && !NPCID.Sets.CountsAsCritter[npc.type] && npc.lifeMax > 9)
+                {
+                    ApplyScalingOnSpawn(npc);
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        Stataria.SyncNPCScaling(npc.whoAmI);
+                    }
+                }
+            }
         }
 
         public override void PostAI(NPC npc)

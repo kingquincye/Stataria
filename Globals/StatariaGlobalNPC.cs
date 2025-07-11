@@ -17,7 +17,7 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            if (config.advanced.BlacklistedNPCs.Any(entry =>
+            if (config.advanced.XPBlacklistedNPCs.Any(entry =>
                 entry.Equals(Lang.GetNPCNameValue(npc.type), StringComparison.OrdinalIgnoreCase) ||
                 entry.Equals(npc.TypeName, StringComparison.OrdinalIgnoreCase) ||
                 (int.TryParse(entry, out int id) && id == npc.type)))

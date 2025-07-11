@@ -664,8 +664,6 @@ namespace Stataria
                     }
 
                     Type modItemType = item.ModItem.GetType();
-
-                    string tooltip = "";
                     MethodInfo tooltipMethod = modItemType.GetMethod("ModifyTooltips",
                         BindingFlags.Public | BindingFlags.Instance);
 

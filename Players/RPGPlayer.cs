@@ -53,7 +53,7 @@ namespace Stataria
         private float apexSummonerDamageBonus = 0f;
         private int arcaneSurgeDamageBonus = 0;
 
-        public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0;
+        public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0, BLH = 0, HNT = 0, GMB = 0, SHM = 0, THR = 0;
         public HashSet<int> rewardedBosses = new();
 
         public bool AutoAllocateEnabled { get; set; } = false;
@@ -67,7 +67,7 @@ namespace Stataria
             XP = 0L;
             XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
             StatPoints = 0;
-            VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = 0;
+            VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = 0;
             GhostStats = new Dictionary<string, int>();
             rewardedBosses.Clear();
             lastStandCooldownTimer = 0;
@@ -93,6 +93,9 @@ namespace Stataria
             tag["POW"] = POW; tag["DEX"] = DEX; tag["SPR"] = SPR;
             tag["RGE"] = RGE; tag["TCH"] = TCH; tag["BRD"] = BRD;
             tag["HLR"] = HLR; tag["CLK"] = CLK;
+            tag["BLH"] = BLH;
+            tag["HNT"] = HNT; tag["GMB"] = GMB;
+            tag["SHM"] = SHM; tag["THR"] = THR;
             tag["RewardedBosses"] = new List<int>(rewardedBosses);
             tag["lastStandCooldownTimer"] = lastStandCooldownTimer;
             tag["divineInterventionCooldownTimer"] = divineInterventionCooldownTimer;
@@ -131,6 +134,11 @@ namespace Stataria
             BRD = tag.ContainsKey("BRD") ? tag.GetInt("BRD") : 0;
             HLR = tag.ContainsKey("HLR") ? tag.GetInt("HLR") : 0;
             CLK = tag.ContainsKey("CLK") ? tag.GetInt("CLK") : 0;
+            BLH = tag.ContainsKey("BLH") ? tag.GetInt("BLH") : 0;
+            HNT = tag.ContainsKey("HNT") ? tag.GetInt("HNT") : 0;
+            GMB = tag.ContainsKey("GMB") ? tag.GetInt("GMB") : 0;
+            SHM = tag.ContainsKey("SHM") ? tag.GetInt("SHM") : 0;
+            THR = tag.ContainsKey("THR") ? tag.GetInt("THR") : 0;
             if (tag.ContainsKey("RewardedBosses"))
                 rewardedBosses = tag.Get<List<int>>("RewardedBosses").ToHashSet();
             lastStandCooldownTimer = tag.ContainsKey("lastStandCooldownTimer") ? tag.GetInt("lastStandCooldownTimer") : 0;
@@ -642,7 +650,7 @@ namespace Stataria
             if (config.rebirthSystem.ResetStatsOnRebirth)
             {
                 StatPoints = config.generalBalance.StatPointsPerLevel;
-                VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = TCH = RGE = BRD = HLR = CLK = 0;
+                VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = TCH = RGE = BRD = HLR = CLK = BLH = THR = 0;
             }
             else
             {
@@ -675,7 +683,8 @@ namespace Stataria
 
             int shouldHaveStatPoints = (Level - 1) * config.generalBalance.StatPointsPerLevel;
 
-            int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK;
+            int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK + 
+                  BLH + THR;
 
             int totalPointsShould = shouldHaveStatPoints;
 
@@ -741,6 +750,11 @@ namespace Stataria
                         case "BRD": cap = config.statSettings.BRD_Cap; break;
                         case "HLR": cap = config.statSettings.HLR_Cap; break;
                         case "CLK": cap = config.statSettings.CLK_Cap; break;
+                        case "BLH": cap = config.statSettings.BLH_Cap; break;
+                        case "HNT": cap = config.statSettings.HNT_Cap; break;
+                        case "GMB": cap = config.statSettings.GMB_Cap; break;
+                        case "SHM": cap = config.statSettings.SHM_Cap; break;
+                        case "THR": cap = config.statSettings.THR_Cap; break;
                     }
 
                     if (cap != -1 && config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
@@ -767,6 +781,11 @@ namespace Stataria
                     case "BRD": baseStat = BRD; break;
                     case "HLR": baseStat = HLR; break;
                     case "CLK": baseStat = CLK; break;
+                    case "BLH": baseStat = BLH; break;
+                    case "HNT": baseStat = HNT; break;
+                    case "GMB": baseStat = GMB; break;
+                    case "SHM": baseStat = SHM; break;
+                    case "THR": baseStat = THR; break;
                 }
 
                 int clampedGhostValue = ghostStatValue;
@@ -844,6 +863,26 @@ namespace Stataria
                 case "CLK":
                     baseStat = CLK;
                     cap = config.statSettings.CLK_Cap;
+                    break;
+                case "BLH":
+                    baseStat = BLH;
+                    cap = config.statSettings.BLH_Cap;
+                    break;
+                case "HNT":
+                    baseStat = HNT;
+                    cap = config.statSettings.HNT_Cap;
+                    break;
+                case "GMB":
+                    baseStat = GMB;
+                    cap = config.statSettings.GMB_Cap;
+                    break;
+                case "SHM":
+                    baseStat = SHM;
+                    cap = config.statSettings.SHM_Cap;
+                    break;
+                case "THR":
+                    baseStat = THR;
+                    cap = config.statSettings.THR_Cap;
                     break;
             }
 
@@ -927,7 +966,8 @@ namespace Stataria
                 shouldHaveBonusStatPoints = (Level - 1) * (int)(config.generalBalance.StatPointsPerLevel * RebirthCount * config.rebirthSystem.RebirthStatPointsMultiplier);
             }
 
-            int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK;
+            int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK + 
+                  BLH + THR;
             int totalPointsShould = shouldHaveBaseStatPoints + shouldHaveBonusStatPoints;
             int currentTotalPoints = spentPoints + StatPoints;
 
@@ -1110,7 +1150,7 @@ namespace Stataria
 
             HandleBlackKnightMechanics(item, target, hit, damageDone);
 
-            if (config.advanced.BlacklistedNPCs.Any(entry =>
+            if (config.advanced.XPBlacklistedNPCs.Any(entry =>
                 entry.Equals(Lang.GetNPCNameValue(target.type), StringComparison.OrdinalIgnoreCase) ||
                 entry.Equals(target.TypeName, StringComparison.OrdinalIgnoreCase) ||
                 (int.TryParse(entry, out int id) && id == target.type)))
@@ -1131,7 +1171,7 @@ namespace Stataria
             Item heldItem = Player.HeldItem;
             HandleBlackKnightMechanics(heldItem, target, hit, damageDone, proj);
 
-            if (config.advanced.BlacklistedNPCs.Any(entry =>
+            if (config.advanced.XPBlacklistedNPCs.Any(entry =>
                 entry.Equals(Lang.GetNPCNameValue(target.type), StringComparison.OrdinalIgnoreCase) ||
                 entry.Equals(target.TypeName, StringComparison.OrdinalIgnoreCase) ||
                 (int.TryParse(entry, out int id) && id == target.type)))
@@ -1729,6 +1769,11 @@ namespace Stataria
                         case "BRD": currentBaseStat = BRD; cap = config.statSettings.BRD_Cap; break;
                         case "HLR": currentBaseStat = HLR; cap = config.statSettings.HLR_Cap; break;
                         case "CLK": currentBaseStat = CLK; cap = config.statSettings.CLK_Cap; break;
+                        case "BLH": currentBaseStat = BLH; cap = config.statSettings.BLH_Cap; break;
+                        case "HNT": currentBaseStat = HNT; cap = config.statSettings.HNT_Cap; break;
+                        case "GMB": currentBaseStat = GMB; cap = config.statSettings.GMB_Cap; break;
+                        case "SHM": currentBaseStat = SHM; cap = config.statSettings.SHM_Cap; break;
+                        case "THR": currentBaseStat = THR; cap = config.statSettings.THR_Cap; break;
                         default: continue;
                     }
 
@@ -1799,6 +1844,11 @@ namespace Stataria
                         case "BRD": currentBaseStat = BRD; cap = config.statSettings.BRD_Cap; break;
                         case "HLR": currentBaseStat = HLR; cap = config.statSettings.HLR_Cap; break;
                         case "CLK": currentBaseStat = CLK; cap = config.statSettings.CLK_Cap; break;
+                        case "BLH": currentBaseStat = BLH; cap = config.statSettings.BLH_Cap; break;
+                        case "HNT": currentBaseStat = HNT; cap = config.statSettings.HNT_Cap; break;
+                        case "GMB": currentBaseStat = GMB; cap = config.statSettings.GMB_Cap; break;
+                        case "SHM": currentBaseStat = SHM; cap = config.statSettings.SHM_Cap; break;
+                        case "THR": currentBaseStat = THR; cap = config.statSettings.THR_Cap; break;
                         default: continue;
                     }
 
@@ -1838,6 +1888,11 @@ namespace Stataria
                         case "BRD": BRD += pointsToAdd; break;
                         case "HLR": HLR += pointsToAdd; break;
                         case "CLK": CLK += pointsToAdd; break;
+                        case "BLH": BLH += pointsToAdd; break;
+                        case "HNT": HNT += pointsToAdd; break;
+                        case "GMB": GMB += pointsToAdd; break;
+                        case "SHM": SHM += pointsToAdd; break;
+                        case "THR": THR += pointsToAdd; break;
                     }
 
                     totalPointsToAllocate += pointsToAdd;
@@ -2294,6 +2349,26 @@ namespace Stataria
                 npc.velocity += knockbackDir * knockbackStrength;
             }
         }
+        
+        public float GetGenericModDamageBonus(string statName, StatariaConfig config)
+        {
+            int effectiveStat = GetEffectiveStat(statName);
+            
+            return statName switch
+            {
+                "BLH" => effectiveStat * (config.modIntegration.BLH_Damage / 100f),
+                "STD" => effectiveStat * (config.modIntegration.STD_Damage / 100f),
+                "KI" => effectiveStat * (config.modIntegration.KI_Damage / 100f),
+                "HNT" => effectiveStat * (config.modIntegration.HNT_Damage / 100f),
+                "DVF" => effectiveStat * (config.modIntegration.DVF_Damage / 100f),
+                "GMB" => effectiveStat * (config.modIntegration.GMB_Damage / 100f),
+                "SHM" => effectiveStat * (config.modIntegration.SHM_Damage / 100f),
+                "GRD" => effectiveStat * (config.modIntegration.GRD_Damage / 100f),
+                "ALC" => effectiveStat * (config.modIntegration.ALC_Damage / 100f),
+                "THR" => effectiveStat * (config.modIntegration.THR_Damage / 100f),
+                _ => 0f
+            };
+        }
 
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
         {
@@ -2335,6 +2410,14 @@ namespace Stataria
                                 ClickerSupportHelper.ClickerClassLoaded &&
                                 ClickerSupportHelper.IsClickerWeapon(item);
 
+            ModDefinition genericModDef = null;
+            bool isGenericModWeapon = false;
+            if (config.modIntegration.EnableGenericModIntegration)
+            {
+                genericModDef = GenericModSupportHelper.GetModDefinitionForWeapon(item);
+                isGenericModWeapon = genericModDef != null;
+            }
+
             if (item.CountsAsClass(DamageClass.Melee))
                 bonus += effectiveSTR * (config.statSettings.STR_Damage / 100f);
 
@@ -2356,6 +2439,12 @@ namespace Stataria
             if (isClickerWeapon)
                 bonus += effectiveCLK * (config.modIntegration.CLK_Damage / 100f);
 
+            if (isGenericModWeapon && genericModDef != null)
+            {
+                float damageBonus = GetGenericModDamageBonus(genericModDef.StatName, config);
+                bonus += damageBonus;
+            }
+
             if (!item.CountsAsClass(DamageClass.Melee) &&
                 !item.CountsAsClass(DamageClass.Ranged) &&
                 !item.CountsAsClass(DamageClass.Magic) &&
@@ -2363,7 +2452,8 @@ namespace Stataria
                 !isRogueWeapon &&
                 !isSymphonicWeapon &&
                 !isRadiantWeapon &&
-                !isClickerWeapon)
+                !isClickerWeapon &&
+                !isGenericModWeapon)
             {
                 bonus += effectivePOW * (config.statSettings.POW_Damage / 100f);
             }
@@ -2476,6 +2566,11 @@ namespace Stataria
             packet.Write(BRD);
             packet.Write(HLR);
             packet.Write(CLK);
+            packet.Write(BLH);
+            packet.Write(HNT);
+            packet.Write(GMB);
+            packet.Write(SHM);
+            packet.Write(THR);
             packet.Write(lastStandCooldownTimer);
             packet.Write(divineInterventionCooldownTimer);
             packet.Write(RebirthCount);
