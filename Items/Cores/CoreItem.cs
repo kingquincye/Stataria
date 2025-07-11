@@ -52,20 +52,38 @@ namespace Stataria.Items.Cores
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            string effect = CoreType switch
+            string effect;
+            string usage;
+            switch (CoreType)
             {
-                CoreType.Power => $"+{EffectValue}% Weapon Damage",
-                CoreType.Force => $"+{EffectValue}% Weapon Knockback",
-                CoreType.Precision => $"+{EffectValue}% Weapon Crit Chance",
-                _ => ""
-            };
+                case CoreType.Power:
+                    effect = $"+{EffectValue}% Weapon Damage";
+                    usage = "Can be socketed into weapons";
+                    break;
+                case CoreType.Force:
+                    effect = $"+{EffectValue}% Weapon Knockback";
+                    usage = "Can be socketed into weapons";
+                    break;
+                case CoreType.Precision:
+                    effect = $"+{EffectValue}% Weapon Crit Chance";
+                    usage = "Can be socketed into weapons";
+                    break;
+                case CoreType.Defense:
+                    effect = $"+{EffectValue} Defense";
+                    usage = "Can be socketed into armor";
+                    break;
+                default:
+                    effect = "";
+                    usage = "";
+                    break;
+            }
 
             tooltips.Add(new TooltipLine(Mod, "CoreEffect", effect)
             {
                 OverrideColor = Color.LightBlue
             });
 
-            tooltips.Add(new TooltipLine(Mod, "CoreUsage", "Can be socketed into weapons")
+            tooltips.Add(new TooltipLine(Mod, "CoreUsage", usage)
             {
                 OverrideColor = Color.Gray
             });
@@ -134,13 +152,35 @@ namespace Stataria.Items.Cores
         public override int Tier => 3;
         public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.PrecisionT3Effect;
     }
+
+    public class CoreOfDefenseT1 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Defense;
+        public override int Tier => 1;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.DefenseT1Effect;
+    }
+
+    public class CoreOfDefenseT2 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Defense;
+        public override int Tier => 2;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.DefenseT2Effect;
+    }
+
+    public class CoreOfDefenseT3 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Defense;
+        public override int Tier => 3;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.DefenseT3Effect;
+    }
 }
 
 public enum CoreType
 {
     Power,
     Force,
-    Precision
+    Precision,
+    Defense
 }
 
 public struct SocketedCore
@@ -182,6 +222,13 @@ public struct SocketedCore
                 3 => config.PrecisionT3Effect,
                 _ => 0f
             },
+            CoreType.Defense => Tier switch
+            {
+                1 => config.DefenseT1Effect,
+                2 => config.DefenseT2Effect,
+                3 => config.DefenseT3Effect,
+                _ => 0f
+            },
             _ => 0f
         };
     }
@@ -193,6 +240,7 @@ public struct SocketedCore
             CoreType.Power => "Core of Power",
             CoreType.Force => "Core of Force",
             CoreType.Precision => "Core of Precision",
+            CoreType.Defense => "Core of Defense",
             _ => "Unknown Core"
         };
         return $"{typeName} T.{Tier}";

@@ -1566,6 +1566,21 @@ Configs: {
 			Label: Max Expanded Slots
 			Tooltip: Maximum number of additional slots that can be added to an item through expansion.
 		}
+
+		DefenseT1Effect: {
+			Label: Defense T.1 Effect
+			Tooltip: Defense bonus provided by Core of Defense T.1.
+		}
+
+		DefenseT2Effect: {
+			Label: Defense T.2 Effect
+			Tooltip: Defense bonus provided by Core of Defense T.2.
+		}
+
+		DefenseT3Effect: {
+			Label: Defense T.3 Effect
+			Tooltip: Defense bonus provided by Core of Defense T.3.
+		}
 	}
 
 	ExtraLuckSettings: {
@@ -1835,5 +1850,44 @@ Items: {
 	CoreOfPrecisionT3: {
 		DisplayName: Core Of Precision T.3
 		Tooltip: Can be socketed into weapons to increase critical hit chance
+	}
+
+	CoreOfDefenseT1: {
+		DisplayName: Core Of Defense T.1
+		Tooltip: Can be socketed into armor to increase defense
+	}
+
+	CoreOfDefenseT2: {
+		DisplayName: Core Of Defense T.2
+		Tooltip: Can be socketed into armor to increase defense
+	}
+
+	CoreOfDefenseT3: {
+		DisplayName: Core Of Defense T.3
+		Tooltip: Can be socketed into armor to increase defense
+	}
+}
+
+NPCs: {
+	Hugo: {
+		Census.SpawnCondition: Conditions unknown
+		DisplayName: Hugo
+
+		TownNPCMood: {
+			Content: I am content.
+			NoHome: I hate not having a home.
+			FarFromHome: I am too far from home.
+			LoveSpace: I love having so much space.
+			DislikeCrowded: I dislike how crowded I am.
+			HateCrowded: I hate how crowded I am.
+			LoveBiome: I love {BiomeName}.
+			LikeBiome: I like {BiomeName}.
+			DislikeBiome: I dislike {BiomeName}.
+			LoveNPC: I love {NPCName}.
+			LikeNPC: I like {NPCName}.
+			DislikeNPC: I dislike {NPCName}.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
 	}
 }

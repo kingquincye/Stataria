@@ -24,7 +24,7 @@ namespace Stataria
 
         public override void SetDefaults(Item item)
         {
-            if (IsWeapon(item))
+            if (IsWeapon(item) || IsArmor(item))
             {
                 MaxSlots = GetBaseSlots(item);
             }
@@ -69,9 +69,18 @@ namespace Stataria
 
             ExpandedSlots = tag.GetInt("ExpandedSlots");
 
-            if (IsWeapon(item))
+            if (IsWeapon(item) || IsArmor(item))
             {
                 MaxSlots = GetBaseSlots(item) + ExpandedSlots;
+            }
+        }
+
+        public override void UpdateEquip(Item item, Player player)
+        {
+            float defenseBonus = GetTotalCoreEffect(CoreType.Defense);
+            if (defenseBonus > 0)
+            {
+                player.statDefense += (int)defenseBonus;
             }
         }
 
@@ -110,7 +119,7 @@ namespace Stataria
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (!IsWeapon(item) || SocketedCores.Count == 0)
+            if (!(IsWeapon(item) || IsArmor(item)) || SocketedCores.Count == 0)
                 return;
 
             var configClient = ModContent.GetInstance<StatariaClientConfig>();
@@ -129,6 +138,7 @@ namespace Stataria
                     CoreType.Power => $"+{core.GetEffectValue() * core.Count:0.#}% Damage",
                     CoreType.Force => CanReceiveKnockback(item) ? $"+{core.GetEffectValue() * core.Count:0.#}% Knockback" : "",
                     CoreType.Precision => CanReceiveCrit(item) ? $"+{core.GetEffectValue() * core.Count:0.#}% Crit" : "",
+                    CoreType.Defense => $"+{core.GetEffectValue() * core.Count:0.#} Defense",
                     _ => ""
                 };
 
@@ -146,6 +156,11 @@ namespace Stataria
         public static bool IsWeapon(Item item)
         {
             return item.DamageType != DamageClass.Default;
+        }
+
+        public static bool IsArmor(Item item)
+        {
+            return !item.accessory && (item.headSlot > -1 || item.bodySlot > -1 || item.legSlot > -1);
         }
 
         public static bool CanReceiveDamage(Item item)
@@ -209,6 +224,7 @@ namespace Stataria
                 CoreType.Power => CanReceiveDamage(item),
                 CoreType.Force => CanReceiveKnockback(item),
                 CoreType.Precision => CanReceiveCrit(item),
+                CoreType.Defense => IsArmor(item),
                 _ => false
             };
         }
@@ -270,7 +286,7 @@ namespace Stataria
             if (Main.netMode == NetmodeID.SinglePlayer)
                 return;
 
-            if (!IsWeapon(item) || item.IsAir)
+            if (!(IsWeapon(item) || IsArmor(item)) || item.IsAir)
                 return;
 
             var socketingData = item.GetGlobalItem<SocketingGlobalItem>();

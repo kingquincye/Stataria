@@ -93,6 +93,9 @@ namespace Stataria
             [Range(0f, 100f)][DefaultValue(5f)] public float PrecisionT1Effect { get; set; } = 5f;
             [Range(0f, 100f)][DefaultValue(10f)] public float PrecisionT2Effect { get; set; } = 10f;
             [Range(0f, 100f)][DefaultValue(25f)] public float PrecisionT3Effect { get; set; } = 25f;
+            [Range(0f, 100f)][DefaultValue(2f)] public float DefenseT1Effect { get; set; } = 2f;
+            [Range(0f, 100f)][DefaultValue(4f)] public float DefenseT2Effect { get; set; } = 4f;
+            [Range(0f, 100f)][DefaultValue(8f)] public float DefenseT3Effect { get; set; } = 8f;
 
             [Header("Cost_Configuration")]
             [Range(0, 1000)][DefaultValue(10)] public int ExtractCost { get; set; } = 10;
@@ -455,16 +458,19 @@ namespace Stataria
         public class Advanced
         {
             [Header("XP_Blacklist")]
-            public List<string> XPBlacklistedNPCs { get; set; } = new List<string>();
+            public List<string> XPBlacklistedNPCs { get; set; } = new List<string>
+            {
+                "Target Dummy",
+                "Scarecrow Dummy",
+                "Super Dummy"
+            };
 
             [Header("Scaling_Blacklist")]
             public List<string> ScalingBlacklistedNPCs { get; set; } = new List<string>
             {
-                "Blood Crawler", "Blood Crawler Wall",
-                "Jungle Creeper", "Jungle Creeper Wall",
-                "Wall Creeper", "Wall Creeper Wall",
-                "Black Recluse", "Black Recluse Wall",
-                "Desert Scorpion Walk", "Desert Scorpion Wall"
+                "Blood Crawler", "Blood Crawler Wall", "Jungle Creeper", "Jungle Creeper Wall", "Wall Creeper", "Wall Creeper Wall",
+                "Black Recluse", "Black Recluse Wall","Desert Scorpion Walk", "Desert Scorpion Wall", "Target Dummy", "Scarecrow Dummy",
+                "Super Dummy"
             };
         }
     }

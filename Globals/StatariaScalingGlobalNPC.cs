@@ -486,6 +486,13 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
             var configClient = ModContent.GetInstance<StatariaClientConfig>();
 
+            if (config.advanced.ScalingBlacklistedNPCs.Any(entry =>
+                entry.Equals(Lang.GetNPCNameValue(npc.type), StringComparison.OrdinalIgnoreCase) ||
+                (int.TryParse(entry, out int id) && id == npc.type)))
+            {
+                return;
+            }
+
             if (!config.enemyScaling.EnableEnemyScaling || !configClient.ShowEnemyLevelIndicator)
                 return;
 

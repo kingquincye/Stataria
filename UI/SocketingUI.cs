@@ -101,7 +101,7 @@ namespace Stataria
             weaponSlot.Top.Set(50f, 0f);
             weaponSlot.Left.Set(10f, 0f);
 
-            weaponSlot.ValidItemFunc = (item) => SocketingGlobalItem.IsWeapon(item);
+            weaponSlot.ValidItemFunc = (item) => SocketingGlobalItem.IsWeapon(item) || SocketingGlobalItem.IsArmor(item);
 
             socketingPanel.Append(weaponSlot);
 
@@ -246,11 +246,11 @@ namespace Stataria
         {
             Player player = Main.LocalPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
-            Item weapon = SocketingItemSlot;
+            Item item = SocketingItemSlot;
 
-            if (weapon == null || weapon.IsAir || !SocketingGlobalItem.IsWeapon(weapon)) return;
+            if (item == null || item.IsAir || !(SocketingGlobalItem.IsWeapon(item) || SocketingGlobalItem.IsArmor(item))) return;
 
-            var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
+            var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
             var config = ModContent.GetInstance<StatariaConfig>().socketingSystem;
 
             if (socketingData.ExpandedSlots >= config.MaxExpandedSlots) return;
@@ -265,7 +265,7 @@ namespace Stataria
 
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
-                SocketingGlobalItem.SyncSocketedItem(player, weapon, -1);
+                SocketingGlobalItem.SyncSocketedItem(player, item, -1);
                 rpg.SyncPlayer(-1, player.whoAmI, false);
             }
 
@@ -277,14 +277,14 @@ namespace Stataria
             if (!selectedCompatibleCore.HasValue) return;
 
             Player player = Main.LocalPlayer;
-            Item weapon = SocketingItemSlot;
+            Item item = SocketingItemSlot;
 
-            if (weapon == null || weapon.IsAir || !SocketingGlobalItem.IsWeapon(weapon)) return;
+            if (item == null || item.IsAir || !(SocketingGlobalItem.IsWeapon(item) || SocketingGlobalItem.IsArmor(item))) return;
 
-            var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
+            var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
             var (type, tier) = selectedCompatibleCore.Value;
 
-            if (!socketingData.CanAttachCore(type, weapon, player)) return;
+            if (!socketingData.CanAttachCore(type, item, player)) return;
 
             int coreItemType = GetCoreItemType(type, tier);
             if (!player.ConsumeItem(coreItemType)) return;
@@ -295,7 +295,7 @@ namespace Stataria
 
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
-                SocketingGlobalItem.SyncSocketedItem(player, weapon, -1);
+                SocketingGlobalItem.SyncSocketedItem(player, item, -1);
             }
 
             RefreshUI();
@@ -308,14 +308,14 @@ namespace Stataria
 
             Player player = Main.LocalPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
-            Item weapon = SocketingItemSlot;
+            Item item = SocketingItemSlot;
 
-            if (weapon == null || weapon.IsAir || !SocketingGlobalItem.IsWeapon(weapon)) return;
+            if (item == null || item.IsAir || !(SocketingGlobalItem.IsWeapon(item) || SocketingGlobalItem.IsArmor(item))) return;
 
             var config = ModContent.GetInstance<StatariaConfig>().socketingSystem;
             if (rpg.RebirthPoints < config.ExtractCost) return;
 
-            var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
+            var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
             var core = selectedAttachedCore.Value;
 
             if (!socketingData.ExtractCore(core.Type, core.Tier)) return;
@@ -329,7 +329,7 @@ namespace Stataria
 
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
-                SocketingGlobalItem.SyncSocketedItem(player, weapon, -1);
+                SocketingGlobalItem.SyncSocketedItem(player, item, -1);
                 rpg.SyncPlayer(-1, player.whoAmI, false);
             }
 
@@ -360,6 +360,13 @@ namespace Stataria
                     1 => ModContent.ItemType<Items.Cores.CoreOfPrecisionT1>(),
                     2 => ModContent.ItemType<Items.Cores.CoreOfPrecisionT2>(),
                     3 => ModContent.ItemType<Items.Cores.CoreOfPrecisionT3>(),
+                    _ => 0
+                },
+                CoreType.Defense => tier switch
+                {
+                    1 => ModContent.ItemType<Items.Cores.CoreOfDefenseT1>(),
+                    2 => ModContent.ItemType<Items.Cores.CoreOfDefenseT2>(),
+                    3 => ModContent.ItemType<Items.Cores.CoreOfDefenseT3>(),
                     _ => 0
                 },
                 _ => 0
@@ -406,11 +413,11 @@ namespace Stataria
         {
             Player player = Main.LocalPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
-            Item weapon = SocketingItemSlot;
+            Item item = SocketingItemSlot;
 
             rebirthPointsText.SetText($"Your RP: {rpg.RebirthPoints}");
 
-            if (weapon == null || weapon.IsAir || !SocketingGlobalItem.IsWeapon(weapon))
+            if (item == null || item.IsAir || !(SocketingGlobalItem.IsWeapon(item) || SocketingGlobalItem.IsArmor(item)))
             {
                 itemNameText.SetText("Item: ---");
                 slotsText.SetText("Slots: - / -");
@@ -433,14 +440,14 @@ namespace Stataria
                 return;
             }
 
-            var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
+            var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
 
             float maxNameWidth = 400f - 130f - 20f;
-            string truncatedName = TruncateItemName(weapon.Name, maxNameWidth);
+            string truncatedName = TruncateItemName(item.Name, maxNameWidth);
             itemNameText.SetText($"Item: {truncatedName}");
             slotsText.SetText($"Slots: {socketingData.GetUsedSlots()} / {socketingData.MaxSlots}");
 
-            RefreshCompatibleCores(weapon, player);
+            RefreshCompatibleCores(item, player);
 
             RefreshAttachedCores(socketingData);
 
@@ -451,7 +458,7 @@ namespace Stataria
             extractCostText.SetText($"Cost: {config.ExtractCost} RP");
         }
 
-        private void RefreshCompatibleCores(Item weapon, Player player)
+        private void RefreshCompatibleCores(Item item, Player player)
         {
             compatibleCoresList.Clear();
 
@@ -459,21 +466,21 @@ namespace Stataria
 
             for (int i = 0; i < player.inventory.Length; i++)
             {
-                Item item = player.inventory[i];
-                if (item.IsAir || item.ModItem is not CoreItem core) continue;
+                Item invItem = player.inventory[i];
+                if (invItem.IsAir || invItem.ModItem is not CoreItem core) continue;
 
                 var key = (core.CoreType, core.Tier);
-                availableCores[key] = availableCores.GetValueOrDefault(key, 0) + item.stack;
+                availableCores[key] = availableCores.GetValueOrDefault(key, 0) + invItem.stack;
             }
 
-            var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
+            var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
 
             foreach (var kvp in availableCores)
             {
                 var (type, tier) = kvp.Key;
                 int count = kvp.Value;
 
-                if (!socketingData.CanAttachCore(type, weapon, player)) continue;
+                if (!socketingData.CanAttachCore(type, item, player)) continue;
 
                 var corePanel = CreateCompatibleCorePanel(type, tier, count);
                 compatibleCoresList.Add(corePanel);
@@ -572,21 +579,21 @@ namespace Stataria
             return panel;
         }
 
-        private void UpdateButtonStates(bool hasWeapon, bool canAttach, bool canExtract)
+        private void UpdateButtonStates(bool hasItem, bool canAttach, bool canExtract)
         {
             Player player = Main.LocalPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
             var config = ModContent.GetInstance<StatariaConfig>().socketingSystem;
 
-            if (Main.netMode == NetmodeID.MultiplayerClient && hasWeapon)
+            if (Main.netMode == NetmodeID.MultiplayerClient && hasItem)
             {
-                Item weapon = SocketingItemSlot;
-                var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
+                Item item = SocketingItemSlot;
+                var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
 
                 if (selectedCompatibleCore.HasValue)
                 {
                     var (type, tier) = selectedCompatibleCore.Value;
-                    canAttach = socketingData.CanAttachCore(type, weapon, player) &&
+                    canAttach = socketingData.CanAttachCore(type, item, player) &&
                             player.HasItem(GetCoreItemType(type, tier));
                 }
 
@@ -598,10 +605,10 @@ namespace Stataria
                 }
             }
 
-            if (hasWeapon)
+            if (hasItem)
             {
-                Item weapon = SocketingItemSlot;
-                var socketingData = weapon.GetGlobalItem<SocketingGlobalItem>();
+                Item item = SocketingItemSlot;
+                var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
                 bool canExpand = socketingData.ExpandedSlots < config.MaxExpandedSlots &&
                             rpg.RebirthPoints >= socketingData.GetExpandCost();
 

@@ -2,7 +2,7 @@ Stataria adds a full RPG stat and leveling system to Terraria!
 
 Hey, if you're enjoying the journey, feel free to support it and fuel my modding addiction xD --> https://ko-fi.com/kingquincye
 
-DEFAULT KEYBIND: K
+DEFAULT KEYBIND: K (MUST SET-UP)
 
 Gain XP by:
 
@@ -35,13 +35,7 @@ Assign stat points across 10 unique stats to build your character:
 
     SPR: Increases Summon Damage and adds Minion and Sentry slots (1 minion per 10 SPR, 1 sentry per 20 SPR)
 
-Mod integration stats:
-
-    POW+: Increases Rage Damage, Rage Duration, and Adrenaline Duration (Calamity)
-    RGE: Increase Rogue Damage, Max Stealth, and Rogue Projectile Velocity, Decreases Rogue Ammo Cost (Calamity)
-    BRD: Increase Symphonic Damage, Max Inspiration (cannot exceed cap at 30), and Empowerment Duration (Thorium)
-    HLR: Increases Radiant Damage, Healing Power, and Improved Life Recovery (Thorium)
-    CLK: Increases Clicker Damage, Radius, and Decreases Clicks Required for Click Effects (ClickerClass)
+Has mod integration stats for Calamity, Thorium, ClickerClass, VitalityMod, OrchidMod, MetroidMod
 
 Has a very simple UI.
 
