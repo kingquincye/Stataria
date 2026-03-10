@@ -1,0 +1,13 @@
+displayName = Stataria
+name = Stataria
+author = KQE
+version = 3.7.0.1
+description = 
+side = Both
+homepage = https://github.com/kingquincye/Stataria
+hideCode = false
+hideResources = false
+includeSource = true
+sortAfter = ThoriumMod, CalamityMod, ClickerClass, VitalityMod, MetroidMod, OrchidMod
+loadAfter = ThoriumMod, CalamityMod, ClickerClass, VitalityMod, MetroidMod, OrchidMod
+buildIgnore = Test.cs, Things-To-Add.txt, Stataria_Localization.txt
