@@ -24,7 +24,6 @@ namespace Stataria
         private UIPanel tooltipPanel;
         private UIText tooltipText;
 
-        private string[] statNames;
         private UIText[] statTexts;
         private UITextPanel<string>[] plusButtons;
         private UITextPanel<string>[] minusButtons;
@@ -50,7 +49,6 @@ namespace Stataria
         private float requirementMessageTimer = 0f;
         private const float RequirementMessageDuration = 3f;
         private UIText rebirthPointsText;
-        private UITextPanel<string> skillTreeButton;
 
         private class StatDefinition
         {
@@ -250,7 +248,7 @@ namespace Stataria
                     var tooltips = new List<string>();
                     bool isGuardian = rpg.ActiveRole?.ID == "Guardian" && rpg.ActiveRole.Status == RoleStatus.Active;
 
-                    tooltips.Add($"+{effectiveEND / cfg.statSettings.END_DefensePerX} Defense (+1 per {cfg.statSettings.END_DefensePerX} points)");
+                    tooltips.Add($"+{effectiveEND * cfg.statSettings.END_Defense:0.#} Defense (+{cfg.statSettings.END_Defense:0.#} per point)");
 
                     if (isGuardian)
                     {
@@ -567,7 +565,7 @@ namespace Stataria
             int effectiveStat = rpg.GetEffectiveStat(statName);
             float damageBonus = rpg.GetGenericModDamageBonus(statName, cfg);
             
-            return $"+{damageBonus:0.#}% {displayName} Damage (+{GetDamagePerPoint(cfg, statName):0.#}% per point)";
+            return $"+{(damageBonus * 100f):0.#}% {displayName} Damage (+{GetDamagePerPoint(cfg, statName):0.#}% per point)";
         }
 
         private static float GetDamagePerPoint(StatariaConfig cfg, string statName)
@@ -705,25 +703,10 @@ namespace Stataria
                 statPanel.Append(statLabel);
                 statTexts[i] = statLabel;
 
-                var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
-                {
-                    Top = { Pixels = rowTop },
-                    Left = { Pixels = 240f + columnOffset },
-                    Width = { Pixels = 40f },
-                    Height = { Pixels = 25f },
-                    BackgroundColor = new Color(255, 255, 255, 50),
-                    BorderColor = new Color(255, 255, 255, 50)
-                };
-                plusBtn.SetPadding(0f);
-                int localStatIndex = i;
-                plusBtn.OnLeftClick += (evt, el) => OnStatIncrease(localStatIndex);
-                statPanel.Append(plusBtn);
-                plusButtons[i] = plusBtn;
-
                 var minusBtn = new UITextPanel<string>("-", textScale: 1.2f, large: false)
                 {
                     Top = { Pixels = rowTop },
-                    Left = { Pixels = 290f + columnOffset },
+                    Left = { Pixels = 240f + columnOffset },
                     Width = { Pixels = 40f },
                     Height = { Pixels = 25f },
                     BackgroundColor = new Color(255, 255, 255, 50),
@@ -735,12 +718,27 @@ namespace Stataria
                 statPanel.Append(minusBtn);
                 minusButtons[i] = minusBtn;
 
+                var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
+                {
+                    Top = { Pixels = rowTop },
+                    Left = { Pixels = 290f + columnOffset },
+                    Width = { Pixels = 40f },
+                    Height = { Pixels = 25f },
+                    BackgroundColor = new Color(255, 255, 255, 50),
+                    BorderColor = new Color(255, 255, 255, 50)
+                };
+                plusBtn.SetPadding(0f);
+                int localStatIndex = i;
+                plusBtn.OnLeftClick += (evt, el) => OnStatIncrease(localStatIndex);
+                statPanel.Append(plusBtn);
+                plusButtons[i] = plusBtn;
+
                 statLabel.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
                 statLabel.OnMouseOut += (evt, el) => HideTooltip();
-                plusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
-                plusBtn.OnMouseOut += (evt, el) => HideTooltip();
                 minusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
                 minusBtn.OnMouseOut += (evt, el) => HideTooltip();
+                plusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
+                plusBtn.OnMouseOut += (evt, el) => HideTooltip();
                 checkbox.OnMouseOver += (evt, el) => ShowTooltip("Check to auto-allocate points to this stat");
                 checkbox.OnMouseOut += (evt, el) => HideTooltip();
             }
@@ -757,6 +755,11 @@ namespace Stataria
                 BorderColor = new Color(0, 0, 0, 255)
             };
             resetButton.OnLeftClick += OnResetStats;
+            resetButton.OnMouseOver += (evt, el) =>
+            {
+                ShowTooltip("Reset all stats for free");
+            };
+            resetButton.OnMouseOut += (evt, el) => HideTooltip();
             statPanel.Append(resetButton);
 
             float rebirthButtonY = bottomControlsTop + 45f;
@@ -961,25 +964,10 @@ namespace Stataria
                 statPanel.Append(statLabel);
                 statTexts[i] = statLabel;
 
-                var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
-                {
-                    Top = { Pixels = rowTop },
-                    Left = { Pixels = 240f + columnOffset },
-                    Width = { Pixels = 40f },
-                    Height = { Pixels = 25f },
-                    BackgroundColor = new Color(255, 255, 255, 50),
-                    BorderColor = new Color(255, 255, 255, 50)
-                };
-                plusBtn.SetPadding(0f);
-                int localStatIndex = i;
-                plusBtn.OnLeftClick += (evt, el) => OnStatIncrease(localStatIndex);
-                statPanel.Append(plusBtn);
-                plusButtons[i] = plusBtn;
-
                 var minusBtn = new UITextPanel<string>("-", textScale: 1.2f, large: false)
                 {
                     Top = { Pixels = rowTop },
-                    Left = { Pixels = 290f + columnOffset },
+                    Left = { Pixels = 240f + columnOffset },
                     Width = { Pixels = 40f },
                     Height = { Pixels = 25f },
                     BackgroundColor = new Color(255, 255, 255, 50),
@@ -990,6 +978,21 @@ namespace Stataria
                 minusBtn.OnLeftClick += (evt, el) => OnStatDecrease(minusStatIndex);
                 statPanel.Append(minusBtn);
                 minusButtons[i] = minusBtn;
+
+                var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
+                {
+                    Top = { Pixels = rowTop },
+                    Left = { Pixels = 290f + columnOffset },
+                    Width = { Pixels = 40f },
+                    Height = { Pixels = 25f },
+                    BackgroundColor = new Color(255, 255, 255, 50),
+                    BorderColor = new Color(255, 255, 255, 50)
+                };
+                plusBtn.SetPadding(0f);
+                int localStatIndex = i;
+                plusBtn.OnLeftClick += (evt, el) => OnStatIncrease(localStatIndex);
+                statPanel.Append(plusBtn);
+                plusButtons[i] = plusBtn;
 
                 statLabel.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
                 statLabel.OnMouseOut += (evt, el) => HideTooltip();
@@ -1013,6 +1016,11 @@ namespace Stataria
                 BorderColor = new Color(0, 0, 0, 255)
             };
             resetButton.OnLeftClick += OnResetStats;
+            resetButton.OnMouseOver += (evt, el) =>
+            {
+                ShowTooltip("Reset all stats for free");
+            };
+            resetButton.OnMouseOut += (evt, el) => HideTooltip();
             statPanel.Append(resetButton);
 
             float rebirthButtonY = bottomControlsTop + 45f;
@@ -1458,6 +1466,13 @@ namespace Stataria
             Player player = Main.LocalPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
 
+            if (!rpg.PerformRespec(out string reason))
+            {
+                Main.NewText(reason, Color.Red);
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                return;
+            }
+
             var activeStats = GetActiveStats();
 
             int total = 0;
@@ -1631,6 +1646,21 @@ namespace Stataria
                 rebirthConfirmationShown = false;
                 statPanel.RemoveChild(rebirthConfirmationText);
                 rebirthButton.SetText("Rebirth");
+            }
+
+
+            if (resetButton != null)
+            {
+                if (rpg.CanRespec(out string _))
+                {
+                    resetButton.BackgroundColor = new Color(63, 82, 151, 200);
+                    resetButton.BorderColor = new Color(0, 0, 0, 255);
+                }
+                else
+                {
+                    resetButton.BackgroundColor = new Color(100, 100, 100, 150);
+                    resetButton.BorderColor = new Color(150, 150, 150, 150);
+                }
             }
 
             if (rebirthButton != null)

@@ -69,6 +69,11 @@ Configs: {
 			Tooltip: Configure the enhanced luck system that affects drop rates and other luck-based mechanics.
 			Label: Extra Luck Settings
 		}
+
+		ascensionSystem: {
+			Label: Ascension System
+			Tooltip: Configure the ascension mechanics, requirements, and bonuses.
+		}
 	}
 
 	GeneralBalance: {
@@ -78,6 +83,8 @@ Configs: {
 			General_Balance: General Balance
 			XP_Multipliers: XP Multipliers
 			Damage_Calculation: Damage Calculation
+			Diminishing_Returns: Diminishing Returns
+			Respec_Settings: Respec Settings
 		}
 
 		EnableBossHPXP: {
@@ -143,6 +150,41 @@ Configs: {
 		EnableStatPointRecalculation: {
 			Tooltip: When enabled, players will automatically receive additional stat points if Stat Points Per Level is increased.
 			Label: Enable Stat Point Recalculation
+		}
+
+		EnableDiminishingReturns: {
+			Label: Enable Diminishing Returns
+			Tooltip: Applies diminishing returns to extremely high stat values.
+		}
+
+		DiminishingReturnsRate: {
+			Label: Diminishing Returns Rate
+			Tooltip: How aggressively stats diminish at high values.
+		}
+
+		EnableRespecCost: {
+			Label: Enable Respec Cost
+			Tooltip: Requires currency to reset allocated stat points.
+		}
+
+		RespecCostType: {
+			Label: Respec Cost Type
+			Tooltip: The currency item required to reset stats.
+		}
+
+		RespecCostBase: {
+			Label: Respec Cost Base
+			Tooltip: Base amount of currency required to reset stats.
+		}
+
+		EnableXPCurve: {
+			Label: Enable XP Curve
+			Tooltip: Makes leveling progressively harder according to an exponential curve.
+		}
+
+		XPCurveSteepness: {
+			Label: XP Curve Steepness
+			Tooltip: Steepness of the XP scaling curve.
 		}
 	}
 
@@ -312,6 +354,9 @@ Configs: {
 			Enemy_Scaling: Enemy Scaling
 			Multiplayer_Scaling: Multiplayer Scaling
 			Elite_Enemies: Elite Enemies
+			Boss_Scaling: Boss Scaling
+			Flat_Scaling: Flat Scaling
+			Level_Variation: Level Variation
 		}
 
 		EnableEnemyScaling: {
@@ -459,6 +504,36 @@ Configs: {
 				If false, these enemies will ignore the scaling system to prevent issues when they switch between ground and wall states.
 				'''
 		}
+
+		EnableBossScaling: {
+			Label: Enable Boss Scaling
+			Tooltip: Configuration for Enable Boss Scaling.
+		}
+
+		EnableFlatEnemyScaling: {
+			Label: Enable Flat Enemy Scaling
+			Tooltip: Configuration for Enable Flat Enemy Scaling.
+		}
+
+		FlatEnemyHealthScaling: {
+			Label: Flat Enemy Health Scaling
+			Tooltip: Configuration for Flat Enemy Health Scaling.
+		}
+
+		FlatEnemyDamageScaling: {
+			Label: Flat Enemy Damage Scaling
+			Tooltip: Configuration for Flat Enemy Damage Scaling.
+		}
+
+		FlatBossHealthScaling: {
+			Label: Flat Boss Health Scaling
+			Tooltip: Configuration for Flat Boss Health Scaling.
+		}
+
+		FlatBossDamageScaling: {
+			Label: Flat Boss Damage Scaling
+			Tooltip: Configuration for Flat Boss Damage Scaling.
+		}
 	}
 
 	StatSettings: {
@@ -601,6 +676,11 @@ Configs: {
 		END_DefensePerX: {
 			Label: Defense Per X
 			Tooltip: Grants +1 defense per X END points.
+		}
+
+		END_Defense: {
+			Label: END Defense
+			Tooltip: Amount of defense granted per END point.
 		}
 
 		END_Aggro: {
@@ -1193,6 +1273,11 @@ Configs: {
 			Label: Bleed Damage Percent
 		}
 
+		VampireBleedCooldown: {
+			Label: Bleed Cooldown
+			Tooltip: Cooldown in seconds before the Vampire can inflict Bleed again.
+		}
+
 		VampireBleedChance: {
 			Tooltip: Percentage chance for attacks to inflict Bleed on enemies.
 			Label: Bleed Chance
@@ -1462,6 +1547,11 @@ Configs: {
 			Tooltip: Percentage damage bonus provided by Core of Power T.3.
 		}
 
+		PowerT4Effect: {
+			Label: Power T.4 Effect
+			Tooltip: Percentage damage bonus provided by Core of Power T.4.
+		}
+
 		ForceT1Effect: {
 			Label: Force T.1 Effect
 			Tooltip: Percentage knockback bonus provided by Core of Force T.1.
@@ -1477,6 +1567,11 @@ Configs: {
 			Tooltip: Percentage knockback bonus provided by Core of Force T.3.
 		}
 
+		ForceT4Effect: {
+			Label: Force T.4 Effect
+			Tooltip: Percentage knockback bonus provided by Core of Force T.4.
+		}
+
 		PrecisionT1Effect: {
 			Label: Precision T.1 Effect
 			Tooltip: Percentage critical hit chance bonus provided by Core of Precision T.1.
@@ -1490,6 +1585,11 @@ Configs: {
 		PrecisionT3Effect: {
 			Label: Precision T.3 Effect
 			Tooltip: Percentage critical hit chance bonus provided by Core of Precision T.3.
+		}
+
+		PrecisionT4Effect: {
+			Label: Precision T.4 Effect
+			Tooltip: Percentage critical hit chance bonus provided by Core of Precision T.4.
 		}
 
 		ExtractCost: {
@@ -1525,6 +1625,51 @@ Configs: {
 		DefenseT3Effect: {
 			Label: Defense T.3 Effect
 			Tooltip: Defense bonus provided by Core of Defense T.3.
+		}
+
+		DefenseT4Effect: {
+			Label: Defense T.4 Effect
+			Tooltip: Defense bonus provided by Core of Defense T.4.
+		}
+
+		VitalityT1Effect: {
+			Label: Vitality T.1 Effect
+			Tooltip: Health bonus provided by Core of Vitality T.1.
+		}
+
+		VitalityT2Effect: {
+			Label: Vitality T.2 Effect
+			Tooltip: Health bonus provided by Core of Vitality T.2.
+		}
+
+		VitalityT3Effect: {
+			Label: Vitality T.3 Effect
+			Tooltip: Health bonus provided by Core of Vitality T.3.
+		}
+
+		VitalityT4Effect: {
+			Label: Vitality T.4 Effect
+			Tooltip: Health bonus provided by Core of Vitality T.4.
+		}
+
+		EvasionT1Effect: {
+			Label: Evasion T.1 Effect
+			Tooltip: Evade chance bonus provided by Core of Evasion T.1.
+		}
+
+		EvasionT2Effect: {
+			Label: Evasion T.2 Effect
+			Tooltip: Evade chance bonus provided by Core of Evasion T.2.
+		}
+
+		EvasionT3Effect: {
+			Label: Evasion T.3 Effect
+			Tooltip: Evade chance bonus provided by Core of Evasion T.3.
+		}
+
+		EvasionT4Effect: {
+			Label: Evasion T.4 Effect
+			Tooltip: Evade chance bonus provided by Core of Evasion T.4.
 		}
 	}
 
@@ -1716,6 +1861,36 @@ Configs: {
 			Label: Excluded Boss NPC IDs
 			Tooltip: List of NPC IDs to NEVER show boss bars for (takes priority over all other settings)
 		}
+
+		EnableLevelUpSound: {
+			Label: Enable Level Up Sound
+			Tooltip: Configuration for Enable Level Up Sound.
+		}
+	}
+
+	AscensionSystem: {
+		Tooltip: Advanced features relating to the ascension system.
+		Headers.Ascension_System: Ascension_ System Header
+
+		EnableAscension: {
+			Label: Enable Ascension
+			Tooltip: Configuration for Enable Ascension.
+		}
+
+		AscensionCostType: {
+			Label: Ascension Cost Type
+			Tooltip: Configuration for Ascension Cost Type.
+		}
+
+		AscensionCostBase: {
+			Label: Ascension Cost Base
+			Tooltip: Configuration for Ascension Cost Base.
+		}
+
+		AscensionLevelBonus: {
+			Label: Ascension Level Bonus
+			Tooltip: Configuration for Ascension Level Bonus.
+		}
 	}
 }
 
@@ -1767,6 +1942,11 @@ Items: {
 		Tooltip: Can be socketed into weapons to increase knockback
 	}
 
+	CoreOfForceT4: {
+		DisplayName: Core Of Force T.4
+		Tooltip: Can be socketed into weapons to increase knockback
+	}
+
 	CoreOfPowerT1: {
 		DisplayName: Core Of Power T.1
 		Tooltip: Can be socketed into weapons to increase damage
@@ -1779,6 +1959,11 @@ Items: {
 
 	CoreOfPowerT3: {
 		DisplayName: Core Of Power T.3
+		Tooltip: Can be socketed into weapons to increase damage
+	}
+
+	CoreOfPowerT4: {
+		DisplayName: Core Of Power T.4
 		Tooltip: Can be socketed into weapons to increase damage
 	}
 
@@ -1797,6 +1982,11 @@ Items: {
 		Tooltip: Can be socketed into weapons to increase critical hit chance
 	}
 
+	CoreOfPrecisionT4: {
+		DisplayName: Core Of Precision T.4
+		Tooltip: Can be socketed into weapons to increase critical hit chance
+	}
+
 	CoreOfDefenseT1: {
 		DisplayName: Core Of Defense T.1
 		Tooltip: Can be socketed into armor to increase defense
@@ -1810,6 +2000,51 @@ Items: {
 	CoreOfDefenseT3: {
 		DisplayName: Core Of Defense T.3
 		Tooltip: Can be socketed into armor to increase defense
+	}
+
+	CoreOfDefenseT4: {
+		DisplayName: Core Of Defense T.4
+		Tooltip: Can be socketed into armor to increase defense
+	}
+
+	CoreOfVitalityT1: {
+		DisplayName: Core Of Vitality T.1
+		Tooltip: Can be socketed into armor to increase max health
+	}
+
+	CoreOfVitalityT2: {
+		DisplayName: Core Of Vitality T.2
+		Tooltip: Can be socketed into armor to increase max health
+	}
+
+	CoreOfVitalityT3: {
+		DisplayName: Core Of Vitality T.3
+		Tooltip: Can be socketed into armor to increase max health
+	}
+
+	CoreOfVitalityT4: {
+		DisplayName: Core Of Vitality T.4
+		Tooltip: Can be socketed into armor to increase max health
+	}
+
+	CoreOfEvasionT1: {
+		DisplayName: Core Of Evasion T.1
+		Tooltip: Can be socketed into armor to increase evade chance
+	}
+
+	CoreOfEvasionT2: {
+		DisplayName: Core Of Evasion T.2
+		Tooltip: Can be socketed into armor to increase evade chance
+	}
+
+	CoreOfEvasionT3: {
+		DisplayName: Core Of Evasion T.3
+		Tooltip: Can be socketed into armor to increase evade chance
+	}
+
+	CoreOfEvasionT4: {
+		DisplayName: Core Of Evasion T.4
+		Tooltip: Can be socketed into armor to increase evade chance
 	}
 }
 

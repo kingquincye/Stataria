@@ -35,6 +35,7 @@ namespace Stataria.Items.Cores
                 1 => Item.buyPrice(0, 0, 50, 0),
                 2 => Item.buyPrice(0, 10, 0, 0),
                 3 => Item.buyPrice(1, 0, 0, 0),
+                4 => Item.buyPrice(2, 0, 0, 0),
                 _ => 0
             };
         }
@@ -46,6 +47,7 @@ namespace Stataria.Items.Cores
                 1 => ItemRarityID.White,
                 2 => ItemRarityID.Green,
                 3 => ItemRarityID.Orange,
+                4 => ItemRarityID.LightRed,
                 _ => ItemRarityID.White
             };
         }
@@ -70,6 +72,14 @@ namespace Stataria.Items.Cores
                     break;
                 case CoreType.Defense:
                     effect = $"+{EffectValue} Defense";
+                    usage = "Can be socketed into armor";
+                    break;
+                case CoreType.Vitality:
+                    effect = $"+{EffectValue} Max Health";
+                    usage = "Can be socketed into armor";
+                    break;
+                case CoreType.Evasion:
+                    effect = $"+{EffectValue}% Evade Chance";
                     usage = "Can be socketed into armor";
                     break;
                 default:
@@ -111,6 +121,13 @@ namespace Stataria.Items.Cores
         public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.PowerT3Effect;
     }
 
+    public class CoreOfPowerT4 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Power;
+        public override int Tier => 4;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.PowerT4Effect;
+    }
+
     public class CoreOfForceT1 : CoreItem
     {
         public override CoreType CoreType => CoreType.Force;
@@ -130,6 +147,13 @@ namespace Stataria.Items.Cores
         public override CoreType CoreType => CoreType.Force;
         public override int Tier => 3;
         public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.ForceT3Effect;
+    }
+
+    public class CoreOfForceT4 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Force;
+        public override int Tier => 4;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.ForceT4Effect;
     }
 
     public class CoreOfPrecisionT1 : CoreItem
@@ -153,6 +177,13 @@ namespace Stataria.Items.Cores
         public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.PrecisionT3Effect;
     }
 
+    public class CoreOfPrecisionT4 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Precision;
+        public override int Tier => 4;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.PrecisionT4Effect;
+    }
+
     public class CoreOfDefenseT1 : CoreItem
     {
         public override CoreType CoreType => CoreType.Defense;
@@ -173,6 +204,69 @@ namespace Stataria.Items.Cores
         public override int Tier => 3;
         public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.DefenseT3Effect;
     }
+
+    public class CoreOfDefenseT4 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Defense;
+        public override int Tier => 4;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.DefenseT4Effect;
+    }
+
+    public class CoreOfVitalityT1 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Vitality;
+        public override int Tier => 1;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.VitalityT1Effect;
+    }
+
+    public class CoreOfVitalityT2 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Vitality;
+        public override int Tier => 2;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.VitalityT2Effect;
+    }
+
+    public class CoreOfVitalityT3 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Vitality;
+        public override int Tier => 3;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.VitalityT3Effect;
+    }
+
+    public class CoreOfVitalityT4 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Vitality;
+        public override int Tier => 4;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.VitalityT4Effect;
+    }
+
+    public class CoreOfEvasionT1 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Evasion;
+        public override int Tier => 1;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.EvasionT1Effect;
+    }
+
+    public class CoreOfEvasionT2 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Evasion;
+        public override int Tier => 2;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.EvasionT2Effect;
+    }
+
+    public class CoreOfEvasionT3 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Evasion;
+        public override int Tier => 3;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.EvasionT3Effect;
+    }
+
+    public class CoreOfEvasionT4 : CoreItem
+    {
+        public override CoreType CoreType => CoreType.Evasion;
+        public override int Tier => 4;
+        public override float EffectValue => ModContent.GetInstance<StatariaConfig>().socketingSystem.EvasionT4Effect;
+    }
 }
 
 public enum CoreType
@@ -180,7 +274,9 @@ public enum CoreType
     Power,
     Force,
     Precision,
-    Defense
+    Defense,
+    Vitality,
+    Evasion
 }
 
 public struct SocketedCore
@@ -206,6 +302,7 @@ public struct SocketedCore
                 1 => config.PowerT1Effect,
                 2 => config.PowerT2Effect,
                 3 => config.PowerT3Effect,
+                4 => config.PowerT4Effect,
                 _ => 0f
             },
             CoreType.Force => Tier switch
@@ -213,6 +310,7 @@ public struct SocketedCore
                 1 => config.ForceT1Effect,
                 2 => config.ForceT2Effect,
                 3 => config.ForceT3Effect,
+                4 => config.ForceT4Effect,
                 _ => 0f
             },
             CoreType.Precision => Tier switch
@@ -220,6 +318,7 @@ public struct SocketedCore
                 1 => config.PrecisionT1Effect,
                 2 => config.PrecisionT2Effect,
                 3 => config.PrecisionT3Effect,
+                4 => config.PrecisionT4Effect,
                 _ => 0f
             },
             CoreType.Defense => Tier switch
@@ -227,6 +326,23 @@ public struct SocketedCore
                 1 => config.DefenseT1Effect,
                 2 => config.DefenseT2Effect,
                 3 => config.DefenseT3Effect,
+                4 => config.DefenseT4Effect,
+                _ => 0f
+            },
+            CoreType.Vitality => Tier switch
+            {
+                1 => config.VitalityT1Effect,
+                2 => config.VitalityT2Effect,
+                3 => config.VitalityT3Effect,
+                4 => config.VitalityT4Effect,
+                _ => 0f
+            },
+            CoreType.Evasion => Tier switch
+            {
+                1 => config.EvasionT1Effect,
+                2 => config.EvasionT2Effect,
+                3 => config.EvasionT3Effect,
+                4 => config.EvasionT4Effect,
                 _ => 0f
             },
             _ => 0f
@@ -241,6 +357,8 @@ public struct SocketedCore
             CoreType.Force => "Core of Force",
             CoreType.Precision => "Core of Precision",
             CoreType.Defense => "Core of Defense",
+            CoreType.Vitality => "Core of Vitality",
+            CoreType.Evasion => "Core of Evasion",
             _ => "Unknown Core"
         };
         return $"{typeName} T.{Tier}";

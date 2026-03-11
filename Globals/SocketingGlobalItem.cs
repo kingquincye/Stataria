@@ -82,6 +82,12 @@ namespace Stataria
             {
                 player.statDefense += (int)defenseBonus;
             }
+
+            float vitalityBonus = GetTotalCoreEffect(CoreType.Vitality);
+            if (vitalityBonus > 0)
+            {
+                player.statLifeMax2 += (int)vitalityBonus;
+            }
         }
 
         public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)
@@ -139,6 +145,8 @@ namespace Stataria
                     CoreType.Force => CanReceiveKnockback(item) ? $"+{core.GetEffectValue() * core.Count:0.#}% Knockback" : "",
                     CoreType.Precision => CanReceiveCrit(item) ? $"+{core.GetEffectValue() * core.Count:0.#}% Crit" : "",
                     CoreType.Defense => $"+{core.GetEffectValue() * core.Count:0.#} Defense",
+                    CoreType.Vitality => $"+{core.GetEffectValue() * core.Count:0.#} Max Health",
+                    CoreType.Evasion => $"+{core.GetEffectValue() * core.Count:0.#}% Evade Chance",
                     _ => ""
                 };
 
@@ -225,6 +233,8 @@ namespace Stataria
                 CoreType.Force => CanReceiveKnockback(item),
                 CoreType.Precision => CanReceiveCrit(item),
                 CoreType.Defense => IsArmor(item),
+                CoreType.Vitality => IsArmor(item),
+                CoreType.Evasion => IsArmor(item),
                 _ => false
             };
         }

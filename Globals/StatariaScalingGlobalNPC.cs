@@ -399,17 +399,30 @@ namespace Stataria
                 return;
 
             float healthMult = 1f;
+            int additionalFlatHealth = 0;
 
             if (npc.boss)
             {
-                healthMult = 1f + ((Level - 1) * config.enemyScaling.EnemyHealthScaling * config.enemyScaling.BossHealthScaling);
-                damageMult = 1f + ((Level - 1) * config.enemyScaling.EnemyDamageScaling * config.enemyScaling.BossDamageScaling);
+                if (config.enemyScaling.EnableBossScaling)
+                {
+                    healthMult = 1f + ((Level - 1) * config.enemyScaling.BossHealthScaling);
+                    damageMult = 1f + ((Level - 1) * config.enemyScaling.BossDamageScaling);
 
+                    if (config.enemyScaling.EnableFlatEnemyScaling)
+                    {
+                        additionalFlatHealth += (Level - 1) * config.enemyScaling.FlatBossHealthScaling;
+                    }
+                }
             }
             else
             {
                 healthMult = 1f + ((Level - 1) * config.enemyScaling.EnemyHealthScaling);
                 damageMult = 1f + ((Level - 1) * config.enemyScaling.EnemyDamageScaling);
+
+                if (config.enemyScaling.EnableFlatEnemyScaling)
+                {
+                    additionalFlatHealth += (Level - 1) * config.enemyScaling.FlatEnemyHealthScaling;
+                }
 
                 float defenseMult = 1f + ((Level - 1) * config.enemyScaling.EnemyDefenseScaling);
 
@@ -425,6 +438,7 @@ namespace Stataria
             {
                 healthMult *= config.enemyScaling.EliteHealthMultiplier;
                 damageMult *= config.enemyScaling.EliteDamageMultiplier;
+                additionalFlatHealth = (int)(additionalFlatHealth * config.enemyScaling.EliteHealthMultiplier);
 
                 if (!npc.boss)
                 {
@@ -437,7 +451,7 @@ namespace Stataria
                 npc.knockBackResist *= (1f - config.enemyScaling.EliteKnockbackResistance);
             }
 
-            int newHealth = (int)(npc.lifeMax * healthMult);
+            int newHealth = (int)(npc.lifeMax * healthMult) + additionalFlatHealth;
 
             const int MAX_SAFE_HEALTH = 1000000000;
             if (newHealth > MAX_SAFE_HEALTH)
@@ -449,10 +463,32 @@ namespace Stataria
 
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
         {
-            if (!ModContent.GetInstance<StatariaConfig>().enemyScaling.EnableEnemyScaling)
+            var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (!config.enemyScaling.EnableEnemyScaling)
                 return;
 
             modifiers.FinalDamage *= damageMult;
+
+            if (config.enemyScaling.EnableFlatEnemyScaling)
+            {
+                int flatDamage = 0;
+                if (npc.boss && config.enemyScaling.EnableBossScaling)
+                {
+                    flatDamage = (Level - 1) * config.enemyScaling.FlatBossDamageScaling;
+                }
+                else if (!npc.boss)
+                {
+                    flatDamage = (Level - 1) * config.enemyScaling.FlatEnemyDamageScaling;
+                }
+
+                if (IsElite)
+                {
+                    flatDamage = (int)(flatDamage * config.enemyScaling.EliteDamageMultiplier);
+                }
+
+                modifiers.FinalDamage += flatDamage;
+            }
         }
 
         public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
@@ -626,6 +662,16 @@ namespace Stataria
         {
             base.OnKill(npc);
             hasBeenScaled = false;
+
+            if (npc.boss)
+            {
+                Player player = Main.LocalPlayer;
+                if (player.active)
+                {
+                    RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
+                    rpg.BossKillsCount++;
+                }
+            }
         }
 
         public override void SaveData(NPC npc, TagCompound tag)

@@ -346,6 +346,7 @@ namespace Stataria
                     1 => ModContent.ItemType<Items.Cores.CoreOfPowerT1>(),
                     2 => ModContent.ItemType<Items.Cores.CoreOfPowerT2>(),
                     3 => ModContent.ItemType<Items.Cores.CoreOfPowerT3>(),
+                    4 => ModContent.ItemType<Items.Cores.CoreOfPowerT4>(),
                     _ => 0
                 },
                 CoreType.Force => tier switch
@@ -353,6 +354,7 @@ namespace Stataria
                     1 => ModContent.ItemType<Items.Cores.CoreOfForceT1>(),
                     2 => ModContent.ItemType<Items.Cores.CoreOfForceT2>(),
                     3 => ModContent.ItemType<Items.Cores.CoreOfForceT3>(),
+                    4 => ModContent.ItemType<Items.Cores.CoreOfForceT4>(),
                     _ => 0
                 },
                 CoreType.Precision => tier switch
@@ -360,6 +362,7 @@ namespace Stataria
                     1 => ModContent.ItemType<Items.Cores.CoreOfPrecisionT1>(),
                     2 => ModContent.ItemType<Items.Cores.CoreOfPrecisionT2>(),
                     3 => ModContent.ItemType<Items.Cores.CoreOfPrecisionT3>(),
+                    4 => ModContent.ItemType<Items.Cores.CoreOfPrecisionT4>(),
                     _ => 0
                 },
                 CoreType.Defense => tier switch
@@ -367,6 +370,23 @@ namespace Stataria
                     1 => ModContent.ItemType<Items.Cores.CoreOfDefenseT1>(),
                     2 => ModContent.ItemType<Items.Cores.CoreOfDefenseT2>(),
                     3 => ModContent.ItemType<Items.Cores.CoreOfDefenseT3>(),
+                    4 => ModContent.ItemType<Items.Cores.CoreOfDefenseT4>(),
+                    _ => 0
+                },
+                CoreType.Vitality => tier switch
+                {
+                    1 => ModContent.ItemType<Items.Cores.CoreOfVitalityT1>(),
+                    2 => ModContent.ItemType<Items.Cores.CoreOfVitalityT2>(),
+                    3 => ModContent.ItemType<Items.Cores.CoreOfVitalityT3>(),
+                    4 => ModContent.ItemType<Items.Cores.CoreOfVitalityT4>(),
+                    _ => 0
+                },
+                CoreType.Evasion => tier switch
+                {
+                    1 => ModContent.ItemType<Items.Cores.CoreOfEvasionT1>(),
+                    2 => ModContent.ItemType<Items.Cores.CoreOfEvasionT2>(),
+                    3 => ModContent.ItemType<Items.Cores.CoreOfEvasionT3>(),
+                    4 => ModContent.ItemType<Items.Cores.CoreOfEvasionT4>(),
                     _ => 0
                 },
                 _ => 0

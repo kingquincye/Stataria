@@ -23,6 +23,7 @@ namespace Stataria
         [SeparatePage]
         public RebirthAbilities rebirthAbilities { get; set; } = new RebirthAbilities();
 
+
         [SeparatePage]
         public RoleSettings roleSettings { get; set; } = new RoleSettings();
 
@@ -56,8 +57,16 @@ namespace Stataria
             [DefaultValue(true)] public bool EnableStatPointRecalculation { get; set; } = true;
             [Range(1, 1000)][DefaultValue(2)] public int StatPointsPerLevel { get; set; } = 2;
 
+            [Header("Diminishing_Returns")]
+            [DefaultValue(false)] public bool EnableDiminishingReturns { get; set; } = false;
+            [Increment(0.001f)][Range(0.001f, 1f)][DefaultValue(0.01f)] public float DiminishingReturnsRate { get; set; } = 0.01f;
+
+
             [Header("XP_Multipliers")]
             [Range(1f, 10f)][DefaultValue(2f)][SliderColor(150, 0, 150)] public float LevelScalingFactor { get; set; } = 2f;
+            [DefaultValue(false)] public bool EnableXPCurve { get; set; } = false;
+            [Range(1f, 5f)][DefaultValue(1.5f)][SliderColor(150, 0, 150)] public float XPCurveSteepness { get; set; } = 1.5f;
+
             [Range(0f, 10f)][DefaultValue(0.25f)][SliderColor(150, 0, 150)] public float DamageXP { get; set; } = 0.25f;
             [Range(0f, 10f)][DefaultValue(0.5f)][SliderColor(150, 0, 150)] public float KillXP { get; set; } = 0.5f;
             [Range(0, 1000)][DefaultValue(25)] public int BossXP { get; set; } = 25;
@@ -87,15 +96,27 @@ namespace Stataria
             [Range(0f, 100f)][DefaultValue(5f)] public float PowerT1Effect { get; set; } = 5f;
             [Range(0f, 100f)][DefaultValue(10f)] public float PowerT2Effect { get; set; } = 10f;
             [Range(0f, 100f)][DefaultValue(25f)] public float PowerT3Effect { get; set; } = 25f;
+            [Range(0f, 200f)][DefaultValue(50f)] public float PowerT4Effect { get; set; } = 50f;
             [Range(0f, 100f)][DefaultValue(5f)] public float ForceT1Effect { get; set; } = 5f;
             [Range(0f, 100f)][DefaultValue(10f)] public float ForceT2Effect { get; set; } = 10f;
             [Range(0f, 100f)][DefaultValue(25f)] public float ForceT3Effect { get; set; } = 25f;
+            [Range(0f, 200f)][DefaultValue(50f)] public float ForceT4Effect { get; set; } = 50f;
             [Range(0f, 100f)][DefaultValue(5f)] public float PrecisionT1Effect { get; set; } = 5f;
             [Range(0f, 100f)][DefaultValue(10f)] public float PrecisionT2Effect { get; set; } = 10f;
             [Range(0f, 100f)][DefaultValue(25f)] public float PrecisionT3Effect { get; set; } = 25f;
+            [Range(0f, 200f)][DefaultValue(50f)] public float PrecisionT4Effect { get; set; } = 50f;
             [Range(0f, 100f)][DefaultValue(2f)] public float DefenseT1Effect { get; set; } = 2f;
             [Range(0f, 100f)][DefaultValue(4f)] public float DefenseT2Effect { get; set; } = 4f;
             [Range(0f, 100f)][DefaultValue(8f)] public float DefenseT3Effect { get; set; } = 8f;
+            [Range(0f, 100f)][DefaultValue(15f)] public float DefenseT4Effect { get; set; } = 15f;
+            [Range(0f, 200f)][DefaultValue(10f)] public float VitalityT1Effect { get; set; } = 10f;
+            [Range(0f, 200f)][DefaultValue(20f)] public float VitalityT2Effect { get; set; } = 20f;
+            [Range(0f, 500f)][DefaultValue(40f)] public float VitalityT3Effect { get; set; } = 40f;
+            [Range(0f, 1000f)][DefaultValue(100f)] public float VitalityT4Effect { get; set; } = 100f;
+            [Range(0f, 100f)][DefaultValue(1f)] public float EvasionT1Effect { get; set; } = 1f;
+            [Range(0f, 100f)][DefaultValue(3f)] public float EvasionT2Effect { get; set; } = 3f;
+            [Range(0f, 100f)][DefaultValue(5f)] public float EvasionT3Effect { get; set; } = 5f;
+            [Range(0f, 100f)][DefaultValue(10f)] public float EvasionT4Effect { get; set; } = 10f;
 
             [Header("Cost_Configuration")]
             [Range(0, 1000)][DefaultValue(10)] public int ExtractCost { get; set; } = 10;
@@ -169,6 +190,8 @@ namespace Stataria
             [Range(1, 50)][DefaultValue(10)] public int MaxEnhancedFortuneLevel { get; set; } = 10;
         }
 
+
+
         public class RoleSettings
         {
             [Header("Role_System")]
@@ -186,12 +209,13 @@ namespace Stataria
             [DefaultValue(false)] public bool VampireEnableEyeColorChange { get; set; } = false;
             [DefaultValue(15f)][Range(0f, 200f)] public float VampireHealthBonus { get; set; } = 15f;
             [DefaultValue(10f)][Range(0f, 100f)] public float VampireMovementSpeed { get; set; } = 10f;
-            [DefaultValue(15f)][Range(0f, 100f)] public float VampireBleedChance { get; set; } = 15f;
+            [DefaultValue(5f)][Range(0f, 100f)] public float VampireBleedChance { get; set; } = 5f;
             [DefaultValue(1f)][Range(0.1f, 50f)] public float VampireBleedDamagePercent { get; set; } = 1f;
-            [DefaultValue(3f)][Range(1f, 30f)] public float VampireBleedDuration { get; set; } = 3f;
-            [DefaultValue(1.5f)][Range(0.1f, 5f)] public float VampireBleedTickInterval { get; set; } = 1.5f;
+            [DefaultValue(2f)][Range(1f, 30f)] public float VampireBleedDuration { get; set; } = 2f;
+            [DefaultValue(0.4f)][Range(0.1f, 5f)] public float VampireBleedTickInterval { get; set; } = 0.4f;
             [DefaultValue(10f)][Range(0f, 100f)] public float VampireBleedHealPercent { get; set; } = 10f;
             [DefaultValue(5f)][Range(0f, 50f)] public float VampireKillHealPercent { get; set; } = 5f;
+            [DefaultValue(3f)][Range(0f, 60f)] public float VampireBleedCooldown { get; set; } = 3f;
 
             [Header("Beastmaster")]
             [DefaultValue(15f)][Range(0f, 100f)] public float BeastmasterDamagePerUniqueMinion { get; set; } = 15f;
@@ -260,8 +284,20 @@ namespace Stataria
             [DefaultValue(true)] public bool EnableDefenseCap { get; set; } = true;
             [Range(1, 100)][DefaultValue(3)] public int MaxDefenseMultiplier { get; set; } = 3;
             [Range(0f, 5f)][DefaultValue(0.02f)] public float EnemyDefenseScaling { get; set; } = 0.02f;
-            [Range(0f, 10f)][DefaultValue(0.2f)] public float BossHealthScaling { get; set; } = 0.2f;
-            [Range(0f, 10f)][DefaultValue(0.1f)] public float BossDamageScaling { get; set; } = 0.1f;
+
+            [Header("Boss_Scaling")]
+            [DefaultValue(true)] public bool EnableBossScaling { get; set; } = true;
+            [Range(0f, 10f)][DefaultValue(0.2f)] public float BossHealthScaling { get; set; } = 0.05f;
+            [Range(0f, 10f)][DefaultValue(0.1f)] public float BossDamageScaling { get; set; } = 0.02f;
+
+            [Header("Flat_Scaling")]
+            [DefaultValue(false)] public bool EnableFlatEnemyScaling { get; set; } = false;
+            [Range(0, 5000)][DefaultValue(10)] public int FlatEnemyHealthScaling { get; set; } = 10;
+            [Range(0, 5000)][DefaultValue(2)] public int FlatEnemyDamageScaling { get; set; } = 2;
+            [Range(0, 50000)][DefaultValue(100)] public int FlatBossHealthScaling { get; set; } = 100;
+            [Range(0, 5000)][DefaultValue(10)] public int FlatBossDamageScaling { get; set; } = 10;
+
+            [Header("Level_Variation")]
             [DefaultValue(true)] public bool EnableLevelVariation { get; set; } = true;
             [Range(1, 100)][DefaultValue(10)] public int MaxLevelVariation { get; set; } = 10;
             [DefaultValue(false)] public bool EnableMinimumLevelDifference { get; set; } = false;
@@ -310,7 +346,7 @@ namespace Stataria
             [Range(-1, 10000)][DefaultValue(1000)] public int THR_Cap { get; set; } = 1000;
 
             [Header("VIT_Settings")]
-            [Range(0, 1000)][DefaultValue(2)] public int VIT_HP { get; set; } = 2;
+            [Increment(0.1f)][Range(0f, 1000f)][DefaultValue(2f)] public float VIT_HP { get; set; } = 2f;
             [DefaultValue(false)] public bool UseCustomHpRegen { get; set; } = false;
             [Range(0f, 10f)][DefaultValue(0.25f)] public float CustomHpRegenPerVIT { get; set; } = 0.25f;
             [Range(0, 10)][DefaultValue(3)] public int CustomHpRegenDelay { get; set; } = 3;
@@ -318,34 +354,34 @@ namespace Stataria
             [Range(0f, 10f)][DefaultValue(0.5f)] public float HealingPotionBoostPercent { get; set; } = 0.5f;
 
             [Header("STR_Settings")]
-            [Range(0f, 10f)][DefaultValue(0.5f)] public float STR_Damage { get; set; } = 0.5f;
-            [Range(0f, 10f)][DefaultValue(0.5f)] public float STR_Knockback { get; set; } = 0.5f;
-            [DefaultValue(1)] public int STR_ArmorPen { get; set; } = 1;
+            [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float STR_Damage { get; set; } = 0.5f;
+            [Increment(0.05f)][Range(0f, 10f)][DefaultValue(0.5f)] public float STR_Knockback { get; set; } = 0.5f;
+            [Increment(0.05f)][DefaultValue(1f)] public float STR_ArmorPen { get; set; } = 1f;
 
             [Header("AGI_Settings")]
-            [Range(0f, 10f)][DefaultValue(1f)] public float AGI_MoveSpeed { get; set; } = 1f;
-            [Range(0f, 10f)][DefaultValue(0.5f)] public float AGI_AttackSpeed { get; set; } = 0.5f;
-            [Range(0f, 2f)][DefaultValue(0.25f)] public float AGI_JumpHeight { get; set; } = 0.25f;
-            [Range(0f, 1f)][DefaultValue(0.1f)] public float AGI_JumpSpeed { get; set; } = 0.1f;
-            [DefaultValue(1)] public int AGI_WingTime { get; set; } = 1;
+            [Increment(0.01f)][Range(0f, 10f)][DefaultValue(1f)] public float AGI_MoveSpeed { get; set; } = 1f;
+            [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float AGI_AttackSpeed { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 2f)][DefaultValue(0.25f)] public float AGI_JumpHeight { get; set; } = 0.25f;
+            [Increment(0.01f)][Range(0f, 1f)][DefaultValue(0.1f)] public float AGI_JumpSpeed { get; set; } = 0.1f;
+            [Increment(0.01f)][DefaultValue(1f)] public float AGI_WingTime { get; set; } = 1f;
 
             [Header("INT_Settings")]
-            [Range(0f, 10f)][DefaultValue(0.5f)] public float INT_Damage { get; set; } = 0.5f;
-            [Range(0, 1000)][DefaultValue(2)] public int INT_MP { get; set; } = 2;
-            [Range(0f, 10f)][DefaultValue(1.2f)] public float INT_ManaCostReduction { get; set; } = 1.2f;
-            [DefaultValue(1)] public int INT_ArmorPen { get; set; } = 1;
+            [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float INT_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 1000f)][DefaultValue(2f)] public float INT_MP { get; set; } = 2f;
+            [Increment(0.01f)][Range(0f, 10f)][DefaultValue(1.2f)] public float INT_ManaCostReduction { get; set; } = 1.2f;
+            [Increment(0.01f)][DefaultValue(1f)] public float INT_ArmorPen { get; set; } = 1f;
 
             [Header("LUC_Settings")]
-            [Range(0f, 10f)][DefaultValue(0.5f)] public float LUC_Crit { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float LUC_Crit { get; set; } = 0.5f;
             [DefaultValue(true)] public bool LUC_EnableFishing { get; set; } = true;
-            [DefaultValue(1)] public int LUC_Fishing { get; set; } = 1;
-            [DefaultValue(5)] public int LUC_AggroReduction { get; set; } = 5;
+            [Increment(0.05f)][DefaultValue(1f)] public float LUC_Fishing { get; set; } = 1f;
+            [Increment(0.5f)][DefaultValue(5f)] public float LUC_AggroReduction { get; set; } = 5f;
             [DefaultValue(true)] public bool LUC_EnableLuckBonus { get; set; } = true;
             [Range(-1f, 1f)][DefaultValue(0.01f)] public float LUC_LuckBonus { get; set; } = 0.01f;
 
             [Header("END_Settings")]
-            [DefaultValue(5)] public int END_DefensePerX { get; set; } = 5;
-            [DefaultValue(10)] public int END_Aggro { get; set; } = 10;
+            [Increment(0.05f)][DefaultValue(0.2f)][Range(0f, 10f)] public float END_Defense { get; set; } = 0.2f;
+            [Increment(0.5f)][DefaultValue(10f)] public float END_Aggro { get; set; } = 10f;
             [DefaultValue(false)] public bool EnableKnockbackResist { get; set; } = false;
             [Range(0f, 10f)][DefaultValue(1f)] public float END_KnockbackResistPerPoint { get; set; } = 1f;
             [DefaultValue(false)] public bool EnableDR { get; set; } = false;
@@ -357,17 +393,17 @@ namespace Stataria
             [Range(0f, 10f)][DefaultValue(0.5f)] public float POW_Damage { get; set; } = 0.5f;
 
             [Header("DEX_Settings")]
-            [Range(0f, 10f)][DefaultValue(0.5f)] public float DEX_Damage { get; set; } = 0.5f;
-            [DefaultValue(1)] public int DEX_ArmorPen { get; set; } = 1;
-            [Range(0f, 10f)][DefaultValue(0.5f)] public float DEX_AmmoConservation { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float DEX_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][DefaultValue(1f)] public float DEX_ArmorPen { get; set; } = 1f;
+            [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float DEX_AmmoConservation { get; set; } = 0.5f;
 
             [Header("TCH_Settings")]
             [DefaultValue(true)] public bool TCH_EnableMiningSpeed { get; set; } = true;
-            [DefaultValue(1)] public int TCH_MiningSpeed { get; set; } = 1;
+            [DefaultValue(1f)] public float TCH_MiningSpeed { get; set; } = 1f;
             [DefaultValue(true)] public bool TCH_EnableBuildSpeed { get; set; } = true;
-            [DefaultValue(1)] public int TCH_BuildSpeed { get; set; } = 1;
+            [DefaultValue(1f)] public float TCH_BuildSpeed { get; set; } = 1f;
             [DefaultValue(true)] public bool TCH_EnableRange { get; set; } = true;
-            [DefaultValue(1)] public int TCH_Range { get; set; } = 1;
+            [DefaultValue(0.2f)] public float TCH_Range { get; set; } = 0.2f;
 
             [Header("SPR_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float SPR_Damage { get; set; } = 0.5f;
@@ -402,15 +438,15 @@ namespace Stataria
             [Header("BRD_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float BRD_Damage { get; set; } = 0.5f;
             [DefaultValue(5)] public int BRD_PointsPerMaxInspiration { get; set; } = 5;
-            [DefaultValue(1)] public int BRD_ArmorPen { get; set; } = 1;
+            [DefaultValue(1f)] public float BRD_ArmorPen { get; set; } = 1f;
             [DefaultValue(true)] public bool BRD_EnableEmpowermentBoost { get; set; } = true;
             [Range(0f, 10f)][DefaultValue(0.1f)] public float BRD_EmpowermentDuration { get; set; } = 0.1f;
 
             [Header("HLR_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float HLR_Damage { get; set; } = 0.5f;
-            [DefaultValue(1)] public int HLR_HealingPower { get; set; } = 1;
+            [DefaultValue(1f)] public float HLR_HealingPower { get; set; } = 1f;
             [DefaultValue(5)][Range(1, 1000)] public int HLR_PointsPerEffectPoint { get; set; } = 5;
-            [DefaultValue(1)] public int HLR_ArmorPen { get; set; } = 1;
+            [DefaultValue(1f)] public float HLR_ArmorPen { get; set; } = 1f;
 
             [Header("CLK_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float CLK_Damage { get; set; } = 0.5f;
@@ -465,6 +501,7 @@ namespace Stataria
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
         [Header("General")]
+        [DefaultValue(true)] public bool EnableLevelUpSound { get; set; } = true;
         [DefaultValue(true)] public bool ShowXPBarAbovePlayer { get; set; } = true;
         [DefaultValue(true)] public bool ShowXPGainPopups { get; set; } = true;
         [DefaultValue(true)] public bool ShowDamageXPPopups { get; set; } = true;

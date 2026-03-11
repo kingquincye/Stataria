@@ -41,6 +41,7 @@ namespace Stataria
         private bool appliedManaSickReduction = false;
         public int RebirthCount = 0;
         public int RebirthPoints = 0;
+        public int BossKillsCount { get; set; } = 0;
         public bool WasRetroRPGranted = false;
         public Dictionary<string, RebirthAbility> RebirthAbilities { get; private set; } = new Dictionary<string, RebirthAbility>();
 
@@ -65,7 +66,14 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
             Level = 1;
             XP = 0L;
-            XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            if (config.generalBalance.EnableXPCurve)
+            {
+                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.XPCurveSteepness));
+            }
+            else
+            {
+                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            }
             StatPoints = 0;
             VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = 0;
             GhostStats = new Dictionary<string, int>();
@@ -75,6 +83,7 @@ namespace Stataria
             wasLastStandTriggered = false;
             RebirthCount = 0;
             RebirthPoints = 0;
+            BossKillsCount = 0;
             RebirthAbilities = new Dictionary<string, RebirthAbility>();
             RegisterDefaultAbilities();
             RegisterDefaultRoles();
@@ -101,6 +110,7 @@ namespace Stataria
             tag["divineInterventionCooldownTimer"] = divineInterventionCooldownTimer;
             tag["RebirthCount"] = RebirthCount;
             tag["RebirthPoints"] = RebirthPoints;
+            tag["BossKillsCount"] = BossKillsCount;
             tag["WasRetroRPGranted"] = WasRetroRPGranted;
             var abilitiesData = new List<TagCompound>();
             foreach (var kvp in RebirthAbilities)
@@ -145,6 +155,7 @@ namespace Stataria
             divineInterventionCooldownTimer = tag.ContainsKey("divineInterventionCooldownTimer") ? tag.GetInt("divineInterventionCooldownTimer") : 0;
             RebirthCount = tag.ContainsKey("RebirthCount") ? tag.GetInt("RebirthCount") : 0;
             RebirthPoints = tag.ContainsKey("RebirthPoints") ? tag.GetInt("RebirthPoints") : 0;
+            BossKillsCount = tag.ContainsKey("BossKillsCount") ? tag.GetInt("BossKillsCount") : 0;
             WasRetroRPGranted = tag.ContainsKey("WasRetroRPGranted") ? tag.GetBool("WasRetroRPGranted") : false;
             RegisterDefaultAbilities();
             if (tag.ContainsKey("RebirthAbilities"))
@@ -650,7 +661,7 @@ namespace Stataria
             if (config.rebirthSystem.ResetStatsOnRebirth)
             {
                 StatPoints = config.generalBalance.StatPointsPerLevel;
-                VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = TCH = RGE = BRD = HLR = CLK = BLH = THR = 0;
+                VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = 0;
             }
             else
             {
@@ -892,6 +903,12 @@ namespace Stataria
                 totalStat += ghostBonus;
             }
 
+            if (config.generalBalance.EnableDiminishingReturns && totalStat > 0)
+            {
+                float diminishingScale = config.generalBalance.DiminishingReturnsRate;
+                totalStat = (int)(totalStat / (1f + (totalStat * diminishingScale)));
+            }
+
             if (capsEnabled)
             {
                 int finalCap = cap;
@@ -983,7 +1000,7 @@ namespace Stataria
             }
         }
 
-        private int GetEffectiveLevelCap()
+        public int GetEffectiveLevelCap()
         {
             var config = ModContent.GetInstance<StatariaConfig>();
             int cap = int.MaxValue;
@@ -998,6 +1015,7 @@ namespace Stataria
             {
                 cap = config.generalBalance.LevelCapValue;
             }
+
             return cap;
         }
 
@@ -1031,6 +1049,19 @@ namespace Stataria
             }
 
             ApplyXPDirectly(amount, source);
+        }
+
+
+        public bool CanRespec(out string reason)
+        {
+            reason = "";
+            return true;
+        }
+
+        public bool PerformRespec(out string reason)
+        {
+            reason = "";
+            return true;
         }
 
         public void ApplyXPDirectly(long amount, string source)
@@ -1133,11 +1164,23 @@ namespace Stataria
             }
 
             StatPoints += baseStatPoints + bonusStatPoints;
-            XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            if (config.generalBalance.EnableXPCurve)
+            {
+                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.XPCurveSteepness));
+            }
+            else
+            {
+                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            }
 
             if (Main.netMode != NetmodeID.Server)
             {
                 CombatText.NewText(Player.Hitbox, Color.LightGreen, $"Level Up! Level {Level}");
+                var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
+                if (clientConfig.EnableLevelUpSound)
+                {
+                    Terraria.Audio.SoundEngine.PlaySound(SoundID.Item82, Player.position);
+                }
             }
         }
 
@@ -1430,7 +1473,7 @@ namespace Stataria
 
             int effectiveVIT = GetEffectiveStat("VIT");
 
-            Player.statLifeMax2 += effectiveVIT * config.statSettings.VIT_HP;
+            Player.statLifeMax2 += (int)(effectiveVIT * config.statSettings.VIT_HP);
 
             int effectiveSTR = GetEffectiveStat("STR");
 
@@ -1438,7 +1481,7 @@ namespace Stataria
 
             int effectiveINT = GetEffectiveStat("INT");
 
-            Player.statManaMax2 += effectiveINT * config.statSettings.INT_MP;
+            Player.statManaMax2 += (int)(effectiveINT * config.statSettings.INT_MP);
             float rawReduction = effectiveINT * config.statSettings.INT_ManaCostReduction / 100f;
             float diminishingReduction = 1f - (1f / (1f + rawReduction));
             Player.manaCost -= diminishingReduction;
@@ -1446,11 +1489,11 @@ namespace Stataria
 
             int effectiveEND = GetEffectiveStat("END");
 
-            if (config.statSettings.END_DefensePerX > 0)
+            if (config.statSettings.END_Defense > 0f)
             {
-                Player.statDefense += effectiveEND / config.statSettings.END_DefensePerX;
+                Player.statDefense += (int)(effectiveEND * config.statSettings.END_Defense);
             }
-            Player.aggro += effectiveEND * config.statSettings.END_Aggro;
+            Player.aggro += (int)(effectiveEND * config.statSettings.END_Aggro);
 
             int effectiveAGI = GetEffectiveStat("AGI");
 
@@ -1464,9 +1507,9 @@ namespace Stataria
             int effectiveLUC = GetEffectiveStat("LUC");
 
             if (config.statSettings.LUC_EnableFishing)
-                Player.fishingSkill += effectiveLUC * config.statSettings.LUC_Fishing;
+                Player.fishingSkill += (int)(effectiveLUC * config.statSettings.LUC_Fishing);
 
-            Player.aggro -= effectiveLUC * config.statSettings.LUC_AggroReduction;
+            Player.aggro -= (int)(effectiveLUC * config.statSettings.LUC_AggroReduction);
 
             int effectiveSPR = GetEffectiveStat("SPR");
 
@@ -1496,12 +1539,15 @@ namespace Stataria
                 Player.pickSpeed -= effectiveTCH * config.statSettings.TCH_MiningSpeed * 0.01f;
 
             if (config.statSettings.TCH_EnableBuildSpeed)
+            {
                 Player.tileSpeed += effectiveTCH * config.statSettings.TCH_BuildSpeed;
+                Player.wallSpeed += effectiveTCH * config.statSettings.TCH_BuildSpeed;
+            }
 
             if (config.statSettings.TCH_EnableRange)
             {
-                Player.tileRangeX += effectiveTCH * config.statSettings.TCH_Range;
-                Player.tileRangeY += effectiveTCH * config.statSettings.TCH_Range;
+                Player.tileRangeX += (int)(effectiveTCH * config.statSettings.TCH_Range);
+                Player.tileRangeY += (int)(effectiveTCH * config.statSettings.TCH_Range);
             }
 
             if (config.modIntegration.EnableCalamityIntegration && CalamitySupportHelper.CalamityLoaded)
@@ -1533,6 +1579,16 @@ namespace Stataria
                 ApplyBardStatEffects();
 
                 ApplyHealerStatEffects();
+
+                int effectiveBRD = GetEffectiveStat("BRD");
+                if (effectiveBRD > 0)
+                {
+                    int armorPen = (int)(effectiveBRD * config.modIntegration.BRD_ArmorPen);
+                    if (ModLoader.TryGetMod("ThoriumMod", out Mod thoriumMod) && thoriumMod.TryFind("BardDamage", out DamageClass bardDamageClass))
+                    {
+                        Player.GetArmorPenetration(bardDamageClass) += armorPen;
+                    }
+                }
             }
 
             int effectiveDEX = GetEffectiveStat("DEX");
@@ -1655,14 +1711,10 @@ namespace Stataria
 
             int effectiveBRD = GetEffectiveStat("BRD");
 
-            if (effectiveBRD > 0 && config.modIntegration.BRD_PointsPerMaxInspiration > 0)
+            if (config.modIntegration.BRD_PointsPerMaxInspiration > 0)
             {
-                int bonusInspiration = effectiveBRD / config.modIntegration.BRD_PointsPerMaxInspiration;
-
-                if (bonusInspiration > 0)
-                {
-                    ThoriumSupportHelper.CallAddBardInspirationMax(Player, bonusInspiration);
-                }
+                int inspirationBonus = effectiveBRD / config.modIntegration.BRD_PointsPerMaxInspiration;
+                ThoriumSupportHelper.CallAddBardInspirationMax(Player, inspirationBonus);
             }
 
             if (effectiveBRD > 0 && config.modIntegration.BRD_EnableEmpowermentBoost)
@@ -1694,10 +1746,10 @@ namespace Stataria
 
                 if (effectiveHLRPoints > 0 && config.modIntegration.HLR_HealingPower > 0)
                 {
-                    int bonusToHealPower = effectiveHLRPoints * config.modIntegration.HLR_HealingPower;
+                    int bonusToHealPower = (int)(effectiveHLRPoints * config.modIntegration.HLR_HealingPower);
                     ThoriumSupportHelper.CallBonusHealerHealBonus(Player, bonusToHealPower);
 
-                    int bonusToLifeRecoveryAmount = (effectiveHLRPoints * config.modIntegration.HLR_HealingPower) / 2;
+                    int bonusToLifeRecoveryAmount = (int)(effectiveHLRPoints * config.modIntegration.HLR_HealingPower) / 2;
                     ThoriumSupportHelper.CallBonusLifeRecovery(Player, bonusToLifeRecoveryAmount);
                 }
 
@@ -1905,7 +1957,7 @@ namespace Stataria
         public override void PostUpdateEquips()
         {
             var config = ModContent.GetInstance<StatariaConfig>();
-            Player.wingTimeMax += AGI * config.statSettings.AGI_WingTime;
+            Player.wingTimeMax += (int)(AGI * config.statSettings.AGI_WingTime);
         }
 
         public override void PostUpdate()
@@ -2317,6 +2369,33 @@ namespace Stataria
                     }
                 };
             }
+        }
+
+        public override bool FreeDodge(Player.HurtInfo info)
+        {
+            if (Player.whoAmI != Main.myPlayer)
+                return false;
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+            float evadeChance = 0f;
+            foreach (Item item in Player.armor)
+            {
+                if (item != null && !item.IsAir && item.TryGetGlobalItem<SocketingGlobalItem>(out var socketingParams))
+                {
+                    evadeChance += socketingParams.GetTotalCoreEffect(CoreType.Evasion);
+                }
+            }
+            
+            if (evadeChance > 0f)
+            {
+                if (Main.rand.NextFloat() < (evadeChance / 100f))
+                {
+                    Player.SetImmuneTimeForAllTypes(config.statSettings.CustomHpRegenDelay * 60);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public override void OnHurt(Player.HurtInfo info)

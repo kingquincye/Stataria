@@ -69,7 +69,7 @@ namespace Stataria
             bool shouldPause = orig();
 
             // The absolute ultimate frame-override. We execute this during the core pause evaluation.
-            if (Main.netMode == NetmodeID.SinglePlayer && !Main.gameMenu && CustomConfigUIState.IsUIActive)
+            if (Main.netMode == NetmodeID.SinglePlayer && !Main.gameMenu && CustomConfigUI != null && Main.InGameUI.CurrentState == CustomConfigUI)
             {
                 shouldPause = true;
             }

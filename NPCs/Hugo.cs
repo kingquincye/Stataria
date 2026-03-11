@@ -47,7 +47,7 @@ namespace Stataria.NPCs
             NPC.friendly = true;
             NPC.width = 18;
             NPC.height = 40;
-            NPC.aiStyle = 7;
+            NPC.aiStyle = NPCAIStyleID.Passive;
             NPC.damage = 10;
             NPC.defense = 15;
             NPC.lifeMax = 250;
@@ -104,14 +104,26 @@ namespace Stataria.NPCs
                 .Add<CoreOfForceT1>()
                 .Add<CoreOfPrecisionT1>()
                 .Add<CoreOfDefenseT1>()
+                .Add<CoreOfVitalityT1>()
+                .Add<CoreOfEvasionT1>()
                 .Add<CoreOfPowerT2>(Condition.DownedEowOrBoc)
                 .Add<CoreOfForceT2>(Condition.DownedEowOrBoc)
                 .Add<CoreOfPrecisionT2>(Condition.DownedEowOrBoc)
                 .Add<CoreOfDefenseT2>(Condition.DownedEowOrBoc)
+                .Add<CoreOfVitalityT2>(Condition.DownedEowOrBoc)
+                .Add<CoreOfEvasionT2>(Condition.DownedEowOrBoc)
                 .Add<CoreOfPowerT3>(Condition.Hardmode)
                 .Add<CoreOfForceT3>(Condition.Hardmode)
                 .Add<CoreOfPrecisionT3>(Condition.Hardmode)
-                .Add<CoreOfDefenseT3>(Condition.Hardmode);
+                .Add<CoreOfDefenseT3>(Condition.Hardmode)
+                .Add<CoreOfVitalityT3>(Condition.Hardmode)
+                .Add<CoreOfEvasionT3>(Condition.Hardmode)
+                .Add<CoreOfPowerT4>(Condition.DownedGolem)
+                .Add<CoreOfForceT4>(Condition.DownedGolem)
+                .Add<CoreOfPrecisionT4>(Condition.DownedGolem)
+                .Add<CoreOfDefenseT4>(Condition.DownedGolem)
+                .Add<CoreOfVitalityT4>(Condition.DownedGolem)
+                .Add<CoreOfEvasionT4>(Condition.DownedGolem);
 
             var config = ModContent.GetInstance<StatariaConfig>().socketingSystem;
             if (config.EnableSocketingSystem)

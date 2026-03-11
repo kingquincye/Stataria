@@ -16,9 +16,6 @@ namespace Stataria
         private int _itemSlotContext;
         public Func<Item, bool> ValidItemFunc { get; set; }
 
-        private bool _isMouseDown = false;
-        private bool _wasMouseDown = false;
-
         public ValidatingItemSlot(Item[] itemArray, int itemIndex, int itemSlotContext = 0)
         {
             _itemArray = itemArray;

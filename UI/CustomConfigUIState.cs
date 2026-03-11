@@ -36,19 +36,14 @@ namespace Stataria.UI
         private UIElement configTabsList;
         public ModConfig CurrentConfig;
 
-        // Absolute single source of truth for the UI's activity status
-        public static bool IsUIActive { get; private set; }
-
         public override void OnActivate()
         {
             base.OnActivate();
-            IsUIActive = true;
         }
 
         public override void OnDeactivate()
         {
             base.OnDeactivate();
-            IsUIActive = false;
         }
 
         public override void OnInitialize()
@@ -165,6 +160,13 @@ namespace Stataria.UI
             configElementsScrollbar.HAlign = 1f;
             rightPanel.Append(configElementsScrollbar);
             configElementsList.SetScrollbar(configElementsScrollbar);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            tooltipText?.SetText("Hover over a setting to see its description.");
+            reloadWarningText?.SetText("");
+            base.Draw(spriteBatch);
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -442,6 +444,14 @@ namespace Stataria.UI
                 else if (field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof(System.Collections.Generic.List<>))
                 {
                     configElementsList.Add(new UI.Elements.UIListEditor(formattedFieldName, field, categoryInstance, CurrentConfig, tooltipString, reloadRequired, onHover));
+                }
+                else if (field.Type == typeof(string))
+                {
+                    var optionStringsAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.OptionStringsAttribute>();
+                    if (optionStringsAttr != null)
+                    {
+                        configElementsList.Add(new UI.Elements.UIStringSelector(formattedFieldName, field, categoryInstance, optionStringsAttr.OptionLabels, CurrentConfig, tooltipString, reloadRequired, onHover));
+                    }
                 }
             }
         }

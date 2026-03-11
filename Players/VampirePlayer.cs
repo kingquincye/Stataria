@@ -8,12 +8,19 @@ namespace Stataria
 {
     public class VampirePlayer : ModPlayer
     {
+        public int BleedCooldownTimer;
         public bool IsVampireActive => GetVampireRole()?.Status == RoleStatus.Active;
 
         private Role GetVampireRole()
         {
             var rpg = Player.GetModPlayer<RPGPlayer>();
             return rpg.AvailableRoles.TryGetValue("Vampire", out Role role) ? role : null;
+        }
+
+        public override void PreUpdate()
+        {
+            if (BleedCooldownTimer > 0)
+                BleedCooldownTimer--;
         }
 
         public override void ResetEffects()
@@ -52,10 +59,11 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            if (Main.rand.NextFloat() < config.roleSettings.VampireBleedChance / 100f)
+            if (Main.rand.NextFloat() < config.roleSettings.VampireBleedChance / 100f && BleedCooldownTimer <= 0)
             {
                 int bleedDuration = (int)(config.roleSettings.VampireBleedDuration * 60f);
                 target.AddBuff(ModContent.BuffType<BleedDebuff>(), bleedDuration);
+                BleedCooldownTimer = (int)(config.roleSettings.VampireBleedCooldown * 60f);
 
                 if (Main.netMode != NetmodeID.Server)
                 {

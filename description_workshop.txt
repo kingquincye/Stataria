@@ -1,5 +1,12 @@
 [b] Stataria - An RPG System for Terraria [/b]
 
+[b][u] NEW IN THIS UPDATE: [/u][/b]
+[list]
+[*] [b]Custom Config UI[/b]: Inspired by the "Quality of Terraria" mod, configuring Stataria is now easier and sleeker than ever!
+[*] [b]Hugo NPC[/b]: Hugo sells the Cores! Many people missed this in previous versions, so make sure to check his shop.
+[*] [b]GitHub Repository[/b]: The repository is now permanently public! Whether you want to help with [b]Localization[/b], fix bugs, or provide updates, you can find it here: [url=https://github.com/kingquincye/Stataria]GitHub[/url]
+[/list]
+
 Stataria brings a stat-based leveling and character building to Terraria.
 
 [i]Psst, hey, want a sword that you can use with this mod? Check out my XP Blade mod![/i]

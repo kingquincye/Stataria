@@ -1807,6 +1807,11 @@ Items: {
 		Tooltip: Can be socketed into weapons to increase knockback
 	}
 
+	CoreOfForceT4: {
+		DisplayName: Core Of Force T.4
+		Tooltip: Can be socketed into weapons to increase knockback
+	}
+
 	CoreOfPowerT1: {
 		DisplayName: Core Of Power T.1
 		Tooltip: Can be socketed into weapons to increase damage
@@ -1819,6 +1824,11 @@ Items: {
 
 	CoreOfPowerT3: {
 		DisplayName: Core Of Power T.3
+		Tooltip: Can be socketed into weapons to increase damage
+	}
+
+	CoreOfPowerT4: {
+		DisplayName: Core Of Power T.4
 		Tooltip: Can be socketed into weapons to increase damage
 	}
 
@@ -1835,6 +1845,71 @@ Items: {
 	CoreOfPrecisionT3: {
 		DisplayName: Core Of Precision T.3
 		Tooltip: Can be socketed into weapons to increase critical hit chance
+	}
+
+	CoreOfPrecisionT4: {
+		DisplayName: Core Of Precision T.4
+		Tooltip: Can be socketed into weapons to increase critical hit chance
+	}
+
+	CoreOfDefenseT1: {
+		DisplayName: Core Of Defense T.1
+		Tooltip: Can be socketed into armor to increase defense
+	}
+
+	CoreOfDefenseT2: {
+		DisplayName: Core Of Defense T.2
+		Tooltip: Can be socketed into armor to increase defense
+	}
+
+	CoreOfDefenseT3: {
+		DisplayName: Core Of Defense T.3
+		Tooltip: Can be socketed into armor to increase defense
+	}
+
+	CoreOfDefenseT4: {
+		DisplayName: Core Of Defense T.4
+		Tooltip: Can be socketed into armor to increase defense
+	}
+
+	CoreOfVitalityT1: {
+		DisplayName: Core Of Vitality T.1
+		Tooltip: Can be socketed into armor to increase max health
+	}
+
+	CoreOfVitalityT2: {
+		DisplayName: Core Of Vitality T.2
+		Tooltip: Can be socketed into armor to increase max health
+	}
+
+	CoreOfVitalityT3: {
+		DisplayName: Core Of Vitality T.3
+		Tooltip: Can be socketed into armor to increase max health
+	}
+
+	CoreOfVitalityT4: {
+		DisplayName: Core Of Vitality T.4
+		Tooltip: Can be socketed into armor to increase max health
+	}
+
+	CoreOfEvasionT1: {
+		DisplayName: Core Of Evasion T.1
+		Tooltip: Can be socketed into armor to increase evade chance
+	}
+
+	CoreOfEvasionT2: {
+		DisplayName: Core Of Evasion T.2
+		Tooltip: Can be socketed into armor to increase evade chance
+	}
+
+	CoreOfEvasionT3: {
+		DisplayName: Core Of Evasion T.3
+		Tooltip: Can be socketed into armor to increase evade chance
+	}
+
+	CoreOfEvasionT4: {
+		DisplayName: Core Of Evasion T.4
+		Tooltip: Can be socketed into armor to increase evade chance
 	}
 }
 
