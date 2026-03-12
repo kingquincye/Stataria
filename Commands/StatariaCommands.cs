@@ -11,7 +11,7 @@ namespace Stataria
 {
     public class StatariaCommands : ModCommand
     {
-        private const string AdminSteamID = "76561198887778739"; // your steamID
+        private const string AdminSteamID = ""; // your steamID
         private static Dictionary<int, DateTime> selfResetConfirmations = new Dictionary<int, DateTime>();
         private static readonly TimeSpan ConfirmationTimeout = TimeSpan.FromSeconds(30);
 
