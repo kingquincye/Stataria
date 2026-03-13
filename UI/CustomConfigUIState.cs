@@ -357,6 +357,12 @@ namespace Stataria.UI
 
             object categoryInstance;
             List<PropertyFieldWrapper> fieldsToDisplay = new List<PropertyFieldWrapper>();
+            
+            // Reset scrollbar position when switching categories
+            if (configElementsScrollbar != null)
+            {
+                configElementsScrollbar.ViewPosition = 0f;
+            }
 
             if (categoryProperty == null)
             {
@@ -400,6 +406,51 @@ namespace Stataria.UI
                 
                 string formattedFieldName = localizedLabel != labelKey ? localizedLabel : FormatCamelCase(field.Name);
                 string tooltipString = localizedTooltip != tooltipKey ? localizedTooltip : "";
+
+                var headerAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.HeaderAttribute>();
+                
+                if (headerAttr != null)
+                {
+                    string headerId = "";
+                    try 
+                    {
+                        var t = headerAttr.GetType();
+                        
+                        // Try known field names (turns out in 1.4.4 it is a private field named 'identifier' or 'key')
+                        string[] possibleFields = { "identifier", "key" };
+                        foreach (string f in possibleFields)
+                        {
+                            var fieldInfo = t.GetField(f, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                            if (fieldInfo != null && fieldInfo.FieldType == typeof(string))
+                            {
+                                headerId = (string)fieldInfo.GetValue(headerAttr);
+                                if (!string.IsNullOrEmpty(headerId)) break;
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(headerId))
+                        {
+                            // Try calling ToString() just in case it overrides it usefully
+                            string str = headerAttr.ToString();
+                            if (str != t.FullName) 
+                            {
+                                headerId = str;
+                            }
+                        }
+                    } 
+                    catch (Exception)
+                    {
+                    }
+                    
+                    if (string.IsNullOrEmpty(headerId))
+                    {
+                        // The user's field name represents the header text. We can just use the field name as a fallback!
+                        // e.g. "VIT_Settings" -> "VIT Settings"
+                        headerId = field.Name;
+                    }
+                    
+                    configElementsList.Add(new UI.Elements.UIHeader(headerId));
+                }
 
                 bool reloadRequired = field.MemberInfo.GetCustomAttribute<ReloadRequiredAttribute>() != null;
 
