@@ -2300,6 +2300,11 @@ RoleEffects: {
 }
 
 UI: {
+	ConfigCenter: Config Center
+	CloseCustomConfig: Close Custom Config
+	Uncategorized: Uncategorized
+	HoverTooltip: Hover over a setting to see its description.
+	ReloadRequired: A reload is required for this setting to take effect.
 	SocketedCoresHeader: Socketed Cores:
 	CoreDamage: +{0}% Damage
 	CoreKnockback: +{0}% Knockback

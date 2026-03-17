@@ -1,0 +1,2691 @@
+Keybinds: {
+	"Toggle Stataria UI.DisplayName": 切换 Stataria 界面
+	"AGI Teleport.DisplayName": 传送
+	"Divine Intervention.DisplayName": 神圣干涉
+}
+
+ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
+
+Commands: {
+	StatariaCommands: {
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Description: Stataria 模组控制台命令
+		NoPermission: 您没有权限使用此命令。
+		SteamNotAvailable: Steam 不可用。无法验证管理员身份。
+		UsagePrefix: 用法: {0}
+		ResetSuccess: Stataria 已重置！
+		SetLevelSuccess: 等级已设置为 {0}
+		SetLevelUsage: 用法: /stataria setlevel <数字>
+		SetXPSuccess: 经验值已设置为 {0}
+		SetXPUsage: 用法: /stataria setxp <数字>
+		SetPointsRPSuccess: 转生点数已设置为 {0}
+		SetPointsRPUsage: 用法: /stataria setpoints rp <数字>
+		SetPointsStatSuccess: 属性点已设置为 {0}
+		SetPointsUsage: 用法: /stataria setpoints <数字> 或 /stataria setpoints rp <数字>
+		SetStatSuccess: "{0} 已设置为 {1}"
+		SetStatUnknown: 未知属性名。有效值: vit, str, agi, int, luc, end, pow, dex, spr, tch, rge, brd, hlr, clk, blh, hnt, gmb, shm, thr
+		SetStatUsage: 用法: /stataria setstat <名称> <数值>
+		ClearBossesSuccess: 已清除首领首杀奖励进度。
+		SyncBossesSuccess: 强制同步首领列表。
+		SyncBossesSinglePlayer: 无法在单人游戏中同步。
+		DebugModeToggle: 调试模式: {0}
+		DebugModeToggleLog: 调试模式已切换为 {0}
+		DiagnoseHeader: 系统诊断:
+		DiagnoseCalStatus: Calamity (灾厄) 整合状态: {0}
+		DiagnoseFoundFields: 找到的字段:
+		DiagnoseField_RogueClass: 盗贼职业: {0}
+		DiagnoseField_RogueStealth: 盗贼潜行: {0}
+		DiagnoseField_MaxStealth: 最大潜行: {0}
+		DiagnoseField_StandstillGen: 静止潜行恢复: {0}
+		DiagnoseField_MovingGen: 移动潜行恢复: {0}
+		DiagnoseField_StealthDamage: 潜行伤害: {0}
+		DiagnoseField_RogueVelocity: 盗贼弹幕速度: {0}
+		DiagnoseField_RogueAmmoCost: 盗贼弹药消耗: {0}
+		DiagnoseField_Rage: 暴怒: {0}
+		DiagnoseField_RageMax: 最大暴怒: {0}
+		DiagnoseField_RageDuration: 暴怒持续时间: {0}
+		DiagnoseField_RageDamage: 暴怒伤害: {0}
+		DiagnoseField_Adrenaline: 肾上腺素: {0}
+		DiagnoseField_AdrenalineMax: 最大肾上腺素: {0}
+		DiagnoseField_AdrenalineDuration: 肾上腺素持续时间: {0}
+		DiagnoseThorStatus: Thorium (瑟银) 整合状态: {0}
+		WeaponDebugNoWeapon: 未装备武器。
+		WeaponDebugHeader: ===== 武器调试信息 =====
+		WeaponDebugName: 名称: {0}
+		WeaponDebugItemType: 类型: {0}
+		WeaponDebugBaseDamage: 基础伤害: {0}
+		WeaponDebugDamageTypeClass: 伤害类型类别: {0}
+		WeaponDebugDamageTypeString: 伤害类型字符串: {0}
+		WeaponDebugDamageClasses: 伤害类别:
+		WeaponDebugMelee: "  近战: {0}"
+		WeaponDebugRanged: "  远程: {0}"
+		WeaponDebugMagic: "  魔法: {0}"
+		WeaponDebugSummon: "  召唤: {0}"
+		WeaponDebugModItemInfo: 模组物品信息:
+		WeaponDebugMod: "  模组: {0}"
+		WeaponDebugItemClass: "  类别: {0}"
+		WeaponDebugNamespace: "  命名空间: {0}"
+		WeaponDebugFullName: "  全名: {0}"
+		WeaponDebugIsRogueWeapon: 是否为盗贼武器: {0}
+		WeaponDebugRogueDetectionDetails: 盗贼检测详情:
+		WeaponDebugIsCalamityModItem: "  是否为灾厄模组物品: True"
+		WeaponDebugRogueWeaponLog: 武器调试: {0} 是否为盗贼武器: {1}
+		WeaponDebugCalamityNotLoaded: 灾厄模组未加载。
+		WeaponDebugStatEffects: 属性效果:
+		WeaponDebugSTR: "  STR: {0} (近战伤害: +{1})"
+		WeaponDebugINT: "  INT: {0} (魔法伤害: +{1})"
+		WeaponDebugDEX: "  DEX: {0} (远程伤害: +{1})"
+		WeaponDebugSPR: "  SPR: {0} (召唤伤害: +{1})"
+		WeaponDebugRGE: "  RGE: {0} (盗贼伤害: +{1})"
+		WeaponDebugPOW: "  POW: {0} (其他伤害: +{1})"
+		WeaponDebugAppliedStatBoost: 已应用属性加成: {0} (+{1})
+		WeaponDebugAppliedStatBoostLog: 已应用属性加成: {0} (+{1})
+		CalCalamityNotDetected: 错误: 未检测到灾厄模组。这些命令需要灾厄模组支持。
+		CalIntegrationDisabled: 错误: 灾厄整合已在配置中禁用。
+		CalUsage: 用法: /stataria cal <fillrage | filladrenaline | infrage | infadren>
+		CalFillRageSuccess: 暴怒已充能至最大值 ({0})。
+		CalFillRageError: 错误: 无法访问暴怒数值。
+		CalFillAdrenalineSuccess: 肾上腺素已充能至最大值 ({0})。
+		CalFillAdrenalineError: 错误: 无法访问肾上腺素数值。
+		CalInfRageToggle: 无限暴怒: {0}
+		CalInfAdrenalineToggle: 无限肾上腺素: {0}
+		CalInfRageToggleLog: 无限暴怒已切换为: {0}
+		CalInfAdrenalineToggleLog: 无限肾上腺素已切换为: {0}
+		UnknownCalSubcommand: 未知的灾厄子命令。用法: /stataria cal <fillrage | filladrenaline | infrage | infadren>
+		TestXPUIAccepted: 经验已接受！
+		TestXPUIRejected: 经验已拒绝！
+		TestXPUIAllAccepted: 已接受所有经验！
+		TestXPUIAllRejected: 已拒绝所有经验！
+		TestXPUIShowing: 显示经验验证界面: 包含 {0} 经验来自 '{1}', 提示 {2}/{3}
+		UnknownSubcommand: 未知子命令。{0}
+		SelfResetMultiplayerDisabled: 本服务器的已禁用玩家自行重置。
+		SelfResetWarning1: 警告: 这将完全重置您的 Stataria 进度！
+		SelfResetWarning2: 您的所有等级、属性、经验、转生进度和能力都将丢失！
+		SelfResetWarning3: 请在 30 秒内再次输入 '/stataria selfreset' 以确认操作。
+		SelfResetSuccess: 您的 Stataria 进度已完全重置！
+		StatusOn: 开启
+		StatusOff: 关闭
+		StatusWorking: 正常工作
+		StatusErrorsDetected: 发现错误
+	}
+}
+
+Configs: {
+	StatariaConfig: {
+		DisplayName: 服务器配置
+
+		generalBalance: {
+			Label: 综合平衡
+			Tooltip: 配置经验获取、等级上限及其他平衡选项。
+		}
+
+		rebirthSystem: {
+			Label: 转生系统
+			Tooltip: 配置转生机制、等级要求和角色成长奖励系统。
+		}
+
+		multiplayerSettings: {
+			Label: 多人游戏设置
+			Tooltip: 调整经验在多人游戏中如何分配和记录。
+		}
+
+		enemyScaling: {
+			Label: 敌人数值随动
+			Tooltip: 控制敌人强度如何根据玩家等级、多人游戏和精英怪刷新机制进行动态调整。
+		}
+
+		statSettings: {
+			Label: 属性设置
+			Tooltip: 配置各项属性对玩家面板的影响。
+		}
+
+		modIntegration: {
+			Label: 模组整合联动
+			Tooltip: 其他模组支持的设置以及特殊属性效果。
+		}
+
+		rebirthAbilities: {
+			Label: 转生能力
+			Tooltip: 配置玩家可以使用转生点数解锁的特殊能力。
+		}
+
+		advanced: {
+			Tooltip: 仅限高级玩家配置。请小心操作。
+			Label: 高级设置
+		}
+
+		xpVerification: {
+			Label: 经验验证机制
+			Tooltip: 配置异常经验获取的检测与验证系统。
+		}
+
+		roleSettings: {
+			Label: 职业定位设置
+			Tooltip: 配置职业系统的机制、切换成本和各个职业的具体效果。
+		}
+
+		socketingSystem: {
+			Label: 镶嵌系统
+			Tooltip: 配置武器的镶嵌孔系统、核心以及升级成本。
+		}
+
+		extraLuckSettings: {
+			Tooltip: 配置影响掉落率和其他基于运气机制的强化幸运系统。
+			Label: 额外幸运设置
+		}
+
+		ascensionSystem: {
+			Label: 飞升系统
+			Tooltip: 配置飞升机制、条件与奖励。
+		}
+	}
+
+	GeneralBalance: {
+		Tooltip: ""
+
+		Headers: {
+			General_Balance: 综合平衡
+			XP_Multipliers: 经验倍率
+			Damage_Calculation: 伤害计算
+			Diminishing_Returns: 收益递减机制
+			Respec_Settings: 洗点设置
+		}
+
+		EnableBossHPXP: {
+			Label: 启用首领生命值经验转化
+			Tooltip: 无论击杀多少次，都基于首领的最大生命值给予经验。如果不开启，只有首次击杀才给大量经验。
+		}
+
+		BonusBossXPIsUnique: {
+			Label: 唯一的首领经验加成
+			Tooltip: 每个首领只给予一次通关经验加成。如果不开启，则每次击杀都给加成。
+		}
+
+		UseFlatBossXP: {
+			Label: 使用固定首领经验
+			Tooltip: 击败首领时给予固定的经验值，而不是随等级缩放的经验。
+		}
+
+		DefaultFlatBossXP: {
+			Label: 默认固定首领经验
+			Tooltip: 当开启“使用固定首领经验”时，设置击杀首领获得的经验值。
+		}
+
+		EnableLevelCap: {
+			Label: 启用等级上限
+			Tooltip: 开启后玩家无法超过设定的等级限制。如果启用了“动态转生等级上限”，此选项将被忽略。
+		}
+
+		LevelCapValue: {
+			Label: 等级上限数值
+			Tooltip: 设置玩家能达到的最高等级。如果启用了“动态转生等级上限”，此选项将被忽略。
+		}
+
+		StatPointsPerLevel: {
+			Label: 升级获得的属性点
+			Tooltip: 每次升级获得的属性点数量。
+		}
+
+		DamageXP: {
+			Label: 伤害经验转化率
+			Tooltip: 基于造成的伤害转化为经验的倍率。
+		}
+
+		KillXP: {
+			Label: 击杀经验转化率
+			Tooltip: 基于敌人生命值（包括首领）转化为击杀经验的倍率。
+		}
+
+		BossXP: {
+			Label: 首领击杀经验加成
+			Tooltip: 击杀首领后给予的经验加成 (基于升到下一级所需经验的百分比)。
+		}
+
+		UseMultiplicativeDamage: {
+			Label: 启用乘法伤害计算
+			Tooltip: 开启后，属性提供的伤害将与其他伤害来源相乘，而不是相加。
+		}
+
+		LevelScalingFactor: {
+			Tooltip: 控制升级所需经验的增长速度。数值越高，经验曲线越陡峭，升级越慢。
+			Label: 等级经验缩放因子
+		}
+
+		EnableStatPointRecalculation: {
+			Tooltip: 开启后，如果您在配置中增加了“升级获得的属性点”，玩家将自动获得补偿属性点。
+			Label: 启用属性点重新计算
+		}
+
+		EnableDiminishingReturns: {
+			Label: 启用收益递减
+			Tooltip: 对极高数值的属性点数应用收益递减（投入越多，收益越低）。
+		}
+
+		DiminishingReturnsRate: {
+			Label: 收益递减率
+			Tooltip: 在高数值下属性收益递减的强度。
+		}
+
+		EnableRespecCost: {
+			Label: 启用洗点消耗
+			Tooltip: 重置已分配的属性点需要消耗货币。
+		}
+
+		RespecCostType: {
+			Label: 洗点消耗类型
+			Tooltip: 重置属性点所需的货币类型。
+		}
+
+		RespecCostBase: {
+			Label: 基础洗点花费
+			Tooltip: 重置属性点所需货币的基础数量。
+		}
+
+		EnableXPCurve: {
+			Label: 启用指数经验曲线
+			Tooltip: 使升级难度根据指数曲线逐渐增加。
+		}
+
+		XPCurveSteepness: {
+			Label: 经验曲线陡峭度
+			Tooltip: 经验缩放曲线的陡峭程度。
+		}
+	}
+
+	RebirthSystem: {
+		Tooltip: ""
+
+		Headers: {
+			Rebirth_System: 转生系统
+			Rebirth_Points: 转生点数
+			Ghost_Stats: 幻影属性
+		}
+
+		EnableRebirthSystem: {
+			Label: 启用转生系统
+			Tooltip: 启用转生系统，允许玩家重置等级进度以换取永久的经验获取加成。
+		}
+
+		RebirthLevelRequirement: {
+			Label: 转生等级要求
+			Tooltip: 执行转生所需的最低等级。
+		}
+
+		RebirthXPMultiplier: {
+			Label: 转生经验倍率
+			Tooltip: 每个转生等级提供的经验获取加成。0.5 意味着每次转生增加 50% 经验。
+		}
+
+		ResetStatsOnRebirth: {
+			Label: 转生时重置属性点
+			Tooltip: 如果开启，转生时将重置所有已分配的属性点。
+		}
+
+		ResetBossRewardsOnRebirth: {
+			Label: 转生时重置首领奖励
+			Tooltip: 如果开启，将重置首领奖励的击杀记录，允许您再次获取首杀经验奖励。
+		}
+
+		BonusPointsForExcessLevels: {
+			Label: 溢出等级奖励点数
+			Tooltip: 如果开启，在高于要求等级时进行转生，会给予额外的转生点数。
+		}
+
+		ExcessLevelPointMultiplier: {
+			Label: 溢出等级点数倍率
+			Tooltip: 溢出等级提供奖励点数的倍率。例如，0.5 意味着 10 个溢出等级将提供 5 个额外点数。
+		}
+
+		IncreaseLevelRequirement: {
+			Label: 递增等级要求
+			Tooltip: 如果开启，每次转生所需的等级要求都会增加。
+		}
+
+		AdditionalLevelRequirementPerRebirth: {
+			Label: 每次转生附加等级要求
+			Tooltip: 每次转生后，下一次转生的等级要求增加多少。
+		}
+
+		RebirthPointsMultiplier: {
+			Label: 转生点数倍率
+			Tooltip: 基于转生等级要求奖励转生点数的倍率。
+		}
+
+		EnableDynamicRebirthLevelCap: {
+			Label: 启用动态转生等级上限
+			Tooltip: 如果开启，当前转生周期的最高等级将根据下一次转生的等级要求动态设置。
+		}
+
+		DynamicRebirthLevelCapMultiplier: {
+			Label: 动态转生等级上限倍率
+			Tooltip: 应用于下一次转生等级要求的倍率，用于确定当前周期的动态等级上限。
+		}
+
+		EnableRebirthPointRecalculation: {
+			Tooltip: 开启后，如果配置中增加了转生点数相关数值，玩家将自动获得补偿的转生点数。
+			Label: 启用转生点数重新计算
+		}
+
+		EnableGhostStats: {
+			Label: 启用幻影属性
+			Tooltip: 根据转生进度提供自动的额外属性加成。
+		}
+
+		UsePercentageGhostStats: {
+			Label: 使用百分比幻影属性
+			Tooltip: 如果开启，幻影属性将基于转生等级要求的百分比。如果关闭，则每次转生提供固定数值。
+		}
+
+		GhostStatsPercentage: {
+			Label: 幻影属性百分比
+			Tooltip: 当开启百分比模式时，作为幻影属性添加的转生等级要求的百分比。
+		}
+
+		GhostStatsFlatAmount: {
+			Label: 幻影属性固定数值
+			Tooltip: 当开启固定数值模式时，每次转生添加的幻影属性数值。
+		}
+
+		GhostStatsAffectedStats: {
+			Label: 受幻影属性影响的属性
+			Tooltip:
+				'''
+				将获得幻影属性加成的属性列表。 
+				有效输入: VIT, STR, AGI, INT, LUC, END, POW, DEX, SPR, TCH, RGE, BRD, HLR, CLK
+				'''
+		}
+
+		EnableRebirthBonusStatPoints: {
+			Label: 启用转生额外属性点
+			Tooltip: 开启后，每次转生都会增加玩家升级时获得的属性点。
+		}
+
+		RebirthStatPointsMultiplier: {
+			Label: 转生额外属性点倍率
+			Tooltip: 每次转生给予的升级属性点百分比加成。0.25 意味着每次转生增加 25% 的升级属性点。
+		}
+
+		EnableRebirthStatPointRecalculation: {
+			Label: 启用转生属性点重新计算
+			Tooltip: 开启后，如果配置中增加了转生相关的属性点设定，玩家将自动获得补偿。
+		}
+
+		EnableProgressiveStatCaps: {
+			Label: 启用递进属性上限
+			Tooltip: 开启后，属性上限会随着每次转生而提高，允许玩家投入更多的点数。
+		}
+
+		ProgressiveStatCapMultiplier: {
+			Label: 递进属性上限倍率
+			Tooltip: 每次转生增加的属性上限百分比。0.5 意味着每次转生上限增加 50%。
+		}
+
+		EnableRebirthAbilities: {
+			Label: 启用转生能力
+			Tooltip: 开启后，允许玩家消耗转生点数来解锁和使用转生专属能力。
+		}
+	}
+
+	MultiplayerSettings: {
+		Tooltip: ""
+		Headers.Multiplayer_Settings: 多人游戏设置
+
+		SplitKillXP: {
+			Label: 平分击杀经验
+			Tooltip: 开启后，击杀敌人获得的经验将在所有玩家间平分。
+		}
+
+		EnableXPProximity: {
+			Label: 启用经验共享范围
+			Tooltip: 开启后，只有在特定距离内的玩家才能获得击杀经验。
+		}
+
+		XPProximityRange: {
+			Label: 经验共享范围半径
+			Tooltip: 玩家必须在敌人多远（单位：像素）的范围内才能获得击杀经验。
+		}
+
+		AllowSelfResetInMultiplayer: {
+			Label: 允许在多人游戏中自行重置
+			Tooltip: 开启后，允许非管理员玩家在多人游戏中使用 '/stataria selfreset' 命令重置自己的进度。
+		}
+	}
+
+	EnemyScaling: {
+		Tooltip: ""
+
+		Headers: {
+			Enemy_Scaling: 敌人数值随动
+			Multiplayer_Scaling: 多人游戏随动机制
+			Elite_Enemies: 精英敌人
+			Boss_Scaling: 首领数值随动
+			Flat_Scaling: 固定数值随动
+			Level_Variation: 等级波动机制
+		}
+
+		EnableEnemyScaling: {
+			Label: 启用敌人数值随动
+			Tooltip: 开启敌人根据玩家等级或人数的动态缩放。关闭时，敌人将使用原版属性。
+		}
+
+		EnemyHealthScaling: {
+			Label: 敌人生命值随动系数
+			Tooltip: 每个玩家等级能让敌人生命值增加多少。数值越高，敌人越难被杀死。
+		}
+
+		EnemyDamageScaling: {
+			Label: 敌人伤害随动系数
+			Tooltip: 每个玩家等级能让敌人伤害增加多少。数值越高，敌人越致命。
+		}
+
+		EnemyDefenseScaling: {
+			Label: 敌人防御随动系数
+			Tooltip: 每个玩家等级能让非首领敌人的防御力增加多少。首领不享受防御随动。
+		}
+
+		BossHealthScaling: {
+			Label: 首领生命值随动系数
+			Tooltip: 应用于首领生命值随动的额外倍率。数值越高，首领越厚。
+		}
+
+		BossDamageScaling: {
+			Label: 首领伤害随动系数
+			Tooltip: 应用于首领伤害随动的额外倍率。数值越高，首领打人越痛。
+		}
+
+		ScalingType: {
+			Label: 随动类型
+			Tooltip: 决定如何计算敌人的数值缩放：0 = 玩家数量 (根据人数给固定加成)，1 = 最高等级 (根据最强玩家)，2 = 平均等级 (根据队伍平均等级)。
+		}
+
+		UseProximityForScaling: {
+			Label: 根据距离随动
+			Tooltip: 开启后，在计算敌人等级时，只考虑附近范围内的玩家。
+		}
+
+		ScalingProximityRange: {
+			Label: 随动计算范围半径
+			Tooltip: 计算动态随动时，考虑玩家的最大距离（单位：像素）。
+		}
+
+		EnableEliteEnemies: {
+			Label: 启用精英敌人
+			Tooltip: 开启后，普通敌人有几率生成为拥有强化属性和抗性的精英变种。
+		}
+
+		EliteEnemyChance: {
+			Label: 精英敌人生成概率
+			Tooltip: 非首领敌人生成为精英怪的几率。
+		}
+
+		EliteHealthMultiplier: {
+			Label: 精英生命值倍率
+			Tooltip: 精英敌人比普通敌人多出多少生命值。
+		}
+
+		EliteDamageMultiplier: {
+			Label: 精英伤害倍率
+			Tooltip: 精英敌人比普通敌人多造成多少伤害。
+		}
+
+		EliteDefenseMultiplier: {
+			Label: 精英防御倍率
+			Tooltip: 精英敌人比普通敌人多出多少防御。
+		}
+
+		EliteKnockbackResistance: {
+			Label: 精英击退抗性
+			Tooltip: 精英敌人的击退抗性强度。0.5 = 减少 50% 的击退效果。
+		}
+
+		EliteCriticalHitResistance: {
+			Label: 精英暴击抗性
+			Tooltip: 对精英敌人造成的暴击伤害会被减少多少。0.25 = 减少 25% 的暴击伤害。
+		}
+
+		EliteScaleIncrease: {
+			Label: 启用精英体型变大
+			Tooltip: 开启后，精英敌人看起来会比普通敌人大。
+		}
+
+		EliteScaleMultiplier: {
+			Label: 精英体型倍率
+			Tooltip: 精英敌人变大的程度。1.15 = 体型增加 15%。
+		}
+
+		EnableDefenseCap: {
+			Label: 启用防御上限
+			Tooltip:
+				'''
+				开启后，限制敌人防御力随等级增长的上限，防止敌人变得完全打不动。 
+				如果您想要更硬核的体验，让高等级敌人拥有极高的防御，请关闭此项。
+				'''
+		}
+
+		MaxDefenseMultiplier: {
+			Label: 最大防御倍率
+			Tooltip:
+				'''
+				当防御随等级增长时，应用于敌人防御的最大倍率（如果开启了防御上限）。 
+				在默认值 3 情况下，无论敌人等级多高，其防御力永远不会超过基础值的 3 倍。更高的数值允许敌人变得更硬。
+				'''
+		}
+
+		LevelsPerPlayer: {
+			Label: 每个玩家提供的额外等级
+			Tooltip: 当使用基于玩家数量的随动机制（类型 0）时，每个活跃玩家为敌人增加的额外等级数。
+		}
+
+		MinimumLevelDifference: {
+			Tooltip:
+				'''
+				当最大等级波动范围较大时，防止敌人生成时的等级比玩家低太多。
+				仅适用于随动类型 1（最高等级）。
+				'''
+			Label: 最小等级差
+		}
+
+		EnableMinimumLevelDifference: {
+			Tooltip: 开启后，生成的敌人等级不会低于玩家指定数量的等级。
+			Label: 启用最小等级差
+		}
+
+		MaxLevelVariation: {
+			Tooltip: 敌人的等级可以在计算出等级的上下浮动多少个等级（±）。
+			Label: 最大等级波动范围
+		}
+
+		EnableLevelVariation: {
+			Tooltip: 开启后，敌人生成时其等级会在最大等级波动范围内随机浮动。
+			Label: 启用等级波动
+		}
+
+		ScaleCrawlerEnemies: {
+			Label: 缩放爬行类敌人
+			Tooltip:
+				'''
+				如果为 true，将缩放血爬虫、丛林蜘蛛、黑隐士等爬行类敌人的数值。 
+				如果为 false，这些敌人将忽略动态缩放系统，以防止它们在地面和墙壁状态切换时出现 Bug。
+				'''
+		}
+
+		EnableBossScaling: {
+			Label: 启用首领数值随动
+			Tooltip: 启用首领数值动态缩放的配置。
+		}
+
+		EnableFlatEnemyScaling: {
+			Label: 启用固定敌人数值随动
+			Tooltip: 启用固定敌人数值缩放的配置。
+		}
+
+		FlatEnemyHealthScaling: {
+			Label: 固定敌人生命值缩放
+			Tooltip: 固定敌人生命值缩放的配置。
+		}
+
+		FlatEnemyDamageScaling: {
+			Label: 固定敌人伤害缩放
+			Tooltip: 固定敌人伤害缩放的配置。
+		}
+
+		FlatBossHealthScaling: {
+			Label: 固定首领生命值缩放
+			Tooltip: 固定首领生命值缩放的配置。
+		}
+
+		FlatBossDamageScaling: {
+			Label: 固定首领伤害缩放
+			Tooltip: 固定首领伤害缩放的配置。
+		}
+	}
+
+	StatSettings: {
+		Tooltip: ""
+
+		Headers: {
+			VIT_Settings: VIT (体力) 设置
+			STR_Settings: STR (力量) 设置
+			AGI_Settings: AGI (敏捷) 设置
+			INT_Settings: INT (智力) 设置
+			LUC_Settings: LUC (幸运) 设置
+			END_Settings: END (耐力) 设置
+			POW_Settings: POW (威力) 设置
+			DEX_Settings: DEX (灵巧) 设置
+			TCH_Settings: TCH (技巧) 设置
+			SPR_Settings: SPR (精神) 设置
+			Stat_Caps: 属性上限
+		}
+
+		VIT_HP: {
+			Label: 生命值加成
+			Tooltip: 每点增加最大生命值。
+		}
+
+		UseCustomHpRegen: {
+			Label: 使用独立生命恢复
+			Tooltip: 启用基于 VIT 的独立生命恢复系统。它将忽略原版生命恢复机制，直接随时间恢复生命值。
+		}
+
+		CustomHpRegenPerVIT: {
+			Label: 每点 VIT 的生命恢复量
+			Tooltip: 每点 VIT 每秒恢复多少生命值。例如，0.5 意味着 10 点 VIT = 5 HP/秒。
+		}
+
+		CustomHpRegenDelay: {
+			Label: 独立生命恢复延迟
+			Tooltip: 受到伤害后，独立生命恢复开始生效前的延迟（单位：帧）。60 帧 = 1 秒。
+		}
+
+		EnableHealingPotionBoost: {
+			Label: 启用治疗药水加成
+			Tooltip: 开启后，VIT 可以增加治疗药水的回复量。
+		}
+
+		HealingPotionBoostPercent: {
+			Label: 治疗药水加成百分比
+			Tooltip: 每点 VIT 增加治疗药水回复量的百分比。
+		}
+
+		STR_Damage: {
+			Label: 近战伤害
+			Tooltip: 每点按百分比增加近战伤害。
+		}
+
+		STR_Knockback: {
+			Label: 击退
+			Tooltip: 增加近战击退效果。
+		}
+
+		STR_ArmorPen: {
+			Label: 护甲穿透
+			Tooltip: 增加近战护甲穿透。
+		}
+
+		AGI_MoveSpeed: {
+			Label: 移动速度
+			Tooltip: 每点增加移动速度。
+		}
+
+		AGI_AttackSpeed: {
+			Label: 攻击速度
+			Tooltip: 增加武器的攻击速度（所有类型）。
+		}
+
+		AGI_JumpHeight: {
+			Label: 跳跃高度
+			Tooltip: 增加跳跃高度（有收益递减）。
+		}
+
+		AGI_JumpSpeed: {
+			Label: 跳跃速度
+			Tooltip: 每点提升跳跃速度。
+		}
+
+		AGI_WingTime: {
+			Label: 飞行时间
+			Tooltip: 增加翅膀的飞行时间。
+		}
+
+		INT_Damage: {
+			Label: 魔法伤害
+			Tooltip: 每点按百分比增加魔法伤害。
+		}
+
+		INT_MP: {
+			Label: 法力值
+			Tooltip: 增加最大法力值。
+		}
+
+		INT_ManaCostReduction: {
+			Label: 法力消耗降低
+			Tooltip: 每点降低法力消耗（有收益递减）。
+		}
+
+		INT_ArmorPen: {
+			Label: 护甲穿透
+			Tooltip: 增加魔法护甲穿透。
+		}
+
+		LUC_Crit: {
+			Label: 暴击率
+			Tooltip: 每点增加暴击几率。
+		}
+
+		LUC_EnableFishing: {
+			Label: 启用渔力加成
+			Tooltip: 开启后，LUC 可以按固定数值提升渔力。
+		}
+
+		LUC_Fishing: {
+			Label: 渔力
+			Tooltip: 每点增加渔力。
+		}
+
+		LUC_AggroReduction: {
+			Label: 仇恨降低
+			Tooltip: 每点降低敌人的仇恨值（更不容易被盯上）。
+		}
+
+		LUC_EnableLuckBonus: {
+			Label: 启用原版幸运加成
+			Tooltip: 开启后，LUC 会增加游戏原版的幸运属性。
+		}
+
+		LUC_LuckBonus: {
+			Label: 幸运加成
+			Tooltip: 每点轻微增加玩家的原版幸运值。
+		}
+
+		END_DefensePerX: {
+			Label: 达到 X 点获得防御
+			Tooltip: 每 X 点 END 提供 +1 防御。
+		}
+
+		END_Defense: {
+			Label: END 防御加成
+			Tooltip: 每点 END 提供的防御数值。
+		}
+
+		END_Aggro: {
+			Label: 仇恨增加
+			Tooltip: 增加敌人的仇恨值（更容易被盯上）。
+		}
+
+		EnableKnockbackResist: {
+			Label: 启用击退抗性
+			Tooltip: 启用受 END 影响的击退抗性加成。
+		}
+
+		EnableDR: {
+			Label: 启用伤害减免
+			Tooltip: 启用受 END 影响的伤害减免 (DR) 加成。
+		}
+
+		EnableEnemyKnockback: {
+			Label: 启用反弹击退敌人
+			Tooltip: 当您受到攻击且投入了 END 时，非首领敌人会被反向击退。
+		}
+
+		END_EnemyKnockbackMultiplier: {
+			Label: 反弹击退敌人倍率
+			Tooltip: 控制由于 END 触发击退时，敌人被击退的力度。
+		}
+
+		POW_Damage: {
+			Label: 威力伤害
+			Tooltip: 按百分比增加由模组添加的武器的伤害。也会给所有原版伤害类型提供微小的加成。
+		}
+
+		DEX_Damage: {
+			Label: 远程伤害
+			Tooltip: 每点按百分比增加远程伤害。
+		}
+
+		DEX_ArmorPen: {
+			Label: 护甲穿透
+			Tooltip: 每点 DEX 为远程攻击增加固定的护甲穿透。
+		}
+
+		TCH_EnableMiningSpeed: {
+			Label: 启用挖矿速度加成
+			Tooltip: 开启后，TCH 将提高镐子的挖矿速度。
+		}
+
+		TCH_MiningSpeed: {
+			Label: 挖矿速度
+			Tooltip: 缩短挖矿时间，提高挖矿速度。
+		}
+
+		TCH_EnableBuildSpeed: {
+			Label: 启用建造速度加成
+			Tooltip: 开启后，TCH 将提高建造和放置物块的速度。
+		}
+
+		TCH_BuildSpeed: {
+			Label: 建造速度
+			Tooltip: 加快方块放置/建造速度。
+		}
+
+		TCH_EnableRange: {
+			Label: 启用互动距离加成
+			Tooltip: 开启后，TCH 将增加方块互动的范围。
+		}
+
+		TCH_Range: {
+			Label: 互动距离
+			Tooltip: 增加放置方块和挖矿的距离。
+		}
+
+		SPR_Damage: {
+			Label: 召唤伤害
+			Tooltip: 每点按百分比增加召唤伤害。
+		}
+
+		SPR_MinionsPerX: {
+			Label: 达到 X 点增加仆从上限
+			Tooltip: 每 X 点 SPR 增加 1 个仆从上限。
+		}
+
+		SPR_SentriesPerX: {
+			Label: 达到 X 点增加哨兵上限
+			Tooltip: 每 X 点 SPR 增加 1 个哨兵上限。
+		}
+
+		EnableStatCaps: {
+			Label: 启用属性上限
+			Tooltip: 启用所有属性的上限。将上限设置为 -1 代表无上限。
+		}
+
+		VIT_Cap: {
+			Label: VIT (体力) 上限
+			Tooltip: ""
+		}
+
+		STR_Cap: {
+			Label: STR (力量) 上限
+			Tooltip: ""
+		}
+
+		AGI_Cap: {
+			Label: AGI (敏捷) 上限
+			Tooltip: ""
+		}
+
+		INT_Cap: {
+			Label: INT (智力) 上限
+			Tooltip: ""
+		}
+
+		LUC_Cap: {
+			Label: LUC (幸运) 上限
+			Tooltip: ""
+		}
+
+		END_Cap: {
+			Label: END (耐力) 上限
+			Tooltip: ""
+		}
+
+		POW_Cap: {
+			Label: POW (威力) 上限
+			Tooltip: ""
+		}
+
+		DEX_Cap: {
+			Label: DEX (灵巧) 上限
+			Tooltip: ""
+		}
+
+		SPR_Cap: {
+			Label: SPR (精神) 上限
+			Tooltip: ""
+		}
+
+		TCH_Cap: {
+			Label: TCH (技巧) 上限
+			Tooltip: ""
+		}
+
+		RGE_Cap: {
+			Label: RGE (盗贼) 上限
+			Tooltip: ""
+		}
+
+		BRD_Cap: {
+			Label: BRD (诗人) 上限
+			Tooltip: ""
+		}
+
+		HLR_Cap: {
+			Label: HLR (治疗师) 上限
+			Tooltip: ""
+		}
+
+		DEX_AmmoConservation: {
+			Label: 弹药节约
+			Tooltip: 每点 DEX 提供不消耗弹药的概率。
+		}
+
+		CLK_Cap: {
+			Label: CLK (点击者) 上限
+			Tooltip: ""
+		}
+
+		END_KnockbackResistPerPoint: {
+			Label: 击退抗性加成
+			Tooltip: 获得的击退抗性百分比。
+		}
+
+		END_DRPerPoint: {
+			Label: 伤害减免加成
+			Tooltip: 获得的伤害减免百分比。可减少来自所有来源的受到的伤害。
+		}
+
+		BLH_Cap: {
+			Label: BLH (血猎手) 上限
+			Tooltip: ""
+		}
+
+		HNT_Cap: {
+			Label: HNT (猎人) 上限
+			Tooltip: ""
+		}
+
+		GMB_Cap: {
+			Label: GMB (赌徒) 上限
+			Tooltip: ""
+		}
+
+		SHM_Cap: {
+			Label: SHM (萨满) 上限
+			Tooltip: ""
+		}
+
+		THR_Cap: {
+			Label: THR (投掷者) 上限
+			Tooltip: ""
+		}
+	}
+
+	ModIntegration: {
+		Tooltip: ""
+
+		Headers: {
+			Mod_Integration: 模组整合联动
+			RGE_Settings: RGE (盗贼) 设置
+			POW_CalamityEnhancements: POW (灾厄强化) 设置
+			BRD_Settings: BRD (诗人) 设置
+			HLR_Settings: HLR (治疗师) 设置
+			CLK_Settings: CLK (点击者) 设置
+			BLH_Settings: BLH (血猎手) 设置
+			HNT_Settings: HNT (猎人) 设置
+			GMB_Settings: GMB (赌徒) 设置
+			SHM_Settings: SHM (萨满) 设置
+			THR_Settings: THR (投掷者) 设置
+		}
+
+		EnableCalamityIntegration: {
+			Label: 启用 Calamity (灾厄) 整合
+			Tooltip: 启用或禁用与灾厄模组的整合。必须安装灾厄模组才能使这些设置生效。
+		}
+
+		RGE_Damage: {
+			Label: 盗贼伤害
+			Tooltip: 每点 RGE 按百分比增加盗贼武器的伤害。
+		}
+
+		RGE_Velocity: {
+			Label: 弹幕速度
+			Tooltip: 每点 RGE 按百分比增加盗贼弹幕的速度。
+		}
+
+		RGE_AmmoConsumptionReduction: {
+			Label: 弹药消耗降低
+			Tooltip: 每点 RGE 降低盗贼武器消耗弹药的百分比概率。
+		}
+
+		RGE_EnableStealthConsumptionReduction: {
+			Label: 启用潜行值消耗降低
+			Tooltip: 开启后，RGE 属性将在达到以下设定的阈值时降低潜行打击消耗的潜行值。
+		}
+
+		RGE_StealthConsumption85Threshold: {
+			Label: 潜行打击 85% 消耗阈值
+			Tooltip: 当达到此 RGE 点数时，盗贼潜行打击将只消耗正常的 85% 潜行值。
+		}
+
+		RGE_StealthConsumption75Threshold: {
+			Label: 潜行打击 75% 消耗阈值
+			Tooltip: 当达到此 RGE 点数时，盗贼潜行打击将只消耗正常的 75% 潜行值。
+		}
+
+		RGE_StealthConsumptionReductionThreshold: {
+			Label: 潜行打击 50% 消耗阈值
+			Tooltip: 当达到此 RGE 点数时，盗贼潜行打击将只消耗正常的 50% 潜行值。
+		}
+
+		POW_RageDamage: {
+			Label: 暴怒模式伤害加成
+			Tooltip: 每点 POW 按百分比增加灾厄暴怒模式 (Rage) 激活时的伤害加成。
+		}
+
+		POW_RageDuration: {
+			Label: 暴怒模式持续时间
+			Tooltip: 每点 POW 增加灾厄暴怒模式的持续时间（单位：帧，60 帧 = 1 秒）。
+		}
+
+		POW_AdrenalineDuration: {
+			Label: 肾上腺素持续时间
+			Tooltip: 每点 POW 增加灾厄肾上腺素模式 (Adrenaline) 的持续时间（单位：帧，60 帧 = 1 秒）。
+		}
+
+		EnableThoriumIntegration: {
+			Label: 启用 Thorium (瑟银) 整合
+			Tooltip: 启用或禁用与瑟银模组的整合。必须安装瑟银模组才能使这些设置生效。
+		}
+
+		BRD_Damage: {
+			Label: 交响伤害
+			Tooltip: 每点 BRD 按百分比增加交响 (Symphonic) 伤害。
+		}
+
+		BRD_EnableEmpowermentBoost: {
+			Label: 启用琴音强化时间加成
+			Tooltip: 开启后，BRD 属性将延长吟游诗人乐器提供的赋能/强化效果的持续时间。
+		}
+
+		BRD_EmpowermentDuration: {
+			Label: 赋能持续时间
+			Tooltip: 按百分比增加赋能效果的持续时间。
+		}
+
+		HLR_Damage: {
+			Label: 光辉伤害
+			Tooltip: 每点 HLR 增加光辉 (Radiant) 伤害的百分比。
+		}
+
+		HLR_HealingPower: {
+			Label: 治疗强度
+			Tooltip: 每点有效 HLR 属性提供的治疗强度 (Healing Power) 数值。这同时也是生命恢复的基础比例。
+		}
+
+		RGE_MaxStealthPerPoint: {
+			Label: 每点提供最大潜行值
+			Tooltip: 每投入 1 点 RGE 属性可以增加多少最大潜行值。
+		}
+
+		BRD_ArmorPen: {
+			Label: 护甲穿透
+			Tooltip: 每点 BRD 增加的交响护甲穿透数值。
+		}
+
+		HLR_ArmorPen: {
+			Label: 护甲穿透
+			Tooltip: 每点 HLR 增加的光辉护甲穿透数值。
+		}
+
+		BRD_PointsPerMaxInspiration: {
+			Label: 每 X 点提供最大灵感
+			Tooltip: 设置需要多少点 BRD 才能获得 1 点最大灵感值 (Max Inspiration)。
+		}
+
+		HLR_PointsPerEffectPoint: {
+			Tooltip: 获得 1 点 HLR 效果需要多少点 HLR 属性（适用于治疗强度、生命恢复量和生命恢复间隔）。
+			Label: 每 X 属性转化 1 点效果
+		}
+
+		EnableClickerClassIntegration: {
+			Label: 启用 Clicker Class (点击者) 整合
+			Tooltip: 开启后，将启用 Stataria 对点击者职业模组的支持，包括 CLK 属性。
+		}
+
+		CLK_Damage: {
+			Label: 点击伤害
+			Tooltip: 每点 CLK 按百分比增加点击伤害。
+		}
+
+		CLK_Radius: {
+			Label: 点击范围
+			Tooltip: 每点 CLK 额外增加的点击者范围半径单位。
+		}
+
+		CLK_EffectThreshold: {
+			Label: 触发效果所需点击次数降低
+			Tooltip: 每点 CLK 提供初始线性百分比的点击次数减免要求。此收益递减。
+		}
+
+		POW_MaxRageDurationBonus: {
+			Label: 最大暴怒持续时间加成
+			Tooltip: POW 提供的最大暴怒时间加成上限。这可以防止高 POW 值导致激活暴怒时时间反向增加的 Bug。
+		}
+
+		EnableGenericModIntegration: {
+			Label: 启用通用模组整合
+			Tooltip: 启用或禁用与各种添加了新伤害职业的小型模组的联动。
+		}
+
+		BLH_Damage: {
+			Label: 血猎手伤害
+			Tooltip: 血猎手 (Blood Hunter) 伤害的百分比加成。
+		}
+
+		HNT_Damage: {
+			Label: 猎人伤害
+			Tooltip: 猎人 (Hunter) 伤害的百分比加成。
+		}
+
+		GMB_Damage: {
+			Label: 赌徒伤害
+			Tooltip: 赌徒/赌博 (Gambling) 伤害的百分比加成。
+		}
+
+		SHM_Damage: {
+			Label: 萨满伤害
+			Tooltip: 萨满 (Shamanic) 伤害的百分比加成。
+		}
+
+		THR_Damage: {
+			Label: 投掷者伤害
+			Tooltip: 投掷 (Throwing) 伤害的百分比加成。
+		}
+	}
+
+	RebirthAbilities: {
+		Tooltip: ""
+
+		Headers: {
+			Last_Stand: 破釜沉舟 (背水一战)
+			Teleport: 瞬间移动
+			Golden_Touch: 点石成金
+			Extra_Accessory_Slots: 额外饰品栏
+			Enhanced_Spawns: 强效生成
+			Auto_Clicker: 自动点击器
+			Enhanced_Fortune: 强效幸运
+		}
+
+		LastStandHealPercent: {
+			Label: 破釜沉舟治疗百分比
+			Tooltip: 当破釜沉舟触发时，恢复的最大生命值百分比。
+		}
+
+		LastStandImmunityTime: {
+			Label: 破釜沉舟无敌时间
+			Tooltip: 破釜沉舟触发后的无敌时间（秒）。
+		}
+
+		LastStandCooldown: {
+			Label: 破釜沉舟冷却时间
+			Tooltip: 破釜沉舟能力再次生效前需要等待的时间（秒）。
+		}
+
+		TeleportCooldown: {
+			Label: 瞬间移动冷却时间
+			Tooltip: 设置瞬间移动能力的冷却时间（秒）。
+		}
+
+		GoldenTouchPercentPerLevel: {
+			Tooltip: 点石成金能力每级增加拾取硬币时的加成百分比。
+			Label: 点石成金每级加成百分比
+		}
+
+		MaxGoldenTouchLevel: {
+			Tooltip: 点石成金能力的最高等级。
+			Label: 最大点石成金等级
+		}
+
+		MaxExtraAccessorySlots: {
+			Tooltip: 通过该能力可以解锁的最大额外饰品栏位数量。
+			Label: 最大额外饰品栏数
+		}
+
+		MaxEnhancedSpawnsLevel: {
+			Label: 最大强效生成等级
+			Tooltip: 强效生成能力的最高等级。
+		}
+
+		SpawnRatePercentPerLevel: {
+			Label: 强效生成每级加成百分比
+			Tooltip: 强效生成能力每级增加敌人生成率的百分比。
+		}
+
+		AutoClickerMaxLevel: {
+			Label: 自动点击器最大等级
+			Tooltip: 自动点击器的最高升级等级。
+		}
+
+		AutoClickerSpeedFactorAtLevel1: {
+			Label: 自动点击器 1 级时速度因子
+			Tooltip: 1 级时的自动点击速度因子。数值越小点击越快。
+		}
+
+		AutoClickerSpeedFactorImprovementPerLevel: {
+			Label: 自动点击器每级提升
+			Tooltip: 1 级之后每一级改善的速度因子变化。使用负值以获得更快的点击。
+		}
+
+		AutoClickerPreventsEffects: {
+			Label: 阻止触发物品效果
+			Tooltip: 如果开启，此能力的自动点击将“不会”触发物品特殊的点击效果。如果关闭，则它“会”尝试触发。
+		}
+
+		MaxEnhancedFortuneLevel: {
+			Tooltip: 该能力的最大等级。
+			Label: 最大强效幸运等级
+		}
+
+		LuckPerAbilityLevel: {
+			Tooltip: 强效幸运转生能力每级授予的额外运气。
+			Label: 强效幸运每级提供数值
+		}
+	}
+
+	Advanced: {
+		XPBlacklistedNPCs: {
+			Tooltip: 击杀后不会给予经验的 NPC 名称或 ID 列表 (例如: Zombie 或僵尸的 ID 3)
+			Label: 经验黑名单 NPC
+		}
+
+		ScalingBlacklistedNPCs: {
+			Tooltip: 不受敌人数值动态缩放系统影响的 NPC 名称或 ID 列表 (例如: 'Blood Crawler' 或 65)。
+			Label: 数值随动黑名单 NPC
+		}
+
+		Headers: {
+			XP_Blacklist: 经验黑名单
+			Scaling_Blacklist: 数值随动黑名单
+		}
+
+		Tooltip: ""
+	}
+
+	XPVerification: {
+		Tooltip: ""
+		Headers.XP_Verification: 经验验证机制
+
+		EnableXPVerification: {
+			Label: 启用经验验证
+			Tooltip: 开启后，单次获得可疑的大量经验值时将弹窗要求确认。
+		}
+
+		BaseXPThreshold: {
+			Label: 基础经验阈值
+			Tooltip: 触发验证的基础经验量。此数值会随您的等级和转生次数增加。
+		}
+
+		LevelScalingFactor: {
+			Label: 等级阈值缩放系数
+			Tooltip: 每个玩家等级使经验阈值增加多少。
+		}
+
+		RebirthScalingFactor: {
+			Label: 转生阈值缩放系数
+			Tooltip: 每个转生等级使经验阈值增加多少。
+		}
+
+		RelativeXPThreshold: {
+			Label: 相对经验阈值
+			Tooltip: 当获取的经验超过升级所需经验的此百分比时，触发验证。例如，1.5 意味着相当于下级所需经验 150% 的经验获取量。
+		}
+
+		RebirthRelativeThresholdReduction: {
+			Label: 转生对相对阈值的降低
+			Tooltip: 每次转生降低多少相对阈值。这允许高转生角色获取大量经验而不被频繁验证打扰。
+		}
+
+		WhitelistedSources: {
+			Label: 经验来源白名单
+			Tooltip:
+				'''
+				免受验证的经验来源。您可以添加如 'Boss'，将放行所有名称中包含 'Boss' 的经验来源。
+				常见来源包括: 'Boss Bonus', 'Kill', 'Damage', 'Melee', 'Projectile'。
+				'''
+		}
+	}
+
+	RoleSettings: {
+		Tooltip: ""
+
+		Headers: {
+			Role_System: 职业定位系统
+			Crit_God: 暴击之神
+			Vampire: 吸血鬼
+			Beastmaster: 兽王
+			Apex_Summoner: 巅峰召唤师
+			Black_Knight: 黑骑士
+			Cleric: 牧师
+			Guardian: 守护者
+		}
+
+		BaseSwitchCost: {
+			Label: 基础职业切换消耗
+			Tooltip: 切换职业的基础转生点数消耗（在首次免费选择之后）。
+		}
+
+		SwitchCostMultiplier: {
+			Label: 职业切换消耗倍增
+			Tooltip: 每次切换职业后成本增加的倍率。
+		}
+
+		CritGodCritChance: {
+			Label: 暴击之神暴击几率加成
+			Tooltip: 暴击之神提供的全局暴击几率加成。
+		}
+
+		CritGodExcessCritToDamage: {
+			Label: 溢出暴击转爆伤比例
+			Tooltip: 暴击几率超过 100% 后，每 1% 溢出几率能转化为多少暴击伤害。
+		}
+
+		CritGodEnableSummonCrits: {
+			Label: 允许召唤物暴击
+			Tooltip: 开启后，暴击之神职业允许召唤物造成暴击。
+		}
+
+		VampireBleedTickInterval: {
+			Tooltip: 流血伤害触发间隔的时间（秒）。
+			Label: 吸血鬼流血触发间隔
+		}
+
+		VampireBleedDuration: {
+			Tooltip: 流血减益状态持续的时间（秒）。
+			Label: 吸血鬼流血持续时间
+		}
+
+		VampireBleedDamagePercent: {
+			Tooltip: 每次触发流血时，造成敌人最大生命值百分比的伤害。
+			Label: 流血伤害百分比
+		}
+
+		VampireBleedCooldown: {
+			Label: 流血冷却时间
+			Tooltip: 吸血鬼能够再次施加流血效果之前的冷却时间（秒）。
+		}
+
+		VampireBleedChance: {
+			Tooltip: 攻击时对敌人施加流血效果的概率百分比。
+			Label: 施加流血几率
+		}
+
+		VampireMovementSpeed: {
+			Tooltip: 移动速度增加的百分比。
+			Label: 吸血鬼移动速度加成
+		}
+
+		VampireHealthBonus: {
+			Tooltip: 最大生命值增加的百分比。
+			Label: 吸血鬼生命值加成
+		}
+
+		RoleProximityRange: {
+			Tooltip: 玩家必须在距离敌人多远（单位：像素）的范围内才能获得职业的击杀效果。
+			Label: 职业生效范围
+		}
+
+		EnableRoleProximity: {
+			Tooltip: 开启后，敌人被击杀时，只有在特定范围内的玩家才能触发职业效果。
+			Label: 启用职业范围限制
+		}
+
+		VampireBleedHealPercent: {
+			Label: 流血吸血转化率
+			Tooltip: 对流血敌人造成的伤害中，转化为吸血鬼自身治疗量的百分比。
+		}
+
+		VampireKillHealPercent: {
+			Label: 击杀回血百分比
+			Tooltip: 击杀敌人时，恢复的最大生命值百分比。
+		}
+
+		BeastmasterDamagePerUniqueMinion: {
+			Label: 单个独特仆从加成伤害
+			Tooltip: 每个不同类型的当前存活仆从，提供的召唤伤害加成百分比。
+		}
+
+		BeastmasterSlotsPerBonusSlot: {
+			Label: 基础栏位换算额外栏位
+			Tooltip: 需要多少个当前仆从栏位，才能获得 1 个额外的仆从栏位。
+		}
+
+		BeastmasterBonusSlotsGained: {
+			Label: 奖励栏位数量
+			Tooltip: 当达到基础栏位条件时，一次性奖励多少个仆从栏位。
+		}
+
+		BeastmasterReduceSPRSlotEfficiency: {
+			Label: 降低 SPR 栏位效率
+			Tooltip: 开启后，通过 SPR 属性获取的仆从栏位在计算额外奖励栏位时，效率会降低（鼓励混合来源获取仆从）。
+		}
+
+		BeastmasterSPRSlotPenaltyMultiplier: {
+			Label: SPR 栏位惩罚倍率
+			Tooltip: SPR 获取栏位的惩罚倍率。2.0 意味着 SPR 栏位需要原来两倍的数量才能算作 1 个基础栏位。
+		}
+
+		ApexSummonerDamagePerUnusedSlot: {
+			Tooltip: 当仅召唤同一种仆从时，每个未使用的仆从栏位提供召唤伤害的加成百分比。
+			Label: 闲置栏位伤害加成
+		}
+
+		BlackKnightINTToMeleeDamage: {
+			Label: 黑骑士: INT 转近战伤害
+			Tooltip: 每 1 点 INT (智力) 提供近战伤害加成的百分比。
+		}
+
+		BlackKnightSTRToMagicDamage: {
+			Label: 黑骑士: STR 转魔法伤害
+			Tooltip: 每 1 点 STR (力量) 提供魔法伤害加成的百分比。
+		}
+
+		BlackKnightMaxDarkFocusStacks: {
+			Label: 最大黑暗专注层数
+			Tooltip: 通过魔法暴击积累的“黑暗专注”效果的最大层数。
+		}
+
+		BlackKnightDarkFocusCritChancePerStack: {
+			Label: 每层提供暴击率
+			Tooltip: 当被近战攻击消耗时，每层“黑暗专注”提供的暴击几率加成。
+		}
+
+		BlackKnightDarkFocusCritDamagePerStack: {
+			Label: 每层提供暴伤
+			Tooltip: 当被近战攻击消耗时，每层“黑暗专注”提供的暴击伤害加成。
+		}
+
+		BlackKnightManaRestoreOnMeleeCrit: {
+			Label: 近战暴击恢复法力值
+			Tooltip: 造成近战暴击时恢复的法力值数量。
+		}
+
+		BlackKnightArcaneSurgeDuration: {
+			Label: 奥术涌动持续时间
+			Tooltip: 近战暴击后，“奥术涌动”增益效果持续的时间（秒）。
+		}
+
+		BlackKnightArcaneSurgeMagicDamage: {
+			Label: 奥术涌动魔法伤害
+			Tooltip: “奥术涌动”增益提供的基础魔法伤害加成百分比。
+		}
+
+		BlackKnightArcaneSurgeScaleWithDamage: {
+			Label: 奥术涌动随伤害增幅
+			Tooltip: 开启后，“奥术涌动”提供的魔法伤害加成将基于触发该效果的近战暴击伤害成比例提升。
+		}
+
+		BlackKnightArcaneSurgeDamageScaling: {
+			Label: 奥术涌动伤害转化率
+			Tooltip: 触发“奥术涌动”的近战暴击伤害每 1 点，额外提供的魔法伤害加成。
+		}
+
+		DivineInterventionCooldown: {
+			Tooltip: 再次使用“神圣干涉”之前的冷却时间（秒）。
+			Label: 神圣干涉冷却时间
+		}
+
+		DivineInterventionDuration: {
+			Tooltip: “神圣干涉”保护免受减益影响的持续时间（秒）。
+			Label: 神圣干涉持续时间
+		}
+
+		ClericRegenInterval: {
+			Tooltip: 每次恢复跳字的间隔时间（秒）。
+			Label: 牧师光环恢复间隔
+		}
+
+		ClericTeammateRegenPercent: {
+			Tooltip: 队友在光环内每个间隔恢复的最大生命值百分比。
+			Label: 牧师队友恢复比例
+		}
+
+		ClericSelfRegenPercent: {
+			Tooltip: 牧师自身每个间隔恢复的最大生命值百分比。
+			Label: 牧师自身恢复比例
+		}
+
+		ClericTeammateHealthBonus: {
+			Tooltip: 牧师光环内队友增加的最大生命值百分比。
+			Label: 牧师队友生命值加成
+		}
+
+		ClericDisableVitRegen: {
+			Tooltip: 开启后，牧师将无法享受基于 VIT 的生命恢复效果，防止牧师变得过于无敌。
+			Label: 禁用牧师的 VIT 恢复
+		}
+
+		ClericDefensePenalty: {
+			Tooltip: 减少牧师的防御力百分比以平衡强度。
+			Label: 牧师防御力惩罚
+		}
+
+		ClericHealthBonus: {
+			Tooltip: 牧师自身最大生命值增加的百分比。
+			Label: 牧师自身生命值加成
+		}
+
+		ClericAuraRadius: {
+			Tooltip: 牧师神圣保护光环的半径（单位：像素）。
+			Label: 牧师光环半径
+		}
+
+		GuardianAuraRadius: {
+			Label: 守护者光环半径
+			Tooltip: 守护者保护光环的半径（单位：像素）。
+		}
+
+		GuardianTeammateDefenseBonus: {
+			Label: 队友防御加成
+			Tooltip: 守护者光环内队友增加的防御力百分比。
+		}
+
+		GuardianTeammateDamageReduction: {
+			Label: 伤害分担/减免比例
+			Tooltip: 守护者为队友提供的伤害减免百分比。
+		}
+
+		GuardianMovementSpeedPenalty: {
+			Label: 守护者移动速度惩罚
+			Tooltip: 守护者移动速度降低的百分比。
+		}
+
+		GuardianDamageReduction: {
+			Label: 守护者自身伤害减免
+			Tooltip: 守护者自身的伤害减免百分比（在其他减免后计算）。
+		}
+
+		GuardianHealthBonus: {
+			Label: 守护者生命值加成
+			Tooltip: 守护者自身最大生命值增加的百分比。
+		}
+
+		GuardianDamagePenalty: {
+			Label: 守护者输出惩罚
+			Tooltip: 为了平衡，守护者造成的伤害降低的百分比。
+		}
+
+		GuardianDefenseBonus: {
+			Label: 守护者自身防御加成
+			Tooltip: 守护者获得的固定防御力加成。
+		}
+
+		GuardianReduceVitEffects: {
+			Label: 降低守护者 VIT 效果
+			Tooltip: 开启后，守护者的基于 VIT 的生命恢复效果将按指定百分比降低。
+		}
+
+		GuardianVitEffectReduction: {
+			Label: VIT 效果降低比例
+			Tooltip: 当未完全禁用时，守护者 VIT 恢复效果降低的百分比。
+		}
+
+		GuardianDisableEndEffects: {
+			Label: 禁用守护者 END 效果
+			Tooltip: 开启后，守护者无法再从 END 属性中获得击退抗性和伤害减免收益。
+		}
+
+		VampireEnableEyeColorChange: {
+			Label: 启用吸血鬼眼睛变色
+			Tooltip:
+				'''
+				开启后，当吸血鬼职业激活时，角色的眼睛会变成红色。 
+				警告: 由于 Terraria 机制限制，如果在此职业激活时禁用此选项，眼睛可能永久保持红色。
+				'''
+		}
+
+		DivineInterventionExemptBuffs: {
+			Label: 神圣干涉豁免的减益
+			Tooltip:
+				'''
+				“神圣干涉”将*不会*清除的减益 ID 或名称列表。
+				输入减益 ID (数字) 或准确的减益英文名称。
+				例如: "123", "Tipsy", "SomeModdedBuff"
+				'''
+		}
+	}
+
+	SocketingSystem: {
+		Tooltip: ""
+
+		Headers: {
+			Core_Effects: 核心效果
+			Cost_Configuration: 消耗配置
+			Socketing_System: 镶嵌系统
+		}
+
+		EnableSocketingSystem: {
+			Label: 启用镶嵌系统 (实验性)
+			Tooltip: 启用或禁用整个镶嵌系统，包括其 UI 标签页。
+		}
+
+		PowerT1Effect: {
+			Label: 力量核心 T.1 效果
+			Tooltip: 力量核心 T.1 提供的伤害加成百分比。
+		}
+
+		PowerT2Effect: {
+			Label: 力量核心 T.2 效果
+			Tooltip: 力量核心 T.2 提供的伤害加成百分比。
+		}
+
+		PowerT3Effect: {
+			Label: 力量核心 T.3 效果
+			Tooltip: 力量核心 T.3 提供的伤害加成百分比。
+		}
+
+		PowerT4Effect: {
+			Label: 力量核心 T.4 效果
+			Tooltip: 力量核心 T.4 提供的伤害加成百分比。
+		}
+
+		ForceT1Effect: {
+			Label: 击退核心 T.1 效果
+			Tooltip: 击退核心 T.1 提供的击退加成百分比。
+		}
+
+		ForceT2Effect: {
+			Label: 击退核心 T.2 效果
+			Tooltip: 击退核心 T.2 提供的击退加成百分比。
+		}
+
+		ForceT3Effect: {
+			Label: 击退核心 T.3 效果
+			Tooltip: 击退核心 T.3 提供的击退加成百分比。
+		}
+
+		ForceT4Effect: {
+			Label: 击退核心 T.4 效果
+			Tooltip: 击退核心 T.4 提供的击退加成百分比。
+		}
+
+		PrecisionT1Effect: {
+			Label: 精准核心 T.1 效果
+			Tooltip: 精准核心 T.1 提供的暴击几率加成百分比。
+		}
+
+		PrecisionT2Effect: {
+			Label: 精准核心 T.2 效果
+			Tooltip: 精准核心 T.2 提供的暴击几率加成百分比。
+		}
+
+		PrecisionT3Effect: {
+			Label: 精准核心 T.3 效果
+			Tooltip: 精准核心 T.3 提供的暴击几率加成百分比。
+		}
+
+		PrecisionT4Effect: {
+			Label: 精准核心 T.4 效果
+			Tooltip: 精准核心 T.4 提供的暴击几率加成百分比。
+		}
+
+		ExtractCost: {
+			Label: 核心提取消耗
+			Tooltip: 从物品中提取已镶嵌核心所需的转生点数。
+		}
+
+		BaseExpandCost: {
+			Label: 基础扩孔消耗
+			Tooltip: 扩展物品镶嵌孔位所需的基础转生点数。
+		}
+
+		ExpandCostIncrease: {
+			Label: 扩孔消耗递增
+			Tooltip: 每次额外扩展槽位时，消耗增加的百分比。
+		}
+
+		MaxExpandedSlots: {
+			Label: 最大扩孔数量
+			Tooltip: 通过扩孔可以添加在物品上的最大额外槽位数。
+		}
+
+		DefenseT1Effect: {
+			Label: 防御核心 T.1 效果
+			Tooltip: 防御核心 T.1 提供的防御加成。
+		}
+
+		DefenseT2Effect: {
+			Label: 防御核心 T.2 效果
+			Tooltip: 防御核心 T.2 提供的防御加成。
+		}
+
+		DefenseT3Effect: {
+			Label: 防御核心 T.3 效果
+			Tooltip: 防御核心 T.3 提供的防御加成。
+		}
+
+		DefenseT4Effect: {
+			Label: 防御核心 T.4 效果
+			Tooltip: 防御核心 T.4 提供的防御加成。
+		}
+
+		VitalityT1Effect: {
+			Label: 活力核心 T.1 效果
+			Tooltip: 活力核心 T.1 提供的生命值加成。
+		}
+
+		VitalityT2Effect: {
+			Label: 活力核心 T.2 效果
+			Tooltip: 活力核心 T.2 提供的生命值加成。
+		}
+
+		VitalityT3Effect: {
+			Label: 活力核心 T.3 效果
+			Tooltip: 活力核心 T.3 提供的生命值加成。
+		}
+
+		VitalityT4Effect: {
+			Label: 活力核心 T.4 效果
+			Tooltip: 活力核心 T.4 提供的生命值加成。
+		}
+
+		EvasionT1Effect: {
+			Label: 闪避核心 T.1 效果
+			Tooltip: 闪避核心 T.1 提供的闪避几率加成。
+		}
+
+		EvasionT2Effect: {
+			Label: 闪避核心 T.2 效果
+			Tooltip: 闪避核心 T.2 提供的闪避几率加成。
+		}
+
+		EvasionT3Effect: {
+			Label: 闪避核心 T.3 效果
+			Tooltip: 闪避核心 T.3 提供的闪避几率加成。
+		}
+
+		EvasionT4Effect: {
+			Label: 闪避核心 T.4 效果
+			Tooltip: 闪避核心 T.4 提供的闪避几率加成。
+		}
+	}
+
+	ExtraLuckSettings: {
+		BaseExtraLuck: {
+			Tooltip: 向所有玩家提供的基础额外幸运值。正值提升幸运，负值降低幸运。计算是指数级的，所以较高的数值会有非常奇特的效果！(此配置不会改变游戏原版幸运值UI显示)
+			Label: 基础额外幸运
+		}
+
+		EnableExtraLuckSystem: {
+			Tooltip: 开启后，提供基础额外幸运，并允许玩家通过转生能力获得更多幸运加成。此系统加成是指数级的！(不会改变游戏原版幸运值UI显示)
+			Label: 启用强效幸运系统
+		}
+
+		Headers.Extra_Luck_System: 额外幸运系统
+		Tooltip: ""
+	}
+
+	StatariaClientConfig: {
+		EnableDivineInterventionCooldownBar: {
+			Label: 启用神圣干涉冷却条
+			Tooltip: 显示“神圣干涉”能力的冷却时间条。
+		}
+
+		EnableTeleportCooldownBar: {
+			Label: 启用传送冷却条
+			Tooltip: 打开传送冷却时间条显示。
+		}
+
+		EnableLastStandCooldownBar: {
+			Label: 启用破釜沉舟冷却条
+			Tooltip: 显示破釜沉舟剩余冷却时间的读条。
+		}
+
+		Headers: {
+			Cooldown_Bars: 冷却条
+			Socketing_System: 镶嵌系统
+			Enemy_Level_Indicators: 敌人等级指示器
+			BossBars: 首领血条
+			ResourceBars: 资源条
+			CooldownBars: 冷却条
+			SocketingSystem: 镶嵌系统
+			General: 通用设置
+		}
+
+		ShowSocketedCoresInTooltip: {
+			Label: 在提示框中显示镶嵌核心
+			Tooltip: 开启后，已镶嵌的核心及其效果将显示在物品的提示文字中。
+		}
+
+		EnemyIndicatorOpacity: {
+			Label: 敌人等级透明度
+			Tooltip: 控制显示在敌人头顶上的等级指示器的透明度。
+		}
+
+		ShowEnemyLevelBehindWalls: {
+			Label: 隔墙显示敌人等级
+			Tooltip: 即使敌人隐藏在墙壁后面，也显示其等级指示器。否则，只有在您的视线内才显示。
+		}
+
+		ShowEnemyLevelIndicator: {
+			Label: 显示敌人等级指示器
+			Tooltip: 开启后，在敌人的头顶上显示其等级。
+		}
+
+		resourceBars: {
+			Label: 资源条设置
+			Tooltip: 自定义生命值、法力值和首领血条的外观与位置。
+		}
+
+		uiSettings: {
+			Label: UI 界面设置
+			Tooltip: 自定义经验条、等级指示器及其他 UI 元素的外观和行为。
+		}
+
+		DisplayName: 客户端配置
+
+		BossBarXOffsetPercent: {
+			Tooltip: 首领血条的水平位置 (占屏幕宽度的百分比)
+			Label: 首领血条 X 轴偏移 (%)
+		}
+
+		BossBarWidth: {
+			Tooltip: 首领血条的宽度（像素）
+			Label: 首领血条宽度
+		}
+
+		ShowBossName: {
+			Tooltip: 在首领血条上方显示其名字
+			Label: 显示首领名字
+		}
+
+		ShowBossHealthText: {
+			Tooltip: 在首领血条上显示当前/最大生命值数字
+			Label: 显示首领血量数字
+		}
+
+		BossBarScale: {
+			Tooltip: 首领血条的整体缩放比例
+			Label: 首领血条缩放倍率
+		}
+
+		BarPadding: {
+			Tooltip: 相邻资源条之间的间距（像素）。
+			Label: 资源条间距
+		}
+
+		BarHeight: {
+			Tooltip: 调整资源条的高度（像素）。
+			Label: 资源条高度
+		}
+
+		BarWidth: {
+			Tooltip: 调整资源条的宽度（像素）。
+			Label: 资源条宽度
+		}
+
+		PositionYPercent: {
+			Tooltip: 控制资源条的垂直位置 (占屏幕高度的百分比)。
+			Label: 资源条 Y 轴位置 (%)
+		}
+
+		PositionXPercent: {
+			Tooltip: 控制资源条的水平位置 (占屏幕宽度的百分比)。
+			Label: 资源条 X 轴位置 (%)
+		}
+
+		IndicatorOpacity: {
+			Tooltip: 控制显示在您角色上方的等级和转生指示器的透明度。
+			Label: 玩家指示器透明度
+		}
+
+		ShowRebirthTitle: {
+			Tooltip: 当您有转生等级时，在等级指示器下方显示您的转生头衔。
+			Label: 显示转生头衔
+		}
+
+		ShowLevelIndicator: {
+			Tooltip: 在角色头顶上显示您当前的等级，在多人游戏中对所有人可见。
+			Label: 显示玩家等级指示器
+		}
+
+		ShowBossXPPopups: {
+			Tooltip: 当获取经验的跳字开启时，是否显示击杀首领的经验跳字。
+			Label: 显示首领经验跳字
+		}
+
+		ShowKillXPPopups: {
+			Tooltip: 当获取经验的跳字开启时，是否显示击杀敌人的经验跳字。
+			Label: 显示击杀经验跳字
+		}
+
+		ShowDamageXPPopups: {
+			Tooltip: 当获取经验的跳字开启时，是否显示造成伤害转化经验的跳字。
+			Label: 显示伤害经验跳字
+		}
+
+		ShowXPGainPopups: {
+			Tooltip: 整体控制是否显示经验获取的跳字。如果关闭，则完全不显示。
+			Label: 开启经验获取跳字
+		}
+
+		ShowXPBarAbovePlayer: {
+			Tooltip: 获取经验时，在角色头顶显示悬浮的经验条。
+			Label: 显示玩家头顶经验条
+		}
+
+		BossBarYOffsetPercent: {
+			Label: 首领血条 Y 轴偏移 (%)
+			Tooltip: 首领血条的垂直位置 (占屏幕高度的百分比)
+		}
+
+		MaxVisibleBossBars: {
+			Label: 最大可见首领血条数
+			Tooltip: 屏幕上同时显示的首领血条最大数量。
+		}
+
+		MiniBossNPCIDs: {
+			Label: 迷你首领 NPC ID
+			Tooltip: 视为迷你首领的 NPC ID 列表（它们将显示首领血条）。
+		}
+
+		ForcedBossNPCIDs: {
+			Label: 强制显示首领血条 NPC ID
+			Tooltip: 始终视为首领的 NPC ID 列表。
+		}
+
+		ExcludedBossNPCIDs: {
+			Label: 排除显示首领血条 NPC ID
+			Tooltip: 永远“不”为其显示首领血条的 NPC ID 列表（此项优先级最高）。
+		}
+
+		EnableLevelUpSound: {
+			Label: 开启升级音效
+			Tooltip: 升级音效的配置。
+		}
+	}
+
+	AscensionSystem: {
+		Tooltip: 有关飞升系统的高级功能。
+		Headers.Ascension_System: 飞升系统
+
+		EnableAscension: {
+			Label: 开启飞升
+			Tooltip: 开启飞升功能的配置。
+		}
+
+		AscensionCostType: {
+			Label: 飞升消耗货币类型
+			Tooltip: 飞升消耗类型的配置。
+		}
+
+		AscensionCostBase: {
+			Label: 基础飞升消耗
+			Tooltip: 基础飞升消耗的配置。
+		}
+
+		AscensionLevelBonus: {
+			Label: 飞升等级奖励
+			Tooltip: 飞升等级奖励的配置。
+		}
+	}
+}
+
+Buffs: {
+	ArcaneSurgeBuff: {
+		DynamicName: 奥术涌动 ({0}秒)
+		DynamicTooltip: +{0}% 魔法伤害
+		Description: Mods.Stataria.Buffs.ArcaneSurgeBuff.Description
+		DisplayName: 奥术涌动
+	}
+
+	ClericAuraBuff: {
+		GuardianNameSelf: 牧师光环 (自身)
+		GuardianTooltipSelf:
+			'''
+			您正散发着神圣的庇护
+			光环半径: {0} 像素
+			'''
+		GuardianNameTeammate: 牧师光环
+		GuardianTooltipTeammate:
+			'''
+			身处牧师的神圣光环内
+			+{0}% 最大生命值
+			接受神圣的恢复之力
+			'''
+		Description: Mods.Stataria.Buffs.ClericAuraBuff.Description
+		DisplayName: 牧师光环
+	}
+
+	DarkFocusBuff: {
+		DynamicName: 黑暗专注 ({0}/{1})
+		DynamicTooltip: 下一次近战攻击: +{0}% 暴击率, +{1}% 暴击伤害
+		Description: Mods.Stataria.Buffs.DarkFocusBuff.Description
+		DisplayName: 黑暗专注
+	}
+
+	DivineInterventionBuff: {
+		DynamicName: 神圣干涉 ({0}秒)
+		DynamicTooltip: 受到神恩的保护，免疫有害减益
+		Description: Mods.Stataria.Buffs.DivineInterventionBuff.Description
+		DisplayName: 神圣干涉
+	}
+
+	GuardianAuraBuff: {
+		GuardianNameSelf: 守护者光环 (自身)
+		GuardianTooltipSelf:
+			'''
+			您正散发着守护的能量
+			光环半径: {0} 像素
+			'''
+		GuardianNameTeammate: 守护者光环
+		GuardianTooltipTeammate:
+			'''
+			身处守护者的光环内
+			+{0}% 防御力
+			由守护者为您分担伤害
+			'''
+		Description: Mods.Stataria.Buffs.GuardianAuraBuff.Description
+		DisplayName: 守护者光环
+	}
+
+	BleedDebuff: {
+		Description: Mods.Stataria.Buffs.BleedDebuff.Description
+		DisplayName: 流血
+	}
+}
+
+Items: {
+	CoreOfForceT1: {
+		DisplayName: 击退核心 T.1
+		Tooltip: 可以镶嵌到武器中以增加击退力
+	}
+
+	CoreOfForceT2: {
+		DisplayName: 击退核心 T.2
+		Tooltip: 可以镶嵌到武器中以增加击退力
+	}
+
+	CoreOfForceT3: {
+		DisplayName: 击退核心 T.3
+		Tooltip: 可以镶嵌到武器中以增加击退力
+	}
+
+	CoreOfForceT4: {
+		DisplayName: 击退核心 T.4
+		Tooltip: 可以镶嵌到武器中以增加击退力
+	}
+
+	CoreOfPowerT1: {
+		DisplayName: 力量核心 T.1
+		Tooltip: 可以镶嵌到武器中以增加伤害
+	}
+
+	CoreOfPowerT2: {
+		DisplayName: 力量核心 T.2
+		Tooltip: 可以镶嵌到武器中以增加伤害
+	}
+
+	CoreOfPowerT3: {
+		DisplayName: 力量核心 T.3
+		Tooltip: 可以镶嵌到武器中以增加伤害
+	}
+
+	CoreOfPowerT4: {
+		DisplayName: 力量核心 T.4
+		Tooltip: 可以镶嵌到武器中以增加伤害
+	}
+
+	CoreOfPrecisionT1: {
+		DisplayName: 精准核心 T.1
+		Tooltip: 可以镶嵌到武器中以增加暴击率
+	}
+
+	CoreOfPrecisionT2: {
+		DisplayName: 精准核心 T.2
+		Tooltip: 可以镶嵌到武器中以增加暴击率
+	}
+
+	CoreOfPrecisionT3: {
+		DisplayName: 精准核心 T.3
+		Tooltip: 可以镶嵌到武器中以增加暴击率
+	}
+
+	CoreOfPrecisionT4: {
+		DisplayName: 精准核心 T.4
+		Tooltip: 可以镶嵌到武器中以增加暴击率
+	}
+
+	CoreOfDefenseT1: {
+		DisplayName: 防御核心 T.1
+		Tooltip: 可以镶嵌到盔甲中以增加防御力
+	}
+
+	CoreOfDefenseT2: {
+		DisplayName: 防御核心 T.2
+		Tooltip: 可以镶嵌到盔甲中以增加防御力
+	}
+
+	CoreOfDefenseT3: {
+		DisplayName: 防御核心 T.3
+		Tooltip: 可以镶嵌到盔甲中以增加防御力
+	}
+
+	CoreOfDefenseT4: {
+		DisplayName: 防御核心 T.4
+		Tooltip: 可以镶嵌到盔甲中以增加防御力
+	}
+
+	CoreOfVitalityT1: {
+		DisplayName: 活力核心 T.1
+		Tooltip: 可以镶嵌到盔甲中以增加最大生命值
+	}
+
+	CoreOfVitalityT2: {
+		DisplayName: 活力核心 T.2
+		Tooltip: 可以镶嵌到盔甲中以增加最大生命值
+	}
+
+	CoreOfVitalityT3: {
+		DisplayName: 活力核心 T.3
+		Tooltip: 可以镶嵌到盔甲中以增加最大生命值
+	}
+
+	CoreOfVitalityT4: {
+		DisplayName: 活力核心 T.4
+		Tooltip: 可以镶嵌到盔甲中以增加最大生命值
+	}
+
+	CoreOfEvasionT1: {
+		DisplayName: 闪避核心 T.1
+		Tooltip: 可以镶嵌到盔甲中以增加闪避几率
+	}
+
+	CoreOfEvasionT2: {
+		DisplayName: 闪避核心 T.2
+		Tooltip: 可以镶嵌到盔甲中以增加闪避几率
+	}
+
+	CoreOfEvasionT3: {
+		DisplayName: 闪避核心 T.3
+		Tooltip: 可以镶嵌到盔甲中以增加闪避几率
+	}
+
+	CoreOfEvasionT4: {
+		DisplayName: 闪避核心 T.4
+		Tooltip: 可以镶嵌到盔甲中以增加闪避几率
+	}
+}
+
+NPCs: {
+	Hugo: {
+		Census.SpawnCondition: 条件未知
+		DisplayName: 雨果
+
+		TownNPCMood: {
+			Content: 我很满足。
+			NoHome: 我讨厌无家可归。
+			FarFromHome: 我离家太远了。
+			LoveSpace: 我喜欢有这么宽敞的空间。
+			DislikeCrowded: 我不喜欢这么拥挤。
+			HateCrowded: 我讨厌这里挤得跟沙丁鱼罐头一样。
+			LoveBiome: 我太爱{BiomeName}了。
+			LikeBiome: 我喜欢{BiomeName}。
+			DislikeBiome: 我不喜欢{BiomeName}。
+			LoveNPC: 我非常喜欢 {NPCName}。
+			LikeNPC: 我喜欢 {NPCName}。
+			DislikeNPC: 我不喜欢 {NPCName}。
+			LikeNPC_Princess: 我喜欢 {NPCName}。
+			Princess_LovesNPC: 我喜欢 {NPCName}。
+		}
+
+		Dialogue: {
+			Chat1: 这些核心... 它们在向我低语。别担心，它们好像挺喜欢你的。
+			Chat2: 想过把太多的力量塞进一把剑里会发生什么吗？我想过。下场可不好看。
+			Chat3: 你能感觉到它们散发出的能量，对吧？小心使用。
+			Chat4: 每一个核心都包含着一份潜力。能不能解开它就看你的了。
+			ChatRebirth: 你感觉... 变了。就像你已经看到了帷幕之外。核心与那股能量产生了共鸣。
+		}
+
+		Shop: 商店
+	}
+}
+
+RebirthAbilityText: {
+	LastStand: 受到致命一击时，恢复 {0}% 的最大生命值并获得 {1} 秒的无敌时间。冷却时间 {2} 秒。
+	ExtraAccessorySlot: 每级提供一个额外的饰品栏位。
+	GoldenTouch: 每级增加 {0}% 拾取硬币的数量。
+	Teleport: 使用快捷键传送到光标所在位置的能力。冷却时间 {0} 秒。
+	EnhancedSpawns: 每级增加 {0}% 的敌人生成速度。可与其他刷怪倍率叠加。
+	AutoClickerDetail: 自动点击大约 {0} 次/秒 (CPS)。点击效果: {1} (可在配置中修改)。
+	AutoClickerDefault: 开启自动点击器。速度随等级提升。对物品效果的触发可在配置中设置。
+	EnhancedFortune: 开启后，每级提供 +{0} 额外运气，提高掉落率和其他运气机制收益。
+	LevelInfo: "{0} (等级 {1}/{2})"
+	Allowed: 允许
+	Prevented: 已阻止
+}
+
+RoleEffects: {
+	NoEffects: 未定义效果。
+
+	CritGod: {
+		CritChance: • +{0}% 暴击率
+		ExcessCrit: • 溢出的暴击率（超过100%的部分），每 1% 转化为 +{0}% 暴击伤害
+		SummonCrits: • 您的召唤物现在可以造成暴击
+	}
+
+	Vampire: {
+		MaxHealth: • +{0}% 最大生命值
+		MoveSpeed: • +{0}% 移动速度
+		BleedChance: • 攻击时有 {0}% 的几率造成流血
+		BleedDamage: • 流血每 {1} 秒造成敌人最大生命值 {0}% 的伤害
+		BleedHeal: • 将对流血敌人造成伤害的 {0}% 转化为自身治疗
+		KillHeal: • 击杀敌人时，恢复 {0}% 的最大生命值
+	}
+
+	Beastmaster: {
+		DamagePerMinion: • 每种不同类型的仆从提供 +{0}% 召唤伤害
+		BonusSlots: • 每 {2} 个基础召唤栏位提供 +{0} 个仆从栏位{1}
+		SPRSlotsReduced: • 每 {2} 个来自 SPR 属性的栏位提供 +{0} 个仆从栏位{1} (效率降低)
+		SPRSlotsNormal: • 每 {2} 个来自 SPR 属性的栏位提供 +{0} 个仆从栏位{1} (正常效率)
+	}
+
+	ApexSummoner: {
+		MassiveBonus: • 当您只召唤“一种”类型的仆从时，获得巨额召唤伤害加成
+		DamagePerUnusedSlot: • 每个未使用的栏位提供 +{0}% 召唤伤害
+		BonusLost: • 如果召唤了多种不同类型的仆从，此加成将失效
+	}
+
+	BlackKnight: {
+		MeleeScaleINT: • 近战武器每点 INT 获得 +{0}% 伤害
+		MagicScaleSTR: • 魔法武器每点 STR 获得 +{0}% 伤害
+		DarkFocusStacks: • 魔法暴击提供“黑暗专注”层数 (最高 {0} 层)
+		ConsumeDarkFocus: • 近战攻击消耗“黑暗专注”: 每层提供 +{0}% 暴击率和 +{1}% 暴击伤害
+		ManaRestore: • 近战暴击恢复 {0} 点法力值
+		ArcaneSurge: • 近战暴击授予“奥术涌动”: 提供 +{0}% 魔法伤害，持续 {1} 秒
+		ArcaneSurgeScale: • “奥术涌动”随近战伤害增幅（每点伤害提升 +{0}% 效果）
+	}
+
+	Cleric: {
+		MaxHealth: • +{0}% 最大生命值
+		DefensePenalty: • -{0}% 防御力
+		ProtectAura: • 散发保护光环 (半径: {0} 像素)
+		AuraHealth: • 光环内的队友: +{0}% 最大生命值
+		SelfRegen: • 自我生命恢复: 每 {1} 秒恢复 {0}% 最大生命值
+		TeamRegen: • 队友生命恢复: 每 {1} 秒恢复 {0}% 最大生命值
+		DivineIntervention: • 神圣干涉: 赋予光环内小队免疫减益的能力，持续 {0} 秒
+		DisabledRegen: • 为了平衡，已禁用来自 VIT 的生命恢复效果
+	}
+
+	Guardian: {
+		MaxHealth: • +{0}% 最大生命值
+		Defense: • +{0} 防御力
+		MoveSpeedPenalty: • -{0}% 移动速度
+		DamagePenalty: • -{0}% 造成的伤害
+		DamageReduction: • {0}% 伤害减免
+		Aura: • 守护光环 (半径: {0} 像素)
+		AuraDefense: • 光环内的队友: +{0}% 防御力
+		AuraReduction: • 光环内的队友: {0}% 伤害减免
+		ImmuneKnockback: • 免疫击退
+		ReducedVIT: • VIT 的效果降低 {0}%
+		DisabledEND: • END 的击退抗性和伤害减免效果已失效
+	}
+}
+
+UI: {
+	ConfigCenter: 配置中心
+	CloseCustomConfig: 关闭自定义配置
+	Uncategorized: 未分类
+	HoverTooltip: 将鼠标悬停在设置上可查看其说明。
+	ReloadRequired: 此设置需要重新加载才能生效。
+	SocketedCoresHeader: 已镶嵌核心:
+	CoreDamage: +{0}% 伤害
+	CoreKnockback: +{0}% 击退
+	CoreCrit: +{0}% 暴击
+	CoreDefense: +{0} 防御
+	CoreVitality: +{0} 最大生命值
+	CoreEvasion: +{0}% 闪避几率
+	EnemyLevel: Lv.{0}
+
+	XPVerification: {
+		Title: 检测到可疑的经验获取
+		Accept: 接受
+		Reject: 拒绝
+		AcceptAll: 全部接受
+		RejectAll: 全部拒绝
+		XPAmount: 经验量: {0:N0}
+		Source: 来源: {0}
+		PendingGains: "{0} 个可疑的经验获取等待处理"
+	}
+
+	TabBar: {
+		Stats: 属性
+		Abilities: 能力
+		Roles: 职业
+		Socketing: 镶嵌
+	}
+
+	PlayerDisplay: {
+		Level: Lv.
+		RebirthPrefix: R
+		RebirthTitle: 转生 {0}
+		LevelIndicator: Lv.{0}
+	}
+
+	SkillTree: {
+		Title: 转生能力
+		RebirthPoints: 转生点数: {0}
+		ResetButton: 重置
+		ShowHidden: 显示隐藏
+		Cost: 消耗: {0} RP
+		Hide: 隐藏
+		Upgrade: 升级
+		Unlocked: 已解锁
+		Unlock: 解锁
+		ToggleOn: 开启
+		ToggleOff: 关闭
+		RefundedRP: 已返还 +{0} RP！
+	}
+
+	BulkAllocation.Header: 批量分配数量:
+
+	RoleSelection: {
+		Title: 选择职业
+		RebirthPoints: 转生点数: {0}
+		ActiveRole: 当前职业: {0}
+		ActiveRoleDeactivated: 当前职业: {0} (已禁用)
+		ActiveRoleNone: 当前职业: 无
+		IndicatorActive: ● 激活中
+		IndicatorDeactivated: ● 已禁用
+		EffectsHeader: 职业效果:
+		DeactivateButton: 禁用职业
+		ReactivateButton: 重新激活
+		LockedRole: 未解锁 - 需要转生 2 次
+		SwitchCostButton: 切换职业 - 消耗: {0} RP
+		SelectFreeButton: 选择职业 (免费)
+	}
+
+	Socketing: {
+		Title: 镶嵌系统
+		RebirthPoints: 您的 RP: {0}
+		ItemNone: 物品: ---
+		SlotsNone: 孔位: - / -
+		CompatibleCoresTitle: 兼容的核心
+		AttachedCoresTitle: 已附着核心:
+		ExpandSlotButton: 扩充孔位
+		CostNone: 消耗: --- RP
+		AttachCoreButton: 镶嵌核心
+		ExtractCoreButton: 提取核心
+		ItemPrefix: "物品: "
+		PlaceholderCores:
+			'''
+			(放入物品以查看
+			 可兼容的核心)
+			'''
+		ItemDisplay: 物品: {0}
+		SlotsDisplay: 孔位: {0} / {1}
+		CostRP: 消耗: {0} RP
+		CoreCountDisplay: "{0}: x{1}"
+		EmptyDash: ---
+		AttachedCoreDisplay: > {0} (x{1})
+	}
+
+	StatPanel: {
+		LevelText: 等级: {0}
+		PointsText: 属性点: {0}
+		XPText: XP: {0} / {1}
+		RPText: RP: {0}
+		StatLabel: "{0}: {1}"
+		StatLabelGhost: "{0}: {1} (+{2})"
+		ResetStats: 洗点
+		Rebirth: 进行转生
+		Auto: 自动
+		ResetStatsTooltip: 免费重置所有分配的属性点
+		AutoTooltip: 切换是否自动将获取的点数分配到已勾选的属性上
+		AutoAllocateTooltip: 勾选以自动将点数分配至该属性
+		RequireLevelPrompt: 需要达到等级 {0}！
+		ConfirmRebirthPrompt: 您确定要进行转生吗？
+		ConfirmRebirth: 确认转生
+		UnknownStat: 未知属性
+		XPInfoTitle: 经验系统信息:
+		StatPointsPerLevelBonus: 每级属性点: {0} + {1} (转生加成) = {2}
+		StatPointsPerLevel: 每级属性点: {0}
+		DamageXP: 伤害经验: {0}x 造成的伤害
+		KillXP: 击杀经验: {0}x 敌人的最大生命值
+		BossXPTitle: 首领经验加成:
+		BossXPFlat: "{0} 固定 XP"
+		BossXPPercent: "{0}% (升至下级的经验百分比)"
+		RebirthXPBonus: 转生经验加成: +{0} ({1} × {2})
+		LevelCapNone: 等级上限: 无 (或极高)
+		DynamicLevelCap: 动态等级上限 (当前周期): {0}
+		LevelCap: 等级上限: {0}
+		StatCapsProgressive: 属性上限: 基础值 × {0} (随转生递增)
+		StatCapsBase: 属性上限: 基础值
+		XPSplit: 经验在所有符合条件的玩家间平分
+		XPProximity: 玩家必须在距离敌人 {0} 像素的范围内才能获取经验
+		VIT_MaxHealth: +{0} 最大生命值 (+{1} 每点)
+		VIT_RegenDisabled: VIT 生命恢复效果已禁用
+		VIT_HpSecReduced: +{0} HP/秒 (+{1} 每点, 守护者效果已削弱)
+		VIT_LifeRegenReduced: +{0} 生命恢复速度 (+{1} 每点, 守护者效果已削弱)
+		VIT_HpSec: +{0} HP/秒 (+{1} 每点)
+		VIT_LifeRegen: +{0} 生命恢复速度 (+0.5 每点)
+		VIT_Healing: +{0}% 治疗量提升 (+{1}% 每点)
+		STR_MeleeDamage: +{0}% 近战伤害 (+{1}% 每点)
+		STR_MeleeKnockback: +{0}% 近战击退 (+{1}% 每点)
+		STR_MeleeArmorPen: +{0} 近战护甲穿透 (+{1} 每点)
+		STR_BlackKnight: 黑骑士: +{0}% 魔法伤害 (+{1}% 每点)
+		AGI_MoveSpeed: +{0} 移动速度 (+{1} 每点, 收益递减)
+		AGI_AttackSpeed: +{0} 攻击速度 (+{1} 每点, 收益递减)
+		AGI_WingTime: +{0} 翅膀飞行时间 (+{1} 每点)
+		AGI_ImprovedJump: 提升跳跃高度与速度
+		INT_MaxMana: +{0} 最大法力值 (+{1} 每点)
+		INT_ManaRegen: +{0} 法力恢复速度 (+0.5 每点)
+		INT_MagicDamage: +{0}% 魔法伤害 (+{1}% 每点)
+		INT_ManaCost: -{0} 法力消耗 (收益递减)
+		INT_MagicArmorPen: +{0} 魔法护甲穿透 (+{1} 每点)
+		INT_BlackKnight: 黑骑士: +{0}% 近战伤害 (+{1}% 每点)
+		LUC_Crit: +{0}% 暴击率 (+{1}% 每点)
+		LUC_Luck: +{0} 幸运 (+{1} 每点)
+		LUC_Fishing: +{0} 渔力 (+{1} 每点)
+		LUC_Aggro: -{0} 仇恨值 (-{1} 每点)
+		END_Defense: +{0} 防御力 (+{1} 每点)
+		END_ImmuneKnockback: 免疫击退 (守护者)
+		END_KnockbackResist: +{0}% 击退抗性 (+{1}% 每点)
+		END_DamageReductionDisabled: END 伤害减免已禁用 (守护者)
+		END_DamageReduction: -{0}% 受到的伤害 (收益递减)
+		END_KnocksBackNonBosses: 受击时反弹击退非首领敌人
+		END_Aggro: +{0} 仇恨值 (+{1} 每点)
+		POW_GeneralDamage: +{0}% 通用伤害 (+{1}% 每点)
+		POW_OtherDamage: +{0}% 其他类型伤害 (+0.1% 每点)
+		POW_RageDamage: +{0}% 暴怒伤害 (+{1}% 每点)
+		POW_RageDuration: +{0}秒 暴怒持续时间 (+{1}秒 每点, 最高 {2}秒)
+		POW_AdrenalineDuration: +{0}秒 肾上腺素持续时间 (+{1}秒 每点)
+		DEX_RangedDamage: +{0}% 远程伤害 (+{1}% 每点)
+		DEX_RangedArmorPen: +{0} 远程护甲穿透 (+{1} 每点)
+		DEX_AmmoSave: +{0}% 弹药节约几率 (+{1}% 每点)
+		SPR_SummonDamage: +{0}% 召唤伤害 (+{1}% 每点)
+		SPR_MinionSlots: +{0} 个仆从栏位 (每 {2} 点提供 1 个)
+		SPR_SentrySlots: +{0} 个哨兵栏位 (每 {2} 点提供 1 个)
+		SPR_BeastmasterSlots: 兽王: +{0} 个栏位 (每拥有 {2} 个基础栏位)
+		SPR_BeastmasterDamage: 兽王: +{0}% 伤害 (每有一种独特的仆从)
+		SPR_ApexSummonerDamage: 巅峰召唤师: +{0}% 伤害 (每有一个闲置栏位，仅限单一种类仆从)
+		TCH_MiningSpeed: +{0}% 挖矿速度 (+{1}% 每点)
+		TCH_BuildSpeed: +{0}% 建造速度 (+{1}% 每点)
+		TCH_TilesReach: +{0} 格方块触及范围 (+{1} 每点)
+		TCH_NoEffects: 没有激活的 TCH 效果。
+		RGE_RogueDamage: +{0}% 盗贼伤害 (+{1}% 每点)
+		RGE_MaxStealth: +{0} 最大潜行值 (+{1} 每点)
+		RGE_Velocity: +{0}% 盗贼弹幕速度 (+{1}% 每点)
+		RGE_AmmoCost: -{0}% 盗贼弹药消耗 (-{1}% 每点)
+		RGE_Stealth50: 潜行打击只消耗 50% 潜行值
+		RGE_Stealth75: 潜行打击只消耗 75% 潜行值
+		RGE_Stealth85: 潜行打击只消耗 85% 潜行值
+		BRD_SymphonicDamage: +{0}% 交响伤害 (+{1}% 每点)
+		BRD_SymphonicArmorPen: +{0} 交响护甲穿透 (+{1} 每点)
+		BRD_MaxInspiration: 最大灵感值: 每 {0} 点 +1 (瑟银总上限为 30)
+		BRD_EmpowermentDuration: +{0}秒 赋能持续时间 (+{1}秒 每点)
+		HLR_RadiantDamage: +{0}% 光辉伤害 (+{1}% 每点)
+		HLR_RadiantArmorPen: +{0} 光辉护甲穿透 (+{1} 每点)
+		HLR_HealingPower: +{0} 治疗强度 (每 {2} 点提升 {1})
+		HLR_ImprovedLifeRecovery: 强化的生命恢复效果
+		CLK_ClickDamage: +{0}% 点击伤害 (+{1}% 每点)
+		CLK_ClickRadius: +{0} 点击半径单位 (+{1} 单位 每点)
+		CLK_EffectsDiminishing: -{0}% 触发效果所需点击数 (收益递减)
+		Generic_Damage: +{0}% {1}伤害 (+{2}% 每点)
+	}
+}
+
+Logger: {
+	LogStarted: === {0} 日志开始于 {1} ===
+	EnabledAdmin: 已为管理员用户启用日志记录
+	EnabledDebug: 已通过调试模式启用日志记录
+	EnabledServer: 已为服务器启用日志记录
+	ClearLogFailed: 无法检查或清除日志文件: {0}
+	WriteLogFailed: 无法写入日志文件: {0}
+	Info: "[信息] {0}"
+	Warning: "[警告] {0}"
+	Error: "[错误] {0}"
+	Debug: "[调试] {0}"
+}
+
+CoreItem: {
+	CoreOfPower: 力量核心
+	CoreOfForce: 击退核心
+	CoreOfPrecision: 精准核心
+	CoreOfDefense: 防御核心
+	CoreOfVitality: 活力核心
+	CoreOfEvasion: 闪避核心
+	UnknownCore: 未知核心
+	CoreNameTier: "{0} T.{1}"
+	EffectPower: +{0}% 武器伤害
+	EffectForce: +{0}% 武器击退
+	EffectPrecision: +{0}% 武器暴击率
+	EffectDefense: +{0} 防御力
+	EffectVitality: +{0} 最大生命值
+	EffectEvasion: +{0}% 闪避几率
+	UsageWeapon: 可以镶嵌进武器中
+	UsageArmor: 可以镶嵌进盔甲中
+}
+
+RPGPlayer: {
+	RetroRPSync: "{0} RP (同步)"
+	RebirthCount: 转生 {0}！
+	RebirthPoints: +{0} 转生点数！
+	StatPointsSync: +{0} 属性点
+	RPSync: +{0} RP
+	RebirthStatPointsSync: +{0} 转生额外属性点
+	LevelCapReached: 已达等级上限！
+	XPGain: +{0} XP
+	XPSource: 来源: {0}
+	LevelUp: 升级！当前等级: {0}
+	LastStand: 破釜沉舟！
+}
+
+RebirthAbilityName: {
+	EnhancedFortune: 强效幸运
+	ReducedPotionSickness: 药水抗性降低
+	ExtraAccessorySlot: 额外饰品栏
+	LastStand: 破釜沉舟
+	Dash: 冲刺
+	AutoJump: 自动跳跃
+	NoFallDamage: 免疫坠落伤害
+	WaterFreedom: 畅游水中
+	Teleport: 瞬间移动
+	TreasureHunter: 寻宝猎人
+	Sustenance: 充沛体力
+	ArcheryMastery: 箭术精通
+	BattleReady: 备战状态
+	AnglerLuck: 渔夫之赐
+	VitalityFortitude: 活力与坚毅
+	InnerCalm: 凝神静气
+	ElementalResistance: 元素抗性
+	ShadowVeil: 暗影面纱
+	FortuneFavored: 命运眷顾
+	ArcaneMastery: 奥术精通
+	MasterBuilder: 建筑大师
+	BattleFury: 战斗狂怒
+	SurfaceSkimmer: 水上漂
+	ThornGuard: 荆棘护甲
+	FleetFooted: 健步如飞
+	SummonerPact: 召唤师契约
+	LavaWalker: 熔岩漫步者
+	ZeroGravity: 零重力
+	NightVision: 夜视能力
+	Sanctuary: 庇护所
+	CombatStations: 战备站
+	GiantsGrip: 巨人之握
+	GoldenTouch: 点石成金
+	EnhancedSpawns: 强效生成
+	ShadowTrail: 暗影轨迹
+	AuraPulse: 光环脉冲
+	AutoClicker: 自动点击器
+}
+
+RebirthAbilityDescription: {
+	EnhancedFortune: 开启后，每级提供额外的运气，提高物品掉落率和其他运气机制的收益。
+	ReducedPotionSickness: 将耐药性（药水冷却）时间降低 50%。
+	ExtraAccessorySlot: 每级提供一个额外的饰品栏位。
+	LastStand: 当您受到致命一击时，恢复 10% 的最大生命值并获得 3 秒的无敌时间。冷却时间 3 分钟。
+	Dash: 获得冲刺的能力。
+	AutoJump: 允许在按住跳跃键时自动连续跳跃。
+	NoFallDamage: 完全免疫坠落伤害。
+	WaterFreedom: 在水中可自由移动，并获得水下呼吸和脚蹼的效果。
+	Teleport: 使用指定的快捷键传送到光标所在的位置。
+	TreasureHunter: 赋予洞穴探险、危险感和狩猎药水的效果。
+	Sustenance: 可开关的食物增益。1级: 吃得好，2级: 很满意，3级: 撑得慌。
+	ArcheryMastery: 赋予弹药储备和箭术药水的效果。
+	BattleReady: 赋予战争药水（增加刷怪）的效果。
+	AnglerLuck: 赋予板条箱、钓鱼和声纳药水的效果。
+	VitalityFortitude: 赋予生命力、耐力、铁皮、生命恢复和拾心药水的效果。
+	InnerCalm: 赋予镇静药水的效果。
+	ElementalResistance: 赋予狱火和御寒药水的效果。
+	ShadowVeil: 赋予隐身药水的效果。
+	FortuneFavored: 赋予幸运药水的效果。
+	ArcaneMastery: 赋予魔能和法力恢复药水的效果。
+	MasterBuilder: 赋予建筑工和挖矿药水的效果。
+	BattleFury: 赋予暴怒和怒气药水的效果。
+	SurfaceSkimmer: 赋予水上漂药水的效果。
+	ThornGuard: 赋予荆棘药水的效果。
+	FleetFooted: 赋予敏捷药水的效果。
+	SummonerPact: 赋予召唤药水的效果。
+	LavaWalker: 赋予黑曜石皮药水的效果。
+	ZeroGravity: 赋予重力药水的效果。
+	NightVision: 赋予发光和猫头鹰药水的效果。
+	Sanctuary: 赋予各种放置物加成效果: 芭丝特雕像、瓶中星、蜂蜜、红心灯笼、树妖祝福以及温馨小火。
+	CombatStations: 赋予各种战备站加成效果: 弹药箱、着迷、水晶球、锋利、战略家 (微醺) 以及糖果冲刺。
+	GiantsGrip: 使近战武器的尺寸增大 33%。
+	GoldenTouch: 每级增加 {config.rebirthAbilities.GoldenTouchPercentPerLevel}% 拾取硬币的数量。
+	EnhancedSpawns: 每级增加 {config.rebirthAbilities.SpawnRatePercentPerLevel}% 的敌人生成速度。可与其他生成速度修改器叠加。
+	ShadowTrail: 制造如同暗影盔甲般拖尾的视觉残影效果。
+	AuraPulse: 制造如同神圣盔甲般脉冲轮廓的视觉光环效果。
+	AutoClicker: 开启时会自动点击。点击速度随等级提升。对物品效果的触发交互可在模组配置中修改。
+}
+
+RoleName: {
+	CritGod: 暴击之神
+	Vampire: 吸血鬼
+	Beastmaster: 兽王
+	ApexSummoner: 巅峰召唤师
+	BlackKnight: 黑骑士
+	Cleric: 牧师
+	Guardian: 守护者
+}
+
+RoleDescription: {
+	CritGod: 掌握着毁灭性精准的宗师，让每一次攻击都有可能成为致命一击。
+	Vampire: 一名嗜血的战士，在战斗中愈战愈勇，通过吸取受伤敌人的生命力来壮大自己。
+	Beastmaster: 御兽大师，通过指挥各式各样的生物并发挥它们的极限潜力来获得力量。
+	ApexSummoner: 一名专注的召唤师，通过对单一召唤物的极致专精来达到力量的顶峰。当只指挥一种仆从时将获得巨额伤害。
+	BlackKnight: 全能的魔剑士。将武艺与奥术完美融合，在剑与魔法的协同作用中汲取力量。
+	Cleric: 神圣的治疗者。在神圣光环内保护并强化盟友，不惜牺牲自身的防御来换取团队的生存。
+	Guardian: 坚不可摧的庇护者。通过分担盟友受到的伤害并将痛楚反弹给攻击者，牢牢护住身后的同伴。
+}
+
+RoleFlavorText: {
+	CritGod: 引导你内心的完美主义吧——每一次命中都至关重要，每一次打击都决不落空。
+	Vampire: 拥抱黑暗的馈赠——让敌人的鲜血成为你力量的源泉。
+	Beastmaster: 力量源于多样性——你的大军越是繁杂多变，你就能变得越强大。
+	ApexSummoner: 专精铸就完美。一生只御一兽，便拥有无限的潜能。
+	BlackKnight: 钢铁与法术的交响——让魔法为利刃充能，让利刃成为魔法的焦点。
+	Cleric: 接受作为希望灯塔的使命吧——你的力量不在于冰冷的钢铁，而在于你赐予他人的神圣庇护。
+	Guardian: 化身不可撼动之盾。让盟友的痛苦转化为你的力量，让你的决意成为他们最终的救赎。
+}
+
+Logging: {
+	Test: {
+		InfoMessage: 这是一条信息提示
+		WarningMessage: 这是一条警告信息
+		ErrorMessage: 这是一条错误信息
+		DebugMessage: 此信息仅在调试模式下出现
+		GlobalDebugMessage: 此信息使用全局调试模式
+	}
+
+	StatariaFeatureToggleSystem: {
+		StatPointsRecalculating: 检测到升级属性点配置的修改 - 正在为玩家重新计算属性点
+		StatPointsRecalculationDisabled: 检测到升级属性点配置的修改 - 重新计算功能已禁用
+		RebirthConfigRecalculating: 检测到转生配置的修改 - 正在为玩家重新计算 RP (转生点数)
+		RebirthConfigRecalculationDisabled: 检测到转生配置的修改 - 重新计算功能已禁用
+		RebirthStatPointRecalculating: 检测到转生属性点配置的修改 - 正在为玩家重新计算属性点
+		RebirthStatPointRecalculationDisabled: 检测到转生属性点配置的修改 - 重新计算功能已禁用
+		ErrorCalamityPanel: 重新初始化面板 (灾厄) 时出错: {0}
+		ErrorThoriumPanel: 重新初始化面板 (瑟银) 时出错: {0}
+	}
+
+	Stataria: {
+		ModLoadingStarted: Stataria 模组开始加载
+		ModLoadingCompleted: Stataria 模组加载完毕
+		ModCallNoArgs: 收到 ModCall 调用但未提供任何参数。
+		ModCallFirstArgString: 传递给 ModCall 的第一个参数必须是字符串消息。
+		ModCallExpectedPlayer: ModCall '{0}': 第二个参数需要传入 Player 对象或 playerID。
+		ModCallNotEnoughArgs: "{0}: 参数不足。"
+		ModCallIncorrectArgs: "{0}: 参数不正确。"
+		ModCallUnknownMessage: 未知的 ModCall 消息: {0}
+	}
+}

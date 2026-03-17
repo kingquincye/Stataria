@@ -107,7 +107,7 @@ namespace Stataria
             button.HAlign = 0.5f; 
             button.BackgroundColor = new Color(63, 82, 151) * 0.7f; 
             
-            UIText buttonText = new UIText("Config Center", 1f, false);
+            UIText buttonText = new UIText(Terraria.Localization.Language.GetText("Mods.Stataria.UI.ConfigCenter"), 1f, false);
             buttonText.TextColor = Color.Magenta; // Quincy's favorite flavor of purple text 
             buttonText.HAlign = 0.5f;
             buttonText.VAlign = 0.5f;

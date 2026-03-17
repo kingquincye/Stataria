@@ -65,7 +65,7 @@ namespace Stataria.UI
             Append(mainPanel);
 
             // Close Button
-            UITextPanel<string> closeButton = new UITextPanel<string>("Close Custom Config");
+            UITextPanel<Terraria.Localization.LocalizedText> closeButton = new UITextPanel<Terraria.Localization.LocalizedText>(Terraria.Localization.Language.GetText("Mods.Stataria.UI.CloseCustomConfig"));
             closeButton.HAlign = 0.5f;
             closeButton.VAlign = 0.5f; // Center screen relative
             closeButton.Top.Set(415, 0f); // 375 (half of 750) + 40 margin
@@ -116,14 +116,14 @@ namespace Stataria.UI
             tooltipPanel.BackgroundColor = new Color(25, 15, 35) * 0.95f;
             mainPanel.Append(tooltipPanel);
 
-            tooltipText = new UIText("Hover over a setting to see its description.", 0.95f);
+            tooltipText = new UIText(Terraria.Localization.Language.GetText("Mods.Stataria.UI.HoverTooltip"), 0.95f);
             tooltipText.HAlign = 0.5f;
             tooltipText.VAlign = 0.4f;
             tooltipText.IsWrapped = true;
             tooltipText.Width.Set(0, 1f);
             tooltipPanel.Append(tooltipText);
 
-            reloadWarningText = new UIText("A reload is required for this setting to take effect.", 0.9f);
+            reloadWarningText = new UIText(Terraria.Localization.Language.GetText("Mods.Stataria.UI.ReloadRequired"), 0.9f);
             reloadWarningText.TextColor = Color.LightCoral;
             reloadWarningText.HAlign = 0.5f;
             reloadWarningText.VAlign = 0.8f;
@@ -164,7 +164,7 @@ namespace Stataria.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            tooltipText?.SetText("Hover over a setting to see its description.");
+            tooltipText?.SetText(Terraria.Localization.Language.GetText("Mods.Stataria.UI.HoverTooltip"));
             reloadWarningText?.SetText("");
             base.Draw(spriteBatch);
         }
@@ -297,7 +297,7 @@ namespace Stataria.UI
             // Create Uncategorized Tab if there are non-category root fields
             if (hasGeneralSettings)
             {
-                AddCategoryTab("Uncategorized", null);
+                AddCategoryTab(Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.Uncategorized"), null);
             }
 
             foreach (PropertyFieldWrapper prop in categoryProperties)
@@ -391,8 +391,8 @@ namespace Stataria.UI
 
             // Define tooltip action
             Action<string, bool> onHover = (tt, r) => {
-                tooltipText.SetText(string.IsNullOrEmpty(tt) ? "Hover over a setting to see its description." : tt);
-                reloadWarningText.SetText(r ? "A reload is required for this setting to take effect." : "");
+                tooltipText.SetText(string.IsNullOrEmpty(tt) ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.HoverTooltip") : tt);
+                reloadWarningText.SetText(r ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.ReloadRequired") : "");
             };
 
             foreach (var field in fieldsToDisplay)
@@ -449,7 +449,14 @@ namespace Stataria.UI
                         headerId = field.Name;
                     }
                     
-                    configElementsList.Add(new UI.Elements.UIHeader(headerId));
+                    string headerKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.Headers.{headerId}";
+                    string localizedHeader = Terraria.Localization.Language.GetTextValue(headerKey);
+                    if (localizedHeader == headerKey)
+                    {
+                        localizedHeader = headerId;
+                    }
+                    
+                    configElementsList.Add(new UI.Elements.UIHeader(localizedHeader));
                 }
 
                 bool reloadRequired = field.MemberInfo.GetCustomAttribute<ReloadRequiredAttribute>() != null;

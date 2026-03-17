@@ -1,0 +1,2691 @@
+Keybinds: {
+	"Toggle Stataria UI.DisplayName": Переключить интерфейс Stataria
+	"AGI Teleport.DisplayName": Телепорт
+	"Divine Intervention.DisplayName": Божественное вмешательство
+}
+
+ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
+
+Commands: {
+	StatariaCommands: {
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Description: Команды для мода Stataria
+		NoPermission: У вас нет прав на использование этой команды.
+		SteamNotAvailable: Steam недоступен. Невозможно проверить права администратора.
+		UsagePrefix: Использование: {0}
+		ResetSuccess: Stataria сброшена!
+		SetLevelSuccess: Уровень установлен на {0}
+		SetLevelUsage: Использование: /stataria setlevel <число>
+		SetXPSuccess: Опыт установлен на {0}
+		SetXPUsage: Использование: /stataria setxp <число>
+		SetPointsRPSuccess: Очки Перерождения установлены на {0}
+		SetPointsRPUsage: Использование: /stataria setpoints rp <число>
+		SetPointsStatSuccess: Очки характеристик установлены на {0}
+		SetPointsUsage: Использование: /stataria setpoints <число> или /stataria setpoints rp <число>
+		SetStatSuccess: "{0} установлено на {1}"
+		SetStatUnknown: Неизвестная характеристика. Доступные: vit, str, agi, int, luc, end, pow, dex, spr, tch, rge, brd, hlr, clk, blh, hnt, gmb, shm, thr
+		SetStatUsage: Использование: /stataria setstat <имя> <значение>
+		ClearBossesSuccess: Прогресс наград за боссов очищен.
+		SyncBossesSuccess: Принудительная синхронизация списка боссов.
+		SyncBossesSinglePlayer: Невозможно синхронизировать в одиночной игре.
+		DebugModeToggle: Режим отладки: {0}
+		DebugModeToggleLog: Режим отладки переключен на {0}
+		DiagnoseHeader: Диагностика системы:
+		DiagnoseCalStatus: Статус интеграции Calamity: {0}
+		DiagnoseFoundFields: Найденные поля:
+		DiagnoseField_RogueClass: Класс Разбойник (Rogue): {0}
+		DiagnoseField_RogueStealth: Скрытность Разбойника: {0}
+		DiagnoseField_MaxStealth: Макс. скрытность: {0}
+		DiagnoseField_StandstillGen: Реген. стоя (Standstill): {0}
+		DiagnoseField_MovingGen: Реген. в движении: {0}
+		DiagnoseField_StealthDamage: Урон скрытности: {0}
+		DiagnoseField_RogueVelocity: Скорость Разбойника: {0}
+		DiagnoseField_RogueAmmoCost: Затраты боеприпасов Разбойника: {0}
+		DiagnoseField_Rage: Ярость (Rage): {0}
+		DiagnoseField_RageMax: Макс. Ярость: {0}
+		DiagnoseField_RageDuration: Длительность Ярости: {0}
+		DiagnoseField_RageDamage: Урон Ярости: {0}
+		DiagnoseField_Adrenaline: Адреналин: {0}
+		DiagnoseField_AdrenalineMax: Макс. Адреналин: {0}
+		DiagnoseField_AdrenalineDuration: Длительность Адреналина: {0}
+		DiagnoseThorStatus: Статус интеграции Thorium: {0}
+		WeaponDebugNoWeapon: Оружие не экипировано.
+		WeaponDebugHeader: ===== Инфо об оружии (Отладка) =====
+		WeaponDebugName: Название: {0}
+		WeaponDebugItemType: Тип: {0}
+		WeaponDebugBaseDamage: Базовый урон: {0}
+		WeaponDebugDamageTypeClass: Класс урона (DamageType): {0}
+		WeaponDebugDamageTypeString: Строка урона: {0}
+		WeaponDebugDamageClasses: Классы урона:
+		WeaponDebugMelee: "  Ближний бой (Melee): {0}"
+		WeaponDebugRanged: "  Дальний бой (Ranged): {0}"
+		WeaponDebugMagic: "  Магия (Magic): {0}"
+		WeaponDebugSummon: "  Призыв (Summon): {0}"
+		WeaponDebugModItemInfo: Инфо о предмете мода:
+		WeaponDebugMod: "  Мод: {0}"
+		WeaponDebugItemClass: "  Класс: {0}"
+		WeaponDebugNamespace: "  Пространство имен: {0}"
+		WeaponDebugFullName: "  Полное имя: {0}"
+		WeaponDebugIsRogueWeapon: Оружие Разбойника: {0}
+		WeaponDebugRogueDetectionDetails: Детали обнаружения Разбойника:
+		WeaponDebugIsCalamityModItem: "  Предмет из Calamity: True"
+		WeaponDebugRogueWeaponLog: Отладка оружия: {0} - оружие Разбойника: {1}
+		WeaponDebugCalamityNotLoaded: Мод Calamity не загружен.
+		WeaponDebugStatEffects: Эффекты характеристик:
+		WeaponDebugSTR: "  STR: {0} (Урон ближн. боя: +{1})"
+		WeaponDebugINT: "  INT: {0} (Маг. урон: +{1})"
+		WeaponDebugDEX: "  DEX: {0} (Урон дальн. боя: +{1})"
+		WeaponDebugSPR: "  SPR: {0} (Урон призыва: +{1})"
+		WeaponDebugRGE: "  RGE: {0} (Урон разбойника: +{1})"
+		WeaponDebugPOW: "  POW: {0} (Иной урон: +{1})"
+		WeaponDebugAppliedStatBoost: Примененный бонус характеристик: {0} (+{1})
+		WeaponDebugAppliedStatBoostLog: Примененный бонус характеристик: {0} (+{1})
+		CalCalamityNotDetected: Ошибка: Мод Calamity не обнаружен. Для этих команд требуется Calamity Mod.
+		CalIntegrationDisabled: Ошибка: Интеграция с Calamity отключена в настройках.
+		CalUsage: Использование: /stataria cal <fillrage | filladrenaline | infrage | infadren>
+		CalFillRageSuccess: Ярость заполнена до максимума ({0}).
+		CalFillRageError: Ошибка: Не удалось получить доступ к значениям Ярости.
+		CalFillAdrenalineSuccess: Адреналин заполнен до максимума ({0}).
+		CalFillAdrenalineError: Ошибка: Не удалось получить доступ к значениям Адреналина.
+		CalInfRageToggle: Бесконечная Ярость: {0}
+		CalInfAdrenalineToggle: Бесконечный Адреналин: {0}
+		CalInfRageToggleLog: Бесконечная Ярость переключена на: {0}
+		CalInfAdrenalineToggleLog: Бесконечный Адреналин переключен на: {0}
+		UnknownCalSubcommand: Неизвестная подкоманда Calamity. Использование: /stataria cal <fillrage | filladrenaline | infrage | infadren>
+		TestXPUIAccepted: Опыт принят!
+		TestXPUIRejected: Опыт отклонен!
+		TestXPUIAllAccepted: Весь опыт принят!
+		TestXPUIAllRejected: Весь опыт отклонен!
+		TestXPUIShowing: Отображение проверки опыта: {0} XP от '{1}', уведомление {2}/{3}
+		UnknownSubcommand: Неизвестная подкоманда. {0}
+		SelfResetMultiplayerDisabled: Сброс прогресса игроком отключен на этом сервере.
+		SelfResetWarning1: ВНИМАНИЕ: Это полностью сбросит ваш прогресс в Stataria!
+		SelfResetWarning2: Все уровни, характеристики, опыт, перерождения и способности будут утеряны!
+		SelfResetWarning3: Введите '/stataria selfreset' еще раз в течение 30 секунд для подтверждения.
+		SelfResetSuccess: Ваш прогресс в Stataria был полностью сброшен!
+		StatusOn: ВКЛ
+		StatusOff: ВЫКЛ
+		StatusWorking: РАБОТАЕТ
+		StatusErrorsDetected: ОБНАРУЖЕНЫ ОШИБКИ
+	}
+}
+
+Configs: {
+	StatariaConfig: {
+		DisplayName: Настройки Сервера
+
+		generalBalance: {
+			Label: Основной Баланс
+			Tooltip: Настройка получения опыта, лимита уровней и других параметров баланса.
+		}
+
+		rebirthSystem: {
+			Label: Система Перерождений
+			Tooltip: Настройка механик перерождения, требований к уровню и системы наград.
+		}
+
+		multiplayerSettings: {
+			Label: Настройки Мультиплеера
+			Tooltip: Настройка распределения и учета опыта между игроками в сетевой игре.
+		}
+
+		enemyScaling: {
+			Label: Масштабирование Врагов
+			Tooltip: Контроль усиления врагов в зависимости от уровня игрока, мультиплеера и спавна элитных противников.
+		}
+
+		statSettings: {
+			Label: Настройки Характеристик
+			Tooltip: Настройка влияния каждой характеристики на атрибуты игрока.
+		}
+
+		modIntegration: {
+			Label: Интеграция Модов
+			Tooltip: Настройки поддержки других модов и их специальных характеристик.
+		}
+
+		rebirthAbilities: {
+			Label: Способности Перерождения
+			Tooltip: Настройка специальных способностей, открываемых за Очки Перерождения.
+		}
+
+		advanced: {
+			Tooltip: Только для опытных пользователей. Будьте осторожны.
+			Label: Продвинутые Настройки
+		}
+
+		xpVerification: {
+			Label: Проверка Опыта
+			Tooltip: Настройка системы обнаружения и проверки аномального получения опыта.
+		}
+
+		roleSettings: {
+			Label: Настройки Ролей
+			Tooltip: Настройка механики системы ролей, их стоимости и эффектов.
+		}
+
+		socketingSystem: {
+			Label: Система Инкрустации (Гнезда)
+			Tooltip: Настройка системы гнезд для оружия, ядер и стоимости их улучшения.
+		}
+
+		extraLuckSettings: {
+			Tooltip: Настройка расширенной системы удачи, влияющей на шанс выпадения предметов и другие механики.
+			Label: Дополнительные Настройки Удачи
+		}
+
+		ascensionSystem: {
+			Label: Система Возвышения
+			Tooltip: Настройка механик возвышения, требований и бонусов.
+		}
+	}
+
+	GeneralBalance: {
+		Tooltip: ""
+
+		Headers: {
+			General_Balance: Основной Баланс
+			XP_Multipliers: Множители Опыта
+			Damage_Calculation: Расчет Урона
+			Diminishing_Returns: Убывающая Доходность
+			Respec_Settings: Настройки Сброса Навыков
+		}
+
+		EnableBossHPXP: {
+			Label: Опыт от макс. здоровья Босса
+			Tooltip: Опыт выдается на основе макс. здоровья босса при каждом убийстве. Иначе - фиксированный бонус один раз.
+		}
+
+		BonusBossXPIsUnique: {
+			Label: Уникальный Бонус за Босса
+			Tooltip: Каждый босс дает бонусный опыт только один раз. Иначе бонус выдается всегда.
+		}
+
+		UseFlatBossXP: {
+			Label: Фиксированный Опыт за Босса
+			Tooltip: Дает боссам фиксированное количество бонусного опыта вместо масштабируемого.
+		}
+
+		DefaultFlatBossXP: {
+			Label: Стандартный Опыт за Босса (Фикс.)
+			Tooltip: Устанавливает количество опыта за боссов, если включен фиксированный опыт.
+		}
+
+		EnableLevelCap: {
+			Label: Включить Лимит Уровня
+			Tooltip: Не дает поднимать уровень выше заданного. Игнорируется, если включен динамический лимит перерождения.
+		}
+
+		LevelCapValue: {
+			Label: Значение Лимита Уровня
+			Tooltip: Устанавливает максимальный уровень. Игнорируется, если включен динамический лимит перерождения.
+		}
+
+		StatPointsPerLevel: {
+			Label: Очки Характеристик за Уровень
+			Tooltip: Количество очков характеристик, получаемых за повышение уровня.
+		}
+
+		DamageXP: {
+			Label: Опыт за Урон
+			Tooltip: Множитель опыта на основе нанесенного урона.
+		}
+
+		KillXP: {
+			Label: Опыт за Убийство
+			Tooltip: Множитель опыта за убийство врагов на основе их здоровья (включая боссов).
+		}
+
+		BossXP: {
+			Label: Опыт за Босса
+			Tooltip: Бонусный опыт за убийство босса (% от опыта, необходимого для следующего уровня).
+		}
+
+		UseMultiplicativeDamage: {
+			Label: Мультипликативный Урон
+			Tooltip: Если включено, урон от характеристик перемножается с другими источниками урона вместо сложения.
+		}
+
+		LevelScalingFactor: {
+			Tooltip: Контролирует скорость роста требований к опыту с каждым уровнем. Большие значения означают более медленную прокачку.
+			Label: Фактор Масштабирования Уровня
+		}
+
+		EnableStatPointRecalculation: {
+			Tooltip: Если включено, игроки автоматически получат дополнительные очки, если 'Очки за Уровень' будут увеличены в конфиге.
+			Label: Включить Перерасчет Очков Характеристик
+		}
+
+		EnableDiminishingReturns: {
+			Label: Включить Убывающую Доходность
+			Tooltip: Применяет убывающую доходность (штраф эффективности) к экстремально высоким значениям характеристик.
+		}
+
+		DiminishingReturnsRate: {
+			Label: Степень Убывающей Доходности
+			Tooltip: Насколько сильно штрафуются характеристики на высоких значениях.
+		}
+
+		EnableRespecCost: {
+			Label: Включить Стоимость Сброса
+			Tooltip: Требует валюту для сброса распределенных очков характеристик.
+		}
+
+		RespecCostType: {
+			Label: Тип Валюты для Сброса
+			Tooltip: Предмет (валюта), требуемый для сброса характеристик.
+		}
+
+		RespecCostBase: {
+			Label: Базовая Стоимость Сброса
+			Tooltip: Базовое количество валюты, требуемое для сброса.
+		}
+
+		EnableXPCurve: {
+			Label: Включить Кривую Опыта
+			Tooltip: Делает повышение уровня экспоненциально сложнее с каждым уровнем.
+		}
+
+		XPCurveSteepness: {
+			Label: Крутизна Кривой Опыта
+			Tooltip: Крутизна кривой масштабирования требований к опыту.
+		}
+	}
+
+	RebirthSystem: {
+		Tooltip: ""
+
+		Headers: {
+			Rebirth_System: Система Перерождений
+			Rebirth_Points: Очки Перерождения
+			Ghost_Stats: Призрачные Характеристики
+		}
+
+		EnableRebirthSystem: {
+			Label: Включить Систему Перерождений
+			Tooltip: Включает систему, позволяющую игрокам сбросить прогресс ради постоянных бонусов к опыту.
+		}
+
+		RebirthLevelRequirement: {
+			Label: Требуемый Уровень Перерождения
+			Tooltip: Минимальный уровень, необходимый для совершения перерождения.
+		}
+
+		RebirthXPMultiplier: {
+			Label: Множитель Опыта от Перерождения
+			Tooltip: Бонус к получаемому опыту за каждый уровень перерождения. 0.5 означает +50% опыта за перерождение.
+		}
+
+		ResetStatsOnRebirth: {
+			Label: Сброс Характеристик при Перерождении
+			Tooltip: Если включено, все распределенные очки характеристик будут сброшены при перерождении.
+		}
+
+		ResetBossRewardsOnRebirth: {
+			Label: Сброс Наград за Боссов при Перерождении
+			Tooltip: Если включено, прогресс наград за боссов будет сброшен, позволяя получить бонусный опыт за них снова.
+		}
+
+		BonusPointsForExcessLevels: {
+			Label: Бонусные Очки за Лишние Уровни
+			Tooltip: Если включено, перерождение на уровне выше требуемого дает бонусные Очки Перерождения.
+		}
+
+		ExcessLevelPointMultiplier: {
+			Label: Множитель Очков за Лишние Уровни
+			Tooltip: Множитель бонусных очков за лишние уровни. Например, 0.5 означает, что 10 лишних уровней дадут 5 доп. очков.
+		}
+
+		IncreaseLevelRequirement: {
+			Label: Увеличивать Требование Уровня
+			Tooltip: Если включено, требуемый для перерождения уровень растет с каждым новым перерождением.
+		}
+
+		AdditionalLevelRequirementPerRebirth: {
+			Label: Доп. Уровни за Каждое Перерождение
+			Tooltip: На сколько уровней возрастает требование перерождения с каждым разом.
+		}
+
+		RebirthPointsMultiplier: {
+			Label: Множитель Очков Перерождения
+			Tooltip: Множитель начисляемых Очков Перерождения, основанный на требованиях к перерождению.
+		}
+
+		EnableDynamicRebirthLevelCap: {
+			Label: Включить Динамический Лимит Уровня
+			Tooltip: Если включено, максимальный уровень динамически ограничивается на основе требования к следующему перерождению.
+		}
+
+		DynamicRebirthLevelCapMultiplier: {
+			Label: Множитель Динамического Лимита
+			Tooltip: Множитель, применяемый к требованию следующего перерождения для определения лимита уровня в текущем цикле.
+		}
+
+		EnableRebirthPointRecalculation: {
+			Tooltip: Если включено, игроки автоматически получат дополнительные Очки Перерождения при изменении конфигов.
+			Label: Перерасчет Очков Перерождения
+		}
+
+		EnableGhostStats: {
+			Label: Включить Призрачные Характеристики
+			Tooltip: Дает автоматические бонусы характеристик в зависимости от прогресса перерождений.
+		}
+
+		UsePercentageGhostStats: {
+			Label: Процентные Призрачные Характеристики
+			Tooltip: Если включено, характеристики зависят от процента требуемого уровня перерождения. Иначе дается фикс. количество.
+		}
+
+		GhostStatsPercentage: {
+			Label: Процент Призрачных Характеристик
+			Tooltip: Процент от требования к уровню перерождения, добавляемый как призрачные характеристики.
+		}
+
+		GhostStatsFlatAmount: {
+			Label: Фиксированные Призрачные Характеристики
+			Tooltip: Фиксированное количество призрачных характеристик, добавляемое за каждое перерождение.
+		}
+
+		GhostStatsAffectedStats: {
+			Label: Затронутые Призрачные Характеристики
+			Tooltip:
+				'''
+				Список характеристик, получающих призрачные бонусы. 
+				Доступные: VIT, STR, AGI, INT, LUC, END, POW, DEX, SPR, TCH, RGE, BRD, HLR, CLK
+				'''
+		}
+
+		EnableRebirthBonusStatPoints: {
+			Label: Включить Бонусные Очки за Перерождение
+			Tooltip: Если включено, каждое перерождение увеличивает количество очков характеристик за уровень.
+		}
+
+		RebirthStatPointsMultiplier: {
+			Label: Множитель Бонусных Очков за Перерождение
+			Tooltip: Процентный бонус к очкам за уровень при каждом перерождении. 0.25 означает +25% очков за перерождение.
+		}
+
+		EnableRebirthStatPointRecalculation: {
+			Label: Перерасчет Очков от Перерождения
+			Tooltip: Если включено, игроки автоматически получат дополнительные очки при увеличении соответствующих настроек.
+		}
+
+		EnableProgressiveStatCaps: {
+			Label: Прогрессивные Лимиты Характеристик
+			Tooltip: Если включено, лимиты характеристик увеличиваются с каждым перерождением, позволяя вкладывать больше очков.
+		}
+
+		ProgressiveStatCapMultiplier: {
+			Label: Множитель Прогрессивного Лимита
+			Tooltip: Процентное увеличение лимита характеристик за перерождение. 0.5 означает +50% к лимиту за перерождение.
+		}
+
+		EnableRebirthAbilities: {
+			Label: Включить Способности Перерождения
+			Tooltip: Позволяет игрокам открывать и использовать специальные способности за Очки Перерождения.
+		}
+	}
+
+	MultiplayerSettings: {
+		Tooltip: ""
+		Headers.Multiplayer_Settings: Настройки Мультиплеера
+
+		SplitKillXP: {
+			Label: Разделение Опыта за Убийства
+			Tooltip: Если включено, опыт за убийства делится между всеми игроками поровну.
+		}
+
+		EnableXPProximity: {
+			Label: Опыт по Близости
+			Tooltip: Если включено, только игроки, находящиеся рядом с убитым врагом, получают опыт.
+		}
+
+		XPProximityRange: {
+			Label: Радиус Получения Опыта
+			Tooltip: Максимальная дистанция (в пикселях) от убитого врага для получения опыта.
+		}
+
+		AllowSelfResetInMultiplayer: {
+			Label: Разрешить Сброс Себя в Мультиплеере
+			Tooltip: Позволяет обычным игрокам сбрасывать свой прогресс Stataria командой '/stataria selfreset' на сервере.
+		}
+	}
+
+	EnemyScaling: {
+		Tooltip: ""
+
+		Headers: {
+			Enemy_Scaling: Масштабирование Врагов
+			Multiplayer_Scaling: Масштабирование в Мультиплеере
+			Elite_Enemies: Элитные Враги
+			Boss_Scaling: Масштабирование Боссов
+			Flat_Scaling: Фикс. Масштабирование
+			Level_Variation: Вариация Уровней
+		}
+
+		EnableEnemyScaling: {
+			Label: Включить Масштабирование Врагов
+			Tooltip: Включает усиление врагов в зависимости от уровня игроков. Если выключено, используются ванильные статы.
+		}
+
+		EnemyHealthScaling: {
+			Label: Масштабирование Здоровья Врагов
+			Tooltip: Насколько увеличивается здоровье врагов за каждый уровень игрока.
+		}
+
+		EnemyDamageScaling: {
+			Label: Масштабирование Урона Врагов
+			Tooltip: Насколько увеличивается урон врагов за каждый уровень игрока.
+		}
+
+		EnemyDefenseScaling: {
+			Label: Масштабирование Защиты Врагов
+			Tooltip: Увеличение защиты обычных врагов за каждый уровень игрока. Боссы не получают это усиление.
+		}
+
+		BossHealthScaling: {
+			Label: Масштабирование Здоровья Боссов
+			Tooltip: Дополнительный множитель для масштабирования здоровья боссов.
+		}
+
+		BossDamageScaling: {
+			Label: Масштабирование Урона Боссов
+			Tooltip: Дополнительный множитель для масштабирования урона боссов.
+		}
+
+		ScalingType: {
+			Label: Тип Масштабирования
+			Tooltip: Как рассчитывается усиление: 0 = По кол-ву игроков (фикс. бонус за игрока), 1 = По высшему уровню (сильнейшему игроку), 2 = По среднему уровню.
+		}
+
+		UseProximityForScaling: {
+			Label: Близость для Масштабирования
+			Tooltip: Учитывает только игроков в пределах радиуса при расчете уровня врагов.
+		}
+
+		ScalingProximityRange: {
+			Label: Радиус Масштабирования
+			Tooltip: Максимальная дистанция (в пикселях) для учета игроков в расчетах масштабирования.
+		}
+
+		EnableEliteEnemies: {
+			Label: Включить Элитных Врагов
+			Tooltip: Включает спавн элитных врагов с улучшенными статами и сопротивлениями.
+		}
+
+		EliteEnemyChance: {
+			Label: Шанс Появления Элиты
+			Tooltip: Шанс появления обычного врага в качестве элитного.
+		}
+
+		EliteHealthMultiplier: {
+			Label: Множитель Здоровья Элиты
+			Tooltip: Насколько больше здоровья у элитных врагов по сравнению с обычными.
+		}
+
+		EliteDamageMultiplier: {
+			Label: Множитель Урона Элиты
+			Tooltip: Насколько больше урона наносят элитные враги по сравнению с обычными.
+		}
+
+		EliteDefenseMultiplier: {
+			Label: Множитель Защиты Элиты
+			Tooltip: Насколько больше защиты у элитных врагов.
+		}
+
+		EliteKnockbackResistance: {
+			Label: Сопротивление Отбрасыванию (Элита)
+			Tooltip: Уровень сопротивления отбрасыванию у элиты. 0.5 = снижение отбрасывания на 50%.
+		}
+
+		EliteCriticalHitResistance: {
+			Label: Сопротивление Критам (Элита)
+			Tooltip: Снижение критического урона по элитным врагам. 0.25 = на 25% меньше крит. урона.
+		}
+
+		EliteScaleIncrease: {
+			Label: Увеличение Размера Элиты
+			Tooltip: Элитные враги визуально больше обычных.
+		}
+
+		EliteScaleMultiplier: {
+			Label: Множитель Размера Элиты
+			Tooltip: Насколько больше кажутся элитные враги. 1.15 = размер увеличен на 15%.
+		}
+
+		EnableDefenseCap: {
+			Label: Включить Лимит Защиты Врагов
+			Tooltip:
+				'''
+				Ограничивает максимальный рост защиты врагов, чтобы они не стали неуязвимыми. 
+				Отключите для более хардкорного опыта на высоких уровнях.
+				'''
+		}
+
+		MaxDefenseMultiplier: {
+			Label: Макс. Множитель Защиты
+			Tooltip:
+				'''
+				Максимальный множитель защиты врага при масштабировании (если включен Лимит Защиты). 
+				При значении 3, защита врага никогда не превысит базовую более чем в 3 раза.
+				'''
+		}
+
+		LevelsPerPlayer: {
+			Label: Уровни за Игрока
+			Tooltip: Количество дополнительных уровней врагов за каждого активного игрока (При типе масштабирования 0).
+		}
+
+		MinimumLevelDifference: {
+			Tooltip:
+				'''
+				Предотвращает спавн врагов, уровень которых слишком сильно ниже уровня игрока (при большой Максимальной Вариации Уровней).
+				Только для Типа Масштабирования 1 (По Высшему Уровню).
+				'''
+			Label: Мин. Разница Уровней
+		}
+
+		EnableMinimumLevelDifference: {
+			Tooltip: Если включено, враги не будут спавниться с уровнем ниже заданного минимума относительно игрока.
+			Label: Включить Мин. Разницу Уровней
+		}
+
+		MaxLevelVariation: {
+			Tooltip: Максимальное количество уровней (±), на которое враг может отличаться от расчетного.
+			Label: Макс. Вариация Уровней
+		}
+
+		EnableLevelVariation: {
+			Tooltip: Если включено, враги будут спавниться со случайным разбросом уровней в пределах заданного максимума.
+			Label: Включить Вариацию Уровней
+		}
+
+		ScaleCrawlerEnemies: {
+			Label: Масштабировать Пауков (Crawlers)
+			Tooltip:
+				'''
+				Если включено, масштабирует ползущих врагов (Blood Crawlers, Jungle Creepers и т.д.). 
+				Если выключено, они игнорируют систему масштабирования во избежание багов при их переходе между стенами и полом.
+				'''
+		}
+
+		EnableBossScaling: {
+			Label: Включить Масштабирование Боссов
+			Tooltip: Настройки масштабирования боссов.
+		}
+
+		EnableFlatEnemyScaling: {
+			Label: Включить Фикс. Масштабирование Врагов
+			Tooltip: Настройки фиксированного масштабирования врагов.
+		}
+
+		FlatEnemyHealthScaling: {
+			Label: Фикс. Здоровье Врагов
+			Tooltip: Настройки фикс. масштабирования здоровья врагов.
+		}
+
+		FlatEnemyDamageScaling: {
+			Label: Фикс. Урон Врагов
+			Tooltip: Настройки фикс. масштабирования урона врагов.
+		}
+
+		FlatBossHealthScaling: {
+			Label: Фикс. Здоровье Боссов
+			Tooltip: Настройки фикс. масштабирования здоровья боссов.
+		}
+
+		FlatBossDamageScaling: {
+			Label: Фикс. Урон Боссов
+			Tooltip: Настройки фикс. масштабирования урона боссов.
+		}
+	}
+
+	StatSettings: {
+		Tooltip: ""
+
+		Headers: {
+			VIT_Settings: Настройки VIT
+			STR_Settings: Настройки STR
+			AGI_Settings: Настройки AGI
+			INT_Settings: Настройки INT
+			LUC_Settings: Настройки LUC
+			END_Settings: Настройки END
+			POW_Settings: Настройки POW
+			DEX_Settings: Настройки DEX
+			TCH_Settings: Настройки TCH
+			SPR_Settings: Настройки SPR
+			Stat_Caps: Лимиты Характеристик
+		}
+
+		VIT_HP: {
+			Label: Здоровье
+			Tooltip: Увеличивает максимальное здоровье за очко.
+		}
+
+		UseCustomHpRegen: {
+			Label: Своя Регенерация Здоровья
+			Tooltip: Включает кастомную систему регенерации HP от VIT. Игнорирует ванильный реген и лечит напрямую со временем.
+		}
+
+		CustomHpRegenPerVIT: {
+			Label: Реген Здоровья за VIT
+			Tooltip: Сколько HP в секунду восстанавливает каждое очко VIT. 0.5 = 10 VIT дают 5 HP/сек.
+		}
+
+		CustomHpRegenDelay: {
+			Label: Задержка Регенерации Здоровья
+			Tooltip: Задержка (в кадрах) перед началом регенерации после получения урона. 60 кадров = 1 секунда.
+		}
+
+		EnableHealingPotionBoost: {
+			Label: Усиление Зелий Лечения
+			Tooltip: Если включено, VIT увеличивает объем лечения от зелий.
+		}
+
+		HealingPotionBoostPercent: {
+			Label: Процент Усиления Зелий
+			Tooltip: Процентное увеличение лечения зельями за очко VIT.
+		}
+
+		STR_Damage: {
+			Label: Урон
+			Tooltip: Процентное увеличение урона ближнего боя за очко.
+		}
+
+		STR_Knockback: {
+			Label: Отбрасывание
+			Tooltip: Увеличивает отбрасывание в ближнем бою.
+		}
+
+		STR_ArmorPen: {
+			Label: Пробивание Брони
+			Tooltip: Увеличивает пробивание брони в ближнем бою.
+		}
+
+		AGI_MoveSpeed: {
+			Label: Скорость Движения
+			Tooltip: Увеличивает скорость перемещения за очко.
+		}
+
+		AGI_AttackSpeed: {
+			Label: Скорость Атаки
+			Tooltip: Увеличивает скорость атаки оружия (все типы).
+		}
+
+		AGI_JumpHeight: {
+			Label: Высота Прыжка
+			Tooltip: Увеличивает высоту прыжка (с убывающей доходностью).
+		}
+
+		AGI_JumpSpeed: {
+			Label: Скорость Прыжка
+			Tooltip: Увеличивает скорость прыжка за очко.
+		}
+
+		AGI_WingTime: {
+			Label: Время Полета
+			Tooltip: Увеличивает время полета крыльев.
+		}
+
+		INT_Damage: {
+			Label: Урон
+			Tooltip: Процентное увеличение магического урона за очко.
+		}
+
+		INT_MP: {
+			Label: Мана
+			Tooltip: Увеличивает максимальную ману.
+		}
+
+		INT_ManaCostReduction: {
+			Label: Снижение Затрат Маны
+			Tooltip: Снижает затраты маны за очко (с убывающей доходностью).
+		}
+
+		INT_ArmorPen: {
+			Label: Пробивание Брони
+			Tooltip: Увеличивает магическое пробивание брони.
+		}
+
+		LUC_Crit: {
+			Label: Крит
+			Tooltip: Увеличивает шанс критического удара за очко.
+		}
+
+		LUC_EnableFishing: {
+			Label: Включить Влияние на Рыбалку
+			Tooltip: Если включено, LUC увеличивает силу рыбалки на фиксированное значение за очко.
+		}
+
+		LUC_Fishing: {
+			Label: Сила Рыбалки
+			Tooltip: Увеличивает силу рыбалки за очко.
+		}
+
+		LUC_AggroReduction: {
+			Label: Снижение Агрессии
+			Tooltip: Снижает агрессию врагов (агро) за очко.
+		}
+
+		LUC_EnableLuckBonus: {
+			Label: Включить Бонус Удачи
+			Tooltip: Если включено, LUC повышает ванильный стат Удачи.
+		}
+
+		LUC_LuckBonus: {
+			Label: Бонус Удачи
+			Tooltip: Слегка увеличивает ванильную Удачу игрока за очко.
+		}
+
+		END_DefensePerX: {
+			Label: Защита За X Очков
+			Tooltip: Дает +1 к защите за каждые X очков END.
+		}
+
+		END_Defense: {
+			Label: Защита от END
+			Tooltip: Количество защиты за каждое очко END.
+		}
+
+		END_Aggro: {
+			Label: Агрессия (Агро)
+			Tooltip: Увеличивает агрессию врагов к игроку.
+		}
+
+		EnableKnockbackResist: {
+			Label: Включить Сопротивление Отбрасыванию
+			Tooltip: Включает масштабирование сопротивления отбрасыванию от END.
+		}
+
+		EnableDR: {
+			Label: Включить Снижение Урона
+			Tooltip: Включает масштабирование снижения урона (DR) от END.
+		}
+
+		EnableEnemyKnockback: {
+			Label: Включить Отбрасывание Врагов
+			Tooltip: Обычные враги отбрасываются при ударе по вам, если прокачан END.
+		}
+
+		END_EnemyKnockbackMultiplier: {
+			Label: Множитель Отбрасывания Врагов
+			Tooltip: Контролирует силу отбрасывания врагов навыком END.
+		}
+
+		POW_Damage: {
+			Label: Урон
+			Tooltip: Увеличивает урон модифицированного оружия (модов). Также дает небольшой бонус всем ванильным типам урона.
+		}
+
+		DEX_Damage: {
+			Label: Урон
+			Tooltip: Процентное увеличение урона дальнего боя за очко.
+		}
+
+		DEX_ArmorPen: {
+			Label: Пробивание Брони
+			Tooltip: Каждое очко DEX добавляет плоское пробивание брони к атакам дальнего боя.
+		}
+
+		TCH_EnableMiningSpeed: {
+			Label: Включить Скорость Добычи
+			Tooltip: Если включено, TCH увеличивает скорость добычи кирками.
+		}
+
+		TCH_MiningSpeed: {
+			Label: Скорость Добычи
+			Tooltip: Снижает время добычи блоков, ускоряя процесс.
+		}
+
+		TCH_EnableBuildSpeed: {
+			Label: Включить Скорость Строительства
+			Tooltip: Если включено, TCH увеличивает скорость размещения блоков и стен.
+		}
+
+		TCH_BuildSpeed: {
+			Label: Скорость Строительства
+			Tooltip: Ускоряет строительство.
+		}
+
+		TCH_EnableRange: {
+			Label: Включить Дистанцию
+			Tooltip: Если включено, TCH увеличивает дистанцию взаимодействия с блоками.
+		}
+
+		TCH_Range: {
+			Label: Дистанция Взаимодействия
+			Tooltip: Увеличивает дальность добычи и размещения блоков.
+		}
+
+		SPR_Damage: {
+			Label: Урон
+			Tooltip: Процентное увеличение урона призывов за очко.
+		}
+
+		SPR_MinionsPerX: {
+			Label: Миньоны За X Очков
+			Tooltip: Дает +1 слот миньона за каждые X очков SPR.
+		}
+
+		SPR_SentriesPerX: {
+			Label: Стражи За X Очков
+			Tooltip: Дает +1 слот стража (турели) за каждые X очков SPR.
+		}
+
+		EnableStatCaps: {
+			Label: Включить Лимиты Характеристик
+			Tooltip: Включает лимит для всех характеристик. Установите -1 для отключения ограничения.
+		}
+
+		VIT_Cap: {
+			Label: Лимит VIT
+			Tooltip: ""
+		}
+
+		STR_Cap: {
+			Label: Лимит STR
+			Tooltip: ""
+		}
+
+		AGI_Cap: {
+			Label: Лимит AGI
+			Tooltip: ""
+		}
+
+		INT_Cap: {
+			Label: Лимит INT
+			Tooltip: ""
+		}
+
+		LUC_Cap: {
+			Label: Лимит LUC
+			Tooltip: ""
+		}
+
+		END_Cap: {
+			Label: Лимит END
+			Tooltip: ""
+		}
+
+		POW_Cap: {
+			Label: Лимит POW
+			Tooltip: ""
+		}
+
+		DEX_Cap: {
+			Label: Лимит DEX
+			Tooltip: ""
+		}
+
+		SPR_Cap: {
+			Label: Лимит SPR
+			Tooltip: ""
+		}
+
+		TCH_Cap: {
+			Label: Лимит TCH
+			Tooltip: ""
+		}
+
+		RGE_Cap: {
+			Label: Лимит RGE
+			Tooltip: ""
+		}
+
+		BRD_Cap: {
+			Label: Лимит BRD
+			Tooltip: ""
+		}
+
+		HLR_Cap: {
+			Label: Лимит HLR
+			Tooltip: ""
+		}
+
+		DEX_AmmoConservation: {
+			Label: Экономия Боеприпасов
+			Tooltip: Процентный шанс не потратить боеприпасы за очко DEX.
+		}
+
+		CLK_Cap: {
+			Label: Лимит CLK
+			Tooltip: ""
+		}
+
+		END_KnockbackResistPerPoint: {
+			Label: Сопротивление Отбрасыванию
+			Tooltip: Процент получаемого сопротивления отбрасыванию.
+		}
+
+		END_DRPerPoint: {
+			Label: Снижение Урона
+			Tooltip: Процент снижения урона. Уменьшает входящий урон из любых источников.
+		}
+
+		BLH_Cap: {
+			Label: Лимит BLH
+			Tooltip: ""
+		}
+
+		HNT_Cap: {
+			Label: Лимит HNT
+			Tooltip: ""
+		}
+
+		GMB_Cap: {
+			Label: Лимит GMB
+			Tooltip: ""
+		}
+
+		SHM_Cap: {
+			Label: Лимит SHM
+			Tooltip: ""
+		}
+
+		THR_Cap: {
+			Label: Лимит THR
+			Tooltip: ""
+		}
+	}
+
+	ModIntegration: {
+		Tooltip: ""
+
+		Headers: {
+			Mod_Integration: Интеграция Модов
+			RGE_Settings: Настройки RGE (Разбойник)
+			POW_CalamityEnhancements: POW Улучшения Calamity
+			BRD_Settings: Настройки BRD (Бард)
+			HLR_Settings: Настройки HLR (Целитель)
+			CLK_Settings: Настройки CLK (Кликер)
+			BLH_Settings: Настройки BLH (Кровавый Охотник)
+			HNT_Settings: Настройки HNT (Охотник)
+			GMB_Settings: Настройки GMB (Азартный игрок)
+			SHM_Settings: Настройки SHM (Шаман)
+			THR_Settings: Настройки THR (Метатель)
+		}
+
+		EnableCalamityIntegration: {
+			Label: Включить Интеграцию с Calamity
+			Tooltip: Включает интеграцию с модом Calamity. Должен быть установлен мод Calamity.
+		}
+
+		RGE_Damage: {
+			Label: Урон
+			Tooltip: Увеличивает урон разбойника (Rogue) за очко RGE.
+		}
+
+		RGE_Velocity: {
+			Label: Скорость Снарядов
+			Tooltip: Увеличивает скорость снарядов разбойника за очко RGE.
+		}
+
+		RGE_AmmoConsumptionReduction: {
+			Label: Снижение Расхода Скрытности/Боеприпасов
+			Tooltip: Снижает расход боеприпасов для оружия разбойника за очко RGE.
+		}
+
+		RGE_EnableStealthConsumptionReduction: {
+			Label: Снижение Расхода Скрытности
+			Tooltip: RGE снижает расход шкалы скрытности (Stealth) на различных порогах.
+		}
+
+		RGE_StealthConsumption85Threshold: {
+			Label: Удар Скрытности 85%
+			Tooltip: При таком количестве RGE, удары из скрытности тратят 85% от обычной шкалы.
+		}
+
+		RGE_StealthConsumption75Threshold: {
+			Label: Удар Скрытности 75%
+			Tooltip: При таком количестве RGE, удары из скрытности тратят 75% от обычной шкалы.
+		}
+
+		RGE_StealthConsumptionReductionThreshold: {
+			Label: Удар Скрытности 50%
+			Tooltip: При таком количестве RGE, удары из скрытности тратят лишь 50% от обычной шкалы.
+		}
+
+		POW_RageDamage: {
+			Label: Урон в Ярости
+			Tooltip: Увеличивает урон режима Ярости (Rage) из Calamity за очко POW.
+		}
+
+		POW_RageDuration: {
+			Label: Длительность Ярости
+			Tooltip: Увеличивает длительность режима Ярости в кадрах за очко POW (60 кадров = 1 сек).
+		}
+
+		POW_AdrenalineDuration: {
+			Label: Длительность Адреналина
+			Tooltip: Увеличивает длительность Адреналина в кадрах за очко POW (60 кадров = 1 сек).
+		}
+
+		EnableThoriumIntegration: {
+			Label: Включить Интеграцию с Thorium
+			Tooltip: Включает интеграцию с Thorium Mod.
+		}
+
+		BRD_Damage: {
+			Label: Урон
+			Tooltip: Увеличивает симфонический (Bard) урон за очко BRD.
+		}
+
+		BRD_EnableEmpowermentBoost: {
+			Label: Усиление Воодушевления
+			Tooltip: Если включено, BRD увеличивает длительность баффов от инструментов барда.
+		}
+
+		BRD_EmpowermentDuration: {
+			Label: Длительность Воодушевления
+			Tooltip: Увеличивает длительность воодушевляющих баффов.
+		}
+
+		HLR_Damage: {
+			Label: Урон
+			Tooltip: Процент урона Светом (Radiant), получаемый за очко HLR.
+		}
+
+		HLR_HealingPower: {
+			Label: Сила Лечения
+			Tooltip: Значение Силы Лечения (Healing Power), даваемое каждым эффективным очком HLR.
+		}
+
+		RGE_MaxStealthPerPoint: {
+			Label: Макс. Скрытность за Очко
+			Tooltip: Сколько очков максимальной скрытности (Stealth) дается за очко RGE.
+		}
+
+		BRD_ArmorPen: {
+			Label: Пробивание Брони
+			Tooltip: Пробивание брони симфоническим уроном за очко BRD.
+		}
+
+		HLR_ArmorPen: {
+			Label: Пробивание Брони
+			Tooltip: Пробивание брони уроном Света за очко HLR.
+		}
+
+		BRD_PointsPerMaxInspiration: {
+			Label: Макс. Вдохновение за X BRD
+			Tooltip: Сколько очков BRD нужно для получения 1 очка Макс. Вдохновения (Inspiration).
+		}
+
+		HLR_PointsPerEffectPoint: {
+			Tooltip: Сколько очков HLR нужно для 1 эффективного очка (для Силы Лечения, Восстановления Жизни и интервалов).
+			Label: Очки За Очко Эффекта
+		}
+
+		EnableClickerClassIntegration: {
+			Label: Интеграция с Clicker Class
+			Tooltip: Если включено, интегрирует возможности Clicker Class, включая стат CLK.
+		}
+
+		CLK_Damage: {
+			Label: Урон
+			Tooltip: Процент увеличения урона кликеров за очко CLK.
+		}
+
+		CLK_Radius: {
+			Label: Радиус
+			Tooltip: Доп. радиус действия кликера за очко CLK.
+		}
+
+		CLK_EffectThreshold: {
+			Label: Порог Эффектов
+			Tooltip: Снижение количества кликов, необходимых для активации эффекта за очко CLK (убывающая доходность).
+		}
+
+		POW_MaxRageDurationBonus: {
+			Label: Макс. Бонус Длительности Ярости
+			Tooltip: Максимально возможный бонус к длительности Ярости от POW.
+		}
+
+		EnableGenericModIntegration: {
+			Label: Общая Интеграция Модов
+			Tooltip: Включает поддержку различных малых модов, добавляющих свои классы урона.
+		}
+
+		BLH_Damage: {
+			Label: Урон
+			Tooltip: Урон Кровавого Охотника (Blood Hunter).
+		}
+
+		HNT_Damage: {
+			Label: Урон
+			Tooltip: Урон Охотника (Hunter).
+		}
+
+		GMB_Damage: {
+			Label: Урон
+			Tooltip: Урон Азартного игрока (Gambler).
+		}
+
+		SHM_Damage: {
+			Label: Урон
+			Tooltip: Урон Шамана (Shamanic).
+		}
+
+		THR_Damage: {
+			Label: Урон
+			Tooltip: Урон Метателя (Throwing).
+		}
+	}
+
+	RebirthAbilities: {
+		Tooltip: ""
+
+		Headers: {
+			Last_Stand: Последний Рубеж
+			Teleport: Телепорт
+			Golden_Touch: Золотое Касание
+			Extra_Accessory_Slots: Доп. Слоты Аксессуаров
+			Enhanced_Spawns: Усиленный Спавн
+			Auto_Clicker: Автокликер
+			Enhanced_Fortune: Расширенная Удача
+		}
+
+		LastStandHealPercent: {
+			Label: Процент Лечения Последнего Рубежа
+			Tooltip: Процент от макс. здоровья, восстанавливаемый при срабатывании.
+		}
+
+		LastStandImmunityTime: {
+			Label: Время Неуязвимости
+			Tooltip: Время неуязвимости (в сек.) после срабатывания 'Последнего рубежа'.
+		}
+
+		LastStandCooldown: {
+			Label: Перезарядка Последнего Рубежа
+			Tooltip: Время в секундах до повторного срабатывания способности.
+		}
+
+		TeleportCooldown: {
+			Label: Перезарядка Телепорта
+			Tooltip: Время в секундах до повторного использования Телепорта.
+		}
+
+		GoldenTouchPercentPerLevel: {
+			Tooltip: Процентное увеличение подбираемых монет за уровень способности 'Золотое Касание'.
+			Label: Процент Золотого Касания за Уровень
+		}
+
+		MaxGoldenTouchLevel: {
+			Tooltip: Максимальный уровень 'Золотого Касания'.
+			Label: Макс. Уровень Золотого Касания
+		}
+
+		MaxExtraAccessorySlots: {
+			Tooltip: Максимальное количество доп. слотов для аксессуаров.
+			Label: Макс. Доп. Слотов Аксессуаров
+		}
+
+		MaxEnhancedSpawnsLevel: {
+			Label: Макс. Уровень Усиленного Спавна
+			Tooltip: Максимальный уровень 'Усиленного Спавна'.
+		}
+
+		SpawnRatePercentPerLevel: {
+			Label: Процент Спавна за Уровень
+			Tooltip: Увеличение шанса появления врагов за уровень 'Усиленного Спавна'.
+		}
+
+		AutoClickerMaxLevel: {
+			Label: Макс. Уровень Автокликера
+			Tooltip: Максимальный уровень способности Автокликера.
+		}
+
+		AutoClickerSpeedFactorAtLevel1: {
+			Label: Фактор Скорости Автокликера (Ур. 1)
+			Tooltip: Множитель скорости на 1-м уровне. Чем ниже значение, тем быстрее клики.
+		}
+
+		AutoClickerSpeedFactorImprovementPerLevel: {
+			Label: Улучшение Фактора Скорости за Уровень
+			Tooltip: Изменение множителя скорости за каждый уровень после первого. Используйте отрицательные значения для ускорения.
+		}
+
+		AutoClickerPreventsEffects: {
+			Label: Блокирует Эффекты Предметов
+			Tooltip: Если включено, автокликер НЕ БУДЕТ активировать эффекты предметов при клике. Иначе - БУДЕТ.
+		}
+
+		MaxEnhancedFortuneLevel: {
+			Tooltip: Макс. уровень способности 'Расширенная Удача'.
+			Label: Макс. Уровень Расширенной Удачи
+		}
+
+		LuckPerAbilityLevel: {
+			Tooltip: Количество удачи, даваемой за каждый уровень способности 'Расширенная Удача'.
+			Label: Удача за Уровень Способности
+		}
+	}
+
+	Advanced: {
+		XPBlacklistedNPCs: {
+			Tooltip: Имена или ID NPC, за которых не дают опыт при убийстве (например, Zombie или 3 для зомби).
+			Label: Черный Список Опыта (NPC)
+		}
+
+		ScalingBlacklistedNPCs: {
+			Tooltip: Имена или ID NPC, которые не усиливаются системой масштабирования (например, 'Blood Crawler' или 65).
+			Label: Черный Список Масштабирования
+		}
+
+		Headers: {
+			XP_Blacklist: Черный Список Опыта
+			Scaling_Blacklist: Черный Список Масштабирования
+		}
+
+		Tooltip: ""
+	}
+
+	XPVerification: {
+		Tooltip: ""
+		Headers.XP_Verification: Проверка Опыта
+
+		EnableXPVerification: {
+			Label: Включить Проверку Опыта
+			Tooltip: Если включено, аномально большие скачки опыта потребуют ручного подтверждения.
+		}
+
+		BaseXPThreshold: {
+			Label: Базовый Порог Опыта
+			Tooltip: Базовое значение опыта, запускающее проверку. Масштабируется от уровня и перерождений.
+		}
+
+		LevelScalingFactor: {
+			Label: Фактор Масштабирования Уровня
+			Tooltip: Насколько увеличивается порог проверки за каждый уровень игрока.
+		}
+
+		RebirthScalingFactor: {
+			Label: Фактор Масштабирования Перерождений
+			Tooltip: Насколько увеличивается порог проверки за каждое перерождение.
+		}
+
+		RelativeXPThreshold: {
+			Label: Относительный Порог Опыта
+			Tooltip: Проверка срабатывает, когда опыт превышает этот процент от опыта до след. уровня. 1.5 = 150%.
+		}
+
+		RebirthRelativeThresholdReduction: {
+			Label: Снижение Порога из-за Перерождений
+			Tooltip: Насколько снижается относительный порог за перерождение (позволяет быстрее получать опыт прокачанным персонажам).
+		}
+
+		WhitelistedSources: {
+			Label: Белый Список Источников
+			Tooltip:
+				'''
+				Источники опыта, не требующие проверки. Добавьте 'Boss', чтобы пропускать весь опыт от боссов.
+				Частые источники: 'Boss Bonus', 'Kill', 'Damage', 'Melee', 'Projectile'.
+				'''
+		}
+	}
+
+	RoleSettings: {
+		Tooltip: ""
+
+		Headers: {
+			Role_System: Система Ролей
+			Crit_God: Бог Крита
+			Vampire: Вампир
+			Beastmaster: Повелитель Зверей
+			Apex_Summoner: Высший Призыватель
+			Black_Knight: Черный Рыцарь
+			Cleric: Жрец
+			Guardian: Страж
+		}
+
+		BaseSwitchCost: {
+			Label: Базовая Стоимость Смены
+			Tooltip: Базовая цена в Очках Перерождения (ОП) для смены роли (после первого бесплатного выбора).
+		}
+
+		SwitchCostMultiplier: {
+			Label: Множитель Стоимости Смены
+			Tooltip: Увеличение стоимости за каждую смену роли.
+		}
+
+		CritGodCritChance: {
+			Label: Шанс Крита
+			Tooltip: Глобальный бонус к шансу крита от 'Бога Крита'.
+		}
+
+		CritGodExcessCritToDamage: {
+			Label: Избыточный Крит в Урон
+			Tooltip: Сколько крит. урона дается за каждый 1% шанса крита свыше 100%.
+		}
+
+		CritGodEnableSummonCrits: {
+			Label: Криты у Призывов
+			Tooltip: Если включено, позволяет призывам (миньонам) наносить крит. удары.
+		}
+
+		VampireBleedTickInterval: {
+			Tooltip: Время между тиками урона от 'Кровотечения' (в сек).
+			Label: Интервал Тика Кровотечения
+		}
+
+		VampireBleedDuration: {
+			Tooltip: Как долго длится дебафф 'Кровотечение' (в сек).
+			Label: Длительность Кровотечения
+		}
+
+		VampireBleedDamagePercent: {
+			Tooltip: Процент от макс. здоровья врага, наносимый за каждый тик кровотечения.
+			Label: Процент Урона от Кровотечения
+		}
+
+		VampireBleedCooldown: {
+			Label: Перезарядка Кровотечения
+			Tooltip: Перезарядка (в сек) перед тем, как Вампир сможет снова наложить Кровотечение.
+		}
+
+		VampireBleedChance: {
+			Tooltip: Шанс в процентах наложить Кровотечение при атаке.
+			Label: Шанс Кровотечения
+		}
+
+		VampireMovementSpeed: {
+			Tooltip: Процентное увеличение скорости передвижения.
+			Label: Бонус к Скорости Движения
+		}
+
+		VampireHealthBonus: {
+			Tooltip: Процентное увеличение максимального здоровья.
+			Label: Бонус Здоровья
+		}
+
+		RoleProximityRange: {
+			Tooltip: Макс. расстояние (в пикселях) для получения классовых эффектов за убийство врагов.
+			Label: Дальность Эффектов Роли
+		}
+
+		EnableRoleProximity: {
+			Tooltip: Если включено, эффекты от убийства врагов работают только в пределах определенного радиуса.
+			Label: Включить Дальность Роли
+		}
+
+		VampireBleedHealPercent: {
+			Label: Лечение от Кровотечения
+			Tooltip: Процент от урона кровотечением, лечащий Вампира.
+		}
+
+		VampireKillHealPercent: {
+			Label: Лечение за Убийство
+			Tooltip: Процент макс. здоровья, восстанавливаемый при убийстве врага.
+		}
+
+		BeastmasterDamagePerUniqueMinion: {
+			Label: Урон за Уникального Миньона
+			Tooltip: Процентный бонус к урону призыва за каждый активный уникальный тип миньона.
+		}
+
+		BeastmasterSlotsPerBonusSlot: {
+			Label: Слоты для Бонусного Слота
+			Tooltip: Сколько базовых слотов миньонов требуется для получения 1 дополнительного бонусного слота.
+		}
+
+		BeastmasterBonusSlotsGained: {
+			Label: Получено Бонусных Слотов
+			Tooltip: Количество слотов, даваемых при достижении порога слотов.
+		}
+
+		BeastmasterReduceSPRSlotEfficiency: {
+			Label: Снизить Эффективность SPR Слотов
+			Tooltip: Если включено, слоты от характеристики SPR менее эффективны для бонусных слотов (поощряет разные источники миньонов).
+		}
+
+		BeastmasterSPRSlotPenaltyMultiplier: {
+			Label: Штрафной Множитель SPR Слотов
+			Tooltip: Множитель того, сколько слотов от SPR нужно для получения бонусного. 2.0 = требуется в 2 раза больше.
+		}
+
+		ApexSummonerDamagePerUnusedSlot: {
+			Tooltip: Бонус к урону призыва за неиспользованный слот, когда призван ровно один тип миньонов.
+			Label: Урон за Неиспользованный Слот
+		}
+
+		BlackKnightINTToMeleeDamage: {
+			Label: INT в Урон Ближнего Боя
+			Tooltip: Процентный бонус урона ближнего боя за каждое очко INT.
+		}
+
+		BlackKnightSTRToMagicDamage: {
+			Label: STR в Маг. Урон
+			Tooltip: Процентный бонус магического урона за каждое очко STR.
+		}
+
+		BlackKnightMaxDarkFocusStacks: {
+			Label: Макс. Зарядов Темного Фокуса
+			Tooltip: Максимальное количество зарядов 'Темного Фокуса' от маг. критических ударов.
+		}
+
+		BlackKnightDarkFocusCritChancePerStack: {
+			Label: Шанс Крита за Заряд Темного Фокуса
+			Tooltip: Бонус к шансу крита за заряд при использовании в ближнем бою.
+		}
+
+		BlackKnightDarkFocusCritDamagePerStack: {
+			Label: Крит. Урон за Заряд Темного Фокуса
+			Tooltip: Бонус к крит. урону за заряд при использовании в ближнем бою.
+		}
+
+		BlackKnightManaRestoreOnMeleeCrit: {
+			Label: Восстановление Маны при Крите (Бл. Бой)
+			Tooltip: Количество восстанавливаемой маны при критическом ударе ближнего боя.
+		}
+
+		BlackKnightArcaneSurgeDuration: {
+			Label: Длительность Чародейского Всплеска
+			Tooltip: Время (в сек) действия баффа 'Чародейский Всплеск' (Arcane Surge) после крита в ближнем бою.
+		}
+
+		BlackKnightArcaneSurgeMagicDamage: {
+			Label: Маг. Урон от Чародейского Всплеска
+			Tooltip: Базовый бонус маг. урона (в %) от 'Чародейского Всплеска'.
+		}
+
+		BlackKnightArcaneSurgeScaleWithDamage: {
+			Label: Всплеск Масштабируется от Урона
+			Tooltip: Если включено, бонус от 'Чародейского Всплеска' растет от урона критического удара, вызвавшего его.
+		}
+
+		BlackKnightArcaneSurgeDamageScaling: {
+			Label: Масштаб Урона Чародейского Всплеска
+			Tooltip: Доп. бонус маг. урона за каждую единицу урона от крита ближнего боя, вызвавшего бафф.
+		}
+
+		DivineInterventionCooldown: {
+			Tooltip: Перезарядка (в сек) перед повторным использованием 'Божественного Вмешательства' (Divine Intervention).
+			Label: Перезарядка Божественного Вмешательства
+		}
+
+		DivineInterventionDuration: {
+			Tooltip: Время (в сек), на которое 'Божественное Вмешательство' дает иммунитет к дебаффами.
+			Label: Длительность Божественного Вмешательства
+		}
+
+		ClericRegenInterval: {
+			Tooltip: Время в секундах между тиками регенерации.
+			Label: Интервал Регенерации Жреца
+		}
+
+		ClericTeammateRegenPercent: {
+			Tooltip: Процент от макс. здоровья, восстанавливаемый союзникам в ауре Жреца за тик.
+			Label: Процент Регена Союзников (Жрец)
+		}
+
+		ClericSelfRegenPercent: {
+			Tooltip: Процент от макс. здоровья, восстанавливаемый самому Жрецу за тик.
+			Label: Процент Саморегена (Жрец)
+		}
+
+		ClericTeammateHealthBonus: {
+			Tooltip: Бонус (в %) к макс. здоровью союзников в ауре Жреца.
+			Label: Бонус к Здоровью Союзников (Жрец)
+		}
+
+		ClericDisableVitRegen: {
+			Tooltip: Отключает регенерацию здоровья Жреца от характеристики VIT во избежание бессмертия.
+			Label: Отключить Реген от VIT у Жреца
+		}
+
+		ClericDefensePenalty: {
+			Tooltip: Процентный штраф к защите Жреца для баланса.
+			Label: Штраф Защиты Жреца
+		}
+
+		ClericHealthBonus: {
+			Tooltip: Процентный бонус к макс. здоровью Жреца.
+			Label: Бонус Здоровья Жреца
+		}
+
+		ClericAuraRadius: {
+			Tooltip: Радиус защитной ауры Жреца (в пикселях).
+			Label: Радиус Ауры Жреца
+		}
+
+		GuardianAuraRadius: {
+			Label: Радиус Ауры Стража
+			Tooltip: Радиус защитной ауры Стража (в пикселях).
+		}
+
+		GuardianTeammateDefenseBonus: {
+			Label: Бонус Защиты Союзникам (Страж)
+			Tooltip: Бонус (в %) к защите союзников внутри ауры Стража.
+		}
+
+		GuardianTeammateDamageReduction: {
+			Label: Процент Разделения Урона
+			Tooltip: Процент снижения (перенаправления) урона для союзников Стража.
+		}
+
+		GuardianMovementSpeedPenalty: {
+			Label: Штраф к Скорости (Страж)
+			Tooltip: Процентное снижение скорости передвижения Стража.
+		}
+
+		GuardianDamageReduction: {
+			Label: Снижение Урона Стража
+			Tooltip: Процент снижения получаемого урона для самого Стража.
+		}
+
+		GuardianHealthBonus: {
+			Label: Бонус Здоровья Стража
+			Tooltip: Процентный бонус к макс. здоровью Стража.
+		}
+
+		GuardianDamagePenalty: {
+			Label: Штраф Урона Стража
+			Tooltip: Процентное снижение наносимого урона для Стража (для баланса).
+		}
+
+		GuardianDefenseBonus: {
+			Label: Бонус Защиты Стража
+			Tooltip: Фиксированный бонус к защите Стража.
+		}
+
+		GuardianReduceVitEffects: {
+			Label: Снизить Эффекты VIT у Стража
+			Tooltip: Если включено, регенерация от VIT снижается для Стража на указанный процент.
+		}
+
+		GuardianVitEffectReduction: {
+			Label: Снижение Эффектов VIT
+			Tooltip: Процент снижения регенерации от VIT для Стража.
+		}
+
+		GuardianDisableEndEffects: {
+			Label: Отключить Эффекты END у Стража
+			Tooltip: Если включено, Страж не получает бонус сопротивления отбрасыванию и снижению урона от END.
+		}
+
+		VampireEnableEyeColorChange: {
+			Label: Изменение Цвета Глаз Вампира
+			Tooltip:
+				'''
+				Если включено, глаза Вампира становятся красными при активной роли. 
+				ВНИМАНИЕ: Из-за ограничений Террарии, глаза могут остаться красными навсегда, если выключить мод.
+				'''
+		}
+
+		DivineInterventionExemptBuffs: {
+			Label: Исключения Божественного Вмешательства
+			Tooltip:
+				'''
+				Список ID или названий баффов, которые Божественное Вмешательство НЕ БУДЕТ снимать.
+				Введите ID баффов (числа) или их точные названия.
+				Примеры: "123", "Tipsy", "SomeModdedBuff"
+				'''
+		}
+	}
+
+	SocketingSystem: {
+		Tooltip: ""
+
+		Headers: {
+			Core_Effects: Эффекты Ядер
+			Cost_Configuration: Настройка Стоимости
+			Socketing_System: Система Инкрустации (Гнезда)
+		}
+
+		EnableSocketingSystem: {
+			Label: Включить Систему Инкрустации (Эксперимент)
+			Tooltip: Включает или выключает систему вставки ядер (гнезд), включая вкладку в UI.
+		}
+
+		PowerT1Effect: {
+			Label: Эффект Ядра Мощи Т.1
+			Tooltip: Процентный бонус урона от 'Ядра Мощи Т.1' (Core of Power T.1).
+		}
+
+		PowerT2Effect: {
+			Label: Эффект Ядра Мощи Т.2
+			Tooltip: Процентный бонус урона от 'Ядра Мощи Т.2'.
+		}
+
+		PowerT3Effect: {
+			Label: Эффект Ядра Мощи Т.3
+			Tooltip: Процентный бонус урона от 'Ядра Мощи Т.3'.
+		}
+
+		PowerT4Effect: {
+			Label: Эффект Ядра Мощи Т.4
+			Tooltip: Процентный бонус урона от 'Ядра Мощи Т.4'.
+		}
+
+		ForceT1Effect: {
+			Label: Эффект Ядра Силы Т.1
+			Tooltip: Процентный бонус к отбрасыванию от 'Ядра Силы Т.1' (Core of Force T.1).
+		}
+
+		ForceT2Effect: {
+			Label: Эффект Ядра Силы Т.2
+			Tooltip: Процентный бонус к отбрасыванию от 'Ядра Силы Т.2'.
+		}
+
+		ForceT3Effect: {
+			Label: Эффект Ядра Силы Т.3
+			Tooltip: Процентный бонус к отбрасыванию от 'Ядра Силы Т.3'.
+		}
+
+		ForceT4Effect: {
+			Label: Эффект Ядра Силы Т.4
+			Tooltip: Процентный бонус к отбрасыванию от 'Ядра Силы Т.4'.
+		}
+
+		PrecisionT1Effect: {
+			Label: Эффект Ядра Точности Т.1
+			Tooltip: Процентный бонус к шансу крита от 'Ядра Точности Т.1' (Core of Precision T.1).
+		}
+
+		PrecisionT2Effect: {
+			Label: Эффект Ядра Точности Т.2
+			Tooltip: Процентный бонус к шансу крита от 'Ядра Точности Т.2'.
+		}
+
+		PrecisionT3Effect: {
+			Label: Эффект Ядра Точности Т.3
+			Tooltip: Процентный бонус к шансу крита от 'Ядра Точности Т.3'.
+		}
+
+		PrecisionT4Effect: {
+			Label: Эффект Ядра Точности Т.4
+			Tooltip: Процентный бонус к шансу крита от 'Ядра Точности Т.4'.
+		}
+
+		ExtractCost: {
+			Label: Стоимость Извлечения
+			Tooltip: Стоимость извлечения вставленного ядра из предмета в Очках Перерождения.
+		}
+
+		BaseExpandCost: {
+			Label: Базовая Стоимость Расширения
+			Tooltip: Базовая стоимость добавления новых слотов в предмет в Очках Перерождения.
+		}
+
+		ExpandCostIncrease: {
+			Label: Увеличение Стоимости Расширения
+			Tooltip: Процентное увеличение цены расширения за каждый дополнительный слот.
+		}
+
+		MaxExpandedSlots: {
+			Label: Максимально Расширенных Слотов
+			Tooltip: Максимальное количество доп. слотов, которые можно добавить предмету.
+		}
+
+		DefenseT1Effect: {
+			Label: Эффект Ядра Защиты Т.1
+			Tooltip: Бонус защиты от 'Ядра Защиты Т.1' (Core of Defense T.1).
+		}
+
+		DefenseT2Effect: {
+			Label: Эффект Ядра Защиты Т.2
+			Tooltip: Бонус защиты от 'Ядра Защиты Т.2'.
+		}
+
+		DefenseT3Effect: {
+			Label: Эффект Ядра Защиты Т.3
+			Tooltip: Бонус защиты от 'Ядра Защиты Т.3'.
+		}
+
+		DefenseT4Effect: {
+			Label: Эффект Ядра Защиты Т.4
+			Tooltip: Бонус защиты от 'Ядра Защиты Т.4'.
+		}
+
+		VitalityT1Effect: {
+			Label: Эффект Ядра Живучести Т.1
+			Tooltip: Бонус к здоровью от 'Ядра Живучести Т.1' (Core of Vitality T.1).
+		}
+
+		VitalityT2Effect: {
+			Label: Эффект Ядра Живучести Т.2
+			Tooltip: Бонус к здоровью от 'Ядра Живучести Т.2'.
+		}
+
+		VitalityT3Effect: {
+			Label: Эффект Ядра Живучести Т.3
+			Tooltip: Бонус к здоровью от 'Ядра Живучести Т.3'.
+		}
+
+		VitalityT4Effect: {
+			Label: Эффект Ядра Живучести Т.4
+			Tooltip: Бонус к здоровью от 'Ядра Живучести Т.4'.
+		}
+
+		EvasionT1Effect: {
+			Label: Эффект Ядра Уклонения Т.1
+			Tooltip: Бонус к шансу уклонения от 'Ядра Уклонения Т.1' (Core of Evasion T.1).
+		}
+
+		EvasionT2Effect: {
+			Label: Эффект Ядра Уклонения Т.2
+			Tooltip: Бонус к шансу уклонения от 'Ядра Уклонения Т.2'.
+		}
+
+		EvasionT3Effect: {
+			Label: Эффект Ядра Уклонения Т.3
+			Tooltip: Бонус к шансу уклонения от 'Ядра Уклонения Т.3'.
+		}
+
+		EvasionT4Effect: {
+			Label: Эффект Ядра Уклонения Т.4
+			Tooltip: Бонус к шансу уклонения от 'Ядра Уклонения Т.4'.
+		}
+	}
+
+	ExtraLuckSettings: {
+		BaseExtraLuck: {
+			Tooltip: Базовое значение доп. удачи для всех игроков. Больше нуля - удача лучше, меньше - хуже. Расчеты экспоненциальные! (Не влияет на ванильный стат Удачи)
+			Label: Базовая Дополнительная Удача
+		}
+
+		EnableExtraLuckSystem: {
+			Tooltip: Включает базовую доп. удачу и возможность получать удачу от способностей перерождения. Система экспоненциальная! (Не влияет на ванильный стат Удачи)
+			Label: Включить Систему Расширенной Удачи
+		}
+
+		Headers.Extra_Luck_System: Система Расширенной Удачи
+		Tooltip: ""
+	}
+
+	StatariaClientConfig: {
+		EnableDivineInterventionCooldownBar: {
+			Label: Полоска Перезарядки Божественного Вмешательства
+			Tooltip: Показывает полоску перезарядки для способности 'Божественное Вмешательство'.
+		}
+
+		EnableTeleportCooldownBar: {
+			Label: Полоска Перезарядки Телепорта
+			Tooltip: Включает полоску перезарядки телепорта.
+		}
+
+		EnableLastStandCooldownBar: {
+			Label: Полоска Перезарядки Последнего Рубежа
+			Tooltip: Показывает оставшееся время перезарядки 'Последнего Рубежа'.
+		}
+
+		Headers: {
+			Cooldown_Bars: Полоски Перезарядки
+			Socketing_System: Система Инкрустации
+			Enemy_Level_Indicators: Индикаторы Уровня Врагов
+			BossBars: Полоски Здоровья Боссов
+			ResourceBars: Полоски Ресурсов
+			CooldownBars: Полоски Перезарядки
+			SocketingSystem: Система Инкрустации
+			General: Общие Настройки
+		}
+
+		ShowSocketedCoresInTooltip: {
+			Label: Показывать Ядра в Подсказках
+			Tooltip: Если включено, вставленные ядра и их эффекты отображаются в подсказке предмета.
+		}
+
+		EnemyIndicatorOpacity: {
+			Label: Прозрачность Индикатора Врагов
+			Tooltip: Контролирует прозрачность уровня, показываемого над врагами.
+		}
+
+		ShowEnemyLevelBehindWalls: {
+			Label: Показывать Уровень Сквозь Стены
+			Tooltip: Показывает уровень врагов, даже если они спрятаны за блоками.
+		}
+
+		ShowEnemyLevelIndicator: {
+			Label: Индикаторы Уровня Врагов
+			Tooltip: Отображает уровни врагов над их головами.
+		}
+
+		resourceBars: {
+			Label: Полоски Ресурсов
+			Tooltip: Настройка внешнего вида и позиции полосок здоровья, маны и здоровья боссов.
+		}
+
+		uiSettings: {
+			Label: Настройки Интерфейса
+			Tooltip: Настройка отображения полос опыта, индикаторов уровня и прочих элементов UI.
+		}
+
+		DisplayName: Настройки Клиента
+
+		BossBarXOffsetPercent: {
+			Tooltip: Смещение полосок здоровья боссов по оси X (в % от ширины экрана)
+			Label: Смещение Полосы Босса по X
+		}
+
+		BossBarWidth: {
+			Tooltip: Ширина полоски здоровья боссов (в пикселях)
+			Label: Ширина Полосы Босса
+		}
+
+		ShowBossName: {
+			Tooltip: Отображать имя босса над полоской здоровья
+			Label: Показывать Имя Босса
+		}
+
+		ShowBossHealthText: {
+			Tooltip: Отображать цифры текущего/макс. здоровья на полосе босса
+			Label: Показывать Цифры Здоровья
+		}
+
+		BossBarScale: {
+			Tooltip: Общий множитель размера полосок здоровья боссов
+			Label: Масштаб Полосы Босса
+		}
+
+		BarPadding: {
+			Tooltip: Расстояние между полосками ресурсов (в пикселях).
+			Label: Отступ Между Полосками
+		}
+
+		BarHeight: {
+			Tooltip: Высота полосок ресурсов (в пикселях).
+			Label: Высота Полоски
+		}
+
+		BarWidth: {
+			Tooltip: Ширина полосок ресурсов (в пикселях).
+			Label: Ширина Полоски
+		}
+
+		PositionYPercent: {
+			Tooltip: Позиция полосок ресурсов по вертикали (в % от высоты экрана).
+			Label: Позиция по Y (в %)
+		}
+
+		PositionXPercent: {
+			Tooltip: Позиция полосок ресурсов по горизонтали (в % от ширины экрана).
+			Label: Позиция по X (в %)
+		}
+
+		IndicatorOpacity: {
+			Tooltip: Прозрачность индикаторов уровня и перерождения над вашим персонажем.
+			Label: Прозрачность Индикатора Игрока
+		}
+
+		ShowRebirthTitle: {
+			Tooltip: Показывает ваш статус перерождения под индикатором уровня.
+			Label: Показывать Титул Перерождения
+		}
+
+		ShowLevelIndicator: {
+			Tooltip: Показывать ваш текущий уровень над персонажем (видят все в мультиплеере).
+			Label: Показывать Индикатор Уровня
+		}
+
+		ShowBossXPPopups: {
+			Tooltip: Показывать всплывающий текст с опытом за убийство боссов.
+			Label: Показывать Всплывающий Опыт (Боссы)
+		}
+
+		ShowKillXPPopups: {
+			Tooltip: Показывать всплывающий текст с опытом за убийство врагов.
+			Label: Показывать Всплывающий Опыт (Убийства)
+		}
+
+		ShowDamageXPPopups: {
+			Tooltip: Показывать всплывающий текст с опытом за нанесение урона.
+			Label: Показывать Всплывающий Опыт (Урон)
+		}
+
+		ShowXPGainPopups: {
+			Tooltip: Глобальный переключатель всплывающего текста с получаемым опытом.
+			Label: Всплывающий Текст Получения Опыта
+		}
+
+		ShowXPBarAbovePlayer: {
+			Tooltip: Показывать небольшую полоску опыта над головой персонажа при получении XP.
+			Label: Полоса Опыта над Игроком
+		}
+
+		BossBarYOffsetPercent: {
+			Label: Смещение Полосы Босса по Y
+			Tooltip: Смещение полосок здоровья боссов по оси Y (в % от высоты экрана)
+		}
+
+		MaxVisibleBossBars: {
+			Label: Максимум Видимых Полос Боссов
+			Tooltip: Максимальное количество полос боссов на экране одновременно.
+		}
+
+		MiniBossNPCIDs: {
+			Label: ID Мини-Боссов
+			Tooltip: Список ID NPC, которые считаются мини-боссами (будет отображаться полоса здоровья).
+		}
+
+		ForcedBossNPCIDs: {
+			Label: ID Принудительных Боссов
+			Tooltip: Список ID NPC, которые всегда воспринимаются как боссы.
+		}
+
+		ExcludedBossNPCIDs: {
+			Label: Исключенные Боссы (ID)
+			Tooltip: Список ID NPC, для которых НИКОГДА не будет показана полоса босса (перекрывает другие настройки).
+		}
+
+		EnableLevelUpSound: {
+			Label: Звук Повышения Уровня
+			Tooltip: Включает звуковой сигнал при получении нового уровня.
+		}
+	}
+
+	AscensionSystem: {
+		Tooltip: Продвинутые механики системы возвышения.
+		Headers.Ascension_System: Система Возвышения
+
+		EnableAscension: {
+			Label: Включить Возвышение
+			Tooltip: Настройки включения Возвышения.
+		}
+
+		AscensionCostType: {
+			Label: Тип Валюты для Возвышения
+			Tooltip: Настройки типа валюты для Возвышения.
+		}
+
+		AscensionCostBase: {
+			Label: Базовая Стоимость Возвышения
+			Tooltip: Настройки базовой стоимости Возвышения.
+		}
+
+		AscensionLevelBonus: {
+			Label: Бонус Уровня Возвышения
+			Tooltip: Настройки бонуса уровня Возвышения.
+		}
+	}
+}
+
+Buffs: {
+	ArcaneSurgeBuff: {
+		DynamicName: Чародейский Всплеск ({0}с)
+		DynamicTooltip: +{0}% маг. урона
+		Description: Mods.Stataria.Buffs.ArcaneSurgeBuff.Description
+		DisplayName: Чародейский Всплеск
+	}
+
+	ClericAuraBuff: {
+		GuardianNameSelf: Аура Жреца (На Себя)
+		GuardianTooltipSelf:
+			'''
+			Вы излучаете божественную защиту
+			Радиус ауры: {0} пикс.
+			'''
+		GuardianNameTeammate: Аура Жреца
+		GuardianTooltipTeammate:
+			'''
+			Находится в защитной ауре Жреца
+			+{0}% макс. здоровья
+			Получает божественную регенерацию
+			'''
+		Description: Mods.Stataria.Buffs.ClericAuraBuff.Description
+		DisplayName: Аура Жреца
+	}
+
+	DarkFocusBuff: {
+		DynamicName: Темный Фокус ({0}/{1})
+		DynamicTooltip: След. атака ближ. боя: +{0}% шанс крита, +{1}% крит. урон
+		Description: Mods.Stataria.Buffs.DarkFocusBuff.Description
+		DisplayName: Темный Фокус
+	}
+
+	DivineInterventionBuff: {
+		DynamicName: Божественное Вмешательство ({0}с)
+		DynamicTooltip: Божественная благодать защищает от дебаффов
+		Description: Mods.Stataria.Buffs.DivineInterventionBuff.Description
+		DisplayName: Божественное Вмешательство
+	}
+
+	GuardianAuraBuff: {
+		GuardianNameSelf: Аура Стража (На Себя)
+		GuardianTooltipSelf:
+			'''
+			Вы излучаете защитную энергию
+			Радиус ауры: {0} пикс.
+			'''
+		GuardianNameTeammate: Аура Стража
+		GuardianTooltipTeammate:
+			'''
+			Находится в защитной ауре Стража
+			+{0}% защиты
+			Делит урон со Стражем
+			'''
+		Description: Mods.Stataria.Buffs.GuardianAuraBuff.Description
+		DisplayName: Аура Стража
+	}
+
+	BleedDebuff: {
+		Description: Mods.Stataria.Buffs.BleedDebuff.Description
+		DisplayName: Кровотечение
+	}
+}
+
+Items: {
+	CoreOfForceT1: {
+		DisplayName: Ядро Силы Т.1
+		Tooltip: Можно вставить в оружие для увеличения отбрасывания
+	}
+
+	CoreOfForceT2: {
+		DisplayName: Ядро Силы Т.2
+		Tooltip: Можно вставить в оружие для увеличения отбрасывания
+	}
+
+	CoreOfForceT3: {
+		DisplayName: Ядро Силы Т.3
+		Tooltip: Можно вставить в оружие для увеличения отбрасывания
+	}
+
+	CoreOfForceT4: {
+		DisplayName: Ядро Силы Т.4
+		Tooltip: Можно вставить в оружие для увеличения отбрасывания
+	}
+
+	CoreOfPowerT1: {
+		DisplayName: Ядро Мощи Т.1
+		Tooltip: Можно вставить в оружие для увеличения урона
+	}
+
+	CoreOfPowerT2: {
+		DisplayName: Ядро Мощи Т.2
+		Tooltip: Можно вставить в оружие для увеличения урона
+	}
+
+	CoreOfPowerT3: {
+		DisplayName: Ядро Мощи Т.3
+		Tooltip: Можно вставить в оружие для увеличения урона
+	}
+
+	CoreOfPowerT4: {
+		DisplayName: Ядро Мощи Т.4
+		Tooltip: Можно вставить в оружие для увеличения урона
+	}
+
+	CoreOfPrecisionT1: {
+		DisplayName: Ядро Точности Т.1
+		Tooltip: Можно вставить в оружие для увеличения шанса критического удара
+	}
+
+	CoreOfPrecisionT2: {
+		DisplayName: Ядро Точности Т.2
+		Tooltip: Можно вставить в оружие для увеличения шанса критического удара
+	}
+
+	CoreOfPrecisionT3: {
+		DisplayName: Ядро Точности Т.3
+		Tooltip: Можно вставить в оружие для увеличения шанса критического удара
+	}
+
+	CoreOfPrecisionT4: {
+		DisplayName: Ядро Точности Т.4
+		Tooltip: Можно вставить в оружие для увеличения шанса критического удара
+	}
+
+	CoreOfDefenseT1: {
+		DisplayName: Ядро Защиты Т.1
+		Tooltip: Можно вставить в броню для увеличения защиты
+	}
+
+	CoreOfDefenseT2: {
+		DisplayName: Ядро Защиты Т.2
+		Tooltip: Можно вставить в броню для увеличения защиты
+	}
+
+	CoreOfDefenseT3: {
+		DisplayName: Ядро Защиты Т.3
+		Tooltip: Можно вставить в броню для увеличения защиты
+	}
+
+	CoreOfDefenseT4: {
+		DisplayName: Ядро Защиты Т.4
+		Tooltip: Можно вставить в броню для увеличения защиты
+	}
+
+	CoreOfVitalityT1: {
+		DisplayName: Ядро Живучести Т.1
+		Tooltip: Можно вставить в броню для увеличения макс. здоровья
+	}
+
+	CoreOfVitalityT2: {
+		DisplayName: Ядро Живучести Т.2
+		Tooltip: Можно вставить в броню для увеличения макс. здоровья
+	}
+
+	CoreOfVitalityT3: {
+		DisplayName: Ядро Живучести Т.3
+		Tooltip: Можно вставить в броню для увеличения макс. здоровья
+	}
+
+	CoreOfVitalityT4: {
+		DisplayName: Ядро Живучести Т.4
+		Tooltip: Можно вставить в броню для увеличения макс. здоровья
+	}
+
+	CoreOfEvasionT1: {
+		DisplayName: Ядро Уклонения Т.1
+		Tooltip: Можно вставить в броню для увеличения шанса уклонения
+	}
+
+	CoreOfEvasionT2: {
+		DisplayName: Ядро Уклонения Т.2
+		Tooltip: Можно вставить в броню для увеличения шанса уклонения
+	}
+
+	CoreOfEvasionT3: {
+		DisplayName: Ядро Уклонения Т.3
+		Tooltip: Можно вставить в броню для увеличения шанса уклонения
+	}
+
+	CoreOfEvasionT4: {
+		DisplayName: Ядро Уклонения Т.4
+		Tooltip: Можно вставить в броню для увеличения шанса уклонения
+	}
+}
+
+NPCs: {
+	Hugo: {
+		Census.SpawnCondition: Условия неизвестны
+		DisplayName: Гюго
+
+		TownNPCMood: {
+			Content: Я доволен.
+			NoHome: Ненавижу оставаться без дома.
+			FarFromHome: Я слишком далеко от дома.
+			LoveSpace: Люблю, когда так много места.
+			DislikeCrowded: Мне не нравится эта толкучка.
+			HateCrowded: Ненавижу, когда тут столько людей.
+			LoveBiome: Я обожаю {BiomeName}.
+			LikeBiome: Мне нравится {BiomeName}.
+			DislikeBiome: Мне не нравится {BiomeName}.
+			LoveNPC: Я очень люблю {NPCName}.
+			LikeNPC: Мне нравится {NPCName}.
+			DislikeNPC: Мне не нравится {NPCName}.
+			LikeNPC_Princess: Мне нравится {NPCName}.
+			Princess_LovesNPC: Мне нравится {NPCName}.
+		}
+
+		Dialogue: {
+			Chat1: Эти ядра... они шепчут мне. Не волнуйся, кажется, ты им нравишься.
+			Chat2: Когда-нибудь задумывался, что будет, если впихнуть слишком много мощи в один меч? Я задумывался. Это было не очень красиво.
+			Chat3: Чувствуешь энергию, исходящую от них? Обращайся с ними осторожнее.
+			Chat4: Каждое ядро скрывает в себе потенциал. Сможешь ли ты его раскрыть — зависит от тебя.
+			ChatRebirth: Ты кажешься... другим. Как будто ты заглянул за грань. Ядра резонируют с этой энергией.
+		}
+
+		Shop: Магазин
+	}
+}
+
+RebirthAbilityText: {
+	LastStand: При смертельном ударе восстанавливает {0}% макс. здоровья и дает {1} сек. неуязвимости. Перезарядка: {2} сек.
+	ExtraAccessorySlot: Дает дополнительный слот для аксессуаров за уровень.
+	GoldenTouch: Увеличивает количество подбираемых монет на {0}% за каждый уровень.
+	Teleport: Позволяет телепортироваться к курсору по нажатию кнопки. Перезарядка: {0} сек.
+	EnhancedSpawns: Увеличивает скорость появления врагов на {0}% за уровень. Складывается с другими модификаторами спавна.
+	AutoClickerDetail: Автоклик ~{0} Кл/с (CPS). Эффекты от предметов: {1} (настраивается).
+	AutoClickerDefault: Включает автокликер. Скорость растет с уровнем. Взаимодействие с эффектами настраивается.
+	EnhancedFortune: Дает +{0} удачи за каждый уровень при активации, повышая шансы на дроп.
+	LevelInfo: "{0} (Уровень {1}/{2})"
+	Allowed: разрешены
+	Prevented: заблокированы
+}
+
+RoleEffects: {
+	NoEffects: Эффекты не заданы.
+
+	CritGod: {
+		CritChance: • +{0}% к Шансу Критического Удара
+		ExcessCrit: • Избыточный шанс крита (свыше 100%) переходит в +{0}% Крит. Урона (за каждый 1% излишка)
+		SummonCrits: • Ваши миньоны теперь могут наносить критические удары
+	}
+
+	Vampire: {
+		MaxHealth: • +{0}% Макс. Здоровья
+		MoveSpeed: • +{0}% Скорости Движения
+		BleedChance: • {0}% шанс вызвать Кровотечение при атаке
+		BleedDamage: • Кровотечение наносит {0}% от макс. здоровья врага каждые {1}с.
+		BleedHeal: • Вы лечитесь на {0}% от нанесенного по кровоточащим врагам урона
+		KillHeal: • Вы лечитесь на {0}% макс. здоровья при убийстве врага
+	}
+
+	Beastmaster: {
+		DamagePerMinion: • +{0}% Урона призыва за каждый уникальный активный тип миньона
+		BonusSlots: • +{0} Слот(а) для миньонов за каждые {2} базовых слота
+		SPRSlotsReduced: • +{0} Слот(а) для миньонов за каждые {2} слота от SPR (сниженная эффективность)
+		SPRSlotsNormal: • +{0} Слот(а) для миньонов за каждые {2} слота от SPR (нормальная эффективность)
+	}
+
+	ApexSummoner: {
+		MassiveBonus: • Огромный бонус урона призыва, когда активен только ОДИН тип миньонов
+		DamagePerUnusedSlot: • +{0}% Урона призыва за каждый неиспользованный слот
+		BonusLost: • Бонус теряется, если призвано несколько разных типов миньонов
+	}
+
+	BlackKnight: {
+		MeleeScaleINT: • Оружие ближ. боя получает +{0}% урона за INT
+		MagicScaleSTR: • Маг. оружие получает +{0}% урона за STR
+		DarkFocusStacks: • Маг. криты дают стаки Темного Фокуса (макс. {0})
+		ConsumeDarkFocus: • Атаки ближ. боя поглощают стаки: +{0}% шанса крита и +{1}% крит. урона за стак
+		ManaRestore: • Криты в ближ. бою восстанавливают {0} маны
+		ArcaneSurge: • Криты в ближ. бою дают Чародейский Всплеск: +{0}% маг. урона на {1}с.
+		ArcaneSurgeScale: • Всплеск растет от крит. урона ближ. боя (+{0}% за ед. урона)
+	}
+
+	Cleric: {
+		MaxHealth: • +{0}% Макс. Здоровья
+		DefensePenalty: • -{0}% Защиты
+		ProtectAura: • Излучает защитную ауру (радиус: {0} пикс.)
+		AuraHealth: • Союзники в ауре: +{0}% макс. здоровья
+		SelfRegen: • Саморегенерация: {0}% макс. здоровья каждые {1}с.
+		TeamRegen: • Реген союзников: {0}% макс. здоровья каждые {1}с.
+		DivineIntervention: • Божественное Вмешательство: Дает ауре иммунитет к дебаффам на {0}с.
+		DisabledRegen: • Регенерация от VIT отключена ради баланса
+	}
+
+	Guardian: {
+		MaxHealth: • +{0}% Макс. Здоровья
+		Defense: • +{0} Защиты
+		MoveSpeedPenalty: • -{0}% Скорости Движения
+		DamagePenalty: • -{0}% Наносимого Урона
+		DamageReduction: • Снижение урона на {0}%
+		Aura: • Защитная аура (радиус: {0} пикс.)
+		AuraDefense: • Союзники в ауре: +{0}% защиты
+		AuraReduction: • Союзники в ауре: Урон снижен на {0}%
+		ImmuneKnockback: • Иммунитет к отбрасыванию
+		ReducedVIT: • Эффекты от VIT снижены на {0}%
+		DisabledEND: • Снижение урона и сопротивление отбрасыванию от END отключены
+	}
+}
+
+UI: {
+	ConfigCenter: Центр конфигурации
+	CloseCustomConfig: Закрыть настройки
+	Uncategorized: Без категории
+	HoverTooltip: Наведите курсор на настройку, чтобы увидеть её описание.
+	ReloadRequired: Для применения этой настройки требуется перезагрузка.
+	SocketedCoresHeader: Вставленные Ядра:
+	CoreDamage: +{0}% к Урону
+	CoreKnockback: +{0}% к Отбрасыванию
+	CoreCrit: +{0}% к Криту
+	CoreDefense: +{0} Защиты
+	CoreVitality: +{0} к Макс. Здоровью
+	CoreEvasion: +{0}% Шанс Уклонения
+	EnemyLevel: Ур.{0}
+
+	XPVerification: {
+		Title: Обнаружен Подозрительный Опыт
+		Accept: Принять
+		Reject: Отклонить
+		AcceptAll: Принять Все
+		RejectAll: Отклонить Все
+		XPAmount: Количество Опыта: {0:N0}
+		Source: Источник: {0}
+		PendingGains: "{0} подозрительных получений в ожидании"
+	}
+
+	TabBar: {
+		Stats: Статы
+		Abilities: Навыки
+		Roles: Роли
+		Socketing: Гнезда
+	}
+
+	PlayerDisplay: {
+		Level: Ур.
+		RebirthPrefix: R
+		RebirthTitle: Перерождение {0}
+		LevelIndicator: Ур.{0}
+	}
+
+	SkillTree: {
+		Title: Навыки Перерождения
+		RebirthPoints: Очки Перерождения: {0}
+		ResetButton: СБРОС
+		ShowHidden: Показать Скрытые
+		Cost: Цена: {0} ОП
+		Hide: Скрыть
+		Upgrade: Улучшить
+		Unlocked: Открыто
+		Unlock: Открыть
+		ToggleOn: Вкл
+		ToggleOff: Выкл
+		RefundedRP: Возвращено {0} ОП!
+	}
+
+	BulkAllocation.Header: Количество за Клик:
+
+	RoleSelection: {
+		Title: ВЫБОР РОЛИ
+		RebirthPoints: Очки Перерождения: {0}
+		ActiveRole: Активная Роль: {0}
+		ActiveRoleDeactivated: Активная Роль: {0} (Отключена)
+		ActiveRoleNone: Активная Роль: Нет
+		IndicatorActive: ● АКТИВНО
+		IndicatorDeactivated: ● ОТКЛЮЧЕНО
+		EffectsHeader: Эффекты:
+		DeactivateButton: ОТКЛЮЧИТЬ
+		ReactivateButton: ВКЛЮЧИТЬ
+		LockedRole: ЗАБЛОКИРОВАНО - Нужно Перерождение 2
+		SwitchCostButton: СМЕНИТЬ - Стоит: {0} ОП
+		SelectFreeButton: ВЫБРАТЬ (Бесплатно)
+	}
+
+	Socketing: {
+		Title: Система Гнезд
+		RebirthPoints: Ваши ОП: {0}
+		ItemNone: Предмет: ---
+		SlotsNone: Слоты: - / -
+		CompatibleCoresTitle: Совместимые Ядра
+		AttachedCoresTitle: Вставленные Ядра:
+		ExpandSlotButton: Расширить Слот
+		CostNone: Цена: --- ОП
+		AttachCoreButton: Вставить Ядро
+		ExtractCoreButton: Извлечь Ядро
+		ItemPrefix: "Предмет: "
+		PlaceholderCores:
+			'''
+			(Поместите предмет, чтобы
+			увидеть совместимые ядра)
+			'''
+		ItemDisplay: Предмет: {0}
+		SlotsDisplay: Слоты: {0} / {1}
+		CostRP: Цена: {0} ОП
+		CoreCountDisplay: "{0}: x{1}"
+		EmptyDash: ---
+		AttachedCoreDisplay: > {0} (x{1})
+	}
+
+	StatPanel: {
+		LevelText: Уровень: {0}
+		PointsText: Очки: {0}
+		XPText: XP: {0} / {1}
+		RPText: ОП: {0}
+		StatLabel: "{0}: {1}"
+		StatLabelGhost: "{0}: {1} (+{2})"
+		ResetStats: Сбросить
+		Rebirth: Перерождение
+		Auto: Авто
+		ResetStatsTooltip: Бесплатно сбросить все статы
+		AutoTooltip: Включить автоматическое распределение очков в отмеченные статы
+		AutoAllocateTooltip: Отметьте для авто-распределения очков в этот стат
+		RequireLevelPrompt: Требуется уровень {0}!
+		ConfirmRebirthPrompt: Вы уверены, что хотите совершить Перерождение?
+		ConfirmRebirth: Подтвердить Перерождение
+		UnknownStat: Неизвестный Стат
+		XPInfoTitle: Инфо о Системе Опыта:
+		StatPointsPerLevelBonus: Очков Статов за Уровень: {0} + {1} (Бонус Перерождения) = {2}
+		StatPointsPerLevel: Очков Статов за Уровень: {0}
+		DamageXP: Опыт за Урон: {0}x от урона
+		KillXP: Опыт за Убийство: {0}x от здоровья врага
+		BossXPTitle: Опыт за Босса:
+		BossXPFlat: "{0} фиксированного XP"
+		BossXPPercent: "{0}% до след. уровня"
+		RebirthXPBonus: Бонус Опыта Перерождения: +{0} ({1} × {2})
+		LevelCapNone: Лимит Уровня: Нет (или очень высокий)
+		DynamicLevelCap: Динамический Лимит (Текущий Цикл): {0}
+		LevelCap: Лимит Уровня: {0}
+		StatCapsProgressive: Лимиты Статов: Базовые × {0} (Прогрессивные)
+		StatCapsBase: Лимиты Статов: Базовые значения
+		XPSplit: Опыт делится поровну среди всех активных игроков
+		XPProximity: Игроки должны быть в {0} пикс. от врага для получения опыта
+		VIT_MaxHealth: +{0} Макс. Здоровья (+{1} за очко)
+		VIT_RegenDisabled: Регенерация от VIT отключена
+		VIT_HpSecReduced: +{0} HP/сек (+{1} за очко, снижено у Стража)
+		VIT_LifeRegenReduced: +{0} Реген Жизни (+{1} за очко, снижено у Стража)
+		VIT_HpSec: +{0} HP/сек (+{1} за очко)
+		VIT_LifeRegen: +{0} Реген Жизни (+0.5 за очко)
+		VIT_Healing: +{0}% Силы Лечения (+{1}% за очко)
+		STR_MeleeDamage: +{0}% Урон Ближнего Боя (+{1}% за очко)
+		STR_MeleeKnockback: +{0}% Отбрасывание Ближнего Боя (+{1}% за очко)
+		STR_MeleeArmorPen: +{0} Пробивание Брони Бл. Боя (+{1} за очко)
+		STR_BlackKnight: Черный Рыцарь: +{0}% Маг. Урон (+{1}% за очко)
+		AGI_MoveSpeed: +{0} Скорость Движения (+{1} за очко, убывает)
+		AGI_AttackSpeed: +{0} Скорость Атаки (+{1} за очко, убывает)
+		AGI_WingTime: +{0} Время Полета (+{1} за очко)
+		AGI_ImprovedJump: Улучшена Высота и Скорость Прыжка
+		INT_MaxMana: +{0} Макс. Мана (+{1} за очко)
+		INT_ManaRegen: +{0} Реген Маны (+0.5 за очко)
+		INT_MagicDamage: +{0}% Магический Урон (+{1}% за очко)
+		INT_ManaCost: -{0} Стоимость Маны (Убывает)
+		INT_MagicArmorPen: +{0} Пробивание Маг. Брони (+{1} за очко)
+		INT_BlackKnight: Черный Рыцарь: +{0}% Урон Ближ. Боя (+{1}% за очко)
+		LUC_Crit: +{0}% Шанс Крита (+{1}% за очко)
+		LUC_Luck: +{0} Удача (+{1} за очко)
+		LUC_Fishing: +{0} Сила Рыбалки (+{1} за очко)
+		LUC_Aggro: -{0} Агро (-{1} за очко)
+		END_Defense: +{0} Защита (+{1} за очко)
+		END_ImmuneKnockback: Иммунитет к отбрасыванию (Страж)
+		END_KnockbackResist: +{0}% Сопр. Отбрасыванию (+{1}% за очко)
+		END_DamageReductionDisabled: Снижение Урона от END отключено (Страж)
+		END_DamageReduction: -{0}% Получаемый Урон (Убывает)
+		END_KnocksBackNonBosses: Отбрасывает обычных врагов
+		END_Aggro: +{0} Агро (+{1} за очко)
+		POW_GeneralDamage: +{0}% Общий Урон (+{1}% за очко)
+		POW_OtherDamage: +{0}% Иные Типы Урона (+0.1% за очко)
+		POW_RageDamage: +{0}% Урон Ярости (+{1}% за очко)
+		POW_RageDuration: +{0}с Длительность Ярости (+{1}с за очко, макс {2}с)
+		POW_AdrenalineDuration: +{0}с Длительность Адреналина (+{1}с за очко)
+		DEX_RangedDamage: +{0}% Урон Дальнего Боя (+{1}% за очко)
+		DEX_RangedArmorPen: +{0} Пробив. Брони Дальнего Боя (+{1} за очко)
+		DEX_AmmoSave: +{0}% Шанс Экономии Патронов (+{1}% за очко)
+		SPR_SummonDamage: +{0}% Урон Призыва (+{1}% за очко)
+		SPR_MinionSlots: +{0} Слот(а) Миньонов (+1 за {2} очков)
+		SPR_SentrySlots: +{0} Слот(а) Стражей (+1 за {2} очков)
+		SPR_BeastmasterSlots: Повелитель Зверей: +{0} слот(а) за {2} всего слотов
+		SPR_BeastmasterDamage: Повелитель Зверей: +{0}% урона за уникального миньона
+		SPR_ApexSummonerDamage: Высший Призыватель: +{0}% урона за пустой слот (для одного миньона)
+		TCH_MiningSpeed: +{0}% Скорость Добычи (+{1}% за очко)
+		TCH_BuildSpeed: +{0}% Скорость Строительства (+{1}% за очко)
+		TCH_TilesReach: +{0} Дальность Размещения (+{1} за очко)
+		TCH_NoEffects: Нет активных эффектов от TCH.
+		RGE_RogueDamage: +{0}% Урон Разбойника (+{1}% за очко)
+		RGE_MaxStealth: +{0} Макс. Скрытность (+{1} за очко)
+		RGE_Velocity: +{0}% Скорость Снарядов Разб. (+{1}% за очко)
+		RGE_AmmoCost: -{0}% Расход Боеприпасов Разб. (-{1}% за очко)
+		RGE_Stealth50: Удары из Скрытности стоят 50%
+		RGE_Stealth75: Удары из Скрытности стоят 75%
+		RGE_Stealth85: Удары из Скрытности стоят 85%
+		BRD_SymphonicDamage: +{0}% Симфонический Урон (+{1}% за очко)
+		BRD_SymphonicArmorPen: +{0} Пробив. Симфонической Брони (+{1} за очко)
+		BRD_MaxInspiration: Макс. Вдохновение: +1 за {0} очков (Лимит в Thorium 30)
+		BRD_EmpowermentDuration: +{0}с Длительность Воодушевления (+{1}с за очко)
+		HLR_RadiantDamage: +{0}% Урон Светом (+{1}% за очко)
+		HLR_RadiantArmorPen: +{0} Пробив. Брони Света (+{1} за очко)
+		HLR_HealingPower: +{0} Сила Лечения (+{1} за {2} очков)
+		HLR_ImprovedLifeRecovery: Улучшенное Восстановление Жизни
+		CLK_ClickDamage: +{0}% Урон Клика (+{1}% за очко)
+		CLK_ClickRadius: +{0} Ед. Радиуса Клика (+{1} ед. за очко)
+		CLK_EffectsDiminishing: -{0}% Кликов для Эффектов (Убывает)
+		Generic_Damage: +{0}% {1} Урон (+{2}% за очко)
+	}
+}
+
+Logger: {
+	LogStarted: === {0} Лог начат в {1} ===
+	EnabledAdmin: Логирование включено для администратора
+	EnabledDebug: Логирование включено через режим отладки
+	EnabledServer: Логирование включено для сервера
+	ClearLogFailed: Не удалось проверить/очистить файл лога: {0}
+	WriteLogFailed: Не удалось записать в файл лога: {0}
+	Info: "[INFO] {0}"
+	Warning: "[WARNING] {0}"
+	Error: "[ERROR] {0}"
+	Debug: "[DEBUG] {0}"
+}
+
+CoreItem: {
+	CoreOfPower: Ядро Мощи
+	CoreOfForce: Ядро Силы
+	CoreOfPrecision: Ядро Точности
+	CoreOfDefense: Ядро Защиты
+	CoreOfVitality: Ядро Живучести
+	CoreOfEvasion: Ядро Уклонения
+	UnknownCore: Неизвестное Ядро
+	CoreNameTier: "{0} Т.{1}"
+	EffectPower: +{0}% Урона Оружия
+	EffectForce: +{0}% Отбрасывания Оружия
+	EffectPrecision: +{0}% Шанса Крита Оружия
+	EffectDefense: +{0} Защиты
+	EffectVitality: +{0} Макс. Здоровья
+	EffectEvasion: +{0}% Шанса Уклонения
+	UsageWeapon: Можно вставить в оружие
+	UsageArmor: Можно вставить в броню
+}
+
+RPGPlayer: {
+	RetroRPSync: "{0} ОП (Синхр.)"
+	RebirthCount: Перерождение {0}!
+	RebirthPoints: +{0} Очков Перерождения!
+	StatPointsSync: +{0} Очков Характеристик
+	RPSync: +{0} ОП
+	RebirthStatPointsSync: +{0} Очков Характеристик за Перерождение
+	LevelCapReached: Достигнут Лимит Уровня!
+	XPGain: +{0} XP
+	XPSource: От: {0}
+	LevelUp: Уровень Повышен! Уровень {0}
+	LastStand: Последний Рубеж!
+}
+
+RebirthAbilityName: {
+	EnhancedFortune: Расширенная Удача
+	ReducedPotionSickness: Быстрое Исцеление
+	ExtraAccessorySlot: Доп. Слот Аксессуаров
+	LastStand: Последний Рубеж
+	Dash: Рывок
+	AutoJump: Авто-Прыжок
+	NoFallDamage: Нет Урона от Падения
+	WaterFreedom: Свобода в Воде
+	Teleport: Телепорт
+	TreasureHunter: Охотник за Сокровищами
+	Sustenance: Сытость
+	ArcheryMastery: Мастерство Лучника
+	BattleReady: Готовность к Бою
+	AnglerLuck: Удача Рыбака
+	VitalityFortitude: Живучесть и Стойкость
+	InnerCalm: Внутреннее Спокойствие
+	ElementalResistance: Сопротивление Стихиям
+	ShadowVeil: Теневая Вуаль
+	FortuneFavored: Любимец Фортуны
+	ArcaneMastery: Тайное Мастерство
+	MasterBuilder: Мастер-Строитель
+	BattleFury: Боевая Ярость
+	SurfaceSkimmer: Скользящий по Поверхности
+	ThornGuard: Шипастая Броня
+	FleetFooted: Легконогий
+	SummonerPact: Договор Призывателя
+	LavaWalker: Идущий по Лаве
+	ZeroGravity: Нулевая Гравитация
+	NightVision: Ночное Зрение
+	Sanctuary: Святилище
+	CombatStations: Боевые Станции
+	GiantsGrip: Хватка Гиганта
+	GoldenTouch: Золотое Касание
+	EnhancedSpawns: Усиленный Спавн
+	ShadowTrail: Теневой След
+	AuraPulse: Пульсирующая Аура
+	AutoClicker: Автокликер
+}
+
+RebirthAbilityDescription: {
+	EnhancedFortune: Дает доп. удачу за уровень при активации, повышая шансы на дроп и другие механики.
+	ReducedPotionSickness: Снижает длительность послезельевой болезни на 50%.
+	ExtraAccessorySlot: Дает дополнительный слот для аксессуаров за уровень.
+	LastStand: При получении смертельного удара, лечит на 10% от макс. здоровья и дает 3 сек. неуязвимости. 3 мин. перезарядки.
+	Dash: Дает возможность делать рывок (Dash).
+	AutoJump: Позволяет прыгать автоматически при зажатии кнопки прыжка.
+	NoFallDamage: Полный иммунитет к урону от падения.
+	WaterFreedom: Дает свободное перемещение в воде, дыхание под водой и эффект ласт.
+	Teleport: Возможность телепортироваться к курсору по нажатию горячей клавиши.
+	TreasureHunter: Дает эффекты: Спелеолог, Предчувствие и Охотник.
+	Sustenance: Активируемый бафф еды. Ур.1: Сыт, Ур.2: Очень Сыт, Ур.3: Превосходно Насыщен.
+	ArcheryMastery: Дает эффекты Экономия Боеприпасов и Лучник.
+	BattleReady: Дает бафф Битва (Увеличенный спавн).
+	AnglerLuck: Дает эффекты: Ящик, Рыбалка и Сонар.
+	VitalityFortitude: Дает эффекты: Жизненная Сила, Стойкость, Железная Кожа, Регенерация и Сердечный Магнит.
+	InnerCalm: Дает эффект Спокойствие.
+	ElementalResistance: Дает эффекты: Инферно и Тепло.
+	ShadowVeil: Дает эффект Невидимость.
+	FortuneFavored: Дает эффект Удача (Lucky).
+	ArcaneMastery: Дает эффекты: Магическая Сила и Регенерация Маны.
+	MasterBuilder: Дает эффекты: Строитель и Добыча.
+	BattleFury: Дает эффекты: Ярость и Гнев.
+	SurfaceSkimmer: Дает эффект Хождение по Воде.
+	ThornGuard: Дает эффект Шипы.
+	FleetFooted: Дает эффект Стремительность.
+	SummonerPact: Дает эффект Призыв.
+	LavaWalker: Дает эффект Обсидиановая Кожа.
+	ZeroGravity: Дает эффект Гравитация.
+	NightVision: Дает эффекты: Сияние и Совиный Глаз.
+	Sanctuary: Дает баффы защиты от построек: Статуя Баст, Звезда в Банке, Мед, Лампа из Сердца, Благословение Дриады и Уютный Огонь.
+	CombatStations: Дает баффы боевых станций: Ящик Патронов, Привороженный, Ясновидение, Заточенное Оружие, Стратег (Опьянение) и Сахарная Лихорадка.
+	GiantsGrip: Увеличивает размер оружия ближнего боя на 33%.
+	GoldenTouch: Увеличивает количество подбираемых монет на {config.rebirthAbilities.GoldenTouchPercentPerLevel}% за уровень.
+	EnhancedSpawns: Увеличивает скорость спавна врагов на {config.rebirthAbilities.SpawnRatePercentPerLevel}% за уровень. Складывается с другими баффами.
+	ShadowTrail: Создает визуальный эффект оставляемого шлейфа как у Теневой Брони.
+	AuraPulse: Создает визуальный эффект пульсирующей ауры как у Святой Брони.
+	AutoClicker: При активации автоматически кликает. Скорость растет с уровнем. Взаимодействие с эффектами задается в конфиге.
+}
+
+RoleName: {
+	CritGod: Бог Крита
+	Vampire: Вампир
+	Beastmaster: Повелитель Зверей
+	ApexSummoner: Высший Призыватель
+	BlackKnight: Черный Рыцарь
+	Cleric: Жрец
+	Guardian: Страж
+}
+
+RoleDescription: {
+	CritGod: Мастер разрушительной точности. Превращает каждый удар в потенциально смертельный.
+	Vampire: Кровожадный воин, который становится сильнее в бою, высасывая жизнь из раненых врагов.
+	Beastmaster: Мастер миньонов. Получает мощь за командование разнообразными существами, раскрывая их максимальный потенциал.
+	ApexSummoner: Сфокусированный призыватель, достигающий максимальной силы через преданность одному типу существ.
+	BlackKnight: Универсальный воин-маг. Смешивает боевое мастерство и магию, получая невероятную синергию меча и заклинаний.
+	Cleric: Божественный целитель. Защищает и усиливает союзников внутри своей священной ауры, жертвуя собственной защитой ради команды.
+	Guardian: Непоколебимый защитник. Укрывает союзников от вреда, разделяя их бремя и отражая урон обратно в атакующих.
+}
+
+RoleFlavorText: {
+	CritGod: Пробуди в себе перфекциониста — каждое попадание идет в счет, каждый удар имеет значение.
+	Vampire: Прими тьму. Пусть кровь твоих врагов станет топливом для твоей силы.
+	Beastmaster: Сила в разнообразии. Чем больше армия, тем сильнее ты становишься.
+	ApexSummoner: Совершенство через фокус. Один миньон, безграничный потенциал.
+	BlackKnight: Сталь и волшебство едины. Пусть магия заряжает клинок, а клинок фокусирует магию.
+	Cleric: Прими свое призвание как маяк надежды. Твоя сила не в стали, а в божественной защите, которую ты даришь другим.
+	Guardian: Стань несокрушимым щитом. Пусть боль твоих союзников станет твоей силой, а твоя решимость — их спасением.
+}
+
+Logging: {
+	Test: {
+		InfoMessage: Это информационное сообщение
+		WarningMessage: Это предупреждающее сообщение
+		ErrorMessage: Это сообщение об ошибке
+		DebugMessage: Это сообщение появляется только в режиме отладки
+		GlobalDebugMessage: Это сообщение использует глобальный режим отладки
+	}
+
+	StatariaFeatureToggleSystem: {
+		StatPointsRecalculating: Замечено изменение очков статов за уровень - перерасчет очков для игроков
+		StatPointsRecalculationDisabled: Замечено изменение очков статов за уровень - перерасчет отключен
+		RebirthConfigRecalculating: Замечено изменение конфига перерождений - перерасчет ОП для игроков
+		RebirthConfigRecalculationDisabled: Замечено изменение конфига перерождений - перерасчет отключен
+		RebirthStatPointRecalculating: Замечено изменение статов за перерождение - перерасчет очков для игроков
+		RebirthStatPointRecalculationDisabled: Замечено изменение статов за перерождение - перерасчет отключен
+		ErrorCalamityPanel: Ошибка реинициализации панели (Calamity): {0}
+		ErrorThoriumPanel: Ошибка реинициализации панели (Thorium): {0}
+	}
+
+	Stataria: {
+		ModLoadingStarted: Загрузка мода Stataria началась
+		ModLoadingCompleted: Загрузка мода Stataria завершена
+		ModCallNoArgs: ModCall получен без аргументов.
+		ModCallFirstArgString: Первый аргумент ModCall должен быть строковым сообщением.
+		ModCallExpectedPlayer: ModCall '{0}': Ожидался Player или playerID как второй аргумент.
+		ModCallNotEnoughArgs: "{0}: Недостаточно аргументов."
+		ModCallIncorrectArgs: "{0}: Некорректные аргументы."
+		ModCallUnknownMessage: Неизвестное сообщение ModCall: {0}
+	}
+}
