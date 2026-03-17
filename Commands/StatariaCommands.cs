@@ -1,5 +1,6 @@
 using Terraria.ModLoader;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 using System;
@@ -19,9 +20,9 @@ namespace Stataria
 
         public override string Command => "stataria";
 
-        public override string Usage => "/stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>";
+        public override string Usage => Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.Usage");
 
-        public override string Description => "Commands for Stataria mod";
+        public override string Description => Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.Description");
 
         private bool IsAdmin(CommandCaller caller)
         {
@@ -32,13 +33,13 @@ namespace Stataria
                     var steamId = SteamUser.GetSteamID();
                     if (steamId.m_SteamID.ToString() != AdminSteamID)
                     {
-                        caller.Reply("You do not have permission to use this command.", Color.Red);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.NoPermission"), Color.Red);
                         return false;
                     }
                 }
                 else
                 {
-                    caller.Reply("Steam not available. Cannot verify admin identity.", Color.Red);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SteamNotAvailable"), Color.Red);
                     return false;
                 }
             }
@@ -52,7 +53,7 @@ namespace Stataria
 
             if (args.Length == 0)
             {
-                caller.Reply("Usage: " + Usage, Color.Red);
+                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.UsagePrefix", Usage), Color.Red);
                 return;
             }
 
@@ -90,7 +91,7 @@ namespace Stataria
                         rpg.SyncAbilities();
                     }
 
-                    caller.Reply("Stataria reset!", Color.Orange);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.ResetSuccess"), Color.Orange);
                     break;
 
                 case "selfreset":
@@ -111,9 +112,9 @@ namespace Stataria
                             rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
                         }
 
-                        caller.Reply($"Level set to {level}", Color.LightGreen);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetLevelSuccess", level), Color.LightGreen);
                     }
-                    else caller.Reply("Usage: /stataria setlevel <number>", Color.Red);
+                    else caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetLevelUsage"), Color.Red);
                     break;
 
                 case "setxp":
@@ -128,9 +129,9 @@ namespace Stataria
                             rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
                         }
 
-                        caller.Reply($"XP set to {xp:N0}", Color.Yellow);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetXPSuccess", xp.ToString("N0")), Color.Yellow);
                     }
-                    else caller.Reply("Usage: /stataria setxp <number>", Color.Red);
+                    else caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetXPUsage"), Color.Red);
                     break;
 
                 case "setpoints":
@@ -149,9 +150,9 @@ namespace Stataria
                                     rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
                                 }
 
-                                caller.Reply($"Rebirth Points set to {rebirthPts}", Color.Gold);
+                                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetPointsRPSuccess", rebirthPts), Color.Gold);
                             }
-                            else caller.Reply("Usage: /stataria setpoints rp <number>", Color.Red);
+                            else caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetPointsRPUsage"), Color.Red);
                         }
                         else if (int.TryParse(args[1], out int statPts))
                         {
@@ -162,14 +163,14 @@ namespace Stataria
                                 rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
                             }
 
-                            caller.Reply($"Stat points set to {statPts}", Color.Purple);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetPointsStatSuccess", statPts), Color.Purple);
                         }
                         else
                         {
-                            caller.Reply("Usage: /stataria setpoints <number> or /stataria setpoints rp <number>", Color.Red);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetPointsUsage"), Color.Red);
                         }
                     }
-                    else caller.Reply("Usage: /stataria setpoints <number> or /stataria setpoints rp <number>", Color.Red);
+                    else caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetPointsUsage"), Color.Red);
                     break;
 
                 case "setstat":
@@ -185,12 +186,12 @@ namespace Stataria
                                 rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
                             }
 
-                            caller.Reply($"{args[1].ToUpper()} set to {val}", Color.Green);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetStatSuccess", args[1].ToUpper(), val), Color.Green);
                         }
                         else
-                            caller.Reply("Unknown stat name. Valid: vit, str, agi, int, luc, end, pow, dex, spr, tch, rge, brd, hlr, clk, blh, hnt, gmb, shm, thr", Color.Red);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetStatUnknown"), Color.Red);
                     }
-                    else caller.Reply("Usage: /stataria setstat <name> <value>", Color.Red);
+                    else caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetStatUsage"), Color.Red);
                     break;
 
                 case "clearbosses":
@@ -203,7 +204,7 @@ namespace Stataria
                         rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
                     }
 
-                    caller.Reply("Rewarded boss XP progress cleared.", Color.Cyan);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.ClearBossesSuccess"), Color.Cyan);
                     break;
 
                 case "syncbosses":
@@ -212,11 +213,11 @@ namespace Stataria
                     if (Main.netMode == NetmodeID.Server || Main.netMode == NetmodeID.MultiplayerClient)
                     {
                         StatariaSystem.SyncGlobalBosses();
-                        caller.Reply("Forced boss list sync.", Color.Green);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SyncBossesSuccess"), Color.Green);
                     }
                     else
                     {
-                        caller.Reply("Cannot sync in single player.", Color.Red);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SyncBossesSinglePlayer"), Color.Red);
                     }
                     break;
 
@@ -226,8 +227,8 @@ namespace Stataria
                     bool newDebugMode = !StatariaLogger.GlobalDebugMode;
                     StatariaLogger.UpdateDebugMode(ModContent.GetInstance<Stataria>(), newDebugMode);
 
-                    caller.Reply($"Debug mode: {(StatariaLogger.GlobalDebugMode ? "ON" : "OFF")}", Color.Yellow);
-                    StatariaLogger.Info($"Debug mode toggled to {(StatariaLogger.GlobalDebugMode ? "ON" : "OFF")}");
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DebugModeToggle", StatariaLogger.GlobalDebugMode ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOn") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOff")), Color.Yellow);
+                    StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DebugModeToggleLog", StatariaLogger.GlobalDebugMode ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOn") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOff")));
                     break;
 
                 case "diagnose":
@@ -239,40 +240,40 @@ namespace Stataria
                     bool calIntegrationOk = CalamitySupportHelper.IsCalamityIntegrationWorking();
                     bool thorIntegrationOk = ThoriumSupportHelper.IsThoriumIntegrationWorking();
 
-                    caller.Reply("System Diagnostics:", Color.Yellow);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseHeader"), Color.Yellow);
 
                     if (CalamitySupportHelper.CalamityLoaded) {
-                        caller.Reply($"Calamity integration status: {(calIntegrationOk ? "WORKING" : "ERRORS DETECTED")}",
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseCalStatus", calIntegrationOk ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusWorking") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusErrorsDetected")),
                                     calIntegrationOk ? Color.Green : Color.Red);
-                        StatariaLogger.Info($"Calamity integration status: {(calIntegrationOk ? "WORKING" : "ERRORS DETECTED")}");
+                        StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseCalStatus", calIntegrationOk ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusWorking") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusErrorsDetected")));
 
                         if (!calIntegrationOk)
                         {
-                            caller.Reply("Found fields:", Color.Yellow);
-                            caller.Reply($"Rogue Class: {CalamitySupportHelper.FoundRogueClass}",
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseFoundFields"), Color.Yellow);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RogueClass", CalamitySupportHelper.FoundRogueClass),
                                         CalamitySupportHelper.FoundRogueClass ? Color.Green : Color.Red);
-                            StatariaLogger.Info($"Rogue Class: {CalamitySupportHelper.FoundRogueClass}");
-                            StatariaLogger.Info($"Rogue Stealth: {CalamitySupportHelper.FoundRogueStealth}");
-                            StatariaLogger.Info($"Max Stealth: {CalamitySupportHelper.FoundRogueStealthMax}");
-                            StatariaLogger.Info($"Standstill Gen: {CalamitySupportHelper.FoundStealthGenStandstill}");
-                            StatariaLogger.Info($"Moving Gen: {CalamitySupportHelper.FoundStealthGenMoving}");
-                            StatariaLogger.Info($"Stealth Damage: {CalamitySupportHelper.FoundStealthDamage}");
-                            StatariaLogger.Info($"Rogue Velocity: {CalamitySupportHelper.FoundRogueVelocity}");
-                            StatariaLogger.Info($"Rogue Ammo Cost: {CalamitySupportHelper.FoundRogueAmmoCost}");
-                            StatariaLogger.Info($"Rage: {CalamitySupportHelper.FoundRage}");
-                            StatariaLogger.Info($"Rage Max: {CalamitySupportHelper.FoundRageMax}");
-                            StatariaLogger.Info($"Rage Duration: {CalamitySupportHelper.FoundRageDuration}");
-                            StatariaLogger.Info($"Rage Damage: {CalamitySupportHelper.FoundRageDamage}");
-                            StatariaLogger.Info($"Adrenaline: {CalamitySupportHelper.FoundAdrenaline}");
-                            StatariaLogger.Info($"Adrenaline Max: {CalamitySupportHelper.FoundAdrenalineMax}");
-                            StatariaLogger.Info($"Adrenaline Duration: {CalamitySupportHelper.FoundAdrenalineDuration}");
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RogueClass", CalamitySupportHelper.FoundRogueClass));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RogueStealth", CalamitySupportHelper.FoundRogueStealth));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_MaxStealth", CalamitySupportHelper.FoundRogueStealthMax));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_StandstillGen", CalamitySupportHelper.FoundStealthGenStandstill));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_MovingGen", CalamitySupportHelper.FoundStealthGenMoving));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_StealthDamage", CalamitySupportHelper.FoundStealthDamage));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RogueVelocity", CalamitySupportHelper.FoundRogueVelocity));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RogueAmmoCost", CalamitySupportHelper.FoundRogueAmmoCost));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_Rage", CalamitySupportHelper.FoundRage));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RageMax", CalamitySupportHelper.FoundRageMax));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RageDuration", CalamitySupportHelper.FoundRageDuration));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RageDamage", CalamitySupportHelper.FoundRageDamage));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_Adrenaline", CalamitySupportHelper.FoundAdrenaline));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_AdrenalineMax", CalamitySupportHelper.FoundAdrenalineMax));
+                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_AdrenalineDuration", CalamitySupportHelper.FoundAdrenalineDuration));
                         }
                     }
 
                     if (ThoriumSupportHelper.ThoriumLoaded) {
-                        caller.Reply($"Thorium integration status: {(thorIntegrationOk ? "WORKING" : "ERRORS DETECTED")}",
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseThorStatus", thorIntegrationOk ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusWorking") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusErrorsDetected")),
                                     thorIntegrationOk ? Color.Green : Color.Red);
-                        StatariaLogger.Info($"Thorium integration status: {(thorIntegrationOk ? "WORKING" : "ERRORS DETECTED")}");
+                        StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseThorStatus", thorIntegrationOk ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusWorking") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusErrorsDetected")));
                     }
                     break;
 
@@ -284,65 +285,65 @@ namespace Stataria
 
                     if (heldItem == null || heldItem.IsAir)
                     {
-                        caller.Reply("No weapon equipped.", Color.Red);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugNoWeapon"), Color.Red);
                         return;
                     }
 
-                    caller.Reply($"===== Weapon Debug Info =====", Color.Yellow);
-                    caller.Reply($"Name: {heldItem.Name}", Color.White);
-                    caller.Reply($"Type: {heldItem.type}", Color.White);
-                    caller.Reply($"Base Damage: {heldItem.damage}", Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugHeader"), Color.Yellow);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugName", heldItem.Name), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugItemType", heldItem.type), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugBaseDamage", heldItem.damage), Color.White);
 
                     string damageTypeName = heldItem.DamageType?.GetType().Name ?? "None";
                     string damageTypeString = heldItem.DamageType?.ToString() ?? "None";
 
-                    caller.Reply($"DamageType Class: {damageTypeName}", Color.White);
-                    caller.Reply($"DamageType String: {damageTypeString}", Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugDamageTypeClass", damageTypeName), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugDamageTypeString", damageTypeString), Color.White);
 
-                    caller.Reply("Damage Classes:", Color.White);
-                    caller.Reply($"  Melee: {heldItem.CountsAsClass(DamageClass.Melee)}", Color.White);
-                    caller.Reply($"  Ranged: {heldItem.CountsAsClass(DamageClass.Ranged)}", Color.White);
-                    caller.Reply($"  Magic: {heldItem.CountsAsClass(DamageClass.Magic)}", Color.White);
-                    caller.Reply($"  Summon: {heldItem.CountsAsClass(DamageClass.Summon)}", Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugDamageClasses"), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugMelee", heldItem.CountsAsClass(DamageClass.Melee)), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugRanged", heldItem.CountsAsClass(DamageClass.Ranged)), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugMagic", heldItem.CountsAsClass(DamageClass.Magic)), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugSummon", heldItem.CountsAsClass(DamageClass.Summon)), Color.White);
 
                     if (heldItem.ModItem != null)
                     {
-                        caller.Reply("Mod Item Info:", Color.White);
-                        caller.Reply($"  Mod: {heldItem.ModItem.Mod.Name}", Color.White);
-                        caller.Reply($"  Class: {heldItem.ModItem.GetType().Name}", Color.White);
-                        caller.Reply($"  Namespace: {heldItem.ModItem.GetType().Namespace}", Color.White);
-                        caller.Reply($"  FullName: {heldItem.ModItem.GetType().FullName}", Color.White);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugModItemInfo"), Color.White);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugMod", heldItem.ModItem.Mod.Name), Color.White);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugItemClass", heldItem.ModItem.GetType().Name), Color.White);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugNamespace", heldItem.ModItem.GetType().Namespace), Color.White);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugFullName", heldItem.ModItem.GetType().FullName), Color.White);
                     }
 
                     if (CalamitySupportHelper.CalamityLoaded)
                     {
                         bool isRogueWeapon = CalamitySupportHelper.IsRogueWeapon(heldItem);
-                        caller.Reply($"Is Rogue Weapon: {isRogueWeapon}",
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugIsRogueWeapon", isRogueWeapon),
                             isRogueWeapon ? Color.Green : Color.Red);
 
-                        caller.Reply("Rogue Detection Details:", Color.White);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugRogueDetectionDetails"), Color.White);
 
                         if (heldItem.ModItem?.Mod?.Name == "CalamityMod")
                         {
-                            caller.Reply("  Is Calamity ModItem: True", Color.Green);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugIsCalamityModItem"), Color.Green);
                         }
 
-                        StatariaLogger.Debug($"Weapon debug: {heldItem.Name} is Rogue weapon: {isRogueWeapon}");
+                        StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugRogueWeaponLog", heldItem.Name, isRogueWeapon));
                     }
                     else
                     {
-                        caller.Reply("Calamity mod not loaded.", Color.Yellow);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugCalamityNotLoaded"), Color.Yellow);
                     }
 
                     var config = ModContent.GetInstance<StatariaConfig>();
 
-                    caller.Reply("Stat Effects:", Color.Yellow);
-                    caller.Reply($"  STR: {rpg.STR} (Melee DMG: +{rpg.STR * (config.statSettings.STR_Damage / 100f):F2})", Color.White);
-                    caller.Reply($"  INT: {rpg.INT} (Magic DMG: +{rpg.INT * (config.statSettings.INT_Damage / 100f):F2})", Color.White);
-                    caller.Reply($"  DEX: {rpg.DEX} (Ranged DMG: +{rpg.DEX * (config.statSettings.DEX_Damage / 100f):F2})", Color.White);
-                    caller.Reply($"  SPR: {rpg.SPR} (Summon DMG: +{rpg.SPR * (config.statSettings.SPR_Damage / 100f):F2})", Color.White);
-                    caller.Reply($"  RGE: {rpg.RGE} (Rogue DMG: +{rpg.RGE * (config.modIntegration.RGE_Damage / 100f):F2})", Color.White);
-                    caller.Reply($"  POW: {rpg.POW} (Other DMG: +{rpg.POW * (config.statSettings.POW_Damage / 100f):F2})", Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugStatEffects"), Color.Yellow);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugSTR", rpg.STR, (rpg.STR * (config.statSettings.STR_Damage / 100f)).ToString("F2")), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugINT", rpg.INT, (rpg.INT * (config.statSettings.INT_Damage / 100f)).ToString("F2")), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugDEX", rpg.DEX, (rpg.DEX * (config.statSettings.DEX_Damage / 100f)).ToString("F2")), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugSPR", rpg.SPR, (rpg.SPR * (config.statSettings.SPR_Damage / 100f)).ToString("F2")), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugRGE", rpg.RGE, (rpg.RGE * (config.modIntegration.RGE_Damage / 100f)).ToString("F2")), Color.White);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugPOW", rpg.POW, (rpg.POW * (config.statSettings.POW_Damage / 100f)).ToString("F2")), Color.White);
 
                     string appliedStat = "None";
                     float statBonus = 0f;
@@ -374,8 +375,8 @@ namespace Stataria
                         statBonus = rpg.POW * (config.statSettings.POW_Damage / 100f);
                     }
 
-                    caller.Reply($"Applied Stat Boost: {appliedStat} (+{statBonus:F2})", Color.Yellow);
-                    StatariaLogger.Debug($"Applied stat boost: {appliedStat} (+{statBonus:F2})");
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugAppliedStatBoost", appliedStat, statBonus.ToString("F2")), Color.Yellow);
+                    StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.WeaponDebugAppliedStatBoostLog", appliedStat, statBonus.ToString("F2")));
                     break;
 
                 case "cal":
@@ -383,20 +384,20 @@ namespace Stataria
 
                     if (!CalamitySupportHelper.CalamityLoaded)
                     {
-                        caller.Reply("Error: Calamity Mod not detected. These commands require Calamity Mod.", Color.Red);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalCalamityNotDetected"), Color.Red);
                         return;
                     }
 
                     var configCal = ModContent.GetInstance<StatariaConfig>();
                     if (!configCal.modIntegration.EnableCalamityIntegration)
                     {
-                        caller.Reply("Error: Calamity integration is disabled in the config.", Color.Red);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalIntegrationDisabled"), Color.Red);
                         return;
                     }
 
                     if (args.Length < 2)
                     {
-                        caller.Reply("Usage: /stataria cal <fillrage | filladrenaline | infrage | infadren>", Color.Red);
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalUsage"), Color.Red);
                         return;
                     }
 
@@ -407,12 +408,12 @@ namespace Stataria
                             {
                                 float rageMax = CalamitySupportHelper.GetRageMax(caller.Player);
                                 CalamitySupportHelper.SetRage(caller.Player, rageMax);
-                                caller.Reply($"Rage filled to maximum ({rageMax}).", Color.Orange);
-                                StatariaLogger.Debug($"Rage filled to maximum ({rageMax}).");
+                                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalFillRageSuccess", rageMax), Color.Orange);
+                                StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalFillRageSuccess", rageMax));
                             }
                             else
                             {
-                                caller.Reply("Error: Could not access Rage values.", Color.Red);
+                                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalFillRageError"), Color.Red);
                             }
                             break;
 
@@ -421,20 +422,20 @@ namespace Stataria
                             {
                                 float adrenalineMax = CalamitySupportHelper.GetAdrenalineMax(caller.Player);
                                 CalamitySupportHelper.SetAdrenaline(caller.Player, adrenalineMax);
-                                caller.Reply($"Adrenaline filled to maximum ({adrenalineMax}).", Color.Cyan);
-                                StatariaLogger.Debug($"Adrenaline filled to maximum ({adrenalineMax}).");
+                                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalFillAdrenalineSuccess", adrenalineMax), Color.Cyan);
+                                StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalFillAdrenalineSuccess", adrenalineMax));
                             }
                             else
                             {
-                                caller.Reply("Error: Could not access Adrenaline values.", Color.Red);
+                                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalFillAdrenalineError"), Color.Red);
                             }
                             break;
 
                         case "infrage":
                             CalamitySupportHelper.ToggleInfiniteRage();
-                            caller.Reply($"Infinite Rage: {(CalamitySupportHelper.InfiniteRageEnabled ? "ON" : "OFF")}",
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalInfRageToggle", CalamitySupportHelper.InfiniteRageEnabled ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOn") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOff")),
                                         CalamitySupportHelper.InfiniteRageEnabled ? Color.Green : Color.Red);
-                            StatariaLogger.Debug($"Infinite Rage toggled to: {(CalamitySupportHelper.InfiniteRageEnabled ? "ON" : "OFF")}");
+                            StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalInfRageToggleLog", CalamitySupportHelper.InfiniteRageEnabled ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOn") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOff")));
                             if (CalamitySupportHelper.InfiniteRageEnabled)
                             {
                                 float rageMax = CalamitySupportHelper.GetRageMax(caller.Player);
@@ -444,9 +445,9 @@ namespace Stataria
 
                         case "infadren":
                             CalamitySupportHelper.ToggleInfiniteAdrenaline();
-                            caller.Reply($"Infinite Adrenaline: {(CalamitySupportHelper.InfiniteAdrenalineEnabled ? "ON" : "OFF")}",
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalInfAdrenalineToggle", CalamitySupportHelper.InfiniteAdrenalineEnabled ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOn") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOff")),
                                         CalamitySupportHelper.InfiniteAdrenalineEnabled ? Color.Green : Color.Red);
-                            StatariaLogger.Debug($"Infinite Adrenaline toggled to: {(CalamitySupportHelper.InfiniteAdrenalineEnabled ? "ON" : "OFF")}");
+                            StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.CalInfAdrenalineToggleLog", CalamitySupportHelper.InfiniteAdrenalineEnabled ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOn") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusOff")));
                             if (CalamitySupportHelper.InfiniteAdrenalineEnabled)
                             {
                                 float adrenalineMax = CalamitySupportHelper.GetAdrenalineMax(caller.Player);
@@ -455,7 +456,7 @@ namespace Stataria
                             break;
 
                         default:
-                            caller.Reply("Unknown Calamity subcommand. Usage: /stataria cal <fillrage | filladrenaline | infrage | infadren>", Color.Red);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.UnknownCalSubcommand"), Color.Red);
                             break;
                     }
                     break;
@@ -497,28 +498,28 @@ namespace Stataria
                         testIndex,
                         testCount,
                         () => {
-                            caller.Reply("XP accepted!", Color.Green);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.TestXPUIAccepted"), Color.Green);
                             XPVerificationUI.HideVerification();
                         },
                         () => {
-                            caller.Reply("XP rejected!", Color.Red);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.TestXPUIRejected"), Color.Red);
                             XPVerificationUI.HideVerification();
                         },
                         () => {
-                            caller.Reply("All XP accepted!", Color.Green);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.TestXPUIAllAccepted"), Color.Green);
                             XPVerificationUI.HideVerification();
                         },
                         () => {
-                            caller.Reply("All XP rejected!", Color.Red);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.TestXPUIAllRejected"), Color.Red);
                             XPVerificationUI.HideVerification();
                         }
                     );
 
-                    caller.Reply($"Showing XP verification UI with {testAmount} XP from '{testSource}', notification {testIndex}/{testCount}", Color.Yellow);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.TestXPUIShowing", testAmount, testSource, testIndex, testCount), Color.Yellow);
                     break;
 
                 default:
-                    caller.Reply("Unknown subcommand. " + Usage, Color.Red);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.UnknownSubcommand", Usage), Color.Red);
                     break;
             }
         }
@@ -529,7 +530,7 @@ namespace Stataria
 
             if (Main.netMode == NetmodeID.MultiplayerClient && !config.multiplayerSettings.AllowSelfResetInMultiplayer)
             {
-                caller.Reply("Self-reset is disabled in multiplayer on this server.", Color.Red);
+                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SelfResetMultiplayerDisabled"), Color.Red);
                 return;
             }
 
@@ -550,9 +551,9 @@ namespace Stataria
             else
             {
                 selfResetConfirmations[playerId] = now;
-                caller.Reply("WARNING: This will completely reset your Stataria progress!", Color.Red);
-                caller.Reply("All levels, stats, XP, rebirth progress, and abilities will be lost!", Color.Red);
-                caller.Reply("Type '/stataria selfreset' again within 30 seconds to confirm.", Color.Yellow);
+                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SelfResetWarning1"), Color.Red);
+                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SelfResetWarning2"), Color.Red);
+                caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SelfResetWarning3"), Color.Yellow);
             }
         }
 
@@ -591,7 +592,7 @@ namespace Stataria
                 rpg.SyncAbilities();
             }
 
-            caller.Reply("Your Stataria progress has been completely reset!", Color.Orange);
+            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SelfResetSuccess"), Color.Orange);
         }
 
         private bool SetStatByName(RPGPlayer rpg, string name, int value)

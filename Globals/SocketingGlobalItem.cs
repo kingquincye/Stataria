@@ -7,6 +7,7 @@ using Terraria.ID;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Microsoft.CodeAnalysis;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -132,7 +133,7 @@ namespace Stataria
             if (!configClient.ShowSocketedCoresInTooltip)
                 return;
 
-            tooltips.Add(new TooltipLine(Mod, "SocketedCoresHeader", "Socketed Cores:")
+            tooltips.Add(new TooltipLine(Mod, "SocketedCoresHeader", Language.GetTextValue("Mods.Stataria.UI.SocketedCoresHeader"))
             {
                 OverrideColor = Color.Gold
             });
@@ -141,12 +142,12 @@ namespace Stataria
             {
                 string effect = core.Type switch
                 {
-                    CoreType.Power => $"+{core.GetEffectValue() * core.Count:0.#}% Damage",
-                    CoreType.Force => CanReceiveKnockback(item) ? $"+{core.GetEffectValue() * core.Count:0.#}% Knockback" : "",
-                    CoreType.Precision => CanReceiveCrit(item) ? $"+{core.GetEffectValue() * core.Count:0.#}% Crit" : "",
-                    CoreType.Defense => $"+{core.GetEffectValue() * core.Count:0.#} Defense",
-                    CoreType.Vitality => $"+{core.GetEffectValue() * core.Count:0.#} Max Health",
-                    CoreType.Evasion => $"+{core.GetEffectValue() * core.Count:0.#}% Evade Chance",
+                    CoreType.Power => Language.GetTextValue("Mods.Stataria.UI.CoreDamage", (core.GetEffectValue() * core.Count).ToString("0.#")),
+                    CoreType.Force => CanReceiveKnockback(item) ? Language.GetTextValue("Mods.Stataria.UI.CoreKnockback", (core.GetEffectValue() * core.Count).ToString("0.#")) : "",
+                    CoreType.Precision => CanReceiveCrit(item) ? Language.GetTextValue("Mods.Stataria.UI.CoreCrit", (core.GetEffectValue() * core.Count).ToString("0.#")) : "",
+                    CoreType.Defense => Language.GetTextValue("Mods.Stataria.UI.CoreDefense", (core.GetEffectValue() * core.Count).ToString("0.#")),
+                    CoreType.Vitality => Language.GetTextValue("Mods.Stataria.UI.CoreVitality", (core.GetEffectValue() * core.Count).ToString("0.#")),
+                    CoreType.Evasion => Language.GetTextValue("Mods.Stataria.UI.CoreEvasion", (core.GetEffectValue() * core.Count).ToString("0.#")),
                     _ => ""
                 };
 

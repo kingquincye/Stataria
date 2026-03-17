@@ -32,8 +32,8 @@ namespace Stataria.Buffs
                     float critChance = stacks * config.roleSettings.BlackKnightDarkFocusCritChancePerStack;
                     float critDamage = stacks * config.roleSettings.BlackKnightDarkFocusCritDamagePerStack;
                     
-                    buffName = $"Dark Focus ({stacks}/{maxStacks})";
-                    tip = $"Next melee attack: +{critChance:0.#}% crit chance, +{critDamage:0.#}% crit damage";
+                    buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.DarkFocusBuff.DynamicName", stacks, maxStacks);
+                    tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.DarkFocusBuff.DynamicTooltip", critChance.ToString("0.#"), critDamage.ToString("0.#"));
                 }
             }
         }

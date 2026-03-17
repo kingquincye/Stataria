@@ -25,13 +25,13 @@ namespace Stataria.Buffs
 
             if (isGuardian)
             {
-                buffName = "Guardian Aura (Self)";
-                tip = $"You are radiating protective energy\nAura radius: {config.roleSettings.GuardianAuraRadius:0.#} pixels";
+                buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.GuardianAuraBuff.GuardianNameSelf");
+                tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.GuardianAuraBuff.GuardianTooltipSelf", config.roleSettings.GuardianAuraRadius.ToString("0.#"));
             }
             else
             {
-                buffName = "Guardian Aura";
-                tip = $"Within a Guardian's protective aura\n+{config.roleSettings.GuardianTeammateDefenseBonus:0.#}% defense\nSharing damage with Guardian";
+                buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.GuardianAuraBuff.GuardianNameTeammate");
+                tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.GuardianAuraBuff.GuardianTooltipTeammate", config.roleSettings.GuardianTeammateDefenseBonus.ToString("0.#"));
             }
         }
 

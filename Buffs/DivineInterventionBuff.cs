@@ -44,8 +44,8 @@ namespace Stataria.Buffs
                 if (buffIndex >= 0)
                 {
                     float timeLeft = player.buffTime[buffIndex] / 60f;
-                    buffName = $"Divine Intervention ({timeLeft:0.0}s)";
-                    tip = "Protected from harmful debuffs by divine grace";
+                    buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.DivineInterventionBuff.DynamicName", timeLeft.ToString("0.0"));
+                    tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.DivineInterventionBuff.DynamicTooltip");
                 }
             }
         }

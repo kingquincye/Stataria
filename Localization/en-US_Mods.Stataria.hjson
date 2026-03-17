@@ -6,6 +6,110 @@ Keybinds: {
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
 
+Commands: {
+	StatariaCommands: {
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Description: Commands for Stataria mod
+		NoPermission: You do not have permission to use this command.
+		SteamNotAvailable: Steam not available. Cannot verify admin identity.
+		UsagePrefix: Usage: {0}
+		ResetSuccess: Stataria reset!
+		SetLevelSuccess: Level set to {0}
+		SetLevelUsage: Usage: /stataria setlevel <number>
+		SetXPSuccess: XP set to {0}
+		SetXPUsage: Usage: /stataria setxp <number>
+		SetPointsRPSuccess: Rebirth Points set to {0}
+		SetPointsRPUsage: Usage: /stataria setpoints rp <number>
+		SetPointsStatSuccess: Stat points set to {0}
+		SetPointsUsage: Usage: /stataria setpoints <number> or /stataria setpoints rp <number>
+		SetStatSuccess: "{0} set to {1}"
+		SetStatUnknown: Unknown stat name. Valid: vit, str, agi, int, luc, end, pow, dex, spr, tch, rge, brd, hlr, clk, blh, hnt, gmb, shm, thr
+		SetStatUsage: Usage: /stataria setstat <name> <value>
+		ClearBossesSuccess: Rewarded boss XP progress cleared.
+		SyncBossesSuccess: Forced boss list sync.
+		SyncBossesSinglePlayer: Cannot sync in single player.
+		DebugModeToggle: Debug mode: {0}
+		DebugModeToggleLog: Debug mode toggled to {0}
+		DiagnoseHeader: System Diagnostics:
+		DiagnoseCalStatus: Calamity integration status: {0}
+		DiagnoseFoundFields: Found fields:
+		DiagnoseField_RogueClass: Rogue Class: {0}
+		DiagnoseField_RogueStealth: Rogue Stealth: {0}
+		DiagnoseField_MaxStealth: Max Stealth: {0}
+		DiagnoseField_StandstillGen: Standstill Gen: {0}
+		DiagnoseField_MovingGen: Moving Gen: {0}
+		DiagnoseField_StealthDamage: Stealth Damage: {0}
+		DiagnoseField_RogueVelocity: Rogue Velocity: {0}
+		DiagnoseField_RogueAmmoCost: Rogue Ammo Cost: {0}
+		DiagnoseField_Rage: Rage: {0}
+		DiagnoseField_RageMax: Rage Max: {0}
+		DiagnoseField_RageDuration: Rage Duration: {0}
+		DiagnoseField_RageDamage: Rage Damage: {0}
+		DiagnoseField_Adrenaline: Adrenaline: {0}
+		DiagnoseField_AdrenalineMax: Adrenaline Max: {0}
+		DiagnoseField_AdrenalineDuration: Adrenaline Duration: {0}
+		DiagnoseThorStatus: Thorium integration status: {0}
+		WeaponDebugNoWeapon: No weapon equipped.
+		WeaponDebugHeader: ===== Weapon Debug Info =====
+		WeaponDebugName: Name: {0}
+		WeaponDebugItemType: Type: {0}
+		WeaponDebugBaseDamage: Base Damage: {0}
+		WeaponDebugDamageTypeClass: DamageType Class: {0}
+		WeaponDebugDamageTypeString: DamageType String: {0}
+		WeaponDebugDamageClasses: Damage Classes:
+		WeaponDebugMelee: "  Melee: {0}"
+		WeaponDebugRanged: "  Ranged: {0}"
+		WeaponDebugMagic: "  Magic: {0}"
+		WeaponDebugSummon: "  Summon: {0}"
+		WeaponDebugModItemInfo: Mod Item Info:
+		WeaponDebugMod: "  Mod: {0}"
+		WeaponDebugItemClass: "  Class: {0}"
+		WeaponDebugNamespace: "  Namespace: {0}"
+		WeaponDebugFullName: "  FullName: {0}"
+		WeaponDebugIsRogueWeapon: Is Rogue Weapon: {0}
+		WeaponDebugRogueDetectionDetails: Rogue Detection Details:
+		WeaponDebugIsCalamityModItem: "  Is Calamity ModItem: True"
+		WeaponDebugRogueWeaponLog: Weapon debug: {0} is Rogue weapon: {1}
+		WeaponDebugCalamityNotLoaded: Calamity mod not loaded.
+		WeaponDebugStatEffects: Stat Effects:
+		WeaponDebugSTR: "  STR: {0} (Melee DMG: +{1})"
+		WeaponDebugINT: "  INT: {0} (Magic DMG: +{1})"
+		WeaponDebugDEX: "  DEX: {0} (Ranged DMG: +{1})"
+		WeaponDebugSPR: "  SPR: {0} (Summon DMG: +{1})"
+		WeaponDebugRGE: "  RGE: {0} (Rogue DMG: +{1})"
+		WeaponDebugPOW: "  POW: {0} (Other DMG: +{1})"
+		WeaponDebugAppliedStatBoost: Applied Stat Boost: {0} (+{1})
+		WeaponDebugAppliedStatBoostLog: Applied stat boost: {0} (+{1})
+		CalCalamityNotDetected: Error: Calamity Mod not detected. These commands require Calamity Mod.
+		CalIntegrationDisabled: Error: Calamity integration is disabled in the config.
+		CalUsage: Usage: /stataria cal <fillrage | filladrenaline | infrage | infadren>
+		CalFillRageSuccess: Rage filled to maximum ({0}).
+		CalFillRageError: Error: Could not access Rage values.
+		CalFillAdrenalineSuccess: Adrenaline filled to maximum ({0}).
+		CalFillAdrenalineError: Error: Could not access Adrenaline values.
+		CalInfRageToggle: Infinite Rage: {0}
+		CalInfAdrenalineToggle: Infinite Adrenaline: {0}
+		CalInfRageToggleLog: Infinite Rage toggled to: {0}
+		CalInfAdrenalineToggleLog: Infinite Adrenaline toggled to: {0}
+		UnknownCalSubcommand: Unknown Calamity subcommand. Usage: /stataria cal <fillrage | filladrenaline | infrage | infadren>
+		TestXPUIAccepted: XP accepted!
+		TestXPUIRejected: XP rejected!
+		TestXPUIAllAccepted: All XP accepted!
+		TestXPUIAllRejected: All XP rejected!
+		TestXPUIShowing: Showing XP verification UI with {0} XP from '{1}', notification {2}/{3}
+		UnknownSubcommand: Unknown subcommand. {0}
+		SelfResetMultiplayerDisabled: Self-reset is disabled in multiplayer on this server.
+		SelfResetWarning1: WARNING: This will completely reset your Stataria progress!
+		SelfResetWarning2: All levels, stats, XP, rebirth progress, and abilities will be lost!
+		SelfResetWarning3: Type '/stataria selfreset' again within 30 seconds to confirm.
+		SelfResetSuccess: Your Stataria progress has been completely reset!
+		StatusOn: ON
+		StatusOff: OFF
+		StatusWorking: WORKING
+		StatusErrorsDetected: ERRORS DETECTED
+	}
+}
+
 Configs: {
 	StatariaConfig: {
 		DisplayName: Server Config
@@ -1895,34 +1999,66 @@ Configs: {
 }
 
 Buffs: {
-	BleedDebuff: {
-		Description: Losing health over time
-		DisplayName: Bleed
-	}
-
 	ArcaneSurgeBuff: {
-		DisplayName: Arcane Surge
-		Description: Arcane power surging through your spells
-	}
-
-	DarkFocusBuff: {
-		DisplayName: Dark Focus
-		Description: Magical energy focused through combat prowess
+		DynamicName: Arcane Surge ({0}s)
+		DynamicTooltip: +{0}% magic damage
+		Description: Mods.Stataria.Buffs.ArcaneSurgeBuff.Description
+		DisplayName: Arcane Surge Buff
 	}
 
 	ClericAuraBuff: {
-		DisplayName: Cleric Aura
-		Description: Within a protective divine aura
+		GuardianNameSelf: Cleric Aura (Self)
+		GuardianTooltipSelf:
+			'''
+			You are radiating divine protection
+			Aura radius: {0} pixels
+			'''
+		GuardianNameTeammate: Cleric Aura
+		GuardianTooltipTeammate:
+			'''
+			Within a Cleric's protective aura
+			+{0}% max health
+			Receiving divine regeneration
+			'''
+		Description: Mods.Stataria.Buffs.ClericAuraBuff.Description
+		DisplayName: Cleric Aura Buff
+	}
+
+	DarkFocusBuff: {
+		DynamicName: Dark Focus ({0}/{1})
+		DynamicTooltip: Next melee attack: +{0}% crit chance, +{1}% crit damage
+		Description: Mods.Stataria.Buffs.DarkFocusBuff.Description
+		DisplayName: Dark Focus Buff
 	}
 
 	DivineInterventionBuff: {
-		Description: Protected from harmful debuffs by divine grace
-		DisplayName: Divine Intervention
+		DynamicName: Divine Intervention ({0}s)
+		DynamicTooltip: Protected from harmful debuffs by divine grace
+		Description: Mods.Stataria.Buffs.DivineInterventionBuff.Description
+		DisplayName: Divine Intervention Buff
 	}
 
 	GuardianAuraBuff: {
-		DisplayName: Guardian Aura
-		Description: Within a protective guardian aura
+		GuardianNameSelf: Guardian Aura (Self)
+		GuardianTooltipSelf:
+			'''
+			You are radiating protective energy
+			Aura radius: {0} pixels
+			'''
+		GuardianNameTeammate: Guardian Aura
+		GuardianTooltipTeammate:
+			'''
+			Within a Guardian's protective aura
+			+{0}% defense
+			Sharing damage with Guardian
+			'''
+		Description: Mods.Stataria.Buffs.GuardianAuraBuff.Description
+		DisplayName: Guardian Aura Buff
+	}
+
+	BleedDebuff: {
+		Description: Mods.Stataria.Buffs.BleedDebuff.Description
+		DisplayName: Bleed Debuff
 	}
 }
 
@@ -2069,5 +2205,482 @@ NPCs: {
 			LikeNPC_Princess: I like {NPCName}.
 			Princess_LovesNPC: I like {NPCName}.
 		}
+
+		Dialogue: {
+			Chat1: These cores... they whisper to me. Don't worry, they seem to like you.
+			Chat2: Ever wonder what happens when you cram too much power into a single sword? I have. It wasn't pretty.
+			Chat3: You can feel the energy radiating from these, can't you? Handle them with care.
+			Chat4: Each core holds a fragment of potential. It's up to you to unlock it.
+			ChatRebirth: You feel... different. Like you've seen beyond the veil. The cores resonate with that energy.
+		}
+
+		Shop: Shop
+	}
+}
+
+RebirthAbilityText: {
+	LastStand: When you would die, heal for {0}% of your max health and gain {1} seconds of immunity. {2} second cooldown.
+	ExtraAccessorySlot: Grants an additional accessory slot per level.
+	GoldenTouch: Increases the amount of coins picked up by {0}% per level.
+	Teleport: Ability to teleport to cursor position using assigned key. {0} second cooldown.
+	EnhancedSpawns: Increases enemy spawn rate by {0}% per level. Stacks with other spawn rate modifiers.
+	AutoClickerDetail: Auto-clicks at ~{0} CPS. Click effects are {1} (configurable).
+	AutoClickerDefault: Enables auto-clicking. Speed improves with levels. Effect interaction is configurable.
+	EnhancedFortune: Grants +{0} luck per level when toggled on, improving drop rates and other luck-based mechanics.
+	LevelInfo: "{0} (Level {1}/{2})"
+	Allowed: allowed
+	Prevented: prevented
+}
+
+RoleEffects: {
+	NoEffects: No effects defined.
+
+	CritGod: {
+		CritChance: • +{0}% Critical Strike Chance
+		ExcessCrit: • Excess Critical Strike Chance (over 100%) converts to +{0}% Critical Strike Damage per 1% excess
+		SummonCrits: • Your summons can now critically strike
+	}
+
+	Vampire: {
+		MaxHealth: • +{0}% Max Health
+		MoveSpeed: • +{0}% Movement Speed
+		BleedChance: • {0}% chance to inflict Bleed on attack
+		BleedDamage: • Bleed deals {0}% of enemy's max health per {1}s
+		BleedHeal: • Heal for {0}% of damage dealt to bleeding enemies
+		KillHeal: • Heal for {0}% of max health on enemy kill
+	}
+
+	Beastmaster: {
+		DamagePerMinion: • +{0}% Summon Damage per unique active minion type
+		BonusSlots: • +{0} Minion Slot{1} per {2} base minion slots
+		SPRSlotsReduced: • +{0} Minion Slot{1} per {2} SPR-gained minion slots (reduced efficiency)
+		SPRSlotsNormal: • +{0} Minion Slot{1} per {2} SPR-gained minion slots (normal efficiency)
+	}
+
+	ApexSummoner: {
+		MassiveBonus: • Massive summon damage bonus when you have exactly one type of minion active
+		DamagePerUnusedSlot: • +{0}% Summon Damage per unused minion slot
+		BonusLost: • Bonus is lost if multiple minion types are summoned
+	}
+
+	BlackKnight: {
+		MeleeScaleINT: • Melee weapons gain +{0}% damage per INT
+		MagicScaleSTR: • Magic weapons gain +{0}% damage per STR
+		DarkFocusStacks: • Magic crits grant Dark Focus stacks (max {0})
+		ConsumeDarkFocus: • Melee attacks consume Dark Focus: +{0}% crit chance and +{1}% crit damage per stack
+		ManaRestore: • Melee crits restore {0} mana
+		ArcaneSurge: • Melee crits grant Arcane Surge: +{0}% magic damage for {1}s
+		ArcaneSurgeScale: • Arcane Surge scales with melee crit damage (+{0}% per damage point)
+	}
+
+	Cleric: {
+		MaxHealth: • +{0}% Max Health
+		DefensePenalty: • -{0}% Defense
+		ProtectAura: • Radiates protective aura (radius: {0} pixels)
+		AuraHealth: • Teammates in aura: +{0}% max health
+		SelfRegen: • Self regeneration: {0}% max health per {1}s
+		TeamRegen: • Teammate regeneration: {0}% max health per {1}s
+		DivineIntervention: • Divine Intervention: Grants debuff immunity to team within aura for {0}s
+		DisabledRegen: • VIT regeneration effects disabled for balance
+	}
+
+	Guardian: {
+		MaxHealth: • +{0}% Max Health
+		Defense: • +{0} Defense
+		MoveSpeedPenalty: • -{0}% Movement Speed
+		DamagePenalty: • -{0}% Damage Output
+		DamageReduction: • {0}% Damage Reduction
+		Aura: • Protective aura (radius: {0} pixels)
+		AuraDefense: • Teammates in aura: +{0}% defense
+		AuraReduction: • Teammates in aura: {0}% Damage Reduction
+		ImmuneKnockback: • Immune to knockback
+		ReducedVIT: • VIT effects reduced by {0}%
+		DisabledEND: • END knockback resistance and damage reduction disabled
+	}
+}
+
+UI: {
+	SocketedCoresHeader: Socketed Cores:
+	CoreDamage: +{0}% Damage
+	CoreKnockback: +{0}% Knockback
+	CoreCrit: +{0}% Crit
+	CoreDefense: +{0} Defense
+	CoreVitality: +{0} Max Health
+	CoreEvasion: +{0}% Evade Chance
+	EnemyLevel: Lv.{0}
+
+	XPVerification: {
+		Title: Suspicious XP Gain Detected
+		Accept: Accept
+		Reject: Reject
+		AcceptAll: Accept All
+		RejectAll: Reject All
+		XPAmount: XP Amount: {0:N0}
+		Source: Source: {0}
+		PendingGains: "{0} suspicious XP gains pending"
+	}
+
+	TabBar: {
+		Stats: Stats
+		Abilities: Abilities
+		Roles: Roles
+		Socketing: Socketing
+	}
+
+	PlayerDisplay: {
+		Level: Lv.
+		RebirthPrefix: R
+		RebirthTitle: Rebirth {0}
+		LevelIndicator: Lv.{0}
+	}
+
+	SkillTree: {
+		Title: Rebirth Abilities
+		RebirthPoints: Rebirth Points: {0}
+		ResetButton: RESET
+		ShowHidden: Show Hidden
+		Cost: Cost: {0} RP
+		Hide: Hide
+		Upgrade: Upgrade
+		Unlocked: Unlocked
+		Unlock: Unlock
+		ToggleOn: On
+		ToggleOff: Off
+		RefundedRP: +{0} RP Refunded!
+	}
+
+	BulkAllocation.Header: Allocation Amount:
+
+	RoleSelection: {
+		Title: ROLE SELECTION
+		RebirthPoints: Rebirth Points: {0}
+		ActiveRole: Active Role: {0}
+		ActiveRoleDeactivated: Active Role: {0} (Deactivated)
+		ActiveRoleNone: Active Role: None
+		IndicatorActive: ● ACTIVE
+		IndicatorDeactivated: ● DEACTIVATED
+		EffectsHeader: Effects:
+		DeactivateButton: DEACTIVATE
+		ReactivateButton: REACTIVATE
+		LockedRole: LOCKED - Requires Rebirth 2
+		SwitchCostButton: SWITCH - Cost: {0} RP
+		SelectFreeButton: SELECT (Free)
+	}
+
+	Socketing: {
+		Title: Socketing System
+		RebirthPoints: Your RP: {0}
+		ItemNone: Item: ---
+		SlotsNone: Slots: - / -
+		CompatibleCoresTitle: Compatible Cores
+		AttachedCoresTitle: Attached Cores:
+		ExpandSlotButton: Expand Slot
+		CostNone: Cost: --- RP
+		AttachCoreButton: Attach Core
+		ExtractCoreButton: Extract Core
+		ItemPrefix: "Item: "
+		PlaceholderCores:
+			'''
+			(Place an item to see
+			 compatible cores)
+			'''
+		ItemDisplay: Item: {0}
+		SlotsDisplay: Slots: {0} / {1}
+		CostRP: Cost: {0} RP
+		CoreCountDisplay: "{0}: x{1}"
+		EmptyDash: ---
+		AttachedCoreDisplay: > {0} (x{1})
+	}
+
+	StatPanel: {
+		LevelText: Level: {0}
+		PointsText: Points: {0}
+		XPText: XP: {0} / {1}
+		RPText: RP: {0}
+		StatLabel: "{0}: {1}"
+		StatLabelGhost: "{0}: {1} (+{2})"
+		ResetStats: Reset Stats
+		Rebirth: Rebirth
+		Auto: Auto
+		ResetStatsTooltip: Reset all stats for free
+		AutoTooltip: Toggle automatic point allocation to checked stats
+		AutoAllocateTooltip: Check to auto-allocate points to this stat
+		RequireLevelPrompt: Requires level {0}!
+		ConfirmRebirthPrompt: Are you sure you want to Rebirth?
+		ConfirmRebirth: Confirm Rebirth
+		UnknownStat: Unknown Stat
+		XPInfoTitle: XP System Info:
+		StatPointsPerLevelBonus: Stat Points per Level: {0} + {1} (Rebirth Bonus) = {2}
+		StatPointsPerLevel: Stat Points per Level: {0}
+		DamageXP: Damage XP: {0}x damage dealt
+		KillXP: Kill XP: {0}x enemy max health
+		BossXPTitle: Boss XP:
+		BossXPFlat: "{0} flat XP"
+		BossXPPercent: "{0}% of next level"
+		RebirthXPBonus: Rebirth XP Bonus: +{0} ({1} × {2})
+		LevelCapNone: Level Cap: None (or very high)
+		DynamicLevelCap: Dynamic Level Cap (Current Cycle): {0}
+		LevelCap: Level Cap: {0}
+		StatCapsProgressive: Stat Caps: Base × {0} (Progressive)
+		StatCapsBase: Stat Caps: Base values
+		XPSplit: XP is split evenly among all eligible players
+		XPProximity: Players must be within {0} pixels of enemies to get XP
+		VIT_MaxHealth: +{0} Max Health (+{1} per point)
+		VIT_RegenDisabled: VIT regeneration effects disabled
+		VIT_HpSecReduced: +{0} HP/sec (+{1} per point, Guardian reduced)
+		VIT_LifeRegenReduced: +{0} Life Regen (+{1} per point, Guardian reduced)
+		VIT_HpSec: +{0} HP/sec (+{1} per point)
+		VIT_LifeRegen: +{0} Life Regen (+0.5 per point)
+		VIT_Healing: +{0}% Healing (+{1}% per point)
+		STR_MeleeDamage: +{0}% Melee Damage (+{1}% per point)
+		STR_MeleeKnockback: +{0}% Melee Knockback (+{1}% per point)
+		STR_MeleeArmorPen: +{0} Melee Armor Pen. (+{1} per point)
+		STR_BlackKnight: Black Knight: +{0}% Magic Damage (+{1}% per point)
+		AGI_MoveSpeed: +{0} Movement Speed (+{1} per point, diminished)
+		AGI_AttackSpeed: +{0} Attack Speed (+{1} per point, diminished)
+		AGI_WingTime: +{0} Wing Time (+{1} per point)
+		AGI_ImprovedJump: Improved Jump Height & Speed
+		INT_MaxMana: +{0} Max Mana (+{1} per point)
+		INT_ManaRegen: +{0} Mana Regen (+0.5 per point)
+		INT_MagicDamage: +{0}% Magic Damage (+{1}% per point)
+		INT_ManaCost: -{0} Mana Cost (Diminishing)
+		INT_MagicArmorPen: +{0} Magic Armor Pen. (+{1} per point)
+		INT_BlackKnight: Black Knight: +{0}% Melee Damage (+{1}% per point)
+		LUC_Crit: +{0}% Critical Chance (+{1}% per point)
+		LUC_Luck: +{0} Luck (+{1} per point)
+		LUC_Fishing: +{0} Fishing Power (+{1} per point)
+		LUC_Aggro: -{0} Aggro (-{1} per point)
+		END_Defense: +{0} Defense (+{1} per point)
+		END_ImmuneKnockback: Immune to knockback (Guardian)
+		END_KnockbackResist: +{0}% Knockback Resist (+{1}% per point)
+		END_DamageReductionDisabled: END damage reduction disabled (Guardian)
+		END_DamageReduction: -{0}% Damage Taken (Diminishing)
+		END_KnocksBackNonBosses: Knocks Back Non-Bosses
+		END_Aggro: +{0} Aggro (+{1} per point)
+		POW_GeneralDamage: +{0}% General Damage (+{1}% per point)
+		POW_OtherDamage: +{0}% Other Damage Types (+0.1% per point)
+		POW_RageDamage: +{0}% Rage Damage (+{1}% per point)
+		POW_RageDuration: +{0}s Rage Duration (+{1}s per point, max {2}s)
+		POW_AdrenalineDuration: +{0}s Adrenaline Duration (+{1}s per point)
+		DEX_RangedDamage: +{0}% Ranged Damage (+{1}% per point)
+		DEX_RangedArmorPen: +{0} Ranged Armor Pen. (+{1} per point)
+		DEX_AmmoSave: +{0}% Ammo Save Chance (+{1}% per point)
+		SPR_SummonDamage: +{0}% Summon Damage (+{1}% per point)
+		SPR_MinionSlots: +{0} Minion Slot{1} (+1 per {2} points)
+		SPR_SentrySlots: +{0} Sentry Slot{1} (+1 per {2} points)
+		SPR_BeastmasterSlots: Beastmaster: +{0} slot{1} per {2} total slots
+		SPR_BeastmasterDamage: Beastmaster: +{0}% damage per unique minion type
+		SPR_ApexSummonerDamage: Apex Summoner: +{0}% damage per unused slot (single minion type only)
+		TCH_MiningSpeed: +{0}% Mining Speed (+{1}% per point)
+		TCH_BuildSpeed: +{0}% Build Speed (+{1}% per point)
+		TCH_TilesReach: +{0} Tiles Reach (+{1} per point)
+		TCH_NoEffects: No active TCH effects.
+		RGE_RogueDamage: +{0}% Rogue Damage (+{1}% per point)
+		RGE_MaxStealth: +{0} Max Stealth (+{1} per point)
+		RGE_Velocity: +{0}% Rogue Velocity (+{1}% per point)
+		RGE_AmmoCost: -{0}% Rogue Ammo Cost (-{1}% per point)
+		RGE_Stealth50: Stealth Strikes cost 50%
+		RGE_Stealth75: Stealth Strikes cost 75%
+		RGE_Stealth85: Stealth Strikes cost 85%
+		BRD_SymphonicDamage: +{0}% Symphonic Damage (+{1}% per point)
+		BRD_SymphonicArmorPen: +{0} Symphonic Armor Pen. (+{1} per point)
+		BRD_MaxInspiration: Max Inspiration: +1 per {0} points (Thorium total caps at 30)
+		BRD_EmpowermentDuration: +{0}s Empowerment Duration (+{1}s per point)
+		HLR_RadiantDamage: +{0}% Radiant Damage (+{1}% per point)
+		HLR_RadiantArmorPen: +{0} Radiant Armor Pen. (+{1} per point)
+		HLR_HealingPower: +{0} Healing Power (+{1} per {2} points)
+		HLR_ImprovedLifeRecovery: Improved Life Recovery
+		CLK_ClickDamage: +{0}% Click Damage (+{1}% per point)
+		CLK_ClickRadius: +{0} Click Radius Units (+{1} units per point)
+		CLK_EffectsDiminishing: -{0}% Clicks for Effects (Diminishing)
+		Generic_Damage: +{0}% {1} Damage (+{2}% per point)
+	}
+}
+
+Logger: {
+	LogStarted: === {0} Log Started at {1} ===
+	EnabledAdmin: Logging enabled for admin user
+	EnabledDebug: Logging enabled via debug mode
+	EnabledServer: Logging enabled for server
+	ClearLogFailed: Failed to check/clear log file: {0}
+	WriteLogFailed: Failed to write to log file: {0}
+	Info: "[INFO] {0}"
+	Warning: "[WARNING] {0}"
+	Error: "[ERROR] {0}"
+	Debug: "[DEBUG] {0}"
+}
+
+CoreItem: {
+	CoreOfPower: Core of Power
+	CoreOfForce: Core of Force
+	CoreOfPrecision: Core of Precision
+	CoreOfDefense: Core of Defense
+	CoreOfVitality: Core of Vitality
+	CoreOfEvasion: Core of Evasion
+	UnknownCore: Unknown Core
+	CoreNameTier: "{0} T.{1}"
+	EffectPower: +{0}% Weapon Damage
+	EffectForce: +{0}% Weapon Knockback
+	EffectPrecision: +{0}% Weapon Crit Chance
+	EffectDefense: +{0} Defense
+	EffectVitality: +{0} Max Health
+	EffectEvasion: +{0}% Evade Chance
+	UsageWeapon: Can be socketed into weapons
+	UsageArmor: Can be socketed into armor
+}
+
+RPGPlayer: {
+	RetroRPSync: "{0} RP (Sync)"
+	RebirthCount: Rebirth {0}!
+	RebirthPoints: +{0} Rebirth Points!
+	StatPointsSync: +{0} Stat Points
+	RPSync: +{0} RP
+	RebirthStatPointsSync: +{0} Rebirth Stat Points
+	LevelCapReached: Level Cap Reached!
+	XPGain: +{0} XP
+	XPSource: From: {0}
+	LevelUp: Level Up! Level {0}
+	LastStand: Last Stand!
+}
+
+RebirthAbilityName: {
+	EnhancedFortune: Enhanced Fortune
+	ReducedPotionSickness: Reduced Potion Sickness
+	ExtraAccessorySlot: Extra Accessory Slot
+	LastStand: Last Stand
+	Dash: Dash
+	AutoJump: Auto-Jump
+	NoFallDamage: No Fall Damage
+	WaterFreedom: Water Freedom
+	Teleport: Teleport
+	TreasureHunter: Treasure Hunter
+	Sustenance: Sustenance
+	ArcheryMastery: Archery Mastery
+	BattleReady: Battle Ready
+	AnglerLuck: Angler's Luck
+	VitalityFortitude: Vitality & Fortitude
+	InnerCalm: Inner Calm
+	ElementalResistance: Elemental Resistance
+	ShadowVeil: Shadow Veil
+	FortuneFavored: Fortune Favored
+	ArcaneMastery: Arcane Mastery
+	MasterBuilder: Master Builder
+	BattleFury: Battle Fury
+	SurfaceSkimmer: Surface Skimmer
+	ThornGuard: Thorn Guard
+	FleetFooted: Fleet Footed
+	SummonerPact: Summoner's Pact
+	LavaWalker: Lava Walker
+	ZeroGravity: Zero Gravity
+	NightVision: Night Vision
+	Sanctuary: Sanctuary
+	CombatStations: Combat Stations
+	GiantsGrip: Giant's Grip
+	GoldenTouch: Golden Touch
+	EnhancedSpawns: Enhanced Spawns
+	ShadowTrail: Shadow Trail
+	AuraPulse: Aura Pulse
+	AutoClicker: Auto-Clicker
+}
+
+RebirthAbilityDescription: {
+	EnhancedFortune: Grants additional luck per level when toggled on, improving drop rates and other luck-based mechanics.
+	ReducedPotionSickness: Reduces potion sickness duration by 50%
+	ExtraAccessorySlot: Grants an additional accessory slot per level
+	LastStand: When you would die, heal for 10% of your max health and gain 3 seconds of immunity. 3 minute cooldown.
+	Dash: Grants the ability to dash
+	AutoJump: Allows jumping automatically when holding jump button
+	NoFallDamage: Completely immune to fall damage
+	WaterFreedom: Grants free movement in water, water breathing and flippers effect
+	Teleport: Ability to teleport to cursor position using assigned key
+	TreasureHunter: Grants Spelunker, Dangersense, and Hunter effects.
+	Sustenance: Toggleable food buff. Level 1: Well Fed, Level 2: Plenty Satisfied, Level 3: Exquisitely Stuffed.
+	ArcheryMastery: Grants Ammo Reservation and Archery buffs.
+	BattleReady: Grants Battle buff.
+	AnglerLuck: Grants Crate, Fishing, and Sonar buffs.
+	VitalityFortitude: Grants Lifeforce, Endurance, Ironskin, Regeneration, and Heartreach buffs.
+	InnerCalm: Grants Calm buff.
+	ElementalResistance: Grants Inferno and Warmth buffs.
+	ShadowVeil: Grants Invisibility buff.
+	FortuneFavored: Grants Lucky buff.
+	ArcaneMastery: Grants Magic Power and Mana Regeneration buffs.
+	MasterBuilder: Grants Builder and Mining buffs.
+	BattleFury: Grants Rage and Wrath buffs.
+	SurfaceSkimmer: Grants Water Walking buff.
+	ThornGuard: Grants Thorns buff.
+	FleetFooted: Grants Swiftness buff.
+	SummonerPact: Grants Summoning buff.
+	LavaWalker: Grants Obsidian Skin buff.
+	ZeroGravity: Grants Gravitation buff.
+	NightVision: Grants Shine and Night Owl buffs.
+	Sanctuary: Grants The Bast Defence, Star in a Bottle, Honey, Heart Lamp, Dryad's Blessing, and Cozy Fire buffs.
+	CombatStations: Grants Ammo Box, Bewitched, Clairvoyance, Sharpened, Strategist (Tipsy), and Sugar Rush buffs.
+	GiantsGrip: Increases the size of melee weapons by 33%.
+	GoldenTouch: Increases the amount of coins picked up by {config.rebirthAbilities.GoldenTouchPercentPerLevel}% per level.
+	EnhancedSpawns: Increases enemy spawn rate by {config.rebirthAbilities.SpawnRatePercentPerLevel}% per level. Stacks with other spawn rate modifiers.
+	ShadowTrail: Creates a trailing afterimage effect like Shadow Armor.
+	AuraPulse: Creates a pulsing outline aura effect like Hallowed Armor.
+	AutoClicker: When toggled on, automatically clicks. Speed improves with levels. Effect interaction is set in mod config.
+}
+
+RoleName: {
+	CritGod: Crit God
+	Vampire: Vampire
+	Beastmaster: Beastmaster
+	ApexSummoner: Apex Summoner
+	BlackKnight: Black Knight
+	Cleric: Cleric
+	Guardian: Guardian
+}
+
+RoleDescription: {
+	CritGod: A master of devastating precision, turning every strike into a potential killing blow.
+	Vampire: A bloodthirsty warrior who grows stronger through combat, draining life from wounded foes.
+	Beastmaster: A master of minions who gains power from commanding diverse creatures and maximizing their potential.
+	ApexSummoner: A focused summoner who achieves maximum power through singular dedication, gaining massive damage when commanding only one minion type.
+	BlackKnight: A versatile warrior-mage who blends martial prowess with arcane mastery, gaining power through the synergy of sword and spell.
+	Cleric: A divine healer who protects and empowers allies within their sacred aura, sacrificing personal defense for team support.
+	Guardian: A stalwart protector who shields allies from harm by sharing their burden and reflecting damage back to attackers.
+}
+
+RoleFlavorText: {
+	CritGod: Channel your inner perfectionist - every hit counts, every strike matters.
+	Vampire: Embrace the darkness - let your enemies' blood fuel your power.
+	Beastmaster: Strength through diversity - the more varied your army, the stronger you become.
+	ApexSummoner: Perfection through focus - one minion, unlimited potential.
+	BlackKnight: Steel and sorcery united - let magic fuel your blade, and let your blade focus your magic.
+	Cleric: Embrace your calling as a beacon of hope - your strength lies not in steel, but in the divine protection you provide to others.
+	Guardian: Stand as the unbreakable shield - let your allies' pain become your strength, and your resolve become their salvation.
+}
+
+Logging: {
+	Test: {
+		InfoMessage: This is an information message
+		WarningMessage: This is a warning message
+		ErrorMessage: This is an error message
+		DebugMessage: This message only appears in debug mode
+		GlobalDebugMessage: This message uses global debug mode
+	}
+
+	StatariaFeatureToggleSystem: {
+		StatPointsRecalculating: Stat points per level config change detected - recalculating stat points for players
+		StatPointsRecalculationDisabled: Stat points per level config change detected - recalculation disabled
+		RebirthConfigRecalculating: Rebirth config change detected - recalculating RP for players
+		RebirthConfigRecalculationDisabled: Rebirth config change detected - recalculation disabled
+		RebirthStatPointRecalculating: Rebirth stat point config change detected - recalculating stat points for players
+		RebirthStatPointRecalculationDisabled: Rebirth stat point config change detected - recalculation disabled
+		ErrorCalamityPanel: Error reinitializing panel (Calamity): {0}
+		ErrorThoriumPanel: Error reinitializing panel (Thorium): {0}
+	}
+
+	Stataria: {
+		ModLoadingStarted: Stataria mod loading started
+		ModLoadingCompleted: Stataria mod loading completed
+		ModCallNoArgs: ModCall received with no arguments.
+		ModCallFirstArgString: First argument to ModCall must be a string message.
+		ModCallExpectedPlayer: ModCall '{0}': Expected Player or playerID as second argument.
+		ModCallNotEnoughArgs: "{0}: Not enough arguments."
+		ModCallIncorrectArgs: "{0}: Incorrect arguments."
+		ModCallUnknownMessage: Unknown ModCall message: {0}
 	}
 }

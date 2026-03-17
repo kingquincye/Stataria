@@ -11,6 +11,7 @@ using System.Linq;
 using Terraria.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -18,15 +19,15 @@ namespace Stataria
     {
         public void SomeMethod()
         {
-            StatariaLogger.Info("This is an information message");
+            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Logging.Test.InfoMessage"));
 
-            StatariaLogger.Warning("This is a warning message");
+            StatariaLogger.Warning(Language.GetTextValue("Mods.Stataria.Logging.Test.WarningMessage"));
 
-            StatariaLogger.Error("This is an error message");
+            StatariaLogger.Error(Language.GetTextValue("Mods.Stataria.Logging.Test.ErrorMessage"));
 
-            StatariaLogger.Debug("This message only appears in debug mode");
+            StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Logging.Test.DebugMessage"));
 
-            StatariaLogger.Debug("This message uses global debug mode");
+            StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Logging.Test.GlobalDebugMessage"));
         }
     }
 }

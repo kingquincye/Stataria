@@ -5,6 +5,7 @@ using Terraria.GameContent;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -30,7 +31,7 @@ namespace Stataria
 
             float opacity = configClient.IndicatorOpacity;
 
-            string levelText = $"Lv.{rpg.Level}";
+            string levelText = Language.GetTextValue("Mods.Stataria.UI.PlayerDisplay.LevelIndicator", rpg.Level);
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             Vector2 textSize = font.MeasureString(levelText);
 

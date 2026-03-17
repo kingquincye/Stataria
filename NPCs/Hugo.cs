@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent.Personalities;
 using System.Collections.Generic;
 using Terraria.GameContent.Events;
+using Terraria.Localization;
 using Stataria.Items.Cores;
 using Terraria.Utilities;
 
@@ -65,20 +66,20 @@ namespace Stataria.NPCs
 
         public override List<string> SetNPCNameList()
         {
-            return new List<string>() { "Hugo" };
+            return new List<string>() { Language.GetTextValue("Mods.Stataria.NPCs.Hugo.DisplayName") };
         }
 
         public override string GetChat()
         {
             WeightedRandom<string> chat = new WeightedRandom<string>();
-            chat.Add("These cores... they whisper to me. Don't worry, they seem to like you.");
-            chat.Add("Ever wonder what happens when you cram too much power into a single sword? I have. It wasn't pretty.");
-            chat.Add("You can feel the energy radiating from these, can't you? Handle them with care.");
-            chat.Add("Each core holds a fragment of potential. It's up to you to unlock it.");
+            chat.Add(Language.GetTextValue("Mods.Stataria.NPCs.Hugo.Dialogue.Chat1"));
+            chat.Add(Language.GetTextValue("Mods.Stataria.NPCs.Hugo.Dialogue.Chat2"));
+            chat.Add(Language.GetTextValue("Mods.Stataria.NPCs.Hugo.Dialogue.Chat3"));
+            chat.Add(Language.GetTextValue("Mods.Stataria.NPCs.Hugo.Dialogue.Chat4"));
 
             if (Main.LocalPlayer.GetModPlayer<RPGPlayer>().RebirthCount > 0)
             {
-                chat.Add("You feel... different. Like you've seen beyond the veil. The cores resonate with that energy.");
+                chat.Add(Language.GetTextValue("Mods.Stataria.NPCs.Hugo.Dialogue.ChatRebirth"));
             }
 
             return chat.Get();
@@ -86,7 +87,7 @@ namespace Stataria.NPCs
 
         public override void SetChatButtons(ref string button, ref string button2)
         {
-            button = "Shop";
+            button = Language.GetTextValue("Mods.Stataria.NPCs.Hugo.Shop");
         }
 
         public override void OnChatButtonClicked(bool firstButton, ref string shop)

@@ -25,13 +25,13 @@ namespace Stataria.Buffs
 
             if (isCleric)
             {
-                buffName = "Cleric Aura (Self)";
-                tip = $"You are radiating divine protection\nAura radius: {config.roleSettings.ClericAuraRadius:0.#} pixels";
+                buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianNameSelf");
+                tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianTooltipSelf", config.roleSettings.ClericAuraRadius.ToString("0.#"));
             }
             else
             {
-                buffName = "Cleric Aura";
-                tip = $"Within a Cleric's protective aura\n+{config.roleSettings.ClericTeammateHealthBonus:0.#}% max health\nReceiving divine regeneration";
+                buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianNameTeammate");
+                tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianTooltipTeammate", config.roleSettings.ClericTeammateHealthBonus.ToString("0.#"));
             }
         }
 

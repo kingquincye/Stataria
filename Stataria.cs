@@ -1,4 +1,5 @@
 using System;
+using Terraria.Localization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,11 +32,11 @@ namespace Stataria
         {
             StatariaLogger.GlobalDebugMode = false;
             StatariaLogger.Initialize(this);
-            StatariaLogger.Info("Stataria mod loading started");
+            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModLoadingStarted"));
 
             base.Load();
 
-            StatariaLogger.Info("Stataria mod loading completed");
+            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModLoadingCompleted"));
         }
 
         public override void Unload()
@@ -374,13 +375,13 @@ namespace Stataria
         {
             if (args == null || args.Length == 0)
             {
-                Logger.Warn("ModCall received with no arguments.");
+                Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNoArgs"));
                 return null;
             }
 
             if (!(args[0] is string message))
             {
-                Logger.Warn("First argument to ModCall must be a string message.");
+                Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallFirstArgString"));
                 return null;
             }
 
@@ -396,34 +397,34 @@ namespace Stataria
                 {
                     return Main.player[playerID].GetModPlayer<RPGPlayer>();
                 }
-                Logger.Warn($"ModCall '{message}': Expected Player or playerID as second argument.");
+                Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallExpectedPlayer", message));
                 return null;
             }
 
             switch (message)
             {
                 case "GetPlayerLevel":
-                    if (args.Length < 2) { Logger.Warn("GetPlayerLevel: Not enough arguments."); return null; }
+                    if (args.Length < 2) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNotEnoughArgs", "GetPlayerLevel")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     return rpgPlayer?.Level;
 
                 case "GetPlayerXP":
-                    if (args.Length < 2) { Logger.Warn("GetPlayerXP: Not enough arguments."); return null; }
+                    if (args.Length < 2) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNotEnoughArgs", "GetPlayerXP")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     return rpgPlayer?.XP;
 
                 case "GetXPToNextLevel":
-                    if (args.Length < 2) { Logger.Warn("GetXPToNextLevel: Not enough arguments."); return null; }
+                    if (args.Length < 2) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNotEnoughArgs", "GetXPToNextLevel")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     return rpgPlayer?.XPToNext;
 
                 case "GetStatPoints":
-                    if (args.Length < 2) { Logger.Warn("GetStatPoints: Not enough arguments."); return null; }
+                    if (args.Length < 2) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNotEnoughArgs", "GetStatPoints")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     return rpgPlayer?.StatPoints;
 
                 case "GetAllPlayerStats":
-                    if (args.Length < 2) { Logger.Warn("GetAllPlayerStats: Not enough arguments."); return null; }
+                    if (args.Length < 2) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNotEnoughArgs", "GetAllPlayerStats")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     if (rpgPlayer == null) return null;
                     return new Dictionary<string, int>
@@ -450,28 +451,28 @@ namespace Stataria
                     };
 
                 case "GetEffectiveStat":
-                    if (args.Length < 3 || !(args[2] is string statNameEff)) { Logger.Warn("GetEffectiveStat: Incorrect arguments."); return null; }
+                    if (args.Length < 3 || !(args[2] is string statNameEff)) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallIncorrectArgs", "GetEffectiveStat")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     return rpgPlayer?.GetEffectiveStat(statNameEff.ToUpper());
 
                 case "GetGhostStat":
-                    if (args.Length < 3 || !(args[2] is string statNameGhost)) { Logger.Warn("GetGhostStat: Incorrect arguments."); return null; }
+                    if (args.Length < 3 || !(args[2] is string statNameGhost)) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallIncorrectArgs", "GetGhostStat")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     if (rpgPlayer == null) return 0;
                     return rpgPlayer.GhostStats.TryGetValue(statNameGhost.ToUpper(), out int ghostValue) ? ghostValue : 0;
 
                 case "GetRebirthCount":
-                    if (args.Length < 2) { Logger.Warn("GetRebirthCount: Not enough arguments."); return null; }
+                    if (args.Length < 2) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNotEnoughArgs", "GetRebirthCount")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     return rpgPlayer?.RebirthCount;
 
                 case "GetRebirthPoints":
-                    if (args.Length < 2) { Logger.Warn("GetRebirthPoints: Not enough arguments."); return null; }
+                    if (args.Length < 2) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNotEnoughArgs", "GetRebirthPoints")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     return rpgPlayer?.RebirthPoints;
 
                 default:
-                    Logger.Warn($"Unknown ModCall message: {message}");
+                    Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallUnknownMessage", message));
                     return null;
             }
         }

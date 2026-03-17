@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using ReLogic.Graphics;
 using Terraria.GameContent.UI.ResourceSets;
 using System;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -151,7 +152,7 @@ namespace Stataria
             DynamicSpriteFont font = FontAssets.ItemStack.Value;
             float currentTextScale = 0.9f;
 
-            string levelLabelText = "Lv.";
+            string levelLabelText = Language.GetTextValue("Mods.Stataria.UI.PlayerDisplay.Level");
             Vector2 levelLabelTextSize = font.MeasureString(levelLabelText) * currentTextScale;
             Vector2 levelLabelTextPosition = new Vector2(
                 basePosition.X + levelBoxWidth / 2 - levelLabelTextSize.X / 2,
@@ -171,7 +172,7 @@ namespace Stataria
 
             if (rpgPlayer.RebirthCount > 0)
             {
-                string rebirthText = $"R{rpgPlayer.RebirthCount}";
+                string rebirthText = Language.GetTextValue("Mods.Stataria.UI.PlayerDisplay.RebirthPrefix") + rpgPlayer.RebirthCount;
                 float rebirthTextScale = 0.8f;
                 Vector2 rebirthTextSize = font.MeasureString(rebirthText) * rebirthTextScale;
                 Vector2 rebirthPosition = new Vector2(

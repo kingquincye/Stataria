@@ -7,6 +7,7 @@ using Terraria.ID;
 using System;
 using Terraria.ModLoader;
 using System.Collections.Generic;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -21,7 +22,7 @@ namespace Stataria
         }
 
         private UIPanel tabPanel;
-        private UITextPanel<string>[] tabButtons;
+        private UITextPanel<LocalizedText>[] tabButtons;
         private TabType currentTab = TabType.Stats;
         private List<TabType> availableTabs = new List<TabType>();
 
@@ -76,8 +77,13 @@ namespace Stataria
 
         private void CreateTabButtons()
         {
-            tabButtons = new UITextPanel<string>[availableTabs.Count];
-            string[] allTabNames = { "Stats", "Abilities", "Roles", "Socketing" };
+            tabButtons = new UITextPanel<LocalizedText>[availableTabs.Count];
+            LocalizedText[] allTabNames = { 
+                Language.GetText("Mods.Stataria.UI.TabBar.Stats"), 
+                Language.GetText("Mods.Stataria.UI.TabBar.Abilities"), 
+                Language.GetText("Mods.Stataria.UI.TabBar.Roles"), 
+                Language.GetText("Mods.Stataria.UI.TabBar.Socketing") 
+            };
 
             float tabWidth = 80f;
             float tabHeight = 35f;
@@ -88,9 +94,9 @@ namespace Stataria
             for (int i = 0; i < availableTabs.Count; i++)
             {
                 TabType tabType = availableTabs[i];
-                string tabName = allTabNames[(int)tabType];
+                LocalizedText tabName = allTabNames[(int)tabType];
 
-                tabButtons[i] = new UITextPanel<string>(tabName, 0.9f, false)
+                tabButtons[i] = new UITextPanel<LocalizedText>(tabName, 0.9f, false)
                 {
                     Width = { Pixels = tabWidth },
                     Height = { Pixels = tabHeight },

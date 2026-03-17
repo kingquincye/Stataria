@@ -70,28 +70,28 @@ namespace Stataria
 
             if (Name == "Last Stand")
             {
-                description = $"When you would die, heal for {config.rebirthAbilities.LastStandHealPercent}% of your max health and gain {config.rebirthAbilities.LastStandImmunityTime} seconds of immunity. {config.rebirthAbilities.LastStandCooldown} second cooldown.";
+                description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.LastStand", config.rebirthAbilities.LastStandHealPercent, config.rebirthAbilities.LastStandImmunityTime, config.rebirthAbilities.LastStandCooldown);
             }
             else if (Name == "Extra Accessory Slot")
             {
                 int maxLevel = Math.Min(config.rebirthAbilities.MaxExtraAccessorySlots, 29);
-                description = $"Grants an additional accessory slot per level.";
+                description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.ExtraAccessorySlot");
                 MaxLevel = maxLevel;
             }
             else if (Name == "Golden Touch")
             {
                 int maxLevel = config.rebirthAbilities.MaxGoldenTouchLevel;
-                description = $"Increases the amount of coins picked up by {config.rebirthAbilities.GoldenTouchPercentPerLevel}% per level.";
+                description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.GoldenTouch", config.rebirthAbilities.GoldenTouchPercentPerLevel);
                 MaxLevel = maxLevel;
             }
             else if (Name == "Teleport")
             {
-                description = $"Ability to teleport to cursor position using assigned key. {config.rebirthAbilities.TeleportCooldown} second cooldown.";
+                description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.Teleport", config.rebirthAbilities.TeleportCooldown);
             }
             else if (Name == "Enhanced Spawns")
             {
                 int maxLevel = config.rebirthAbilities.MaxEnhancedSpawnsLevel;
-                description = $"Increases enemy spawn rate by {config.rebirthAbilities.SpawnRatePercentPerLevel}% per level. Stacks with other spawn rate modifiers.";
+                description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.EnhancedSpawns", config.rebirthAbilities.SpawnRatePercentPerLevel);
                 MaxLevel = maxLevel;
             }
             else if (Name == "Auto-Clicker")
@@ -111,11 +111,12 @@ namespace Stataria
                     bool effectsArePreventedByConfig = localConfig.rebirthAbilities.AutoClickerPreventsEffects;
 
                     float cps = 60f / currentSpeedFactor;
-                    description = $"Auto-clicks at ~{cps:F1} CPS. Click effects are {(effectsArePreventedByConfig ? "prevented" : "allowed")} (configurable).";
+                    string preventString = effectsArePreventedByConfig ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.Prevented") : Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.Allowed");
+                    description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.AutoClickerDetail", cps.ToString("F1"), preventString);
                 }
                 else
                 {
-                    description = "Enables auto-clicking. Speed improves with levels. Effect interaction is configurable.";
+                    description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.AutoClickerDefault");
                 }
                 MaxLevel = maxLevel;
             }
@@ -123,13 +124,13 @@ namespace Stataria
             {
                 float luckPerLevel = config.rebirthAbilities.LuckPerAbilityLevel;
                 int maxLevel = config.rebirthAbilities.MaxEnhancedFortuneLevel;
-                description = $"Grants +{luckPerLevel} luck per level when toggled on, improving drop rates and other luck-based mechanics.";
+                description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.EnhancedFortune", luckPerLevel);
                 MaxLevel = maxLevel;
             }
 
             if (IsUnlocked && IsStackable)
             {
-                return $"{description} (Level {Level}/{MaxLevel})";
+                return Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.LevelInfo", description, Level, MaxLevel);
             }
 
             return description;

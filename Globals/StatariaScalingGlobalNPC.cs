@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -253,6 +254,45 @@ namespace Stataria
             ApplyScaling(npc);
 
             hasBeenScaled = true;
+        }
+
+        public override void Load()
+        {
+            On_NPC.Transform += NPC_Transform;
+        }
+
+        public override void Unload()
+        {
+            On_NPC.Transform -= NPC_Transform;
+        }
+
+        private void NPC_Transform(On_NPC.orig_Transform orig, NPC self, int newType)
+        {
+            int cachedLevel = 0;
+            bool cachedElite = false;
+            int cachedLife = 0;
+
+            if (self.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var oldGlobal) && oldGlobal.hasBeenScaled)
+            {
+                cachedLevel = oldGlobal.Level;
+                cachedElite = oldGlobal.IsElite;
+                cachedLife = self.life;
+            }
+
+            orig(self, newType); 
+
+            if (cachedLevel > 0 && self.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var newGlobal))
+            {
+                newGlobal.Level = cachedLevel;
+                newGlobal.IsElite = cachedElite;
+                
+                // Re-apply scaling with cached level and elite status
+                newGlobal.ApplyScaling(self);
+                
+                // Restore the perfectly precise health it had before transforming
+                self.life = cachedLife;
+                newGlobal.hasBeenScaled = true;
+            }
         }
 
         public override void SetDefaults(NPC npc)
@@ -579,7 +619,7 @@ namespace Stataria
 
             float opacity = configClient.EnemyIndicatorOpacity;
 
-            string levelText = $"Lv.{Level}";
+            string levelText = Language.GetTextValue("Mods.Stataria.UI.EnemyLevel", Level);
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             Vector2 textSize = font.MeasureString(levelText);
 

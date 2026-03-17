@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Steamworks;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -62,22 +63,22 @@ namespace Stataria
 
             ClearLogIfNeeded();
 
-            string header = $"=== {modName} Log Started at {DateTime.Now} ===\n";
+            string header = Language.GetTextValue("Mods.Stataria.Logger.LogStarted", modName, DateTime.Now) + "\n";
             File.WriteAllText(logFilePath, header);
 
             initialized = true;
 
             if (isAdmin)
             {
-                Info("Logging enabled for admin user");
+                Info(Language.GetTextValue("Mods.Stataria.Logger.EnabledAdmin"));
             }
             else if (GlobalDebugMode)
             {
-                Info("Logging enabled via debug mode");
+                Info(Language.GetTextValue("Mods.Stataria.Logger.EnabledDebug"));
             }
             else if (isServer)
             {
-                Info("Logging enabled for server");
+                Info(Language.GetTextValue("Mods.Stataria.Logger.EnabledServer"));
             }
         }
 
@@ -102,7 +103,7 @@ namespace Stataria
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Failed to check/clear log file: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine(Language.GetTextValue("Mods.Stataria.Logger.ClearLogFailed", ex.Message));
                 }
             }
         }
@@ -130,7 +131,7 @@ namespace Stataria
         {
             if (isAdmin || GlobalDebugMode || isServer)
             {
-                WriteLog($"[INFO] {message}");
+                WriteLog(Language.GetTextValue("Mods.Stataria.Logger.Info", message));
             }
         }
 
@@ -138,7 +139,7 @@ namespace Stataria
         {
             if (isAdmin || GlobalDebugMode || isServer)
             {
-                WriteLog($"[WARNING] {message}");
+                WriteLog(Language.GetTextValue("Mods.Stataria.Logger.Warning", message));
             }
         }
 
@@ -146,7 +147,7 @@ namespace Stataria
         {
             if (isAdmin || GlobalDebugMode || isServer)
             {
-                WriteLog($"[ERROR] {message}");
+                WriteLog(Language.GetTextValue("Mods.Stataria.Logger.Error", message));
             }
         }
 
@@ -154,7 +155,7 @@ namespace Stataria
         {
             if (isAdmin || GlobalDebugMode || isServer)
             {
-                WriteLog($"[DEBUG] {message}");
+                WriteLog(Language.GetTextValue("Mods.Stataria.Logger.Debug", message));
             }
         }
 
@@ -174,7 +175,7 @@ namespace Stataria
             }
             catch (Exception ex)
             {
-                ModContent.GetInstance<Stataria>().Logger.Error($"Failed to write to log file: {ex.Message}");
+                ModContent.GetInstance<Stataria>().Logger.Error(Language.GetTextValue("Mods.Stataria.Logger.WriteLogFailed", ex.Message));
             }
         }
 

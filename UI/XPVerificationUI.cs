@@ -6,6 +6,7 @@ using Terraria.GameContent.UI.Elements;
 using System;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -19,10 +20,10 @@ namespace Stataria
         private UIText sourceText;
         private UIText pendingCountText;
         private UIText notificationCounterText;
-        private UITextPanel<string> acceptButton;
-        private UITextPanel<string> rejectButton;
-        private UITextPanel<string> acceptAllButton;
-        private UITextPanel<string> rejectAllButton;
+        private UITextPanel<LocalizedText> acceptButton;
+        private UITextPanel<LocalizedText> rejectButton;
+        private UITextPanel<LocalizedText> acceptAllButton;
+        private UITextPanel<LocalizedText> rejectAllButton;
 
         private PendingXPGain currentVerification;
         private Action onAccept;
@@ -66,7 +67,7 @@ namespace Stataria
                 dragging = false;
             };
 
-            titleText = new UIText("Suspicious XP Gain Detected", 1.3f);
+            titleText = new UIText(Language.GetText("Mods.Stataria.UI.XPVerification.Title"), 1.3f);
             titleText.HAlign = 0.5f;
             titleText.Top.Set(15, 0f);
             titleText.TextColor = Color.Yellow;
@@ -96,7 +97,7 @@ namespace Stataria
             pendingCountText.TextColor = Color.Orange;
             panel.Append(pendingCountText);
 
-            acceptButton = new UITextPanel<string>("Accept", 1f, false);
+            acceptButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.XPVerification.Accept"), 1f, false);
             acceptButton.Width.Set(130, 0f);
             acceptButton.Height.Set(40, 0f);
             acceptButton.HAlign = 0.25f;
@@ -112,7 +113,7 @@ namespace Stataria
             };
             panel.Append(acceptButton);
 
-            rejectButton = new UITextPanel<string>("Reject", 1f, false);
+            rejectButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.XPVerification.Reject"), 1f, false);
             rejectButton.Width.Set(130, 0f);
             rejectButton.Height.Set(40, 0f);
             rejectButton.HAlign = 0.75f;
@@ -128,7 +129,7 @@ namespace Stataria
             };
             panel.Append(rejectButton);
 
-            acceptAllButton = new UITextPanel<string>("Accept All", 0.9f, false);
+            acceptAllButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.XPVerification.AcceptAll"), 0.9f, false);
             acceptAllButton.Width.Set(130, 0f);
             acceptAllButton.Height.Set(35, 0f);
             acceptAllButton.HAlign = 0.25f;
@@ -144,7 +145,7 @@ namespace Stataria
             };
             panel.Append(acceptAllButton);
 
-            rejectAllButton = new UITextPanel<string>("Reject All", 0.9f, false);
+            rejectAllButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.XPVerification.RejectAll"), 0.9f, false);
             rejectAllButton.Width.Set(130, 0f);
             rejectAllButton.Height.Set(35, 0f);
             rejectAllButton.HAlign = 0.75f;
@@ -228,8 +229,8 @@ namespace Stataria
             currentIndex = currentIdx;
             totalCount = totalNotifications;
 
-            xpAmountText.SetText($"XP Amount: {verification.Amount:N0}");
-            sourceText.SetText($"Source: {verification.GetFormattedSource()}");
+            xpAmountText.SetText(Language.GetTextValue("Mods.Stataria.UI.XPVerification.XPAmount", verification.Amount));
+            sourceText.SetText(Language.GetTextValue("Mods.Stataria.UI.XPVerification.Source", verification.GetFormattedSource()));
 
             if (totalCount > 1)
             {
@@ -243,7 +244,7 @@ namespace Stataria
             int pendingCount = totalCount - currentIndex;
             if (pendingCount > 0)
             {
-                pendingCountText.SetText($"{pendingCount} suspicious XP gains pending");
+                pendingCountText.SetText(Language.GetTextValue("Mods.Stataria.UI.XPVerification.PendingGains", pendingCount));
                 SetBatchButtonsVisible(true);
             }
             else

@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Stataria;
+using Terraria.Localization;
 
 namespace Stataria.Items.Cores
 {
@@ -59,28 +60,28 @@ namespace Stataria.Items.Cores
             switch (CoreType)
             {
                 case CoreType.Power:
-                    effect = $"+{EffectValue}% Weapon Damage";
-                    usage = "Can be socketed into weapons";
+                    effect = Language.GetTextValue("Mods.Stataria.CoreItem.EffectPower", EffectValue);
+                    usage = Language.GetTextValue("Mods.Stataria.CoreItem.UsageWeapon");
                     break;
                 case CoreType.Force:
-                    effect = $"+{EffectValue}% Weapon Knockback";
-                    usage = "Can be socketed into weapons";
+                    effect = Language.GetTextValue("Mods.Stataria.CoreItem.EffectForce", EffectValue);
+                    usage = Language.GetTextValue("Mods.Stataria.CoreItem.UsageWeapon");
                     break;
                 case CoreType.Precision:
-                    effect = $"+{EffectValue}% Weapon Crit Chance";
-                    usage = "Can be socketed into weapons";
+                    effect = Language.GetTextValue("Mods.Stataria.CoreItem.EffectPrecision", EffectValue);
+                    usage = Language.GetTextValue("Mods.Stataria.CoreItem.UsageWeapon");
                     break;
                 case CoreType.Defense:
-                    effect = $"+{EffectValue} Defense";
-                    usage = "Can be socketed into armor";
+                    effect = Language.GetTextValue("Mods.Stataria.CoreItem.EffectDefense", EffectValue);
+                    usage = Language.GetTextValue("Mods.Stataria.CoreItem.UsageArmor");
                     break;
                 case CoreType.Vitality:
-                    effect = $"+{EffectValue} Max Health";
-                    usage = "Can be socketed into armor";
+                    effect = Language.GetTextValue("Mods.Stataria.CoreItem.EffectVitality", EffectValue);
+                    usage = Language.GetTextValue("Mods.Stataria.CoreItem.UsageArmor");
                     break;
                 case CoreType.Evasion:
-                    effect = $"+{EffectValue}% Evade Chance";
-                    usage = "Can be socketed into armor";
+                    effect = Language.GetTextValue("Mods.Stataria.CoreItem.EffectEvasion", EffectValue);
+                    usage = Language.GetTextValue("Mods.Stataria.CoreItem.UsageArmor");
                     break;
                 default:
                     effect = "";
@@ -353,14 +354,14 @@ public struct SocketedCore
     {
         string typeName = Type switch
         {
-            CoreType.Power => "Core of Power",
-            CoreType.Force => "Core of Force",
-            CoreType.Precision => "Core of Precision",
-            CoreType.Defense => "Core of Defense",
-            CoreType.Vitality => "Core of Vitality",
-            CoreType.Evasion => "Core of Evasion",
-            _ => "Unknown Core"
+            CoreType.Power => Language.GetTextValue("Mods.Stataria.CoreItem.CoreOfPower"),
+            CoreType.Force => Language.GetTextValue("Mods.Stataria.CoreItem.CoreOfForce"),
+            CoreType.Precision => Language.GetTextValue("Mods.Stataria.CoreItem.CoreOfPrecision"),
+            CoreType.Defense => Language.GetTextValue("Mods.Stataria.CoreItem.CoreOfDefense"),
+            CoreType.Vitality => Language.GetTextValue("Mods.Stataria.CoreItem.CoreOfVitality"),
+            CoreType.Evasion => Language.GetTextValue("Mods.Stataria.CoreItem.CoreOfEvasion"),
+            _ => Language.GetTextValue("Mods.Stataria.CoreItem.UnknownCore")
         };
-        return $"{typeName} T.{Tier}";
+        return Language.GetTextValue("Mods.Stataria.CoreItem.CoreNameTier", typeName, Tier);
     }
 }

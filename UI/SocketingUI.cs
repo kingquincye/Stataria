@@ -11,6 +11,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -32,9 +33,9 @@ namespace Stataria
         private UIText attachedCoresTitle;
         private UIList attachedCoresList;
 
-        private UITextPanel<string> expandButton;
-        private UITextPanel<string> attachButton;
-        private UITextPanel<string> extractButton;
+        private UITextPanel<LocalizedText> expandButton;
+        private UITextPanel<LocalizedText> attachButton;
+        private UITextPanel<LocalizedText> extractButton;
         private UIText expandCostText;
         private UIText extractCostText;
 
@@ -80,13 +81,13 @@ namespace Stataria
 
         private void InitializeHeader()
         {
-            titleText = new UIText("Socketing System", 1.6f);
+            titleText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.Title"), 1.6f);
             titleText.Top.Set(5f, 0f);
             titleText.HAlign = 0.5f;
             titleText.TextColor = new Color(220, 220, 255);
             socketingPanel.Append(titleText);
 
-            rebirthPointsText = new UIText("Your RP: 0", 1f);
+            rebirthPointsText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.RebirthPoints").WithFormatArgs(0), 1f);
             rebirthPointsText.Top.Set(560f, 0f);
             rebirthPointsText.Left.Set(600f, 0f);
             rebirthPointsText.TextColor = new Color(255, 215, 100);
@@ -105,13 +106,13 @@ namespace Stataria
 
             socketingPanel.Append(weaponSlot);
 
-            itemNameText = new UIText("Item: ---", 1f);
+            itemNameText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.ItemNone"), 1f);
             itemNameText.Top.Set(60f, 0f);
             itemNameText.Left.Set(130f, 0f);
             itemNameText.TextColor = Color.White;
             socketingPanel.Append(itemNameText);
 
-            slotsText = new UIText("Slots: - / -", 1f);
+            slotsText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.SlotsNone"), 1f);
             slotsText.Top.Set(80f, 0f);
             slotsText.Left.Set(130f, 0f);
             slotsText.TextColor = Color.LightGray;
@@ -130,7 +131,7 @@ namespace Stataria
             compatibleCoresPanel.SetPadding(10f);
             socketingPanel.Append(compatibleCoresPanel);
 
-            compatibleCoresTitle = new UIText("Compatible Cores", 1.1f);
+            compatibleCoresTitle = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.CompatibleCoresTitle"), 1.1f);
             compatibleCoresTitle.Top.Set(5f, 0f);
             compatibleCoresTitle.HAlign = 0.5f;
             compatibleCoresTitle.TextColor = new Color(220, 220, 255);
@@ -154,7 +155,7 @@ namespace Stataria
 
         private void InitializeAttachedCores()
         {
-            attachedCoresTitle = new UIText("Attached Cores:", 1.1f);
+            attachedCoresTitle = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.AttachedCoresTitle"), 1.1f);
             attachedCoresTitle.Top.Set(200f, 0f);
             attachedCoresTitle.Left.Set(30f, 0f);
             attachedCoresTitle.TextColor = new Color(255, 200, 100);
@@ -171,7 +172,7 @@ namespace Stataria
 
         private void InitializeActionButtons()
         {
-            expandButton = new UITextPanel<string>("Expand Slot", 1f, false);
+            expandButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.Socketing.ExpandSlotButton"), 1f, false);
             expandButton.Width.Set(150f, 0f);
             expandButton.Height.Set(40f, 0f);
             expandButton.Top.Set(370f, 0f);
@@ -181,13 +182,13 @@ namespace Stataria
             expandButton.OnLeftClick += OnExpandClick;
             socketingPanel.Append(expandButton);
 
-            expandCostText = new UIText("Cost: --- RP", 0.9f);
+            expandCostText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.CostNone"), 0.9f);
             expandCostText.Top.Set(415f, 0f);
             expandCostText.Left.Set(30f, 0f);
             expandCostText.TextColor = Color.Yellow;
             socketingPanel.Append(expandCostText);
 
-            attachButton = new UITextPanel<string>("Attach Core", 1f, false);
+            attachButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.Socketing.AttachCoreButton"), 1f, false);
             attachButton.Width.Set(150f, 0f);
             attachButton.Height.Set(40f, 0f);
             attachButton.Top.Set(500f, 0f);
@@ -197,7 +198,7 @@ namespace Stataria
             attachButton.OnLeftClick += OnAttachClick;
             socketingPanel.Append(attachButton);
 
-            extractButton = new UITextPanel<string>("Extract Core", 1f, false);
+            extractButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.Socketing.ExtractCoreButton"), 1f, false);
             extractButton.Width.Set(150f, 0f);
             extractButton.Height.Set(40f, 0f);
             extractButton.Top.Set(500f, 0f);
@@ -207,7 +208,7 @@ namespace Stataria
             extractButton.OnLeftClick += OnExtractClick;
             socketingPanel.Append(extractButton);
 
-            extractCostText = new UIText("Cost: --- RP", 0.9f);
+            extractCostText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.CostNone"), 0.9f);
             extractCostText.Top.Set(545f, 0f);
             extractCostText.Left.Set(400f, 0f);
             extractCostText.TextColor = Color.Yellow;
@@ -398,7 +399,8 @@ namespace Stataria
             if (string.IsNullOrEmpty(itemName))
                 return itemName;
 
-            string testText = "Item: " + itemName;
+            string preText = Language.GetTextValue("Mods.Stataria.UI.Socketing.ItemPrefix");
+            string testText = preText + itemName;
             Vector2 textSize = Terraria.GameContent.FontAssets.MouseText.Value.MeasureString(testText);
 
             if (textSize.X <= maxWidth)
@@ -412,7 +414,7 @@ namespace Stataria
             {
                 int mid = (left + right) / 2;
                 string truncated = itemName.Substring(0, mid) + "...";
-                string testTruncated = "Item: " + truncated;
+                string testTruncated = preText + truncated;
                 Vector2 truncatedSize = Terraria.GameContent.FontAssets.MouseText.Value.MeasureString(testTruncated);
 
                 if (truncatedSize.X <= maxWidth)
@@ -435,15 +437,15 @@ namespace Stataria
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
             Item item = SocketingItemSlot;
 
-            rebirthPointsText.SetText($"Your RP: {rpg.RebirthPoints}");
+            rebirthPointsText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.RebirthPoints").WithFormatArgs(rpg.RebirthPoints));
 
             if (item == null || item.IsAir || !(SocketingGlobalItem.IsWeapon(item) || SocketingGlobalItem.IsArmor(item)))
             {
-                itemNameText.SetText("Item: ---");
-                slotsText.SetText("Slots: - / -");
+                itemNameText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.ItemNone"));
+                slotsText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.SlotsNone"));
 
                 compatibleCoresList.Clear();
-                var placeholderText = new UIText("(Place an item to see\n compatible cores)", 0.9f);
+                var placeholderText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.PlaceholderCores"), 0.9f);
                 placeholderText.Top.Set(80f, 0f);
                 placeholderText.HAlign = 0.5f;
                 placeholderText.TextColor = Color.Gray;
@@ -464,8 +466,8 @@ namespace Stataria
 
             float maxNameWidth = 400f - 130f - 20f;
             string truncatedName = TruncateItemName(item.Name, maxNameWidth);
-            itemNameText.SetText($"Item: {truncatedName}");
-            slotsText.SetText($"Slots: {socketingData.GetUsedSlots()} / {socketingData.MaxSlots}");
+            itemNameText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.ItemDisplay").WithFormatArgs(truncatedName));
+            slotsText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.SlotsDisplay").WithFormatArgs(socketingData.GetUsedSlots(), socketingData.MaxSlots));
 
             RefreshCompatibleCores(item, player);
 
@@ -474,8 +476,8 @@ namespace Stataria
             UpdateButtonStates(true, selectedCompatibleCore.HasValue, selectedAttachedCore.HasValue);
 
             var config = ModContent.GetInstance<StatariaConfig>().socketingSystem;
-            expandCostText.SetText($"Cost: {socketingData.GetExpandCost()} RP");
-            extractCostText.SetText($"Cost: {config.ExtractCost} RP");
+            expandCostText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.CostRP").WithFormatArgs(socketingData.GetExpandCost()));
+            extractCostText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.CostRP").WithFormatArgs(config.ExtractCost));
         }
 
         private void RefreshCompatibleCores(Item item, Player player)
@@ -519,7 +521,7 @@ namespace Stataria
             panel.SetPadding(5f);
 
             var core = new SocketedCore(type, tier);
-            var text = new UIText($"{core.GetDisplayName()}: x{count}", 0.9f);
+            var text = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.CoreCountDisplay").WithFormatArgs(core.GetDisplayName(), count), 0.9f);
             text.VAlign = 0.5f;
             text.TextColor = Color.White;
             panel.Append(text);
@@ -547,7 +549,7 @@ namespace Stataria
 
             if (socketingData.SocketedCores.Count == 0)
             {
-                var emptyText = new UIText("---", 0.9f);
+                var emptyText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.EmptyDash"), 0.9f);
                 emptyText.TextColor = Color.Gray;
                 var emptyPanel = new UIPanel();
                 emptyPanel.Width.Set(0, 1f);
@@ -577,7 +579,7 @@ namespace Stataria
             panel.BorderColor = Color.Transparent;
             panel.SetPadding(3f);
 
-            var text = new UIText($"> {core.GetDisplayName()} (x{core.Count})", 0.85f);
+            var text = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.AttachedCoreDisplay").WithFormatArgs(core.GetDisplayName(), core.Count), 0.85f);
             text.VAlign = 0.5f;
             text.TextColor = Color.LightGray;
             panel.Append(text);

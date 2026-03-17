@@ -77,13 +77,13 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    $"• +{config.roleSettings.CritGodCritChance}% Critical Strike Chance",
-                    $"• Excess Critical Strike Chance (over 100%) converts to +{config.roleSettings.CritGodExcessCritToDamage:0.##}% Critical Strike Damage per 1% excess"
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.CritGod.CritChance", config.roleSettings.CritGodCritChance),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.CritGod.ExcessCrit", config.roleSettings.CritGodExcessCritToDamage.ToString("0.##"))
                 };
 
                 if (config.roleSettings.CritGodEnableSummonCrits)
                 {
-                    effects.Add("• Your summons can now critically strike");
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.CritGod.SummonCrits"));
                 }
 
                 return string.Join("\n", effects);
@@ -93,12 +93,12 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    $"• +{config.roleSettings.VampireHealthBonus:0.##}% Max Health",
-                    $"• +{config.roleSettings.VampireMovementSpeed:0.##}% Movement Speed",
-                    $"• {config.roleSettings.VampireBleedChance:0.##}% chance to inflict Bleed on attack",
-                    $"• Bleed deals {config.roleSettings.VampireBleedDamagePercent:0.##}% of enemy's max health per {config.roleSettings.VampireBleedTickInterval:0.##}s",
-                    $"• Heal for {config.roleSettings.VampireBleedHealPercent:0.##}% of damage dealt to bleeding enemies",
-                    $"• Heal for {config.roleSettings.VampireKillHealPercent:0.##}% of max health on enemy kill"
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Vampire.MaxHealth", config.roleSettings.VampireHealthBonus.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Vampire.MoveSpeed", config.roleSettings.VampireMovementSpeed.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Vampire.BleedChance", config.roleSettings.VampireBleedChance.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Vampire.BleedDamage", config.roleSettings.VampireBleedDamagePercent.ToString("0.##"), config.roleSettings.VampireBleedTickInterval.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Vampire.BleedHeal", config.roleSettings.VampireBleedHealPercent.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Vampire.KillHeal", config.roleSettings.VampireKillHealPercent.ToString("0.##"))
                 };
 
                 return string.Join("\n", effects);
@@ -108,18 +108,18 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    $"• +{config.roleSettings.BeastmasterDamagePerUniqueMinion:0.##}% Summon Damage per unique active minion type",
-                    $"• +{config.roleSettings.BeastmasterBonusSlotsGained} Minion Slot{(config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : "")} per {config.roleSettings.BeastmasterSlotsPerBonusSlot} base minion slots"
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Beastmaster.DamagePerMinion", config.roleSettings.BeastmasterDamagePerUniqueMinion.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Beastmaster.BonusSlots", config.roleSettings.BeastmasterBonusSlotsGained, (config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : ""), config.roleSettings.BeastmasterSlotsPerBonusSlot)
                 };
 
                 if (config.roleSettings.BeastmasterReduceSPRSlotEfficiency)
                 {
                     int sprRequirement = (int)(config.roleSettings.BeastmasterSlotsPerBonusSlot * config.roleSettings.BeastmasterSPRSlotPenaltyMultiplier);
-                    effects.Add($"• +{config.roleSettings.BeastmasterBonusSlotsGained} Minion Slot{(config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : "")} per {sprRequirement} SPR-gained minion slots (reduced efficiency)");
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Beastmaster.SPRSlotsReduced", config.roleSettings.BeastmasterBonusSlotsGained, (config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : ""), sprRequirement));
                 }
                 else
                 {
-                    effects.Add($"• +{config.roleSettings.BeastmasterBonusSlotsGained} Minion Slot{(config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : "")} per {config.roleSettings.BeastmasterSlotsPerBonusSlot} SPR-gained minion slots (normal efficiency)");
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Beastmaster.SPRSlotsNormal", config.roleSettings.BeastmasterBonusSlotsGained, (config.roleSettings.BeastmasterBonusSlotsGained > 1 ? "s" : ""), config.roleSettings.BeastmasterSlotsPerBonusSlot));
                 }
 
                 return string.Join("\n", effects);
@@ -129,9 +129,9 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    "• Massive summon damage bonus when you have exactly one type of minion active",
-                    $"• +{config.roleSettings.ApexSummonerDamagePerUnusedSlot:0.##}% Summon Damage per unused minion slot",
-                    "• Bonus is lost if multiple minion types are summoned"
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.ApexSummoner.MassiveBonus"),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.ApexSummoner.DamagePerUnusedSlot", config.roleSettings.ApexSummonerDamagePerUnusedSlot.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.ApexSummoner.BonusLost")
                 };
 
                 return string.Join("\n", effects);
@@ -141,17 +141,17 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    $"• Melee weapons gain +{config.roleSettings.BlackKnightINTToMeleeDamage:0.##}% damage per INT",
-                    $"• Magic weapons gain +{config.roleSettings.BlackKnightSTRToMagicDamage:0.##}% damage per STR",
-                    $"• Magic crits grant Dark Focus stacks (max {config.roleSettings.BlackKnightMaxDarkFocusStacks})",
-                    $"• Melee attacks consume Dark Focus: +{config.roleSettings.BlackKnightDarkFocusCritChancePerStack:0.##}% crit chance and +{config.roleSettings.BlackKnightDarkFocusCritDamagePerStack:0.##}% crit damage per stack",
-                    $"• Melee crits restore {config.roleSettings.BlackKnightManaRestoreOnMeleeCrit} mana",
-                    $"• Melee crits grant Arcane Surge: +{config.roleSettings.BlackKnightArcaneSurgeMagicDamage:0.##}% magic damage for {config.roleSettings.BlackKnightArcaneSurgeDuration:0.##}s"
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.BlackKnight.MeleeScaleINT", config.roleSettings.BlackKnightINTToMeleeDamage.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.BlackKnight.MagicScaleSTR", config.roleSettings.BlackKnightSTRToMagicDamage.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.BlackKnight.DarkFocusStacks", config.roleSettings.BlackKnightMaxDarkFocusStacks),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.BlackKnight.ConsumeDarkFocus", config.roleSettings.BlackKnightDarkFocusCritChancePerStack.ToString("0.##"), config.roleSettings.BlackKnightDarkFocusCritDamagePerStack.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.BlackKnight.ManaRestore", config.roleSettings.BlackKnightManaRestoreOnMeleeCrit),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.BlackKnight.ArcaneSurge", config.roleSettings.BlackKnightArcaneSurgeMagicDamage.ToString("0.##"), config.roleSettings.BlackKnightArcaneSurgeDuration.ToString("0.##"))
                 };
 
                 if (config.roleSettings.BlackKnightArcaneSurgeScaleWithDamage)
                 {
-                    effects.Add($"• Arcane Surge scales with melee crit damage (+{config.roleSettings.BlackKnightArcaneSurgeDamageScaling:0.##}% per damage point)");
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.BlackKnight.ArcaneSurgeScale", config.roleSettings.BlackKnightArcaneSurgeDamageScaling.ToString("0.##")));
                 }
 
                 return string.Join("\n", effects);
@@ -161,18 +161,18 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    $"• +{config.roleSettings.ClericHealthBonus:0.##}% Max Health",
-                    $"• -{config.roleSettings.ClericDefensePenalty:0.##}% Defense",
-                    $"• Radiates protective aura (radius: {config.roleSettings.ClericAuraRadius:0.#} pixels)",
-                    $"• Teammates in aura: +{config.roleSettings.ClericTeammateHealthBonus:0.##}% max health",
-                    $"• Self regeneration: {config.roleSettings.ClericSelfRegenPercent:0.##}% max health per {config.roleSettings.ClericRegenInterval:0.##}s",
-                    $"• Teammate regeneration: {config.roleSettings.ClericTeammateRegenPercent:0.##}% max health per {config.roleSettings.ClericRegenInterval:0.##}s",
-                    $"• Divine Intervention: Grants debuff immunity to team within aura for {config.roleSettings.DivineInterventionDuration:0.##}s"
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.MaxHealth", config.roleSettings.ClericHealthBonus.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DefensePenalty", config.roleSettings.ClericDefensePenalty.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.ProtectAura", config.roleSettings.ClericAuraRadius.ToString("0.#")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.AuraHealth", config.roleSettings.ClericTeammateHealthBonus.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.SelfRegen", config.roleSettings.ClericSelfRegenPercent.ToString("0.##"), config.roleSettings.ClericRegenInterval.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.TeamRegen", config.roleSettings.ClericTeammateRegenPercent.ToString("0.##"), config.roleSettings.ClericRegenInterval.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DivineIntervention", config.roleSettings.DivineInterventionDuration.ToString("0.##"))
                 };
 
                 if (config.roleSettings.ClericDisableVitRegen)
                 {
-                    effects.Add("• VIT regeneration effects disabled for balance");
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DisabledRegen"));
                 }
 
                 return string.Join("\n", effects);
@@ -182,31 +182,31 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    $"• +{config.roleSettings.GuardianHealthBonus:0.##}% Max Health",
-                    $"• +{config.roleSettings.GuardianDefenseBonus} Defense",
-                    $"• -{config.roleSettings.GuardianMovementSpeedPenalty:0.##}% Movement Speed",
-                    $"• -{config.roleSettings.GuardianDamagePenalty:0.##}% Damage Output",
-                    $"• {config.roleSettings.GuardianDamageReduction:0.##}% Damage Reduction",
-                    $"• Protective aura (radius: {config.roleSettings.GuardianAuraRadius:0.#} pixels)",
-                    $"• Teammates in aura: +{config.roleSettings.GuardianTeammateDefenseBonus:0.##}% defense",
-                    $"• Teammates in aura: {config.roleSettings.GuardianTeammateDamageReduction:0.##}% Damage Reduction",
-                    "• Immune to knockback"
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.MaxHealth", config.roleSettings.GuardianHealthBonus.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.Defense", config.roleSettings.GuardianDefenseBonus),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.MoveSpeedPenalty", config.roleSettings.GuardianMovementSpeedPenalty.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.DamagePenalty", config.roleSettings.GuardianDamagePenalty.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.DamageReduction", config.roleSettings.GuardianDamageReduction.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.Aura", config.roleSettings.GuardianAuraRadius.ToString("0.#")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.AuraDefense", config.roleSettings.GuardianTeammateDefenseBonus.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.AuraReduction", config.roleSettings.GuardianTeammateDamageReduction.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.ImmuneKnockback")
                 };
 
                 if (config.roleSettings.GuardianReduceVitEffects && config.roleSettings.GuardianVitEffectReduction > 0)
                 {
-                    effects.Add($"• VIT effects reduced by {config.roleSettings.GuardianVitEffectReduction:0.##}%");
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.ReducedVIT", config.roleSettings.GuardianVitEffectReduction.ToString("0.##")));
                 }
 
                 if (config.roleSettings.GuardianDisableEndEffects)
                 {
-                    effects.Add("• END knockback resistance and damage reduction disabled");
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.DisabledEND"));
                 }
 
                 return string.Join("\n", effects);
             }
 
-            return "No effects defined.";
+            return Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.NoEffects");
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.GameContent;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -19,8 +20,8 @@ namespace Stataria
         private UIList abilityList;
         private UIText titleText;
         private UIText pointsText;
-        private UITextPanel<string> resetAbilitiesButton;
-        private UITextPanel<string> showHiddenButton;
+        private UITextPanel<LocalizedText> resetAbilitiesButton;
+        private UITextPanel<LocalizedText> showHiddenButton;
 
         private bool dragging = false;
         private Vector2 offset;
@@ -53,12 +54,12 @@ namespace Stataria
             };
             skillPanel.OnLeftMouseUp += (evt, el) => dragging = false;
 
-            titleText = new UIText("Rebirth Abilities", 1.2f);
+            titleText = new UIText(Language.GetText("Mods.Stataria.UI.SkillTree.Title"), 1.2f);
             titleText.Top.Set(0f, 0f);
             titleText.HAlign = 0.5f;
             skillPanel.Append(titleText);
 
-            pointsText = new UIText("Rebirth Points: 0", 1f);
+            pointsText = new UIText(Language.GetText("Mods.Stataria.UI.SkillTree.RebirthPoints").WithFormatArgs(0), 1f);
             pointsText.Top.Set(35f, 0f);
             pointsText.HAlign = 0.5f;
             pointsText.TextColor = new Color(255, 230, 100);
@@ -78,7 +79,7 @@ namespace Stataria
             skillPanel.Append(scrollbar);
             abilityList.SetScrollbar(scrollbar);
 
-            resetAbilitiesButton = new UITextPanel<string>("RESET", 0.9f, false);
+            resetAbilitiesButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.SkillTree.ResetButton"), 0.9f, false);
             resetAbilitiesButton.Width.Set(80f, 0f);
             resetAbilitiesButton.Height.Set(30f, 0f);
             resetAbilitiesButton.Top.Set(10f, 0f);
@@ -91,7 +92,7 @@ namespace Stataria
             };
             skillPanel.Append(resetAbilitiesButton);
 
-            showHiddenButton = new UITextPanel<string>("Show Hidden", 0.9f, false);
+            showHiddenButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.SkillTree.ShowHidden"), 0.9f, false);
             showHiddenButton.Width.Set(120f, 0f);
             showHiddenButton.Height.Set(30f, 0f);
             showHiddenButton.Top.Set(skillPanel.Height.Pixels - 60f, 0f);
@@ -143,7 +144,7 @@ namespace Stataria
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
             if (rpg == null) return;
 
-            pointsText.SetText($"Rebirth Points: {rpg.RebirthPoints}");
+            pointsText.SetText(Language.GetTextValue("Mods.Stataria.UI.SkillTree.RebirthPoints", rpg.RebirthPoints));
 
             foreach (var kvp in rpg.RebirthAbilities)
             {
@@ -196,13 +197,13 @@ namespace Stataria
                 descText.TextColor = ability.IsHidden && showHiddenAbilities ? Color.LightGray * 0.5f : Color.LightGray;
                 abilityPanel.Append(descText);
 
-                var costText = new UIText($"Cost: {ability.Cost} RP", 0.8f);
+                var costText = new UIText(Language.GetTextValue("Mods.Stataria.UI.SkillTree.Cost", ability.Cost), 0.8f);
                 costText.Top.Set(panelHeight - 30f, 0f);
                 costText.Left.Set(10f, 0f);
                 costText.TextColor = ability.IsHidden && showHiddenAbilities ? Color.Yellow * 0.5f : Color.Yellow;
                 abilityPanel.Append(costText);
 
-                var hideButton = new UITextPanel<string>("Hide", 0.8f, false)
+                var hideButton = new UITextPanel<string>(Language.GetTextValue("Mods.Stataria.UI.SkillTree.Hide"), 0.8f, false)
                 {
                     Width = { Pixels = 80f },
                     Height = { Pixels = 30f },
@@ -231,7 +232,7 @@ namespace Stataria
                 abilityPanel.Append(hideButton);
 
                 bool canUnlock = !ability.IsUnlocked || (ability.IsStackable && ability.Level < ability.MaxLevel);
-                string buttonText = ability.IsUnlocked ? (ability.IsStackable ? "Upgrade" : "Unlocked") : "Unlock";
+                string buttonText = ability.IsUnlocked ? (ability.IsStackable ? Language.GetTextValue("Mods.Stataria.UI.SkillTree.Upgrade") : Language.GetTextValue("Mods.Stataria.UI.SkillTree.Unlocked")) : Language.GetTextValue("Mods.Stataria.UI.SkillTree.Unlock");
 
                 var unlockButton = new UITextPanel<string>(buttonText, 0.8f, false)
                 {
@@ -267,7 +268,7 @@ namespace Stataria
                 if (ability.IsUnlocked && ability.AbilityType == RebirthAbilityType.Toggleable)
                 {
                     bool isEnabled = ability.AbilityData.ContainsKey("Enabled") && (bool)ability.AbilityData["Enabled"];
-                    var toggleButton = new UITextPanel<string>(isEnabled ? "On" : "Off", 0.8f, false)
+                    var toggleButton = new UITextPanel<string>(isEnabled ? Language.GetTextValue("Mods.Stataria.UI.SkillTree.ToggleOn") : Language.GetTextValue("Mods.Stataria.UI.SkillTree.ToggleOff"), 0.8f, false)
                     {
                         Width = { Pixels = 60f },
                         Height = { Pixels = 30f },
@@ -281,7 +282,7 @@ namespace Stataria
                         bool currentState = (bool)ability.AbilityData["Enabled"];
                         ability.AbilityData["Enabled"] = !currentState;
 
-                        toggleButton.SetText(!currentState ? "On" : "Off");
+                        toggleButton.SetText(!currentState ? Language.GetTextValue("Mods.Stataria.UI.SkillTree.ToggleOn") : Language.GetTextValue("Mods.Stataria.UI.SkillTree.ToggleOff"));
                         toggleButton.BackgroundColor = !currentState ? new Color(80, 180, 80, 255) : new Color(180, 80, 80, 255);
 
                         SoundEngine.PlaySound(SoundID.MenuTick);
@@ -337,7 +338,7 @@ namespace Stataria
 
             if (refundedPoints > 0)
             {
-                CombatText.NewText(player.Hitbox, Color.Gold, $"+{refundedPoints} RP Refunded!");
+                CombatText.NewText(player.Hitbox, Color.Gold, Language.GetTextValue("Mods.Stataria.UI.SkillTree.RefundedRP", refundedPoints));
             }
 
             RefreshAbilitiesList();
@@ -366,7 +367,7 @@ namespace Stataria
             {
                 RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
                 if (rpg != null)
-                    pointsText.SetText($"Rebirth Points: {rpg.RebirthPoints}");
+                    pointsText.SetText(Language.GetTextValue("Mods.Stataria.UI.SkillTree.RebirthPoints", rpg.RebirthPoints));
             }
         }
 

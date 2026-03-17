@@ -7,6 +7,7 @@ using System;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.GameContent;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -31,7 +32,7 @@ namespace Stataria
 
         public void Initialize(UIPanel panel, float baseY)
         {
-            var bulkHeader = new UIText("Allocation Amount:", 1f);
+            var bulkHeader = new UIText(Language.GetText("Mods.Stataria.UI.BulkAllocation.Header"), 1f);
             baseY += 10f;
             bulkHeader.Top.Set(baseY, 0f);
             bulkHeader.Left.Set(10f, 0f);

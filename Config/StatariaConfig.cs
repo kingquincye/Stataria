@@ -481,17 +481,13 @@ namespace Stataria
             [Header("XP_Blacklist")]
             public List<string> XPBlacklistedNPCs { get; set; } = new List<string>
             {
-                "Target Dummy",
-                "Scarecrow Dummy",
-                "Super Dummy"
+                "Target Dummy", "Scarecrow Dummy", "Super Dummy"
             };
 
             [Header("Scaling_Blacklist")]
             public List<string> ScalingBlacklistedNPCs { get; set; } = new List<string>
             {
-                "Blood Crawler", "Blood Crawler Wall", "Jungle Creeper", "Jungle Creeper Wall", "Wall Creeper", "Wall Creeper Wall",
-                "Black Recluse", "Black Recluse Wall","Desert Scorpion Walk", "Desert Scorpion Wall", "Target Dummy", "Scarecrow Dummy",
-                "Super Dummy"
+                "Target Dummy", "Scarecrow Dummy", "Super Dummy"
             };
         }
     }

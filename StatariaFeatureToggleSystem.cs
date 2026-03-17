@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -72,7 +73,7 @@ namespace Stataria
             {
                 if (cfg.generalBalance.EnableStatPointRecalculation)
                 {
-                    StatariaLogger.Debug("Stat points per level config change detected - recalculating stat points for players");
+                    StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Logging.StatariaFeatureToggleSystem.StatPointsRecalculating"));
                     lastStatPointsPerLevel = cfg.generalBalance.StatPointsPerLevel;
 
                     foreach (Player player in Main.player)
@@ -86,7 +87,7 @@ namespace Stataria
                 }
                 else
                 {
-                    StatariaLogger.Debug("Stat points per level config change detected - recalculation disabled");
+                    StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Logging.StatariaFeatureToggleSystem.StatPointsRecalculationDisabled"));
                     lastStatPointsPerLevel = cfg.generalBalance.StatPointsPerLevel;
                 }
             }
@@ -108,7 +109,7 @@ namespace Stataria
             {
                 if (cfg.rebirthSystem.EnableRebirthPointRecalculation)
                 {
-                    StatariaLogger.Debug("Rebirth config change detected - recalculating RP for players");
+                    StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Logging.StatariaFeatureToggleSystem.RebirthConfigRecalculating"));
                     lastRebirthPointsMultiplier = cfg.rebirthSystem.RebirthPointsMultiplier;
                     lastRebirthLevelRequirement = cfg.rebirthSystem.RebirthLevelRequirement;
                     lastAdditionalLevelRequirementPerRebirth = cfg.rebirthSystem.AdditionalLevelRequirementPerRebirth;
@@ -126,7 +127,7 @@ namespace Stataria
                 }
                 else
                 {
-                    StatariaLogger.Debug("Rebirth config change detected - recalculation disabled");
+                    StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Logging.StatariaFeatureToggleSystem.RebirthConfigRecalculationDisabled"));
                     lastRebirthPointsMultiplier = cfg.rebirthSystem.RebirthPointsMultiplier;
                     lastRebirthLevelRequirement = cfg.rebirthSystem.RebirthLevelRequirement;
                     lastAdditionalLevelRequirementPerRebirth = cfg.rebirthSystem.AdditionalLevelRequirementPerRebirth;
@@ -143,7 +144,7 @@ namespace Stataria
             {
                 if (cfg.rebirthSystem.EnableRebirthStatPointRecalculation)
                 {
-                    StatariaLogger.Debug("Rebirth stat point config change detected - recalculating stat points for players");
+                    StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Logging.StatariaFeatureToggleSystem.RebirthStatPointRecalculating"));
                     lastRebirthBonusStatPoints = cfg.rebirthSystem.EnableRebirthBonusStatPoints;
                     lastRebirthStatPointsMultiplier = cfg.rebirthSystem.RebirthStatPointsMultiplier;
 
@@ -158,7 +159,7 @@ namespace Stataria
                 }
                 else
                 {
-                    StatariaLogger.Debug("Rebirth stat point config change detected - recalculation disabled");
+                    StatariaLogger.Debug(Language.GetTextValue("Mods.Stataria.Logging.StatariaFeatureToggleSystem.RebirthStatPointRecalculationDisabled"));
                     lastRebirthBonusStatPoints = cfg.rebirthSystem.EnableRebirthBonusStatPoints;
                     lastRebirthStatPointsMultiplier = cfg.rebirthSystem.RebirthStatPointsMultiplier;
                 }
@@ -175,7 +176,7 @@ namespace Stataria
                     }
                     catch (System.Exception e)
                     {
-                        ModContent.GetInstance<Stataria>().Logger.Error("Error reinitializing panel (Calamity): " + e.Message);
+                        ModContent.GetInstance<Stataria>().Logger.Error(Language.GetTextValue("Mods.Stataria.Logging.StatariaFeatureToggleSystem.ErrorCalamityPanel", e.Message));
                     }
                 }
                 lastCalamityIntegrationState = currentCalamityState;
@@ -192,7 +193,7 @@ namespace Stataria
                     }
                     catch (System.Exception e)
                     {
-                        ModContent.GetInstance<Stataria>().Logger.Error("Error reinitializing panel (Thorium): " + e.Message);
+                        ModContent.GetInstance<Stataria>().Logger.Error(Language.GetTextValue("Mods.Stataria.Logging.StatariaFeatureToggleSystem.ErrorThoriumPanel", e.Message));
                     }
                 }
                 lastThoriumIntegrationState = currentThoriumState;

@@ -219,7 +219,7 @@ namespace Stataria
                         {
                             string sign = difference > 0 ? "+" : "";
                             Color textColor = difference > 0 ? Color.Gold : Color.OrangeRed;
-                            CombatText.NewText(Player.Hitbox, textColor, $"{sign}{difference} RP (Sync)", true);
+                            CombatText.NewText(Player.Hitbox, textColor, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.RetroRPSync", $"{sign}{difference}"), true);
                         }
                     }
 
@@ -240,149 +240,147 @@ namespace Stataria
             RebirthAbilities.Clear();
 
             RebirthAbilities["EnhancedFortune"] = new RebirthAbility(
-                "Enhanced Fortune", "Grants additional luck per level when toggled on, improving drop rates and other luck-based mechanics.", 30, true, config.rebirthAbilities.MaxEnhancedFortuneLevel
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.EnhancedFortune"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.EnhancedFortune"), 30, true, config.rebirthAbilities.MaxEnhancedFortuneLevel
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["ReducedPotionSickness"] = new RebirthAbility(
-            "Reduced Potion Sickness", "Reduces potion sickness duration by 50%", 20, false, 1);
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ReducedPotionSickness"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ReducedPotionSickness"), 20, false, 1);
 
             RebirthAbilities["ExtraAccessorySlot"] = new RebirthAbility(
-                "Extra Accessory Slot", "Grants an additional accessory slot per level", 30, true,
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ExtraAccessorySlot"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ExtraAccessorySlot"), 30, true,
                 Math.Min(config.rebirthAbilities.MaxExtraAccessorySlots, 50));
 
             RebirthAbilities["LastStand"] = new RebirthAbility(
-                "Last Stand", "When you would die, heal for 10% of your max health and gain 3 seconds of immunity. 3 minute cooldown.", 40, false, 1);
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.LastStand"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.LastStand"), 40, false, 1);
 
             RebirthAbilities["Dash"] = new RebirthAbility(
-                "Dash", "Grants the ability to dash", 20, false, 1);
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.Dash"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.Dash"), 20, false, 1);
 
             RebirthAbilities["AutoJump"] = new RebirthAbility(
-                "Auto-Jump", "Allows jumping automatically when holding jump button", 15, false, 1);
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.AutoJump"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.AutoJump"), 15, false, 1);
 
             RebirthAbilities["NoFallDamage"] = new RebirthAbility(
-                "No Fall Damage", "Completely immune to fall damage", 25, false, 1);
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.NoFallDamage"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.NoFallDamage"), 25, false, 1);
 
             RebirthAbilities["WaterFreedom"] = new RebirthAbility(
-                "Water Freedom", "Grants free movement in water, water breathing and flippers effect", 20, false, 1);
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.WaterFreedom"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.WaterFreedom"), 20, false, 1);
 
             RebirthAbilities["Teleport"] = new RebirthAbility(
-                "Teleport", "Ability to teleport to cursor position using assigned key", 50, false, 1);
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.Teleport"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.Teleport"), 50, false, 1);
 
             RebirthAbilities["TreasureHunter"] = new RebirthAbility(
-                "Treasure Hunter", "Grants Spelunker, Dangersense, and Hunter effects.", 30, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.TreasureHunter"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.TreasureHunter"), 30, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["Sustenance"] = new RebirthAbility(
-                "Sustenance", "Toggleable food buff. Level 1: Well Fed, Level 2: Plenty Satisfied, Level 3: Exquisitely Stuffed.", 25, true, 3
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.Sustenance"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.Sustenance"), 25, true, 3
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["ArcheryMastery"] = new RebirthAbility(
-                "Archery Mastery", "Grants Ammo Reservation and Archery buffs.", 15, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ArcheryMastery"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ArcheryMastery"), 15, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["BattleReady"] = new RebirthAbility(
-                "Battle Ready", "Grants Battle buff.", 10, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.BattleReady"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.BattleReady"), 10, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["AnglerLuck"] = new RebirthAbility(
-                "Angler's Luck", "Grants Crate, Fishing, and Sonar buffs.", 20, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.AnglerLuck"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.AnglerLuck"), 20, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["VitalityFortitude"] = new RebirthAbility(
-                "Vitality & Fortitude", "Grants Lifeforce, Endurance, Ironskin, Regeneration, and Heartreach buffs.", 40, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.VitalityFortitude"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.VitalityFortitude"), 40, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["InnerCalm"] = new RebirthAbility(
-                "Inner Calm", "Grants Calm buff.", 10, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.InnerCalm"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.InnerCalm"), 10, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["ElementalResistance"] = new RebirthAbility(
-                "Elemental Resistance", "Grants Inferno and Warmth buffs.", 15, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ElementalResistance"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ElementalResistance"), 15, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["ShadowVeil"] = new RebirthAbility(
-                "Shadow Veil", "Grants Invisibility buff.", 20, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ShadowVeil"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ShadowVeil"), 20, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["FortuneFavored"] = new RebirthAbility(
-                "Fortune Favored", "Grants Lucky buff.", 25, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.FortuneFavored"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.FortuneFavored"), 25, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["ArcaneMastery"] = new RebirthAbility(
-                "Arcane Mastery", "Grants Magic Power and Mana Regeneration buffs.", 20, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ArcaneMastery"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ArcaneMastery"), 20, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["MasterBuilder"] = new RebirthAbility(
-                "Master Builder", "Grants Builder and Mining buffs.", 20, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.MasterBuilder"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.MasterBuilder"), 20, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["BattleFury"] = new RebirthAbility(
-                "Battle Fury", "Grants Rage and Wrath buffs.", 25, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.BattleFury"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.BattleFury"), 25, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["SurfaceSkimmer"] = new RebirthAbility(
-                "Surface Skimmer", "Grants Water Walking buff.", 15, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.SurfaceSkimmer"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.SurfaceSkimmer"), 15, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["ThornGuard"] = new RebirthAbility(
-                "Thorn Guard", "Grants Thorns buff.", 15, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ThornGuard"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ThornGuard"), 15, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["FleetFooted"] = new RebirthAbility(
-                "Fleet Footed", "Grants Swiftness buff.", 15, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.FleetFooted"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.FleetFooted"), 15, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["SummonerPact"] = new RebirthAbility(
-                "Summoner's Pact", "Grants Summoning buff.", 20, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.SummonerPact"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.SummonerPact"), 20, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["LavaWalker"] = new RebirthAbility(
-                "Lava Walker", "Grants Obsidian Skin buff.", 20, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.LavaWalker"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.LavaWalker"), 20, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["ZeroGravity"] = new RebirthAbility(
-                "Zero Gravity", "Grants Gravitation buff.", 35, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ZeroGravity"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ZeroGravity"), 35, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["NightVision"] = new RebirthAbility(
-                "Night Vision", "Grants Shine and Night Owl buffs.", 15, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.NightVision"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.NightVision"), 15, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["Sanctuary"] = new RebirthAbility(
-                "Sanctuary", "Grants The Bast Defence, Star in a Bottle, Honey, Heart Lamp, Dryad's Blessing, and Cozy Fire buffs.", 50, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.Sanctuary"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.Sanctuary"), 50, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["CombatStations"] = new RebirthAbility(
-                "Combat Stations", "Grants Ammo Box, Bewitched, Clairvoyance, Sharpened, Strategist (Tipsy), and Sugar Rush buffs.", 50, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.CombatStations"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.CombatStations"), 50, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["GiantsGrip"] = new RebirthAbility(
-                "Giant's Grip", "Increases the size of melee weapons by 33%.", 25, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.GiantsGrip"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.GiantsGrip"), 25, false, 1
             );
 
             RebirthAbilities["GoldenTouch"] = new RebirthAbility(
-                "Golden Touch", $"Increases the amount of coins picked up by {config.rebirthAbilities.GoldenTouchPercentPerLevel}% per level.", 15, true,
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.GoldenTouch"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.GoldenTouch"), 15, true,
                 config.rebirthAbilities.MaxGoldenTouchLevel);
 
             RebirthAbilities["EnhancedSpawns"] = new RebirthAbility(
-                "Enhanced Spawns",
-                $"Increases enemy spawn rate by {config.rebirthAbilities.SpawnRatePercentPerLevel}% per level. Stacks with other spawn rate modifiers.",
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.EnhancedSpawns"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.EnhancedSpawns"),
                 35,
                 true,
                 config.rebirthAbilities.MaxEnhancedSpawnsLevel
                 ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["ShadowTrail"] = new RebirthAbility(
-                "Shadow Trail", "Creates a trailing afterimage effect like Shadow Armor.", 5, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.ShadowTrail"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.ShadowTrail"), 5, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["AuraPulse"] = new RebirthAbility(
-                "Aura Pulse", "Creates a pulsing outline aura effect like Hallowed Armor.", 5, false, 1
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.AuraPulse"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.AuraPulse"), 5, false, 1
             ) { AbilityType = RebirthAbilityType.Toggleable };
 
             RebirthAbilities["AutoClicker"] = new RebirthAbility(
-                "Auto-Clicker",
-                "When toggled on, automatically clicks. Speed improves with levels. Effect interaction is set in mod config.",
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.AutoClicker"), Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityDescription.AutoClicker"),
                 25,
                 true,
                 config.rebirthAbilities.AutoClickerMaxLevel
@@ -403,57 +401,57 @@ namespace Stataria
 
             var critGod = new Role(
                 "CritGod",
-                "Crit God",
-                "A master of devastating precision, turning every strike into a potential killing blow.",
-                "Channel your inner perfectionist - every hit counts, every strike matters."
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.CritGod"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.CritGod"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.CritGod")
             );
             AvailableRoles["CritGod"] = critGod;
 
             var vampire = new Role(
                 "Vampire",
-                "Vampire",
-                "A bloodthirsty warrior who grows stronger through combat, draining life from wounded foes.",
-                "Embrace the darkness - let your enemies' blood fuel your power."
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Vampire"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Vampire"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Vampire")
             );
             AvailableRoles["Vampire"] = vampire;
 
             var beastmaster = new Role(
                 "Beastmaster",
-                "Beastmaster",
-                "A master of minions who gains power from commanding diverse creatures and maximizing their potential.",
-                "Strength through diversity - the more varied your army, the stronger you become."
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Beastmaster"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Beastmaster"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Beastmaster")
             );
             AvailableRoles["Beastmaster"] = beastmaster;
 
             var apexSummoner = new Role(
                 "ApexSummoner",
-                "Apex Summoner",
-                "A focused summoner who achieves maximum power through singular dedication, gaining massive damage when commanding only one minion type.",
-                "Perfection through focus - one minion, unlimited potential."
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.ApexSummoner"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.ApexSummoner"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.ApexSummoner")
             );
             AvailableRoles["ApexSummoner"] = apexSummoner;
 
             var blackKnight = new Role(
                 "BlackKnight",
-                "Black Knight",
-                "A versatile warrior-mage who blends martial prowess with arcane mastery, gaining power through the synergy of sword and spell.",
-                "Steel and sorcery united - let magic fuel your blade, and let your blade focus your magic."
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.BlackKnight"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.BlackKnight"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.BlackKnight")
             );
             AvailableRoles["BlackKnight"] = blackKnight;
 
             var cleric = new Role(
                 "Cleric",
-                "Cleric",
-                "A divine healer who protects and empowers allies within their sacred aura, sacrificing personal defense for team support.",
-                "Embrace your calling as a beacon of hope - your strength lies not in steel, but in the divine protection you provide to others."
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Cleric"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Cleric"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Cleric")
             );
             AvailableRoles["Cleric"] = cleric;
 
             var guardian = new Role(
                 "Guardian",
-                "Guardian",
-                "A stalwart protector who shields allies from harm by sharing their burden and reflecting damage back to attackers.",
-                "Stand as the unbreakable shield - let your allies' pain become your strength, and your resolve become their salvation."
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Guardian"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Guardian"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Guardian")
             );
             AvailableRoles["Guardian"] = guardian;
 
@@ -675,8 +673,8 @@ namespace Stataria
 
             if (Main.netMode != NetmodeID.Server)
             {
-                CombatText.NewText(Player.Hitbox, Color.Purple, $"Rebirth {RebirthCount}!");
-                CombatText.NewText(Player.Hitbox, Color.Gold, $"+{pointsToAward} Rebirth Points!");
+                CombatText.NewText(Player.Hitbox, Color.Purple, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.RebirthCount", RebirthCount));
+                CombatText.NewText(Player.Hitbox, Color.Gold, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.RebirthPoints", pointsToAward));
             }
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -708,7 +706,7 @@ namespace Stataria
 
                 if (Main.netMode != NetmodeID.Server)
                 {
-                    CombatText.NewText(Player.Hitbox, Color.Green, $"+{difference} Stat Points", true);
+                    CombatText.NewText(Player.Hitbox, Color.Green, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.StatPointsSync", difference), true);
                 }
             }
         }
@@ -963,7 +961,7 @@ namespace Stataria
 
                 if (Main.netMode != NetmodeID.Server)
                 {
-                    CombatText.NewText(Player.Hitbox, Color.Gold, $"+{difference} RP", true);
+                    CombatText.NewText(Player.Hitbox, Color.Gold, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.RPSync", difference), true);
                 }
             }
         }
@@ -995,7 +993,7 @@ namespace Stataria
 
                 if (Main.netMode != NetmodeID.Server)
                 {
-                    CombatText.NewText(Player.Hitbox, Color.Gold, $"+{difference} Rebirth Stat Points", true);
+                    CombatText.NewText(Player.Hitbox, Color.Gold, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.RebirthStatPointsSync", difference), true);
                 }
             }
         }
@@ -1030,7 +1028,7 @@ namespace Stataria
 
                 if (Main.netMode != NetmodeID.Server && levelCapMessageTimer <= 0)
                 {
-                    CombatText.NewText(Player.Hitbox, Color.Gray, "Level Cap Reached!");
+                    CombatText.NewText(Player.Hitbox, Color.Gray, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.LevelCapReached"));
                     levelCapMessageTimer = levelCapMessageCooldown;
                 }
                 return;
@@ -1103,14 +1101,14 @@ namespace Stataria
 
                 if (showPopup && amount > 0)
                 {
-                    CombatText.NewText(Player.Hitbox, Color.Gold, $"+{amount:N0} XP");
+                    CombatText.NewText(Player.Hitbox, Color.Gold, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.XPGain", amount.ToString("N0")));
 
                     if (StatariaLogger.GlobalDebugMode)
                     {
                         Vector2 position = Player.Hitbox.TopLeft();
                         position.Y -= 20;
                         CombatText.NewText(new Rectangle((int)position.X, (int)position.Y, Player.Hitbox.Width, 20),
-                            Color.Cyan, $"From: {source}");
+                            Color.Cyan, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.XPSource", source));
                     }
                 }
             }
@@ -1123,7 +1121,7 @@ namespace Stataria
                     XP = XPToNext;
                     if (Main.netMode != NetmodeID.Server && levelCapMessageTimer <= 0)
                     {
-                        CombatText.NewText(Player.Hitbox, Color.Gray, "Level Cap Reached!");
+                        CombatText.NewText(Player.Hitbox, Color.Gray, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.LevelCapReached"));
                         levelCapMessageTimer = levelCapMessageCooldown;
                     }
                     break;
@@ -1175,7 +1173,7 @@ namespace Stataria
 
             if (Main.netMode != NetmodeID.Server)
             {
-                CombatText.NewText(Player.Hitbox, Color.LightGreen, $"Level Up! Level {Level}");
+                CombatText.NewText(Player.Hitbox, Color.LightGreen, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.LevelUp", Level));
                 var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
                 if (clientConfig.EnableLevelUpSound)
                 {
@@ -2360,7 +2358,7 @@ namespace Stataria
 
                         if (Main.netMode != NetmodeID.Server)
                         {
-                            CombatText.NewText(Player.Hitbox, Color.LimeGreen, "Last Stand!");
+                            CombatText.NewText(Player.Hitbox, Color.LimeGreen, Terraria.Localization.Language.GetTextValue("Mods.Stataria.RPGPlayer.LastStand"));
                         }
 
                         lastStandImmunityTimer = config.rebirthAbilities.LastStandImmunityTime * 60;

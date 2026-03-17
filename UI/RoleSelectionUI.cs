@@ -11,6 +11,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.GameContent;
 using ReLogic.Graphics;
+using Terraria.Localization;
 
 namespace Stataria
 {
@@ -52,19 +53,19 @@ namespace Stataria
             };
             rolePanel.OnLeftMouseUp += (evt, el) => dragging = false;
 
-            titleText = new UIText("ROLE SELECTION", 1.6f);
+            titleText = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.Title"), 1.6f);
             titleText.Top.Set(5f, 0f);
             titleText.HAlign = 0.5f;
             titleText.TextColor = new Color(220, 220, 255);
             rolePanel.Append(titleText);
 
-            pointsText = new UIText("Rebirth Points: 0", 1.2f);
+            pointsText = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.RebirthPoints").WithFormatArgs(0), 1.2f);
             pointsText.Top.Set(40f, 0f);
             pointsText.HAlign = 0.5f;
             pointsText.TextColor = new Color(255, 215, 100);
             rolePanel.Append(pointsText);
 
-            activeRoleText = new UIText("Active Role: None", 1f);
+            activeRoleText = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.ActiveRoleNone"), 1f);
             activeRoleText.Top.Set(70f, 0f);
             activeRoleText.HAlign = 0.5f;
             activeRoleText.TextColor = new Color(100, 255, 100);
@@ -96,7 +97,7 @@ namespace Stataria
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
             if (rpg == null) return;
 
-            pointsText.SetText($"Rebirth Points: {rpg.RebirthPoints}");
+            pointsText.SetText(Language.GetText("Mods.Stataria.UI.RoleSelection.RebirthPoints").WithFormatArgs(rpg.RebirthPoints));
 
             foreach (var kvp in rpg.AvailableRoles)
             {
@@ -154,7 +155,7 @@ namespace Stataria
 
             if (isActive)
             {
-                var activeIndicator = new UIText("● ACTIVE", 1f);
+                var activeIndicator = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.IndicatorActive"), 1f);
                 activeIndicator.Top.Set(currentY, 0f);
                 activeIndicator.Left.Set(0f, 0f);
                 activeIndicator.TextColor = new Color(100, 255, 100);
@@ -163,7 +164,7 @@ namespace Stataria
             }
             else if (isDeactivated)
             {
-                var deactivatedIndicator = new UIText("● DEACTIVATED", 1f);
+                var deactivatedIndicator = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.IndicatorDeactivated"), 1f);
                 deactivatedIndicator.Top.Set(currentY, 0f);
                 deactivatedIndicator.Left.Set(0f, 0f);
                 deactivatedIndicator.TextColor = new Color(255, 255, 100);
@@ -204,7 +205,7 @@ namespace Stataria
                 currentY += GetTextHeight(wrappedFlavorText, 0.85f) + SECTION_SPACING;
             }
 
-            var effectsHeader = new UIText("Effects:", 1.1f);
+            var effectsHeader = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.EffectsHeader"), 1.1f);
             effectsHeader.Top.Set(currentY, 0f);
             effectsHeader.Left.Set(0f, 0f);
             effectsHeader.TextColor = role.Status == RoleStatus.Locked ?
@@ -225,7 +226,7 @@ namespace Stataria
 
             if (isActive)
             {
-                var statusPanel = new UITextPanel<string>("DEACTIVATE", 1f, false);
+                var statusPanel = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.RoleSelection.DeactivateButton"), 1f, false);
                 statusPanel.Width.Set(200f, 0f);
                 statusPanel.Height.Set(35f, 0f);
                 statusPanel.HAlign = 0.5f;
@@ -247,7 +248,7 @@ namespace Stataria
             }
             else if (isDeactivated)
             {
-                var reactivatePanel = new UITextPanel<string>("REACTIVATE", 1f, false);
+                var reactivatePanel = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.RoleSelection.ReactivateButton"), 1f, false);
                 reactivatePanel.Width.Set(200f, 0f);
                 reactivatePanel.Height.Set(35f, 0f);
                 reactivatePanel.HAlign = 0.5f;
@@ -278,7 +279,7 @@ namespace Stataria
                 lockedPanel.BorderColor = new Color(160, 80, 80, 255);
                 lockedPanel.SetPadding(0f);
 
-                var lockedText = new UIText("LOCKED - Requires Rebirth 2", 0.9f);
+                var lockedText = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.LockedRole"), 0.9f);
                 lockedText.HAlign = 0.5f;
                 lockedText.VAlign = 0.5f;
                 lockedText.TextColor = new Color(255, 120, 120);
@@ -288,9 +289,9 @@ namespace Stataria
             else
             {
                 int cost = role.GetCurrentSwitchCost(rpg);
-                string buttonText = cost > 0 ? $"SWITCH - Cost: {cost} RP" : "SELECT (Free)";
+                LocalizedText buttonText = cost > 0 ? Language.GetText("Mods.Stataria.UI.RoleSelection.SwitchCostButton").WithFormatArgs(cost) : Language.GetText("Mods.Stataria.UI.RoleSelection.SelectFreeButton");
 
-                var switchButton = new UITextPanel<string>(buttonText, 1f, false);
+                var switchButton = new UITextPanel<LocalizedText>(buttonText, 1f, false);
                 switchButton.Width.Set(250f, 0f);
                 switchButton.Height.Set(40f, 0f);
                 switchButton.HAlign = 0.5f;
@@ -330,7 +331,7 @@ namespace Stataria
                 {
                     foreach (var panelChild in rolePanel.Children)
                     {
-                        if (panelChild is UITextPanel<string> button && button.ContainsPoint(mousePosition))
+                        if (panelChild is UITextPanel<LocalizedText> button && button.ContainsPoint(mousePosition))
                             return true;
                     }
                 }
@@ -436,17 +437,23 @@ namespace Stataria
                 RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
                 if (rpg != null)
                 {
-                    pointsText.SetText($"Rebirth Points: {rpg.RebirthPoints}");
+                    pointsText.SetText(Language.GetText("Mods.Stataria.UI.RoleSelection.RebirthPoints").WithFormatArgs(rpg.RebirthPoints));
 
-                    string activeRoleDisplay = "None";
                     if (rpg.ActiveRole != null)
                     {
                         if (rpg.ActiveRole.Status == RoleStatus.Active)
-                            activeRoleDisplay = rpg.ActiveRole.Name;
+                        {
+                            activeRoleText.SetText(Language.GetText("Mods.Stataria.UI.RoleSelection.ActiveRole").WithFormatArgs(rpg.ActiveRole.Name));
+                        }
                         else if (rpg.ActiveRole.Status == RoleStatus.Deactivated)
-                            activeRoleDisplay = $"{rpg.ActiveRole.Name} (Deactivated)";
+                        {
+                            activeRoleText.SetText(Language.GetText("Mods.Stataria.UI.RoleSelection.ActiveRoleDeactivated").WithFormatArgs(rpg.ActiveRole.Name));
+                        }
                     }
-                    activeRoleText.SetText($"Active Role: {activeRoleDisplay}");
+                    else
+                    {
+                        activeRoleText.SetText(Language.GetText("Mods.Stataria.UI.RoleSelection.ActiveRoleNone"));
+                    }
                 }
             }
         }

@@ -29,8 +29,8 @@ namespace Stataria.Buffs
                     var rpgPlayer = player.GetModPlayer<RPGPlayer>();
                     float damageBonus = rpgPlayer.GetArcaneSurgeDamageBonus();
                     
-                    buffName = $"Arcane Surge ({timeLeft:0.0}s)";
-                    tip = $"+{damageBonus:0.#}% magic damage";
+                    buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ArcaneSurgeBuff.DynamicName", timeLeft.ToString("0.0"));
+                    tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ArcaneSurgeBuff.DynamicTooltip", damageBonus.ToString("0.#"));
                 }
             }
         }
