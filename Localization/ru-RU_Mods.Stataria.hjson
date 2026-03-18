@@ -2548,6 +2548,8 @@ RPGPlayer: {
 	LastStand: Последний Рубеж!
 }
 
+Combat.Bleed: Кровотечение!
+
 RebirthAbilityName: {
 	EnhancedFortune: Расширенная Удача
 	ReducedPotionSickness: Быстрое Исцеление

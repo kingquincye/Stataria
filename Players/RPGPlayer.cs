@@ -388,6 +388,7 @@ namespace Stataria
 
             foreach (var kvp in RebirthAbilities)
             {
+                kvp.Value.ID = kvp.Key;
                 if (kvp.Value.AbilityType == RebirthAbilityType.Toggleable && !kvp.Value.AbilityData.ContainsKey("Enabled"))
                 {
                     kvp.Value.AbilityData["Enabled"] = false;
@@ -482,12 +483,7 @@ namespace Stataria
                 RoleSwitchCount++;
                 ActiveRole.Status = RoleStatus.Available;
             }
-            else if (ActiveRole != null && ActiveRole.ID == roleID && ActiveRole.Status == RoleStatus.Deactivated)
-            {
-            }
-            else if (ActiveRole == null)
-            {
-            }
+
 
             ActiveRole = newRole;
             ActiveRole.Status = RoleStatus.Active;
@@ -620,7 +616,10 @@ namespace Stataria
         private void RecalculateXPToNext()
         {
             var config = ModContent.GetInstance<StatariaConfig>();
-            XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            if (config.generalBalance.EnableXPCurve)
+                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.XPCurveSteepness));
+            else
+                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
         }
 
         public void PerformRebirth()
@@ -654,7 +653,10 @@ namespace Stataria
 
             Level = 1;
             XP = 0;
-            XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            if (config.generalBalance.EnableXPCurve)
+                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.XPCurveSteepness));
+            else
+                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
 
             if (config.rebirthSystem.ResetStatsOnRebirth)
             {
@@ -693,7 +695,7 @@ namespace Stataria
             int shouldHaveStatPoints = (Level - 1) * config.generalBalance.StatPointsPerLevel;
 
             int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK + 
-                  BLH + THR;
+                  BLH + HNT + GMB + SHM + THR;
 
             int totalPointsShould = shouldHaveStatPoints;
 
@@ -982,7 +984,7 @@ namespace Stataria
             }
 
             int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK + 
-                  BLH + THR;
+                  BLH + HNT + GMB + SHM + THR;
             int totalPointsShould = shouldHaveBaseStatPoints + shouldHaveBonusStatPoints;
             int currentTotalPoints = spentPoints + StatPoints;
 
@@ -1048,7 +1050,6 @@ namespace Stataria
 
             ApplyXPDirectly(amount, source);
         }
-
 
         public bool CanRespec(out string reason)
         {
@@ -1131,11 +1132,7 @@ namespace Stataria
                 LevelUp();
             }
 
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-            {
-                SyncPlayer(-1, Player.whoAmI, false);
-            }
-            else if (Main.netMode == NetmodeID.Server)
+            if (Main.netMode != NetmodeID.SinglePlayer)
             {
                 SyncPlayer(-1, Player.whoAmI, false);
             }
@@ -1578,15 +1575,6 @@ namespace Stataria
 
                 ApplyHealerStatEffects();
 
-                int effectiveBRD = GetEffectiveStat("BRD");
-                if (effectiveBRD > 0)
-                {
-                    int armorPen = (int)(effectiveBRD * config.modIntegration.BRD_ArmorPen);
-                    if (ModLoader.TryGetMod("ThoriumMod", out Mod thoriumMod) && thoriumMod.TryFind("BardDamage", out DamageClass bardDamageClass))
-                    {
-                        Player.GetArmorPenetration(bardDamageClass) += armorPen;
-                    }
-                }
             }
 
             int effectiveDEX = GetEffectiveStat("DEX");
@@ -1596,11 +1584,6 @@ namespace Stataria
             if (config.modIntegration.EnableThoriumIntegration && ThoriumSupportHelper.ThoriumLoaded)
             {
                 ApplyThoriumArmorPenetration();
-            }
-
-            if (config.modIntegration.EnableCalamityIntegration && CalamitySupportHelper.CalamityLoaded)
-            {
-                ApplyRogueStatEffects();
             }
 
             if (config.modIntegration.EnableClickerClassIntegration && ClickerSupportHelper.ClickerClassLoaded)
@@ -1955,7 +1938,8 @@ namespace Stataria
         public override void PostUpdateEquips()
         {
             var config = ModContent.GetInstance<StatariaConfig>();
-            Player.wingTimeMax += (int)(AGI * config.statSettings.AGI_WingTime);
+            int effectiveAGI = GetEffectiveStat("AGI");
+            Player.wingTimeMax += (int)(effectiveAGI * config.statSettings.AGI_WingTime);
         }
 
         public override void PostUpdate()
@@ -2388,7 +2372,7 @@ namespace Stataria
             {
                 if (Main.rand.NextFloat() < (evadeChance / 100f))
                 {
-                    Player.SetImmuneTimeForAllTypes(config.statSettings.CustomHpRegenDelay * 60);
+                    Player.SetImmuneTimeForAllTypes(Player.longInvince ? 120 : 80);
                     return true;
                 }
             }
@@ -2672,6 +2656,7 @@ namespace Stataria
                 packet.Write(false);
             }
             packet.Write(RoleSwitchCount);
+            packet.Write(BossKillsCount);
 
             packet.Send(toWho, fromWho);
         }

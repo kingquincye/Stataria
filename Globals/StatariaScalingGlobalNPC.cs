@@ -705,11 +705,27 @@ namespace Stataria
 
             if (npc.boss)
             {
-                Player player = Main.LocalPlayer;
-                if (player.active)
+                if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
-                    rpg.BossKillsCount++;
+                    Player player = Main.LocalPlayer;
+                    if (player.active)
+                    {
+                        RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
+                        rpg.BossKillsCount++;
+                    }
+                }
+                else if (Main.netMode == NetmodeID.Server)
+                {
+                    for (int i = 0; i < Main.maxPlayers; i++)
+                    {
+                        Player player = Main.player[i];
+                        if (player != null && player.active)
+                        {
+                            RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
+                            rpg.BossKillsCount++;
+                            rpg.SyncPlayer(-1, i, false);
+                        }
+                    }
                 }
             }
         }

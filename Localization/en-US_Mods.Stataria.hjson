@@ -2548,6 +2548,8 @@ RPGPlayer: {
 	LastStand: Last Stand!
 }
 
+Combat.Bleed: Bleed!
+
 RebirthAbilityName: {
 	EnhancedFortune: Enhanced Fortune
 	ReducedPotionSickness: Reduced Potion Sickness

@@ -67,7 +67,7 @@ namespace Stataria
 
                 if (Main.netMode != NetmodeID.Server)
                 {
-                    CombatText.NewText(target.Hitbox, Color.DarkRed, "Bleed!", false, false);
+                    CombatText.NewText(target.Hitbox, Color.DarkRed, Terraria.Localization.Language.GetTextValue("Mods.Stataria.Combat.Bleed"), false, false);
                 }
             }
 

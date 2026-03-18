@@ -16,6 +16,7 @@ namespace Stataria
 
     public class RebirthAbility
     {
+        public string ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Cost { get; set; }
@@ -30,6 +31,7 @@ namespace Stataria
 
         public RebirthAbility(string name, string description, int cost, bool isStackable = false, int maxLevel = 1)
         {
+            ID = "";
             Name = name;
             Description = description;
             Cost = cost;
@@ -68,33 +70,33 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
             string description = Description;
 
-            if (Name == "Last Stand")
+            if (ID == "LastStand")
             {
                 description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.LastStand", config.rebirthAbilities.LastStandHealPercent, config.rebirthAbilities.LastStandImmunityTime, config.rebirthAbilities.LastStandCooldown);
             }
-            else if (Name == "Extra Accessory Slot")
+            else if (ID == "ExtraAccessorySlot")
             {
                 int maxLevel = Math.Min(config.rebirthAbilities.MaxExtraAccessorySlots, 29);
                 description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.ExtraAccessorySlot");
                 MaxLevel = maxLevel;
             }
-            else if (Name == "Golden Touch")
+            else if (ID == "GoldenTouch")
             {
                 int maxLevel = config.rebirthAbilities.MaxGoldenTouchLevel;
                 description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.GoldenTouch", config.rebirthAbilities.GoldenTouchPercentPerLevel);
                 MaxLevel = maxLevel;
             }
-            else if (Name == "Teleport")
+            else if (ID == "Teleport")
             {
                 description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.Teleport", config.rebirthAbilities.TeleportCooldown);
             }
-            else if (Name == "Enhanced Spawns")
+            else if (ID == "EnhancedSpawns")
             {
                 int maxLevel = config.rebirthAbilities.MaxEnhancedSpawnsLevel;
                 description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityText.EnhancedSpawns", config.rebirthAbilities.SpawnRatePercentPerLevel);
                 MaxLevel = maxLevel;
             }
-            else if (Name == "Auto-Clicker")
+            else if (ID == "AutoClicker")
             {
                 var player = Main.LocalPlayer;
                 int maxLevel = config.rebirthAbilities.AutoClickerMaxLevel;
@@ -120,7 +122,7 @@ namespace Stataria
                 }
                 MaxLevel = maxLevel;
             }
-            else if (Name == "Enhanced Fortune")
+            else if (ID == "EnhancedFortune")
             {
                 float luckPerLevel = config.rebirthAbilities.LuckPerAbilityLevel;
                 int maxLevel = config.rebirthAbilities.MaxEnhancedFortuneLevel;

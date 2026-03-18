@@ -2548,6 +2548,8 @@ RPGPlayer: {
 	LastStand: 破釜沉舟！
 }
 
+Combat.Bleed: 流血!
+
 RebirthAbilityName: {
 	EnhancedFortune: 强效幸运
 	ReducedPotionSickness: 药水抗性降低

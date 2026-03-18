@@ -30,6 +30,7 @@ namespace Stataria
 
         public override void Load()
         {
+            pendingNpcScaling = new Dictionary<int, (bool, int)>();
             StatariaLogger.GlobalDebugMode = false;
             StatariaLogger.Initialize(this);
             StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModLoadingStarted"));
@@ -45,6 +46,16 @@ namespace Stataria
 
             StatariaUI.StatUI = null;
             StatariaUI.Panel = null;
+            StatariaUI.SkillTreeUI = null;
+            StatariaUI.SkillTreePanel = null;
+            StatariaUI.XPVerificationUI = null;
+            StatariaUI.RoleSelectionUI = null;
+            StatariaUI.RoleSelectionPanel = null;
+            StatariaUI.TabBarInterface = null;
+            StatariaUI.TabBarPanel = null;
+            StatariaUI.SocketingUI = null;
+            StatariaUI.SocketingPanel = null;
+            pendingNpcScaling = null;
         }
 
 
@@ -182,6 +193,7 @@ namespace Stataria
                     }
                 }
                 rpg.RoleSwitchCount = reader.ReadInt32();
+                rpg.BossKillsCount = reader.ReadInt32();
 
                 if (Main.netMode == NetmodeID.Server)
                 {

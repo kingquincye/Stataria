@@ -57,6 +57,9 @@ namespace Stataria
             if (Main.netMode != NetmodeID.Server)
                 return;
 
+            // Remove disconnected players so they get re-synced on reconnect
+            syncedPlayers.RemoveWhere(i => i < 0 || i >= Main.maxPlayers || Main.player[i] == null || !Main.player[i].active);
+
             for (int i = 0; i < Main.maxPlayers; i++)
             {
                 var player = Main.player[i];

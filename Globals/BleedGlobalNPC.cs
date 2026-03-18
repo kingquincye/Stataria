@@ -17,6 +17,11 @@ namespace Stataria
 
         public override void ResetEffects(NPC npc)
         {
+            if (!isBleedActive)
+            {
+                bleedTimer = 0f;
+                dustTimer = 0;
+            }
             isBleedActive = false;
         }
 

@@ -6,7 +6,6 @@ using System.Linq;
 using Terraria.ID;
 using Microsoft.Xna.Framework;
 using System.IO;
-using Microsoft.CodeAnalysis;
 using Terraria.Localization;
 
 namespace Stataria
