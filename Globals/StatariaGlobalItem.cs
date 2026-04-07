@@ -40,6 +40,26 @@ namespace Stataria
             return true;
         }
 
+        public override bool ConsumeItem(Item item, Player player)
+        {
+            var rpg = player.GetModPlayer<RPGPlayer>();
+            var config = ModContent.GetInstance<StatariaConfig>();
 
+            if (config.modIntegration.EnableCalamityIntegration && CalamitySupportHelper.CalamityLoaded)
+            {
+                if (CalamitySupportHelper.IsRogueWeapon(item))
+                {
+                    int effectiveRGE = rpg.GetEffectiveStat("RGE");
+                    if (effectiveRGE > 0)
+                    {
+                        float chance = effectiveRGE * (config.modIntegration.RGE_AmmoConsumptionReduction / 100f);
+                        if (Main.rand.NextFloat() < chance)
+                            return false;
+                    }
+                }
+            }
+
+            return base.ConsumeItem(item, player);
+        }
     }
 }

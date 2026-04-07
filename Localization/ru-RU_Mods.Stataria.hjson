@@ -40,7 +40,6 @@ Commands: {
 		DiagnoseField_MovingGen: Реген. в движении: {0}
 		DiagnoseField_StealthDamage: Урон скрытности: {0}
 		DiagnoseField_RogueVelocity: Скорость Разбойника: {0}
-		DiagnoseField_RogueAmmoCost: Затраты боеприпасов Разбойника: {0}
 		DiagnoseField_Rage: Ярость (Rage): {0}
 		DiagnoseField_RageMax: Макс. Ярость: {0}
 		DiagnoseField_RageDuration: Длительность Ярости: {0}
@@ -1030,9 +1029,14 @@ Configs: {
 			Tooltip: RGE снижает расход шкалы скрытности (Stealth) на различных порогах.
 		}
 
-		RGE_StealthConsumption85Threshold: {
-			Label: Удар Скрытности 85%
-			Tooltip: При таком количестве RGE, удары из скрытности тратят 85% от обычной шкалы.
+		RGE_StealthConsumption90Threshold: {
+			Label: Удар Скрытности 90%
+			Tooltip: При таком количестве RGE, удары из скрытности тратят 90% от обычной шкалы.
+		}
+
+		RGE_StealthRegenBonus: {
+			Label: Бонус к регенерации скрытности
+			Tooltip: Процентный бонус к регенерации скрытности за очко RGE.
 		}
 
 		RGE_StealthConsumption75Threshold: {
@@ -1607,7 +1611,7 @@ Configs: {
 			Tooltip:
 				'''
 				Если включено, глаза Вампира становятся красными при активной роли. 
-				ВНИМАНИЕ: Из-за ограничений Террарии, глаза могут остаться красными навсегда, если выключить мод.
+				Оригинальный цвет глаз автоматически сохраняется и восстанавливается при отключении или смене роли.
 				'''
 		}
 
@@ -2484,9 +2488,10 @@ UI: {
 		RGE_MaxStealth: +{0} Макс. Скрытность (+{1} за очко)
 		RGE_Velocity: +{0}% Скорость Снарядов Разб. (+{1}% за очко)
 		RGE_AmmoCost: -{0}% Расход Боеприпасов Разб. (-{1}% за очко)
+		RGE_StealthRegen: +{0}% Регенерация Скрытности (+{1}% за очко)
 		RGE_Stealth50: Удары из Скрытности стоят 50%
 		RGE_Stealth75: Удары из Скрытности стоят 75%
-		RGE_Stealth85: Удары из Скрытности стоят 85%
+		RGE_Stealth90: Удары из Скрытности стоят 90%
 		BRD_SymphonicDamage: +{0}% Симфонический Урон (+{1}% за очко)
 		BRD_SymphonicArmorPen: +{0} Пробив. Симфонической Брони (+{1} за очко)
 		BRD_MaxInspiration: Макс. Вдохновение: +1 за {0} очков (Лимит в Thorium 30)

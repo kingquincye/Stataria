@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -9,8 +7,6 @@ namespace Stataria
 {
     public class VampireEyeDrawLayer : PlayerDrawLayer
     {
-        private static Dictionary<int, Color> originalEyeColors = new Dictionary<int, Color>();
-
         public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.Head);
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
@@ -24,30 +20,23 @@ namespace Stataria
             RPGPlayer rpgPlayer = player.GetModPlayer<RPGPlayer>();
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            if (!originalEyeColors.ContainsKey(player.whoAmI))
-            {
-                originalEyeColors[player.whoAmI] = player.eyeColor;
-            }
-
             if (rpgPlayer != null && rpgPlayer.ActiveRole != null &&
                 rpgPlayer.ActiveRole.ID == "Vampire" && rpgPlayer.ActiveRole.Status == RoleStatus.Active &&
                 config.roleSettings.VampireEnableEyeColorChange)
             {
+                // Capture original eye color if we haven't already
+                if (!rpgPlayer.OriginalEyeColor.HasValue)
+                {
+                    rpgPlayer.OriginalEyeColor = player.eyeColor;
+                }
+
                 drawInfo.drawPlayer.eyeColor = Color.Red;
             }
-            else
+            else if (rpgPlayer != null && rpgPlayer.OriginalEyeColor.HasValue)
             {
-                if (originalEyeColors.TryGetValue(player.whoAmI, out Color originalColor))
-                {
-                    drawInfo.drawPlayer.eyeColor = originalColor;
-                }
+                // Restore original eye color when Vampire is not active
+                drawInfo.drawPlayer.eyeColor = rpgPlayer.OriginalEyeColor.Value;
             }
-        }
-
-        public override void Unload()
-        {
-            originalEyeColors?.Clear();
-            originalEyeColors = null;
         }
     }
 }

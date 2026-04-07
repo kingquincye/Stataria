@@ -45,6 +45,8 @@ namespace Stataria
         public bool WasRetroRPGranted = false;
         public Dictionary<string, RebirthAbility> RebirthAbilities { get; private set; } = new Dictionary<string, RebirthAbility>();
 
+        public Color? OriginalEyeColor { get; set; } = null;
+
         public Role ActiveRole { get; set; }
         public int RoleSwitchCount { get; set; }
         public Dictionary<string, Role> AvailableRoles { get; private set; } = new Dictionary<string, Role>();
@@ -123,6 +125,15 @@ namespace Stataria
             if (ActiveRole != null)
                 tag["ActiveRoleID"] = ActiveRole.ID;
             tag["RoleSwitchCount"] = RoleSwitchCount;
+
+            if (OriginalEyeColor.HasValue)
+            {
+                tag["OriginalEyeR"] = (int)OriginalEyeColor.Value.R;
+                tag["OriginalEyeG"] = (int)OriginalEyeColor.Value.G;
+                tag["OriginalEyeB"] = (int)OriginalEyeColor.Value.B;
+                tag["OriginalEyeA"] = (int)OriginalEyeColor.Value.A;
+            }
+
             tag["AutoAllocateEnabled"] = AutoAllocateEnabled;
             tag["AutoAllocateStats"] = AutoAllocateStats.ToList();
         }
@@ -181,6 +192,21 @@ namespace Stataria
                 }
             }
             RoleSwitchCount = tag.ContainsKey("RoleSwitchCount") ? tag.GetInt("RoleSwitchCount") : 0;
+
+            if (tag.ContainsKey("OriginalEyeR"))
+            {
+                OriginalEyeColor = new Color(
+                    tag.GetInt("OriginalEyeR"),
+                    tag.GetInt("OriginalEyeG"),
+                    tag.GetInt("OriginalEyeB"),
+                    tag.GetInt("OriginalEyeA")
+                );
+            }
+            else
+            {
+                OriginalEyeColor = null;
+            }
+
             if (!WasRetroRPGranted && RebirthCount > 0)
             {
                 var config = ModContent.GetInstance<StatariaConfig>();
@@ -477,6 +503,12 @@ namespace Stataria
             bool isReactivation = newRole.Status == RoleStatus.Deactivated;
             int cost = isReactivation ? 0 : newRole.GetCurrentSwitchCost(this);
 
+            // Restore original eye color when switching away from Vampire
+            if (ActiveRole != null && ActiveRole.ID == "Vampire" && ActiveRole.ID != roleID)
+            {
+                RestoreOriginalEyeColor();
+            }
+
             if (ActiveRole != null && ActiveRole.ID != roleID)
             {
                 RebirthPoints -= cost;
@@ -484,6 +516,11 @@ namespace Stataria
                 ActiveRole.Status = RoleStatus.Available;
             }
 
+            // Capture original eye color when switching to Vampire
+            if (roleID == "Vampire" && !OriginalEyeColor.HasValue)
+            {
+                OriginalEyeColor = Player.eyeColor;
+            }
 
             ActiveRole = newRole;
             ActiveRole.Status = RoleStatus.Active;
@@ -501,6 +538,12 @@ namespace Stataria
             if (ActiveRole == null || ActiveRole.Status != RoleStatus.Active)
                 return false;
 
+            // Restore original eye color when deactivating Vampire
+            if (ActiveRole.ID == "Vampire")
+            {
+                RestoreOriginalEyeColor();
+            }
+
             ActiveRole.Status = RoleStatus.Deactivated;
 
             if (Main.netMode != NetmodeID.SinglePlayer)
@@ -513,12 +556,27 @@ namespace Stataria
 
         public void ResetRoles()
         {
+            // Restore original eye color when resetting roles
+            if (ActiveRole?.ID == "Vampire")
+            {
+                RestoreOriginalEyeColor();
+            }
+
             if (ActiveRole != null)
             {
                 ActiveRole.Status = RoleStatus.Available;
                 ActiveRole = null;
             }
             RoleSwitchCount = 0;
+        }
+
+        private void RestoreOriginalEyeColor()
+        {
+            if (OriginalEyeColor.HasValue)
+            {
+                Player.eyeColor = OriginalEyeColor.Value;
+                OriginalEyeColor = null;
+            }
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -1625,17 +1683,21 @@ namespace Stataria
                     CalamitySupportHelper.SetFieldValue(Player, "stealthStrikeHalfCost", true);
                 else if (effectiveRGE >= config.modIntegration.RGE_StealthConsumption75Threshold)
                     CalamitySupportHelper.SetFieldValue(Player, "stealthStrike75Cost", true);
-                else if (effectiveRGE >= config.modIntegration.RGE_StealthConsumption85Threshold)
-                    CalamitySupportHelper.SetFieldValue(Player, "stealthStrike85Cost", true);
+                else if (effectiveRGE >= config.modIntegration.RGE_StealthConsumption90Threshold)
+                    CalamitySupportHelper.SetFieldValue(Player, "stealthStrike90Cost", true);
             }
 
             float rogueVelocity = CalamitySupportHelper.GetRogueVelocity(Player);
             rogueVelocity += effectiveRGE * (config.modIntegration.RGE_Velocity / 100f);
             CalamitySupportHelper.SetRogueVelocity(Player, rogueVelocity);
+            
+            float stealthGenStandstill = CalamitySupportHelper.GetStealthGenStandstill(Player);
+            stealthGenStandstill += effectiveRGE * (config.modIntegration.RGE_StealthRegenBonus / 100f);
+            CalamitySupportHelper.SetStealthGenStandstill(Player, stealthGenStandstill);
 
-            float rogueAmmoCost = CalamitySupportHelper.GetRogueAmmoCost(Player);
-            rogueAmmoCost -= effectiveRGE * (config.modIntegration.RGE_AmmoConsumptionReduction / 100f);
-            CalamitySupportHelper.SetRogueAmmoCost(Player, rogueAmmoCost);
+            float stealthGenMoving = CalamitySupportHelper.GetStealthGenMoving(Player);
+            stealthGenMoving += effectiveRGE * (config.modIntegration.RGE_StealthRegenBonus / 100f);
+            CalamitySupportHelper.SetStealthGenMoving(Player, stealthGenMoving);
         }
 
         private void ApplyPowerCalamityEffects()
@@ -2596,6 +2658,21 @@ namespace Stataria
                 if (Main.rand.NextFloat() < chance)
                     return false;
             }
+
+            if (config.modIntegration.EnableCalamityIntegration && CalamitySupportHelper.CalamityLoaded)
+            {
+                if (CalamitySupportHelper.IsRogueWeapon(weapon))
+                {
+                    int effectiveRGE = GetEffectiveStat("RGE");
+                    if (effectiveRGE > 0)
+                    {
+                        float chance = effectiveRGE * (config.modIntegration.RGE_AmmoConsumptionReduction / 100f);
+                        if (Main.rand.NextFloat() < chance)
+                            return false;
+                    }
+                }
+            }
+
             return true;
         }
 

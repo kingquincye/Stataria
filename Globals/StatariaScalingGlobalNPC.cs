@@ -20,7 +20,7 @@ namespace Stataria
 
         public bool IsElite { get; set; }
         public int Level { get; set; }
-        private float damageMult = 1f;
+        public float damageMult = 1f;
         public bool hasBeenScaled = false;
 
         private bool IsWormSegment(NPC npc)

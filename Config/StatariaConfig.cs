@@ -425,9 +425,10 @@ namespace Stataria
             [Range(0f, 10f)][DefaultValue(1.5f)] public float RGE_Velocity { get; set; } = 1.5f;
             [Range(0f, 10f)][DefaultValue(0.5f)] public float RGE_AmmoConsumptionReduction { get; set; } = 0.5f;
             [DefaultValue(false)] public bool RGE_EnableStealthConsumptionReduction { get; set; } = false;
-            [DefaultValue(25)] public int RGE_StealthConsumption85Threshold { get; set; } = 25;
+            [DefaultValue(25)] public int RGE_StealthConsumption90Threshold { get; set; } = 25;
             [DefaultValue(50)] public int RGE_StealthConsumption75Threshold { get; set; } = 50;
             [DefaultValue(75)] public int RGE_StealthConsumptionReductionThreshold { get; set; } = 75;
+            [Range(0f, 10f)][DefaultValue(0.5f)] public float RGE_StealthRegenBonus { get; set; } = 0.5f;
 
             [Header("POW_CalamityEnhancements")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float POW_RageDamage { get; set; } = 0.5f;

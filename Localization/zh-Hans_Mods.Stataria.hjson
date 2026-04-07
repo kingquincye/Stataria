@@ -40,7 +40,6 @@ Commands: {
 		DiagnoseField_MovingGen: 移动潜行恢复: {0}
 		DiagnoseField_StealthDamage: 潜行伤害: {0}
 		DiagnoseField_RogueVelocity: 盗贼弹幕速度: {0}
-		DiagnoseField_RogueAmmoCost: 盗贼弹药消耗: {0}
 		DiagnoseField_Rage: 暴怒: {0}
 		DiagnoseField_RageMax: 最大暴怒: {0}
 		DiagnoseField_RageDuration: 暴怒持续时间: {0}
@@ -1030,9 +1029,14 @@ Configs: {
 			Tooltip: 开启后，RGE 属性将在达到以下设定的阈值时降低潜行打击消耗的潜行值。
 		}
 
-		RGE_StealthConsumption85Threshold: {
-			Label: 潜行打击 85% 消耗阈值
-			Tooltip: 当达到此 RGE 点数时，盗贼潜行打击将只消耗正常的 85% 潜行值。
+		RGE_StealthConsumption90Threshold: {
+			Label: 潜行打击 90% 消耗阈值
+			Tooltip: 当达到此 RGE 点数时，盗贼潜行打击将只消耗正常的 90% 潜行值。
+		}
+
+		RGE_StealthRegenBonus: {
+			Label: 潜行恢复加成
+			Tooltip: 每点 RGE 提升的潜行恢复速度百分比加成。
 		}
 
 		RGE_StealthConsumption75Threshold: {
@@ -1607,7 +1611,7 @@ Configs: {
 			Tooltip:
 				'''
 				开启后，当吸血鬼职业激活时，角色的眼睛会变成红色。 
-				警告: 由于 Terraria 机制限制，如果在此职业激活时禁用此选项，眼睛可能永久保持红色。
+				原始眼睛颜色会自动保存，并在职业停用或切换时恢复。
 				'''
 		}
 
@@ -2484,9 +2488,10 @@ UI: {
 		RGE_MaxStealth: +{0} 最大潜行值 (+{1} 每点)
 		RGE_Velocity: +{0}% 盗贼弹幕速度 (+{1}% 每点)
 		RGE_AmmoCost: -{0}% 盗贼弹药消耗 (-{1}% 每点)
+		RGE_StealthRegen: +{0}% 盗贼潜行恢复速度 (+{1}% 每点)
 		RGE_Stealth50: 潜行打击只消耗 50% 潜行值
 		RGE_Stealth75: 潜行打击只消耗 75% 潜行值
-		RGE_Stealth85: 潜行打击只消耗 85% 潜行值
+		RGE_Stealth90: 潜行打击只消耗 90% 潜行值
 		BRD_SymphonicDamage: +{0}% 交响伤害 (+{1}% 每点)
 		BRD_SymphonicArmorPen: +{0} 交响护甲穿透 (+{1} 每点)
 		BRD_MaxInspiration: 最大灵感值: 每 {0} 点 +1 (瑟银总上限为 30)

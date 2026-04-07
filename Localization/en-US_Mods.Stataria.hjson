@@ -40,7 +40,6 @@ Commands: {
 		DiagnoseField_MovingGen: Moving Gen: {0}
 		DiagnoseField_StealthDamage: Stealth Damage: {0}
 		DiagnoseField_RogueVelocity: Rogue Velocity: {0}
-		DiagnoseField_RogueAmmoCost: Rogue Ammo Cost: {0}
 		DiagnoseField_Rage: Rage: {0}
 		DiagnoseField_RageMax: Rage Max: {0}
 		DiagnoseField_RageDuration: Rage Duration: {0}
@@ -1030,9 +1029,14 @@ Configs: {
 			Tooltip: When enabled, your RGE stat will reduce stealth consumption at different thresholds below.
 		}
 
-		RGE_StealthConsumption85Threshold: {
-			Label: Stealth Strike 85%
-			Tooltip: At this many RGE points, rogue stealth strikes will cost 85% of their normal amount.
+		RGE_StealthConsumption90Threshold: {
+			Label: Stealth Strike 90%
+			Tooltip: At this many RGE points, rogue stealth strikes will cost 90% of their normal amount.
+		}
+
+		RGE_StealthRegenBonus: {
+			Label: Stealth Regen Bonus
+			Tooltip: Percentage bonus to stealth regeneration per point in RGE.
 		}
 
 		RGE_StealthConsumption75Threshold: {
@@ -1607,7 +1611,7 @@ Configs: {
 			Tooltip:
 				'''
 				When enabled, vampire eyes turn red while the role is active. 
-				WARNING: Due to Terraria limitations, eyes may remain permanently red if disabled while vampire role is active.
+				Original eye color is automatically saved and restored when the role is deactivated or switched.
 				'''
 		}
 
@@ -2484,9 +2488,10 @@ UI: {
 		RGE_MaxStealth: +{0} Max Stealth (+{1} per point)
 		RGE_Velocity: +{0}% Rogue Velocity (+{1}% per point)
 		RGE_AmmoCost: -{0}% Rogue Ammo Cost (-{1}% per point)
+		RGE_StealthRegen: +{0}% Rogue Stealth Regeneration (+{1}% per point)
 		RGE_Stealth50: Stealth Strikes cost 50%
 		RGE_Stealth75: Stealth Strikes cost 75%
-		RGE_Stealth85: Stealth Strikes cost 85%
+		RGE_Stealth90: Stealth Strikes cost 90%
 		BRD_SymphonicDamage: +{0}% Symphonic Damage (+{1}% per point)
 		BRD_SymphonicArmorPen: +{0} Symphonic Armor Pen. (+{1} per point)
 		BRD_MaxInspiration: Max Inspiration: +1 per {0} points (Thorium total caps at 30)

@@ -17,6 +17,8 @@ namespace Stataria
         private static Type calamityPlayerType;
         private static Type rogueClassType;
         private static bool initialized;
+        private static MethodInfo _getModPlayerMethod;
+        private static Dictionary<string, FieldInfo> _fieldCache = new Dictionary<string, FieldInfo>();
         #endregion
 
         #region Calamity Access Flags
@@ -28,7 +30,6 @@ namespace Stataria
         public static bool FoundStealthGenMoving { get; private set; }
         public static bool FoundStealthDamage { get; private set; }
         public static bool FoundRogueVelocity { get; private set; }
-        public static bool FoundRogueAmmoCost { get; private set; }
         public static bool FoundRage { get; private set; }
         public static bool FoundRageMax { get; private set; }
         public static bool FoundRageDuration { get; private set; }
@@ -40,7 +41,7 @@ namespace Stataria
         public static bool FoundStealthStrikeThisFrame { get; private set; }
         public static bool FoundStealthStrikeHalfCost { get; private set; }
         public static bool FoundStealthStrike75Cost { get; private set; }
-        public static bool FoundStealthStrike85Cost { get; private set; }
+        public static bool FoundStealthStrike90Cost { get; private set; }
         #endregion
 
         #region Infinite Effect Toggles
@@ -68,6 +69,8 @@ namespace Stataria
             calamityPlayerType = null;
             rogueClassType = null;
             initialized = false;
+            _getModPlayerMethod = null;
+            _fieldCache.Clear();
             ResetAccessFlags();
 
             InfiniteRageEnabled = false;
@@ -83,7 +86,6 @@ namespace Stataria
             FoundStealthGenMoving = false;
             FoundStealthDamage = false;
             FoundRogueVelocity = false;
-            FoundRogueAmmoCost = false;
             FoundRage = false;
             FoundRageMax = false;
             FoundRageDuration = false;
@@ -96,7 +98,7 @@ namespace Stataria
             FoundStealthStrikeThisFrame = false;
             FoundStealthStrikeHalfCost = false;
             FoundStealthStrike75Cost = false;
-            FoundStealthStrike85Cost = false;
+            FoundStealthStrike90Cost = false;
         }
 
         public static void Initialize()
@@ -149,27 +151,29 @@ namespace Stataria
                 if (!EnsureCalamityTypes())
                     return;
 
-                Player dummyPlayer = new Player();
+                FoundRogueClass = true;
 
-                try { FoundRogueStealth = GetField(dummyPlayer, "rogueStealth") != null; } catch { }
-                try { FoundRogueStealthMax = GetField(dummyPlayer, "rogueStealthMax") != null; } catch { }
-                try { FoundStealthGenStandstill = GetField(dummyPlayer, "stealthGenStandstill") != null; } catch { }
-                try { FoundStealthGenMoving = GetField(dummyPlayer, "stealthGenMoving") != null; } catch { }
-                try { FoundStealthDamage = GetField(dummyPlayer, "stealthDamage") != null; } catch { }
-                try { FoundRogueVelocity = GetField(dummyPlayer, "rogueVelocity") != null; } catch { }
-                try { FoundRogueAmmoCost = GetField(dummyPlayer, "rogueAmmoCost") != null; } catch { }
-                try { FoundRage = GetField(dummyPlayer, "rage") != null; } catch { }
-                try { FoundRageMax = GetField(dummyPlayer, "rageMax") != null; } catch { }
-                try { FoundRageDuration = GetField(dummyPlayer, "RageDuration") != null; } catch { }
-                try { FoundRageDamage = GetField(dummyPlayer, "RageDamageBoost") != null; } catch { }
-                try { FoundAdrenaline = GetField(dummyPlayer, "adrenaline") != null; } catch { }
-                try { FoundAdrenalineMax = GetField(dummyPlayer, "adrenalineMax") != null; } catch { }
-                try { FoundAdrenalineDuration = GetField(dummyPlayer, "AdrenalineDuration") != null; } catch { }
-                try { FoundWearingRogueArmor = GetField(dummyPlayer, "wearingRogueArmor") != null; } catch { }
-                try { FoundStealthStrikeThisFrame = GetField(dummyPlayer, "stealthStrikeThisFrame") != null; } catch { }
-                try { FoundStealthStrikeHalfCost = GetField(dummyPlayer, "stealthStrikeHalfCost") != null; } catch { }
-                try { FoundStealthStrike75Cost = GetField(dummyPlayer, "stealthStrike75Cost") != null; } catch { }
-                try { FoundStealthStrike85Cost = GetField(dummyPlayer, "stealthStrike85Cost") != null; } catch { }
+                // Check fields directly from the Type instead of requiring a dummy player
+                bool CheckField(string name) => calamityPlayerType.GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) != null;
+
+                try { FoundRogueStealth = CheckField("rogueStealth"); } catch { }
+                try { FoundRogueStealthMax = CheckField("rogueStealthMax"); } catch { }
+                try { FoundStealthGenStandstill = CheckField("stealthGenStandstill"); } catch { }
+                try { FoundStealthGenMoving = CheckField("stealthGenMoving"); } catch { }
+                try { FoundStealthDamage = CheckField("stealthDamage"); } catch { }
+                try { FoundRogueVelocity = CheckField("rogueVelocity"); } catch { }
+                try { FoundRage = CheckField("rage"); } catch { }
+                try { FoundRageMax = CheckField("rageMax"); } catch { }
+                try { FoundRageDuration = CheckField("RageDuration"); } catch { }
+                try { FoundRageDamage = CheckField("RageDamageBoost"); } catch { }
+                try { FoundAdrenaline = CheckField("adrenaline"); } catch { }
+                try { FoundAdrenalineMax = CheckField("adrenalineMax"); } catch { }
+                try { FoundAdrenalineDuration = CheckField("AdrenalineDuration"); } catch { }
+                try { FoundWearingRogueArmor = CheckField("wearingRogueArmor"); } catch { }
+                try { FoundStealthStrikeThisFrame = CheckField("stealthStrikeThisFrame"); } catch { }
+                try { FoundStealthStrikeHalfCost = CheckField("stealthStrikeHalfCost"); } catch { }
+                try { FoundStealthStrike75Cost = CheckField("stealthStrike75Cost"); } catch { }
+                try { FoundStealthStrike90Cost = CheckField("stealthStrike90Cost"); } catch { }
             }
             catch (Exception)
             {
@@ -193,16 +197,15 @@ namespace Stataria
 
             try
             {
-                MethodInfo getModPlayerMethod = typeof(Player).GetMethod("GetModPlayer",
-                    BindingFlags.Instance | BindingFlags.Public,
-                    null,
-                    Type.EmptyTypes,
-                    null);
-
-                if (getModPlayerMethod != null)
+                if (_getModPlayerMethod == null)
                 {
-                    MethodInfo genericMethod = getModPlayerMethod.MakeGenericMethod(calamityPlayerType);
+                    _getModPlayerMethod = typeof(Player).GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                        .FirstOrDefault(m => m.Name == "GetModPlayer" && m.IsGenericMethod && m.GetParameters().Length == 0);
+                }
 
+                if (_getModPlayerMethod != null)
+                {
+                    MethodInfo genericMethod = _getModPlayerMethod.MakeGenericMethod(calamityPlayerType);
                     return genericMethod.Invoke(player, null);
                 }
             }
@@ -214,21 +217,25 @@ namespace Stataria
             return null;
         }
 
+        private static FieldInfo GetFieldInfoCached(string fieldName)
+        {
+            if (_fieldCache.TryGetValue(fieldName, out FieldInfo field))
+                return field;
+
+            if (calamityPlayerType != null)
+            {
+                field = calamityPlayerType.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (field != null)
+                {
+                    _fieldCache[fieldName] = field;
+                }
+            }
+            return field;
+        }
+
         private static FieldInfo GetField(Player player, string fieldName)
         {
-            try
-            {
-                object calPlayer = GetCalamityPlayer(player);
-                if (calPlayer == null)
-                    return null;
-
-                return calamityPlayerType.GetField(fieldName,
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            }
-            catch
-            {
-                return null;
-            }
+            return GetFieldInfoCached(fieldName);
         }
 
         public static T GetFieldValue<T>(Player player, string fieldName, T defaultValue = default)
@@ -239,8 +246,7 @@ namespace Stataria
                 if (calPlayer == null)
                     return defaultValue;
 
-                FieldInfo field = calamityPlayerType.GetField(fieldName,
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                FieldInfo field = GetFieldInfoCached(fieldName);
 
                 if (field == null)
                     return defaultValue;
@@ -265,8 +271,7 @@ namespace Stataria
                 if (calPlayer == null)
                     return false;
 
-                FieldInfo field = calamityPlayerType.GetField(fieldName,
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                FieldInfo field = GetFieldInfoCached(fieldName);
 
                 if (field == null)
                     return false;
@@ -389,17 +394,6 @@ namespace Stataria
             return GetFieldValue<float>(player, "rogueVelocity", 1f);
         }
 
-        public static float GetRogueAmmoCost(Player player)
-        {
-            if (!initialized)
-                Initialize();
-
-            if (!CalamityLoaded || !FoundRogueAmmoCost)
-                return 1f;
-
-            return GetFieldValue<float>(player, "rogueAmmoCost", 1f);
-        }
-
         public static bool SetRogueStealth(Player player, float value)
         {
             if (!initialized)
@@ -453,17 +447,6 @@ namespace Stataria
                 return false;
 
             return SetFieldValue(player, "rogueVelocity", value);
-        }
-
-        public static bool SetRogueAmmoCost(Player player, float value)
-        {
-            if (!initialized)
-                Initialize();
-
-            if (!CalamityLoaded || !FoundRogueAmmoCost)
-                return false;
-
-            return SetFieldValue(player, "rogueAmmoCost", value);
         }
         #endregion
 
@@ -716,7 +699,7 @@ namespace Stataria
 
             bool rogueFieldsOk = FoundRogueClass && FoundRogueStealth && FoundRogueStealthMax &&
                                 FoundStealthGenStandstill && FoundStealthGenMoving &&
-                                FoundStealthDamage && FoundRogueVelocity && FoundRogueAmmoCost;
+                                FoundStealthDamage && FoundRogueVelocity;
 
             bool rageFieldsOk = FoundRage && FoundRageMax && FoundRageDuration && FoundRageDamage;
 

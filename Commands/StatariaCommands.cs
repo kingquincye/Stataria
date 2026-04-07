@@ -259,7 +259,6 @@ namespace Stataria
                             StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_MovingGen", CalamitySupportHelper.FoundStealthGenMoving));
                             StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_StealthDamage", CalamitySupportHelper.FoundStealthDamage));
                             StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RogueVelocity", CalamitySupportHelper.FoundRogueVelocity));
-                            StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RogueAmmoCost", CalamitySupportHelper.FoundRogueAmmoCost));
                             StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_Rage", CalamitySupportHelper.FoundRage));
                             StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RageMax", CalamitySupportHelper.FoundRageMax));
                             StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseField_RageDuration", CalamitySupportHelper.FoundRageDuration));

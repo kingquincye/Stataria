@@ -405,13 +405,14 @@ namespace Stataria
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_RogueDamage", (effectiveRGE * cfg.modIntegration.RGE_Damage).ToString("0.#"), cfg.modIntegration.RGE_Damage.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_MaxStealth", (effectiveRGE * cfg.modIntegration.RGE_MaxStealthPerPoint).ToString("0.#"), cfg.modIntegration.RGE_MaxStealthPerPoint.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_Velocity", (effectiveRGE * cfg.modIntegration.RGE_Velocity).ToString("0.#"), cfg.modIntegration.RGE_Velocity.ToString("0.#")),
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_AmmoCost", (effectiveRGE * cfg.modIntegration.RGE_AmmoConsumptionReduction).ToString("0.#"), cfg.modIntegration.RGE_AmmoConsumptionReduction.ToString("0.#"))
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_AmmoCost", (effectiveRGE * cfg.modIntegration.RGE_AmmoConsumptionReduction).ToString("0.#"), cfg.modIntegration.RGE_AmmoConsumptionReduction.ToString("0.#")),
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_StealthRegen", (effectiveRGE * cfg.modIntegration.RGE_StealthRegenBonus).ToString("0.#"), cfg.modIntegration.RGE_StealthRegenBonus.ToString("0.#"))
                     };
                     if (cfg.modIntegration.RGE_EnableStealthConsumptionReduction)
                     {
                         if (effectiveRGE >= cfg.modIntegration.RGE_StealthConsumptionReductionThreshold) tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_Stealth50"));
                         else if (effectiveRGE >= cfg.modIntegration.RGE_StealthConsumption75Threshold) tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_Stealth75"));
-                        else if (effectiveRGE >= cfg.modIntegration.RGE_StealthConsumption85Threshold) tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_Stealth85"));
+                        else if (effectiveRGE >= cfg.modIntegration.RGE_StealthConsumption90Threshold) tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_Stealth90"));
                     }
                     return string.Join("\n", tooltips);
                 }
