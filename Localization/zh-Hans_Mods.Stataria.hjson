@@ -1974,6 +1974,11 @@ Configs: {
 			Label: 开启升级音效
 			Tooltip: 升级音效的配置。
 		}
+
+		StretchXPBarToBottom: {
+			Tooltip: 将经验条拉伸到屏幕底部。
+			Label: 拉伸经验条到底部
+		}
 	}
 
 	AscensionSystem: {

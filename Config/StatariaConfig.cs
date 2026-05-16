@@ -525,6 +525,7 @@ namespace Stataria
         [DefaultValue(300)][Range(100, 500)] public int BarWidth { get; set; } = 300;
         [DefaultValue(20)][Range(10, 50)] public int BarHeight { get; set; } = 20;
         [DefaultValue(3)][Range(0, 20)] public int BarPadding { get; set; } = 3;
+        [DefaultValue(false)] public bool StretchXPBarToBottom { get; set; } = false;
 
         [Header("BossBars")]
         [DefaultValue(1f)][Range(0.5f, 3f)] public float BossBarScale { get; set; } = 1f;

@@ -68,14 +68,7 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
             Level = 1;
             XP = 0L;
-            if (config.generalBalance.EnableXPCurve)
-            {
-                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.XPCurveSteepness));
-            }
-            else
-            {
-                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
-            }
+            RecalculateXPToNext();
             StatPoints = 0;
             VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = 0;
             GhostStats = new Dictionary<string, int>();
@@ -675,9 +668,14 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
             if (config.generalBalance.EnableXPCurve)
-                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.XPCurveSteepness));
+            {
+                float dynamicExponent = config.generalBalance.LevelScalingFactor + (Level * 0.01f * config.generalBalance.XPCurveSteepness);
+                XPToNext = (long)(100L * Math.Pow(Level, dynamicExponent));
+            }
             else
+            {
                 XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            }
         }
 
         public void PerformRebirth()
@@ -711,10 +709,7 @@ namespace Stataria
 
             Level = 1;
             XP = 0;
-            if (config.generalBalance.EnableXPCurve)
-                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.XPCurveSteepness));
-            else
-                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
+            RecalculateXPToNext();
 
             if (config.rebirthSystem.ResetStatsOnRebirth)
             {
@@ -1217,14 +1212,7 @@ namespace Stataria
             }
 
             StatPoints += baseStatPoints + bonusStatPoints;
-            if (config.generalBalance.EnableXPCurve)
-            {
-                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.XPCurveSteepness));
-            }
-            else
-            {
-                XPToNext = (long)(100L * Math.Pow(Level, config.generalBalance.LevelScalingFactor));
-            }
+            RecalculateXPToNext();
 
             if (Main.netMode != NetmodeID.Server)
             {

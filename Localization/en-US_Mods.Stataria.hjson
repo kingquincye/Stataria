@@ -287,7 +287,7 @@ Configs: {
 
 		XPCurveSteepness: {
 			Label: XP Curve Steepness
-			Tooltip: Steepness of the XP scaling curve.
+			Tooltip: Determines how much the XP scaling exponent increases with each level. Makes leveling progressively harder at higher levels.
 		}
 	}
 
@@ -1973,6 +1973,11 @@ Configs: {
 		EnableLevelUpSound: {
 			Label: Enable Level Up Sound
 			Tooltip: Configuration for Enable Level Up Sound.
+		}
+
+		StretchXPBarToBottom: {
+			Tooltip: Stretches XP bar down the screen.
+			Label: Stretch XP Bar To Bottom
 		}
 	}
 

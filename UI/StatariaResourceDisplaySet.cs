@@ -186,26 +186,39 @@ namespace Stataria
 
         private void DrawXpBar(SpriteBatch spriteBatch, RPGPlayer rpgPlayer)
         {
+            var config = ModContent.GetInstance<StatariaClientConfig>();
             int xpBarHeight = barHeight / 2;
-            Vector2 xpBarPosition = new Vector2(
-                basePosition.X + levelBoxWidth + barPadding,
-                basePosition.Y + (barHeight + barPadding) * 2);
+            Vector2 xpBarPosition;
+            int currentBarWidth;
+
+            if (config.StretchXPBarToBottom)
+            {
+                currentBarWidth = Main.screenWidth;
+                xpBarPosition = new Vector2(0, Main.screenHeight - xpBarHeight);
+            }
+            else
+            {
+                currentBarWidth = barWidth;
+                xpBarPosition = new Vector2(
+                    basePosition.X + levelBoxWidth + barPadding,
+                    basePosition.Y + (barHeight + barPadding) * 2);
+            }
 
             spriteBatch.Draw(
                 pixelTexture,
-                new Rectangle((int)xpBarPosition.X, (int)xpBarPosition.Y, barWidth, xpBarHeight),
+                new Rectangle((int)xpBarPosition.X, (int)xpBarPosition.Y, currentBarWidth, xpBarHeight),
                 new Rectangle(0, 0, 1, 1),
                 xpBgColor);
 
             float xpPercent = rpgPlayer.XPToNext > 0 ? (float)rpgPlayer.XP / rpgPlayer.XPToNext : 0;
-            int xpFillWidth = (int)(barWidth * xpPercent);
+            int xpFillWidth = (int)(currentBarWidth * xpPercent);
             spriteBatch.Draw(
                 pixelTexture,
                 new Rectangle((int)xpBarPosition.X, (int)xpBarPosition.Y, xpFillWidth, xpBarHeight),
                 new Rectangle(0, 0, 1, 1),
                 xpColor);
 
-            DrawBarBorders(spriteBatch, xpBarPosition, barWidth, xpBarHeight);
+            DrawBarBorders(spriteBatch, xpBarPosition, currentBarWidth, xpBarHeight);
 
         }
 
