@@ -23,9 +23,30 @@ namespace Stataria
         public float damageMult = 1f;
         public bool hasBeenScaled = false;
 
-        private bool IsWormSegment(NPC npc)
+        private bool IsWormSegmentOrPart(NPC npc)
         {
-            return npc.realLife >= 0 && npc.realLife != npc.whoAmI;
+            if (npc.realLife >= 0 && npc.realLife != npc.whoAmI)
+                return true;
+
+            if (IsSplittingWormSegment(npc))
+            {
+                NPC head = FindSplittingWormHead(npc);
+                if (head != null && head.whoAmI != npc.whoAmI)
+                    return true;
+            }
+
+            if (npc.ModNPC != null)
+            {
+                string name = npc.ModNPC.Name;
+                if (name.Contains("Body", StringComparison.OrdinalIgnoreCase) || 
+                    name.Contains("Tail", StringComparison.OrdinalIgnoreCase) || 
+                    name.Contains("Segment", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private bool IsSplittingWormSegment(NPC npc)
@@ -65,14 +86,65 @@ namespace Stataria
             return current;
         }
 
-        private NPC GetWormHead(NPC segment)
+        private NPC FindWormHead(NPC segment)
         {
             if (segment.realLife >= 0 && segment.realLife < Main.npc.Length)
             {
-                return Main.npc[segment.realLife];
+                NPC head = Main.npc[segment.realLife];
+                if (head != null && head.active)
+                    return head;
             }
 
-            return segment;
+            if (segment.ModNPC != null)
+            {
+                string segmentName = segment.ModNPC.Name;
+                string baseName = segmentName;
+                if (segmentName.EndsWith("Body"))
+                {
+                    baseName = segmentName.Substring(0, segmentName.Length - 4);
+                }
+                else if (segmentName.EndsWith("Tail"))
+                {
+                    baseName = segmentName.Substring(0, segmentName.Length - 4);
+                }
+                else if (segmentName.Contains("Body"))
+                {
+                    int idx = segmentName.IndexOf("Body");
+                    baseName = segmentName.Substring(0, idx);
+                }
+                else if (segmentName.Contains("Tail"))
+                {
+                    int idx = segmentName.IndexOf("Tail");
+                    baseName = segmentName.Substring(0, idx);
+                }
+
+                NPC closestHead = null;
+                float closestDist = float.MaxValue;
+
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    NPC other = Main.npc[i];
+                    if (other.active && other.ModNPC != null)
+                    {
+                        string otherName = other.ModNPC.Name;
+                        if (otherName.StartsWith(baseName) && 
+                            (otherName.EndsWith("Head") || (!otherName.Contains("Body") && !otherName.Contains("Tail"))))
+                        {
+                            float dist = Vector2.Distance(segment.Center, other.Center);
+                            if (dist < closestDist)
+                            {
+                                closestDist = dist;
+                                closestHead = other;
+                            }
+                        }
+                    }
+                }
+
+                if (closestHead != null)
+                    return closestHead;
+            }
+
+            return null;
         }
 
         private bool IsEaterOfWorldsSegment(NPC npc)
@@ -211,30 +283,21 @@ namespace Stataria
             if (npc.townNPC || npc.friendly || NPCID.Sets.CountsAsCritter[npc.type] || npc.lifeMax <= 9)
                 return;
 
-            if (IsSplittingWormSegment(npc))
+            if (IsWormSegmentOrPart(npc))
             {
-                NPC head = FindSplittingWormHead(npc);
-                
+                NPC head = FindWormHead(npc);
+                if (head == null && IsSplittingWormSegment(npc))
+                {
+                    head = FindSplittingWormHead(npc);
+                }
+
                 if (head != null && head.active && head.whoAmI != npc.whoAmI)
                 {
                     var headScaling = head.GetGlobalNPC<StatariaScalingGlobalNPC>();
-                    
-                    Level = headScaling.Level;
-                    IsElite = headScaling.IsElite;
-                    
-                    ApplyScaling(npc);
-                    hasBeenScaled = true;
-                    return;
-                }
-            }
-
-            if (IsWormSegment(npc))
-            {
-                NPC head = GetWormHead(npc);
-
-                if (head != null && head.active)
-                {
-                    var headScaling = head.GetGlobalNPC<StatariaScalingGlobalNPC>();
+                    if (!headScaling.hasBeenScaled)
+                    {
+                        headScaling.ApplyScalingOnSpawn(head);
+                    }
 
                     Level = headScaling.Level;
                     IsElite = headScaling.IsElite;
@@ -312,7 +375,7 @@ namespace Stataria
 
         private void CalculateEnemyLevel(NPC npc)
         {
-            if (IsWormSegment(npc))
+            if (IsWormSegmentOrPart(npc))
             {
                 return;
             }
@@ -397,9 +460,14 @@ namespace Stataria
                 return;
             }
 
-            else if (IsWormSegment(npc))
+            else if (IsWormSegmentOrPart(npc))
             {
-                NPC head = GetWormHead(npc);
+                NPC head = FindWormHead(npc);
+                if (head == null && IsSplittingWormSegment(npc))
+                {
+                    head = FindSplittingWormHead(npc);
+                }
+
                 if (head != null && head.active)
                 {
                     var headScaling = head.GetGlobalNPC<StatariaScalingGlobalNPC>();
@@ -491,14 +559,20 @@ namespace Stataria
                 npc.knockBackResist *= (1f - config.enemyScaling.EliteKnockbackResistance);
             }
 
-            int newHealth = (int)(npc.lifeMax * healthMult) + additionalFlatHealth;
+            bool isLinkedWormSegment = IsWormSegmentOrPart(npc) && !IsSplittingWormSegment(npc);
 
-            const int MAX_SAFE_HEALTH = 1000000000;
-            if (newHealth > MAX_SAFE_HEALTH)
-                newHealth = MAX_SAFE_HEALTH;
+            if (!isLinkedWormSegment)
+            {
+                float healthRatio = npc.lifeMax > 0 ? (float)npc.life / npc.lifeMax : 1f;
+                int newHealth = (int)(npc.lifeMax * healthMult) + additionalFlatHealth;
 
-            npc.lifeMax = newHealth;
-            npc.life = npc.lifeMax;
+                const int MAX_SAFE_HEALTH = 1000000000;
+                if (newHealth > MAX_SAFE_HEALTH)
+                    newHealth = MAX_SAFE_HEALTH;
+
+                npc.lifeMax = newHealth;
+                npc.life = (int)Math.Round(newHealth * healthRatio);
+            }
         }
 
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
@@ -578,12 +652,14 @@ namespace Stataria
             if (IsMultiPartBoss(npc) && npc.whoAmI != GetMainPartID(npc))
                 return;
 
-            if (npc.realLife >= 0 && npc.realLife != npc.whoAmI)
-                return;
-
-            if (IsSplittingWormSegment(npc))
+            if (IsWormSegmentOrPart(npc))
             {
-                NPC head = FindSplittingWormHead(npc);
+                NPC head = FindWormHead(npc);
+                if (head == null && IsSplittingWormSegment(npc))
+                {
+                    head = FindSplittingWormHead(npc);
+                }
+
                 if (head != null && head.whoAmI != npc.whoAmI)
                     return;
             }

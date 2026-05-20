@@ -1,6 +1,6 @@
 Stataria adds a full RPG stat and leveling system to Terraria!
 
-NEW IN THIS UPDATE:
+GOOD TO KNOW:
 - Custom Config UI: Inspired by the 'Quality of Terraria' mod, configuring Stataria is now easier and sleeker than ever!
 - Hugo NPC: Hugo sells the Cores! Many people missed this in previous versions, so make sure to check his shop.
 - Open Source: The GitHub repository is now permanently public! Whether you want to help with localization, fix bugs, or provide updates, you can find it here: https://github.com/kingquincye/Stataria

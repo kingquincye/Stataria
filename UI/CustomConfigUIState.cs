@@ -36,9 +36,13 @@ namespace Stataria.UI
         private UIElement configTabsList;
         public ModConfig CurrentConfig;
 
+        private UITextPanel<Terraria.Localization.LocalizedText> closeButton;
+        private bool _oldEscapePressed;
+
         public override void OnActivate()
         {
             base.OnActivate();
+            _oldEscapePressed = true;
         }
 
         public override void OnDeactivate()
@@ -65,7 +69,7 @@ namespace Stataria.UI
             Append(mainPanel);
 
             // Close Button
-            UITextPanel<Terraria.Localization.LocalizedText> closeButton = new UITextPanel<Terraria.Localization.LocalizedText>(Terraria.Localization.Language.GetText("Mods.Stataria.UI.CloseCustomConfig"));
+            closeButton = new UITextPanel<Terraria.Localization.LocalizedText>(Terraria.Localization.Language.GetText("Mods.Stataria.UI.CloseCustomConfig"));
             closeButton.HAlign = 0.5f;
             closeButton.VAlign = 0.5f; // Center screen relative
             closeButton.Top.Set(415, 0f); // 375 (half of 750) + 40 margin
@@ -162,11 +166,37 @@ namespace Stataria.UI
             configElementsList.SetScrollbar(configElementsScrollbar);
         }
 
+        public override void Recalculate()
+        {
+            if (mainPanel != null)
+            {
+                float targetHeight = Math.Min(750f, Main.screenHeight - 120f);
+                mainPanel.Height.Set(targetHeight, 0f);
+
+                if (closeButton != null)
+                {
+                    closeButton.Top.Set(targetHeight / 2f + 35f, 0f);
+                }
+            }
+            base.Recalculate();
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             tooltipText?.SetText(Terraria.Localization.Language.GetText("Mods.Stataria.UI.HoverTooltip"));
             reloadWarningText?.SetText("");
             base.Draw(spriteBatch);
+
+            // Keyboard Escape handling during Draw (since typing state is processed during Draw phase)
+            bool escapePressed = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape);
+            if (escapePressed && !_oldEscapePressed)
+            {
+                if (!Main.inputTextEscape)
+                {
+                    ConfigUISystem.Instance.HideMyUI();
+                }
+            }
+            _oldEscapePressed = escapePressed;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)

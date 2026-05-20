@@ -1,6 +1,6 @@
 [b] Stataria - An RPG System for Terraria [/b]
 
-[b][u] NEW IN THIS UPDATE: [/u][/b]
+[b][u] GOOD TO KNOW: [/u][/b]
 [list]
 [*] [b]Custom Config UI[/b]: Inspired by the "Quality of Terraria" mod, configuring Stataria is now easier and sleeker than ever!
 [*] [b]Hugo NPC[/b]: Hugo sells the Cores! Many people missed this in previous versions, so make sure to check his shop.
