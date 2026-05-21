@@ -1289,9 +1289,7 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            float totalCrit = item.crit;
-            totalCrit += GetEffectiveStat("LUC") * config.statSettings.LUC_Crit;
-            totalCrit += config.roleSettings.CritGodCritChance;
+            float totalCrit = Player.GetWeaponCrit(item);
 
             if (totalCrit > 100f)
             {
@@ -1519,6 +1517,15 @@ namespace Stataria
             int effectiveSTR = GetEffectiveStat("STR");
 
             Player.GetArmorPenetration(DamageClass.Melee) += effectiveSTR * config.statSettings.STR_ArmorPen;
+            float meleeBonus = effectiveSTR * (config.statSettings.STR_Damage / 100f);
+            if (meleeBonus > 0f)
+            {
+                if (config.generalBalance.UseMultiplicativeDamage)
+                    Player.GetDamage(DamageClass.Melee) *= 1f + meleeBonus;
+                else
+                    Player.GetDamage(DamageClass.Melee) += meleeBonus;
+            }
+            Player.GetKnockback(DamageClass.Melee) += effectiveSTR * (config.statSettings.STR_Knockback / 100f);
 
             int effectiveINT = GetEffectiveStat("INT");
 
@@ -1527,6 +1534,14 @@ namespace Stataria
             float diminishingReduction = 1f - (1f / (1f + rawReduction));
             Player.manaCost -= diminishingReduction;
             Player.GetArmorPenetration(DamageClass.Magic) += effectiveINT * config.statSettings.INT_ArmorPen;
+            float magicBonus = effectiveINT * (config.statSettings.INT_Damage / 100f);
+            if (magicBonus > 0f)
+            {
+                if (config.generalBalance.UseMultiplicativeDamage)
+                    Player.GetDamage(DamageClass.Magic) *= 1f + magicBonus;
+                else
+                    Player.GetDamage(DamageClass.Magic) += magicBonus;
+            }
 
             int effectiveEND = GetEffectiveStat("END");
 
@@ -1552,11 +1567,25 @@ namespace Stataria
 
             Player.aggro -= (int)(effectiveLUC * config.statSettings.LUC_AggroReduction);
 
+            Player.GetCritChance(DamageClass.Generic) += effectiveLUC * config.statSettings.LUC_Crit;
+
+            if (ActiveRole?.ID == "CritGod" && ActiveRole.Status == RoleStatus.Active)
+            {
+                Player.GetCritChance(DamageClass.Generic) += config.roleSettings.CritGodCritChance;
+            }
+
             int effectiveSPR = GetEffectiveStat("SPR");
 
             Player.maxMinions += effectiveSPR / config.statSettings.SPR_MinionsPerX;
             Player.maxTurrets += effectiveSPR / config.statSettings.SPR_SentriesPerX;
-            Player.GetDamage(DamageClass.Summon) += effectiveSPR * (config.statSettings.SPR_Damage / 100f);
+            float summonBonus = effectiveSPR * (config.statSettings.SPR_Damage / 100f);
+            if (summonBonus > 0f)
+            {
+                if (config.generalBalance.UseMultiplicativeDamage)
+                    Player.GetDamage(DamageClass.Summon) *= 1f + summonBonus;
+                else
+                    Player.GetDamage(DamageClass.Summon) += summonBonus;
+            }
 
             if (ActiveRole?.ID == "Beastmaster" && ActiveRole.Status == RoleStatus.Active)
             {
@@ -1626,6 +1655,14 @@ namespace Stataria
             int effectiveDEX = GetEffectiveStat("DEX");
 
             Player.GetArmorPenetration(DamageClass.Ranged) += effectiveDEX * config.statSettings.DEX_ArmorPen;
+            float rangedBonus = effectiveDEX * (config.statSettings.DEX_Damage / 100f);
+            if (rangedBonus > 0f)
+            {
+                if (config.generalBalance.UseMultiplicativeDamage)
+                    Player.GetDamage(DamageClass.Ranged) *= 1f + rangedBonus;
+                else
+                    Player.GetDamage(DamageClass.Ranged) += rangedBonus;
+            }
 
             if (config.modIntegration.EnableThoriumIntegration && ThoriumSupportHelper.ThoriumLoaded)
             {
@@ -2524,14 +2561,11 @@ namespace Stataria
                 isGenericModWeapon = genericModDef != null;
             }
 
-            if (item.CountsAsClass(DamageClass.Melee))
-                bonus += effectiveSTR * (config.statSettings.STR_Damage / 100f);
+            if (item.CountsAsClass(DamageClass.Melee)) { } // Handled globally in ResetEffects
 
-            if (item.CountsAsClass(DamageClass.Magic))
-                bonus += effectiveINT * (config.statSettings.INT_Damage / 100f);
+            if (item.CountsAsClass(DamageClass.Magic)) { } // Handled globally in ResetEffects
 
-            if (item.CountsAsClass(DamageClass.Ranged))
-                bonus += effectiveDEX * (config.statSettings.DEX_Damage / 100f);
+            if (item.CountsAsClass(DamageClass.Ranged)) { } // Handled globally in ResetEffects
 
             if (isRogueWeapon)
                 bonus += effectiveRGE * (config.modIntegration.RGE_Damage / 100f);
@@ -2598,26 +2632,14 @@ namespace Stataria
 
         public override void ModifyWeaponKnockback(Item item, ref StatModifier knockback)
         {
-            var config = ModContent.GetInstance<StatariaConfig>();
-
-            int effectiveSTR = GetEffectiveStat("STR");
-
-            if (item.CountsAsClass(DamageClass.Melee))
-                knockback += effectiveSTR * (config.statSettings.STR_Knockback / 100f);
+            // Handled globally in ResetEffects
         }
 
         public override void ModifyWeaponCrit(Item item, ref float crit)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
 
-            int effectiveLUC = GetEffectiveStat("LUC");
-
-            crit += effectiveLUC * config.statSettings.LUC_Crit;
-
-            if (ActiveRole?.ID == "CritGod" && ActiveRole.Status == RoleStatus.Active)
-            {
-                crit += config.roleSettings.CritGodCritChance;
-            }
+            // Base LUC and CritGod crit chance are handled globally in ResetEffects
 
             if (ActiveRole?.ID == "BlackKnight" && ActiveRole.Status == RoleStatus.Active)
             {
