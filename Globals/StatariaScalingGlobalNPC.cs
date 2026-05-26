@@ -37,6 +37,9 @@ namespace Stataria
 
             if (npc.ModNPC != null)
             {
+                if (npc.boss)
+                    return false;
+
                 string name = npc.ModNPC.Name;
                 if (name.Contains("Body", StringComparison.OrdinalIgnoreCase) || 
                     name.Contains("Tail", StringComparison.OrdinalIgnoreCase) || 
@@ -51,7 +54,8 @@ namespace Stataria
 
         private bool IsSplittingWormSegment(NPC npc)
         {
-            return npc.ai[0] >= 0 && npc.ai[0] < Main.maxNPCs && 
+            return (npc.aiStyle == NPCAIStyleID.Worm || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail) &&
+                npc.ai[0] >= 0 && npc.ai[0] < Main.maxNPCs && 
                 npc.ai[1] >= 0 && npc.ai[1] < Main.maxNPCs;
         }
 
@@ -265,12 +269,13 @@ namespace Stataria
             if (hasBeenScaled)
                 return;
 
+            hasBeenScaled = true;
+
             var config = ModContent.GetInstance<StatariaConfig>();
             if (config.advanced.ScalingBlacklistedNPCs.Any(entry =>
                 entry.Equals(Lang.GetNPCNameValue(npc.type), StringComparison.OrdinalIgnoreCase) ||
                 (int.TryParse(entry, out int id) && id == npc.type)))
             {
-                hasBeenScaled = true;
                 return;
             }
 
@@ -303,7 +308,6 @@ namespace Stataria
                     IsElite = headScaling.IsElite;
 
                     ApplyScaling(npc);
-                    hasBeenScaled = true;
                     return;
                 }
             }
@@ -315,8 +319,6 @@ namespace Stataria
             }
 
             ApplyScaling(npc);
-
-            hasBeenScaled = true;
         }
 
         public override void Load()
@@ -559,20 +561,15 @@ namespace Stataria
                 npc.knockBackResist *= (1f - config.enemyScaling.EliteKnockbackResistance);
             }
 
-            bool isLinkedWormSegment = IsWormSegmentOrPart(npc) && !IsSplittingWormSegment(npc);
+            float healthRatio = npc.lifeMax > 0 ? (float)npc.life / npc.lifeMax : 1f;
+            int newHealth = (int)(npc.lifeMax * healthMult) + additionalFlatHealth;
 
-            if (!isLinkedWormSegment)
-            {
-                float healthRatio = npc.lifeMax > 0 ? (float)npc.life / npc.lifeMax : 1f;
-                int newHealth = (int)(npc.lifeMax * healthMult) + additionalFlatHealth;
+            const int MAX_SAFE_HEALTH = 1000000000;
+            if (newHealth > MAX_SAFE_HEALTH)
+                newHealth = MAX_SAFE_HEALTH;
 
-                const int MAX_SAFE_HEALTH = 1000000000;
-                if (newHealth > MAX_SAFE_HEALTH)
-                    newHealth = MAX_SAFE_HEALTH;
-
-                npc.lifeMax = newHealth;
-                npc.life = (int)Math.Round(newHealth * healthRatio);
-            }
+            npc.lifeMax = newHealth;
+            npc.life = (int)Math.Round(newHealth * healthRatio);
         }
 
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
