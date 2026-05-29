@@ -14,7 +14,7 @@ namespace Stataria
 
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
-            if ((projectile.minion || projectile.sentry) && source is EntitySource_ItemUse itemSrc)
+            if ((projectile.minion || projectile.sentry || projectile.CountsAsClass(DamageClass.Summon)) && source is EntitySource_ItemUse itemSrc)
             {
                 summonWeaponType = itemSrc.Item.type;
             }
@@ -30,7 +30,7 @@ namespace Stataria
 
         public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
-            if ((projectile.minion || projectile.DamageType == DamageClass.Summon) && summonWeaponType != -1 && projectile.owner >= 0 && projectile.owner < Main.maxPlayers)
+            if ((projectile.minion || projectile.CountsAsClass(DamageClass.Summon)) && summonWeaponType != -1 && projectile.owner >= 0 && projectile.owner < Main.maxPlayers)
             {
                 Player owner = Main.player[projectile.owner];
                 if (!owner.active) return;

@@ -17,7 +17,7 @@ namespace Stataria
             if (!EnableSummonCrits)
                 return;
 
-            bool isSummonProjectile = proj.minion || proj.sentry || proj.DamageType == DamageClass.Summon;
+            bool isSummonProjectile = proj.minion || proj.sentry || proj.CountsAsClass(DamageClass.Summon);
 
             if (!isSummonProjectile || proj.owner != Player.whoAmI)
                 return;
