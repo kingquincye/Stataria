@@ -267,6 +267,7 @@ namespace Stataria.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
+            Main.instance.LoadNPC(NPCID.Zombie);
             Texture2D texture = Terraria.GameContent.TextureAssets.Npc[NPCID.Zombie].Value;
             int numFrames = 3;
             int frameHeight = texture.Height / numFrames;
