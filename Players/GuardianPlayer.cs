@@ -14,7 +14,7 @@ namespace Stataria
     public class GuardianPlayer : ModPlayer
     {
         private HashSet<int> playersInAura = new HashSet<int>();
-        public bool IsGuardianActive => GetGuardianRole()?.Status == RoleStatus.Active;
+        public bool IsGuardianActive => GetGuardianRole()?.Status == RoleStatus.Active && ModContent.GetInstance<StatariaConfig>().roleSettings.EnableRoleSystem;
 
         private Role GetGuardianRole()
         {

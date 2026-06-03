@@ -404,7 +404,19 @@ namespace Stataria
                     barY = anchorY - offsetY - barHeight;
                 }
 
-                currentlyDisplayedBars[i].CalculatedPosition = new Vector2(anchorX - barWidth / 2f, barY);
+                float finalX = anchorX - barWidth / 2f;
+                float finalY = barY;
+
+                float minY = 10f;
+                if (config.ShowBossName)
+                {
+                    minY += nameHeight;
+                }
+
+                finalX = Math.Clamp(finalX, 10f, Math.Max(10f, Main.screenWidth - barWidth - 10f));
+                finalY = Math.Clamp(finalY, minY, Math.Max(minY, Main.screenHeight - barHeight - 10f));
+
+                currentlyDisplayedBars[i].CalculatedPosition = new Vector2(finalX, finalY);
                 currentlyDisplayedBars[i].CurrentWidth = (int)barWidth;
                 currentlyDisplayedBars[i].CurrentHeight = (int)barHeight;
                 currentlyDisplayedBars[i].CurrentScale = config.BossBarScale;

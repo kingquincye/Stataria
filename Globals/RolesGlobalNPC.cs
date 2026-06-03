@@ -48,6 +48,7 @@ namespace Stataria
                 if (p?.active == true && !p.dead)
                 {
                     HandleVampireKill(p, config);
+                    HandleNecromancerKill(p, config);
                 }
             }
         }
@@ -68,6 +69,15 @@ namespace Stataria
             if (healAmount > 0 && Main.netMode != NetmodeID.Server)
             {
                 player.HealEffect(healAmount, true);
+            }
+        }
+
+        private void HandleNecromancerKill(Player player, StatariaConfig config)
+        {
+            var necromancerPlayer = player.GetModPlayer<NecromancerPlayer>();
+            if (necromancerPlayer.IsNecromancerActive)
+            {
+                necromancerPlayer.HarvestSoulOnKill();
             }
         }
     }

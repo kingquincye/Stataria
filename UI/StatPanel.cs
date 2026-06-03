@@ -22,6 +22,9 @@ namespace Stataria
         private UIText xpText;
         private UIText statPointsText;
 
+        private float desiredWidth;
+        private float desiredHeight;
+
         private UIPanel tooltipPanel;
         private UIText tooltipText;
 
@@ -828,6 +831,10 @@ namespace Stataria
 
             float panelHeight = bulkBaseY + 120f;
             statPanel.Height.Set(panelHeight, 0f);
+
+            desiredWidth = totalWidth;
+            desiredHeight = panelHeight;
+
             statPanel.Recalculate();
 
             float tooltipY = panelHeight + 10f;
@@ -1092,6 +1099,10 @@ namespace Stataria
 
             float panelHeight = bulkBaseY + 120f;
             statPanel.Height.Set(panelHeight, 0f);
+
+            desiredWidth = totalWidth;
+            desiredHeight = panelHeight;
+
             statPanel.Recalculate();
 
             float tooltipY = panelHeight + 10f;
@@ -1112,6 +1123,30 @@ namespace Stataria
             tooltipPanel.Append(tooltipText);
 
             statPanel.Recalculate();
+        }
+
+        public override void Recalculate()
+        {
+            if (statPanel != null)
+            {
+                float targetWidth = Math.Min(desiredWidth, Main.screenWidth - 20f);
+                float targetHeight = Math.Min(desiredHeight, Main.screenHeight - 70f);
+
+                statPanel.Width.Set(targetWidth, 0f);
+                statPanel.Height.Set(targetHeight, 0f);
+
+                float baseX = (Main.screenWidth - targetWidth) * 0.5f;
+                float baseY = (Main.screenHeight - targetHeight) * 0.5f;
+
+                float clampedLeft = Math.Clamp(statPanel.Left.Pixels, -baseX + 10f, Math.Max(-baseX + 10f, baseX - 10f));
+                float minY = 50f - baseY;
+                float maxY = baseY - 10f;
+                float clampedTop = Math.Clamp(statPanel.Top.Pixels, minY, Math.Max(minY, maxY));
+
+                statPanel.Left.Set(clampedLeft, 0f);
+                statPanel.Top.Set(clampedTop, 0f);
+            }
+            base.Recalculate();
         }
 
         private bool IsClickingOnInteractiveElement(Vector2 mousePosition)

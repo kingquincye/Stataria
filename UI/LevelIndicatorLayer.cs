@@ -15,7 +15,7 @@ namespace Stataria
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
-            if (Main.dedServ)
+            if (Main.dedServ || !DrawHelper.IsSpriteBatchActive(Main.spriteBatch))
                 return;
 
             Player player = drawInfo.drawPlayer;

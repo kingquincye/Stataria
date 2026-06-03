@@ -20,33 +20,43 @@ namespace Stataria.Buffs
             var config = ModContent.GetInstance<StatariaConfig>();
             Player player = Main.LocalPlayer;
             RPGPlayer rpgPlayer = player.GetModPlayer<RPGPlayer>();
+            var clericPlayer = player.GetModPlayer<ClericPlayer>();
 
             bool isCleric = rpgPlayer?.ActiveRole?.ID == "Cleric" && rpgPlayer.ActiveRole.Status == RoleStatus.Active;
+            bool isAngel = isCleric && rpgPlayer.AscendedRoles.Contains("Cleric");
 
             if (isCleric)
             {
-                buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianNameSelf");
-                tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianTooltipSelf", config.roleSettings.ClericAuraRadius.ToString("0.#"));
+                if (isAngel)
+                {
+                    buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.AngelNameSelf");
+                    tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.AngelTooltipSelf", config.roleSettings.AngelAuraRadius.ToString("0.#"));
+                }
+                else
+                {
+                    buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianNameSelf");
+                    tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianTooltipSelf", config.roleSettings.ClericAuraRadius.ToString("0.#"));
+                }
             }
             else
             {
-                buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianNameTeammate");
-                tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianTooltipTeammate", config.roleSettings.ClericTeammateHealthBonus.ToString("0.#"));
+                bool isAngelAura = clericPlayer.ReceivedTeammateHealthBonus >= config.roleSettings.AngelTeammateHealthBonus;
+                if (isAngelAura)
+                {
+                    buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.AngelNameTeammate");
+                    tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.AngelTooltipTeammate", clericPlayer.ReceivedTeammateHealthBonus.ToString("0.#"));
+                }
+                else
+                {
+                    buffName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianNameTeammate");
+                    tip = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Buffs.ClericAuraBuff.GuardianTooltipTeammate", clericPlayer.ReceivedTeammateHealthBonus.ToString("0.#"));
+                }
             }
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            var config = ModContent.GetInstance<StatariaConfig>();
-            var rpgPlayer = player.GetModPlayer<RPGPlayer>();
-            
-            bool isCleric = rpgPlayer?.ActiveRole?.ID == "Cleric" && rpgPlayer.ActiveRole.Status == RoleStatus.Active;
-            
-            if (!isCleric)
-            {
-                float healthBonus = config.roleSettings.ClericTeammateHealthBonus / 100f;
-                player.statLifeMax2 = (int)(player.statLifeMax2 * (1f + healthBonus));
-            }
+            // Health bonus is now applied inside ClericPlayer.ResetEffects to avoid replication
         }
     }
 }

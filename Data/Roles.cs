@@ -159,24 +159,47 @@ namespace Stataria
 
             if (ID == "Cleric")
             {
-                var effects = new List<string>
-                {
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.MaxHealth", config.roleSettings.ClericHealthBonus.ToString("0.##")),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DefensePenalty", config.roleSettings.ClericDefensePenalty.ToString("0.##")),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.ProtectAura", config.roleSettings.ClericAuraRadius.ToString("0.#")),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.AuraHealth", config.roleSettings.ClericTeammateHealthBonus.ToString("0.##")),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.SelfRegen", config.roleSettings.ClericSelfRegenPercent.ToString("0.##"), config.roleSettings.ClericRegenInterval.ToString("0.##")),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.TeamRegen", config.roleSettings.ClericTeammateRegenPercent.ToString("0.##"), config.roleSettings.ClericRegenInterval.ToString("0.##")),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DivineIntervention", config.roleSettings.DivineInterventionDuration.ToString("0.##"))
-                };
+                var rpg = Main.LocalPlayer.GetModPlayer<RPGPlayer>();
+                bool isAngel = rpg.AscendedRoles.Contains("Cleric");
 
-                if (config.roleSettings.ClericDisableVitRegen)
+                if (isAngel)
                 {
-                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DisabledRegen"));
+                    var effects = new List<string>
+                    {
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.MaxHealth", config.roleSettings.AngelHealthBonus.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.DefensePenalty", config.roleSettings.AngelDefensePenalty.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.ProtectAura", config.roleSettings.AngelAuraRadius.ToString("0.#")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.AuraHealth", config.roleSettings.AngelTeammateHealthBonus.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.SelfRegen", config.roleSettings.AngelSelfRegenPercent.ToString("0.##"), config.roleSettings.AngelRegenInterval.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.TeamRegen", config.roleSettings.AngelTeammateRegenPercent.ToString("0.##"), config.roleSettings.AngelRegenInterval.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.Wings", config.roleSettings.AngelInAirMoveSpeedBonus.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.SoulAnchor", config.roleSettings.AngelSoulAnchorDamageReduction.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Angel.DivineResurrection", config.roleSettings.AngelResurrectionHealPercent.ToString("0.##"), config.roleSettings.AngelResurrectionInvulTime.ToString("0.##"), config.roleSettings.AngelResurrectionCooldown.ToString("0.##"))
+                    };
+                    return string.Join("\n", effects);
                 }
+                else
+                {
+                    var effects = new List<string>
+                    {
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.MaxHealth", config.roleSettings.ClericHealthBonus.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DefensePenalty", config.roleSettings.ClericDefensePenalty.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.ProtectAura", config.roleSettings.ClericAuraRadius.ToString("0.#")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.AuraHealth", config.roleSettings.ClericTeammateHealthBonus.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.SelfRegen", config.roleSettings.ClericSelfRegenPercent.ToString("0.##"), config.roleSettings.ClericRegenInterval.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.TeamRegen", config.roleSettings.ClericTeammateRegenPercent.ToString("0.##"), config.roleSettings.ClericRegenInterval.ToString("0.##")),
+                        Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DivineIntervention", config.roleSettings.DivineInterventionDuration.ToString("0.##"))
+                    };
 
-                return string.Join("\n", effects);
+                    if (config.roleSettings.ClericDisableVitRegen)
+                    {
+                        effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Cleric.DisabledRegen"));
+                    }
+
+                    return string.Join("\n", effects);
+                }
             }
+
 
             if (ID == "Guardian")
             {
@@ -202,6 +225,45 @@ namespace Stataria
                 {
                     effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Guardian.DisabledEND"));
                 }
+
+                return string.Join("\n", effects);
+            }
+
+            if (ID == "Necromancer")
+            {
+                var effects = new List<string>
+                {
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.SoulReserve", config.roleSettings.NecromancerBaseSoulCapacity, config.roleSettings.NecromancerSPRPerSoul),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.SoulDuration", config.roleSettings.NecromancerBaseSoulDuration, config.roleSettings.NecromancerSoulDurationPerSPR),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallsLimit", config.roleSettings.NecromancerActiveThrallsLimit),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.BoneArmor", config.roleSettings.NecromancerBoneArmorDRPerThrall),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallDamage", config.roleSettings.NecromancerThrallBaseDamage, config.roleSettings.NecromancerThrallINTScale)
+                };
+
+                return string.Join("\n", effects);
+            }
+
+            if (ID == "Berserker")
+            {
+                var effects = new List<string>
+                {
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Berserker.BloodbathDmg", config.roleSettings.BerserkerBloodbathMaxDamageBonus.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Berserker.BloodbathSpeed", config.roleSettings.BerserkerBloodbathMaxSpeedBonus.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Berserker.BloodbathImmunity", config.roleSettings.BerserkerBloodbathImmunityThreshold.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Berserker.SavageRoar", config.roleSettings.BerserkerSavageRoarDuration.ToString("0.##"), config.roleSettings.BerserkerSavageRoarCooldown.ToString("0.##"))
+                };
+
+                return string.Join("\n", effects);
+            }
+
+            if (ID == "Spellweaver")
+            {
+                var effects = new List<string>
+                {
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Spellweaver.ManaAegis", config.roleSettings.SpellweaverManaAegisPercent.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Spellweaver.ManaCrit", config.roleSettings.SpellweaverManaCritRestorePercent.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Spellweaver.Discharge", config.roleSettings.SpellweaverMaxElementalCharge.ToString("0.##"), config.roleSettings.SpellweaverElementalDischargeBaseMult.ToString("0.##"), config.roleSettings.SpellweaverElementalDischargeINTScale.ToString("0.##"))
+                };
 
                 return string.Join("\n", effects);
             }

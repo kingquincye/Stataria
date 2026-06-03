@@ -7,6 +7,7 @@ namespace Stataria
     public class StatariaFeatureToggleSystem : ModSystem
     {
         private static bool lastRebirthEnabled;
+        private static bool lastRoleSystemEnabled;
         private static bool lastCalamityIntegrationState;
         private static bool lastThoriumIntegrationState;
         private static int lastStatPointsPerLevel;
@@ -22,6 +23,7 @@ namespace Stataria
         {
             var config = ModContent.GetInstance<StatariaConfig>();
             lastRebirthEnabled = config.rebirthSystem.EnableRebirthSystem;
+            lastRoleSystemEnabled = config.roleSettings.EnableRoleSystem;
             lastCalamityIntegrationState = false;
             lastThoriumIntegrationState = false;
             lastStatPointsPerLevel = config.generalBalance.StatPointsPerLevel;
@@ -96,6 +98,12 @@ namespace Stataria
             {
                 StatariaUI.Panel?.ReInitializePanel();
                 lastRebirthEnabled = cfg.rebirthSystem.EnableRebirthSystem;
+            }
+
+            if (cfg.roleSettings.EnableRoleSystem != lastRoleSystemEnabled)
+            {
+                StatariaUI.Panel?.ReInitializePanel();
+                lastRoleSystemEnabled = cfg.roleSettings.EnableRoleSystem;
             }
 
             bool rebirthConfigChanged =

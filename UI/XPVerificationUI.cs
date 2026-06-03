@@ -34,6 +34,9 @@ namespace Stataria
         private const float StandardPanelHeight = 200f;
         private const float ExtendedPanelHeight = 250f;
 
+        private float desiredWidth = 420f;
+        private float desiredHeight = StandardPanelHeight;
+
         private int currentIndex = 1;
         private int totalCount = 1;
 
@@ -168,6 +171,7 @@ namespace Stataria
         {
             if (visible)
             {
+                desiredHeight = ExtendedPanelHeight;
                 panel.Height.Set(ExtendedPanelHeight, 0f);
 
                 acceptAllButton.BackgroundColor = new Color(50, 180, 50, 200);
@@ -182,6 +186,7 @@ namespace Stataria
             }
             else
             {
+                desiredHeight = StandardPanelHeight;
                 panel.Height.Set(StandardPanelHeight, 0f);
 
                 acceptAllButton.BackgroundColor = new Color(0, 0, 0, 0);
@@ -195,7 +200,29 @@ namespace Stataria
                 rejectAllButton.IgnoresMouseInteraction = true;
             }
 
-            panel.Recalculate();
+            Recalculate();
+        }
+
+        public override void Recalculate()
+        {
+            if (panel != null)
+            {
+                float targetWidth = Math.Min(desiredWidth, Main.screenWidth - 20f);
+                float targetHeight = Math.Min(desiredHeight, Main.screenHeight - 20f);
+
+                panel.Width.Set(targetWidth, 0f);
+                panel.Height.Set(targetHeight, 0f);
+
+                float baseX = (Main.screenWidth - targetWidth) * 0.5f;
+                float baseY = (Main.screenHeight - targetHeight) * 0.5f;
+
+                float clampedLeft = Math.Clamp(panel.Left.Pixels, -baseX, baseX);
+                float clampedTop = Math.Clamp(panel.Top.Pixels, -baseY, baseY);
+
+                panel.Left.Set(clampedLeft, 0f);
+                panel.Top.Set(clampedTop, 0f);
+            }
+            base.Recalculate();
         }
 
         public override void Update(GameTime gameTime)

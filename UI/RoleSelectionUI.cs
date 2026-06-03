@@ -28,6 +28,9 @@ namespace Stataria
         private const float SECTION_SPACING = 12f;
         private const float LINE_SPACING = 18f;
 
+        private const float desiredWidth = 700f;
+        private const float desiredHeight = 600f;
+
         private bool dragging = false;
         private Vector2 offset;
 
@@ -120,15 +123,17 @@ namespace Stataria
             float contentHeight = CalculateRoleContentHeight(role, rpg);
             panel.Height.Set(contentHeight, 0f);
 
+            bool isAngelRole = role.ID == "Cleric" && rpg.AscendedRoles.Contains("Cleric");
+
             if (isActive)
             {
-                panel.BackgroundColor = new Color(40, 80, 40, 220);
-                panel.BorderColor = new Color(80, 160, 80, 255);
+                panel.BackgroundColor = isAngelRole ? new Color(60, 50, 30, 220) : new Color(40, 80, 40, 220);
+                panel.BorderColor = isAngelRole ? new Color(255, 215, 100, 255) : new Color(80, 160, 80, 255);
             }
             else if (isDeactivated)
             {
-                panel.BackgroundColor = new Color(80, 80, 40, 220);
-                panel.BorderColor = new Color(160, 160, 80, 255);
+                panel.BackgroundColor = isAngelRole ? new Color(50, 45, 30, 220) : new Color(80, 80, 40, 220);
+                panel.BorderColor = isAngelRole ? new Color(200, 180, 80, 255) : new Color(160, 160, 80, 255);
             }
             else if (role.Status == RoleStatus.Locked)
             {
@@ -137,8 +142,8 @@ namespace Stataria
             }
             else
             {
-                panel.BackgroundColor = new Color(45, 60, 85, 200);
-                panel.BorderColor = new Color(80, 110, 150, 255);
+                panel.BackgroundColor = isAngelRole ? new Color(45, 40, 60, 200) : new Color(45, 60, 85, 200);
+                panel.BorderColor = isAngelRole ? new Color(180, 140, 220, 255) : new Color(80, 110, 150, 255);
             }
 
             float currentY = 0f;
@@ -146,10 +151,10 @@ namespace Stataria
             var nameText = new UIText(role.Name.ToUpper(), 1.4f);
             nameText.Top.Set(currentY, 0f);
             nameText.Left.Set(0f, 0f);
-            nameText.TextColor = isActive ? new Color(255, 215, 100) :
+            nameText.TextColor = isAngelRole ? new Color(255, 230, 150) : (isActive ? new Color(255, 215, 100) :
                             (isDeactivated ? new Color(255, 255, 100) :
                             (role.Status == RoleStatus.Locked ? new Color(140, 140, 140) :
-                                new Color(220, 220, 255)));
+                                new Color(220, 220, 255))));
             panel.Append(nameText);
             currentY += 30f;
 
@@ -158,7 +163,7 @@ namespace Stataria
                 var activeIndicator = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.IndicatorActive"), 1f);
                 activeIndicator.Top.Set(currentY, 0f);
                 activeIndicator.Left.Set(0f, 0f);
-                activeIndicator.TextColor = new Color(100, 255, 100);
+                activeIndicator.TextColor = isAngelRole ? new Color(255, 215, 100) : new Color(100, 255, 100);
                 panel.Append(activeIndicator);
                 currentY += 25f;
             }
@@ -167,7 +172,7 @@ namespace Stataria
                 var deactivatedIndicator = new UIText(Language.GetText("Mods.Stataria.UI.RoleSelection.IndicatorDeactivated"), 1f);
                 deactivatedIndicator.Top.Set(currentY, 0f);
                 deactivatedIndicator.Left.Set(0f, 0f);
-                deactivatedIndicator.TextColor = new Color(255, 255, 100);
+                deactivatedIndicator.TextColor = isAngelRole ? new Color(220, 200, 100) : new Color(255, 255, 100);
                 panel.Append(deactivatedIndicator);
                 currentY += 25f;
             }
@@ -175,12 +180,13 @@ namespace Stataria
             var separator = new UIText(" ─────────────────────────────────────────────── ", 1f);
             separator.Top.Set(currentY - 5f, 0f);
             separator.HAlign = 0.5f;
-            separator.TextColor = isActive ? new Color(80, 160, 80, 150) :
+            separator.TextColor = isAngelRole ? new Color(200, 160, 80, 150) : (isActive ? new Color(80, 160, 80, 150) :
                                 (isDeactivated ? new Color(160, 160, 80, 150) :
                                 (role.Status == RoleStatus.Locked ? new Color(80, 80, 80, 150) :
-                                new Color(80, 110, 150, 150)));
+                                new Color(80, 110, 150, 150))));
             panel.Append(separator);
             currentY += 12f;
+
 
             string wrappedDescription = WrapText(role.Description, 620f, 0.95f);
             var descText = new UIText(wrappedDescription, 0.95f);
@@ -226,14 +232,27 @@ namespace Stataria
 
             if (isActive)
             {
+                bool showAscendButton = role.ID == "Cleric" && !rpg.AscendedRoles.Contains("Cleric");
+
                 var statusPanel = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.RoleSelection.DeactivateButton"), 1f, false);
-                statusPanel.Width.Set(200f, 0f);
                 statusPanel.Height.Set(35f, 0f);
-                statusPanel.HAlign = 0.5f;
                 statusPanel.Top.Set(currentY, 0f);
                 statusPanel.BackgroundColor = new Color(120, 80, 40, 200);
                 statusPanel.BorderColor = new Color(200, 140, 80, 255);
                 statusPanel.SetPadding(8f);
+
+                if (showAscendButton)
+                {
+                    statusPanel.Width.Set(180f, 0f);
+                    statusPanel.HAlign = 0.5f;
+                    statusPanel.Left.Set(-100f, 0f);
+                }
+                else
+                {
+                    statusPanel.Width.Set(200f, 0f);
+                    statusPanel.HAlign = 0.5f;
+                    statusPanel.Left.Set(0f, 0f);
+                }
 
                 statusPanel.OnLeftClick += (evt, el) =>
                 {
@@ -243,9 +262,77 @@ namespace Stataria
                         RefreshRolesList();
                     }
                 };
-
                 panel.Append(statusPanel);
+
+                if (showAscendButton)
+                {
+                    var config = ModContent.GetInstance<StatariaConfig>();
+                    int requiredRebirths = config.roleSettings.AngelRebirthRequirement;
+                    int requiredPoints = config.roleSettings.AngelUnlockCost;
+                    bool meetsRequirements = rpg.RebirthCount >= requiredRebirths && rpg.RebirthPoints >= requiredPoints;
+
+                    var ascendButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.RoleSelection.AscendButton"), 1f, false);
+                    ascendButton.Width.Set(180f, 0f);
+                    ascendButton.Height.Set(35f, 0f);
+                    ascendButton.HAlign = 0.5f;
+                    ascendButton.Left.Set(100f, 0f);
+                    ascendButton.Top.Set(currentY, 0f);
+                    ascendButton.SetPadding(8f);
+
+                    if (meetsRequirements)
+                    {
+                        ascendButton.BackgroundColor = new Color(180, 140, 40, 220); // Golden yellow
+                        ascendButton.BorderColor = new Color(255, 215, 100, 255);
+                        ascendButton.TextColor = Color.White;
+
+                        ascendButton.OnLeftClick += (evt, el) =>
+                        {
+                            rpg.RebirthPoints -= requiredPoints;
+                            rpg.AscendedRoles.Add("Cleric");
+                            rpg.UpdateAscendedRoleProperties();
+
+                            SoundEngine.PlaySound(SoundID.Item29, player.Center);
+
+                            if (Main.netMode != NetmodeID.Server)
+                            {
+                                for (int i = 0; i < 50; i++)
+                                {
+                                    Dust dust = Dust.NewDustPerfect(player.Center, DustID.GoldFlame, Main.rand.NextVector2Circular(8f, 8f), 100, Color.Gold, 1.5f);
+                                    dust.noGravity = true;
+                                }
+                            }
+
+                            if (Main.netMode == NetmodeID.MultiplayerClient)
+                            {
+                                rpg.SyncPlayer(-1, player.whoAmI, false);
+                                player.GetModPlayer<ClericPlayer>().SyncAngelState();
+                            }
+
+                            RefreshRolesList();
+                        };
+                    }
+                    else
+                    {
+                        ascendButton.BackgroundColor = new Color(70, 70, 70, 180);
+                        ascendButton.BorderColor = new Color(120, 120, 120, 200);
+                        ascendButton.TextColor = new Color(160, 160, 160);
+                    }
+
+                    ascendButton.OnUpdate += (el) =>
+                    {
+                        if (el.IsMouseHovering)
+                        {
+                            string tooltip = meetsRequirements
+                                ? Language.GetTextValue("Mods.Stataria.UI.RoleSelection.AscendReady")
+                                : Language.GetTextValue("Mods.Stataria.UI.RoleSelection.AscendRequirements", requiredRebirths, requiredPoints);
+                            Main.instance.MouseText(tooltip);
+                        }
+                    };
+
+                    panel.Append(ascendButton);
+                }
             }
+
             else if (isDeactivated)
             {
                 var reactivatePanel = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.RoleSelection.ReactivateButton"), 1f, false);
@@ -456,6 +543,30 @@ namespace Stataria
                     }
                 }
             }
+        }
+
+        public override void Recalculate()
+        {
+            if (rolePanel != null)
+            {
+                float targetWidth = Math.Min(desiredWidth, Main.screenWidth - 20f);
+                float targetHeight = Math.Min(desiredHeight, Main.screenHeight - 70f);
+
+                rolePanel.Width.Set(targetWidth, 0f);
+                rolePanel.Height.Set(targetHeight, 0f);
+
+                float baseX = (Main.screenWidth - targetWidth) * 0.5f;
+                float baseY = (Main.screenHeight - targetHeight) * 0.5f;
+
+                float clampedLeft = Math.Clamp(rolePanel.Left.Pixels, -baseX + 10f, Math.Max(-baseX + 10f, baseX - 10f));
+                float minY = 50f - baseY;
+                float maxY = baseY - 10f;
+                float clampedTop = Math.Clamp(rolePanel.Top.Pixels, minY, Math.Max(minY, maxY));
+
+                rolePanel.Left.Set(clampedLeft, 0f);
+                rolePanel.Top.Set(clampedTop, 0f);
+            }
+            base.Recalculate();
         }
     }
 }

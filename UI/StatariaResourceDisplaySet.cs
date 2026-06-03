@@ -38,15 +38,69 @@ namespace Stataria
         private int levelBoxHeight = 56;
         private float textScale = 0.8f;
 
+        public static Vector2 GetClampedResourceBarPosition()
+        {
+            var config = ModContent.GetInstance<StatariaClientConfig>();
+            if (config == null)
+                return Vector2.Zero;
+
+            float screenPosX = Main.screenWidth * config.PositionXPercent;
+            float screenPosY = Main.screenHeight * config.PositionYPercent;
+
+            int levelBoxWidth = 45;
+            int levelBoxHeight = 56;
+            int barPadding = config.BarPadding;
+            int barHeight = config.BarHeight;
+            int barWidth = config.BarWidth;
+
+            // Compute total width and height of the UI block to clamp it
+            float totalWidth = levelBoxWidth + barPadding + barWidth;
+            float totalHeight = levelBoxHeight;
+
+            // Calculate bottom-most Y offset relative to start Y
+            float maxRelY;
+            Player player = Main.LocalPlayer;
+            bool subBarActive = false;
+            if (player != null && player.active && !player.dead)
+            {
+                var necPlayer = player.GetModPlayer<NecromancerPlayer>();
+                var spellPlayer = player.GetModPlayer<SpellweaverPlayer>();
+                subBarActive = (necPlayer != null && necPlayer.IsNecromancerActive) || 
+                               (spellPlayer != null && spellPlayer.IsSpellweaverActive);
+            }
+
+            if (config.StretchXPBarToBottom)
+            {
+                maxRelY = barHeight * 2 + barPadding;
+                if (subBarActive)
+                {
+                    maxRelY = (barHeight + barPadding) * 2 + 16; // 16 is trackerHeight
+                }
+            }
+            else
+            {
+                maxRelY = (barHeight + barPadding) * 2 + (barHeight / 2);
+                if (subBarActive)
+                {
+                    maxRelY = (barHeight + barPadding) * 2 + (barHeight / 2) + barPadding + 16;
+                }
+            }
+
+            totalHeight = Math.Max(totalHeight, maxRelY);
+
+            // Clamp positions to screen boundary
+            float clampedX = MathHelper.Clamp(screenPosX, 0f, Math.Max(0f, Main.screenWidth - totalWidth));
+            float clampedY = MathHelper.Clamp(screenPosY, 0f, Math.Max(0f, Main.screenHeight - totalHeight));
+
+            return new Vector2(clampedX, clampedY);
+        }
+
         public override void PreDrawResources(PlayerStatsSnapshot snapshot)
         {
             pixelTexture = TextureAssets.MagicPixel.Value;
             var config = ModContent.GetInstance<StatariaClientConfig>();
 
-            float screenPosX = Main.screenWidth * config.PositionXPercent;
-            float screenPosY = Main.screenHeight * config.PositionYPercent;
-
-            basePosition = new Vector2(screenPosX, screenPosY);
+            basePosition = GetClampedResourceBarPosition();
             barWidth = config.BarWidth;
             barHeight = config.BarHeight;
             barPadding = config.BarPadding;

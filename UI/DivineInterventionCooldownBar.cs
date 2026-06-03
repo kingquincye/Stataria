@@ -9,14 +9,8 @@ namespace Stataria
     {
         protected override bool IsVisible(Player player, RPGPlayer rpgPlayer, StatariaConfig config)
         {
-            var configClient = ModContent.GetInstance<StatariaClientConfig>();
-            if (!configClient.EnableDivineInterventionCooldownBar) return false;
-            
-            if (rpgPlayer.ActiveRole?.ID != "Cleric" || rpgPlayer.ActiveRole.Status != RoleStatus.Active) 
-                return false;
-                
-            float cooldown = config.roleSettings.DivineInterventionCooldown * 60f;
-            return rpgPlayer.divineInterventionCooldownTimer > 0 && cooldown > 0;
+            // Disabled under player drawing; now handled in the dedicated HUD RoleCooldowns layer
+            return false;
         }
 
         protected override float GetProgress(Player player, RPGPlayer rpgPlayer, StatariaConfig config)

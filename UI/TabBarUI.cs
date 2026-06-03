@@ -60,7 +60,10 @@ namespace Stataria
                 availableTabs.Add(TabType.Abilities);
             }
 
-            availableTabs.Add(TabType.Roles);
+            if (config.roleSettings.EnableRoleSystem)
+            {
+                availableTabs.Add(TabType.Roles);
+            }
 
             if (config.socketingSystem.EnableSocketingSystem)
             {
@@ -214,6 +217,11 @@ namespace Stataria
             bool abilitiesAvailable = config.rebirthSystem.EnableRebirthSystem && config.rebirthSystem.EnableRebirthAbilities;
             bool abilitiesInTabs = availableTabs.Contains(TabType.Abilities);
             if (abilitiesAvailable != abilitiesInTabs)
+                shouldRefresh = true;
+
+            bool rolesAvailable = config.roleSettings.EnableRoleSystem;
+            bool rolesInTabs = availableTabs.Contains(TabType.Roles);
+            if (rolesAvailable != rolesInTabs)
                 shouldRefresh = true;
 
             if (shouldRefresh)

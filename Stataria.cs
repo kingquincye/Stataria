@@ -21,7 +21,12 @@ namespace Stataria
         SyncRewardedBosses,
         SyncEliteStatus,
         SyncAbilities,
-        SyncSocketedItem
+        SyncSocketedItem,
+        SyncNecromancerSouls,
+        SyncBerserkerSavageRoar,
+        SyncSpellweaverState,
+        AngelResurrect,
+        SyncAngelState
     }
 
     public class Stataria : Mod
@@ -151,6 +156,12 @@ namespace Stataria
                 rpg.divineInterventionCooldownTimer = reader.ReadInt32();
                 rpg.RebirthCount = reader.ReadInt32();
                 rpg.RebirthPoints = reader.ReadInt32();
+                int ascendedCount = reader.ReadInt32();
+                rpg.AscendedRoles.Clear();
+                for (int i = 0; i < ascendedCount; i++)
+                {
+                    rpg.AscendedRoles.Add(reader.ReadString());
+                }
                 rpg.AutoAllocateEnabled = reader.ReadBoolean();
                 int statCount = reader.ReadInt32();
                 rpg.AutoAllocateStats.Clear();
@@ -180,20 +191,27 @@ namespace Stataria
                                 role.Status = RoleStatus.Available;
                         }
 
-                        rpg.ActiveRole = rpg.AvailableRoles[roleID];
-                        rpg.ActiveRole.Status = roleStatus;
+                        rpg.RawActiveRole = rpg.AvailableRoles[roleID];
+                        rpg.RawActiveRole.Status = roleStatus;
                     }
                 }
                 else
                 {
-                    if (rpg.ActiveRole != null)
+                    if (rpg.RawActiveRole != null)
                     {
-                        rpg.ActiveRole.Status = RoleStatus.Available;
-                        rpg.ActiveRole = null;
+                        rpg.RawActiveRole.Status = RoleStatus.Available;
+                        rpg.RawActiveRole = null;
                     }
                 }
                 rpg.RoleSwitchCount = reader.ReadInt32();
                 rpg.BossKillsCount = reader.ReadInt32();
+                rpg.UpdateAscendedRoleProperties();
+
+                if (Main.netMode == NetmodeID.MultiplayerClient && playerIndex == Main.myPlayer)
+                {
+                    StatariaUI.RoleSelectionPanel?.RefreshRolesList();
+                }
+
 
                 if (Main.netMode == NetmodeID.Server)
                 {
@@ -379,6 +397,186 @@ namespace Stataria
                 if (Main.LocalPlayer.whoAmI == playerIndex && StatariaUI.SocketingUI?.CurrentState != null)
                 {
                     StatariaUI.SocketingPanel?.RefreshUI();
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncNecromancerSouls)
+            {
+                int playerIndex = reader.ReadInt32();
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    var necPlayer = Main.player[playerIndex].GetModPlayer<NecromancerPlayer>();
+                    int count = reader.ReadInt32();
+                    necPlayer.SoulReserveLifetimes.Clear();
+                    for (int i = 0; i < count; i++)
+                    {
+                        necPlayer.SoulReserveLifetimes.Add(reader.ReadSingle());
+                    }
+                    necPlayer.IsRecalled = reader.ReadBoolean();
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        necPlayer.SyncSouls(toWho: -1, fromWho: whoAmI);
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncBerserkerSavageRoar)
+            {
+                int playerIndex = reader.ReadInt32();
+                int roarTimer = reader.ReadInt32();
+                int roarCooldown = reader.ReadInt32();
+
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    var berserkerPlayer = Main.player[playerIndex].GetModPlayer<BerserkerPlayer>();
+                    bool wasActive = berserkerPlayer.SavageRoarTimer > 0;
+                    berserkerPlayer.SavageRoarTimer = roarTimer;
+                    berserkerPlayer.SavageRoarCooldownTimer = roarCooldown;
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        berserkerPlayer.SyncSavageRoar(toWho: -1, fromWho: whoAmI);
+                    }
+                    else
+                    {
+                        if (!wasActive && roarTimer > 0 && playerIndex != Main.myPlayer)
+                        {
+                            SoundEngine.PlaySound(SoundID.Roar, berserkerPlayer.Player.position);
+                            CombatText.NewText(berserkerPlayer.Player.Hitbox, Color.Red, "Savage Roar!", true);
+
+                            for (int i = 0; i < 30; i++)
+                            {
+                                Vector2 vel = Main.rand.NextVector2Circular(5f, 5f);
+                                Dust d = Dust.NewDustPerfect(berserkerPlayer.Player.Center, DustID.Blood, vel, 0, default, 1.8f);
+                                d.noGravity = true;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncSpellweaverState)
+            {
+                int playerIndex = reader.ReadInt32();
+                float charge = reader.ReadSingle();
+
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    var spellweaverPlayer = Main.player[playerIndex].GetModPlayer<SpellweaverPlayer>();
+                    spellweaverPlayer.ElementalCharge = charge;
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        spellweaverPlayer.SyncSpellweaverState(toWho: -1, fromWho: whoAmI);
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.AngelResurrect)
+            {
+                int angelWhoAmI = reader.ReadInt32();
+                float healPercent = reader.ReadSingle();
+                float invulTime = reader.ReadSingle();
+
+                if (Main.netMode == NetmodeID.Server)
+                {
+                    var packet = GetPacket();
+                    packet.Write((byte)StatariaMessageType.AngelResurrect);
+                    packet.Write(angelWhoAmI);
+                    packet.Write(healPercent);
+                    packet.Write(invulTime);
+                    packet.Send();
+                }
+                else
+                {
+                    if (angelWhoAmI >= 0 && angelWhoAmI < Main.maxPlayers)
+                    {
+                        Player angel = Main.player[angelWhoAmI];
+                        if (angel != null && angel.active)
+                        {
+                            var config = ModContent.GetInstance<StatariaConfig>();
+                            for (int i = 0; i < Main.maxPlayers; i++)
+                            {
+                                Player other = Main.player[i];
+                                if (other == null || !other.active)
+                                    continue;
+
+                                bool isTeammate = false;
+                                if (angel.team != 0 && angel.team == other.team)
+                                {
+                                    isTeammate = true;
+                                }
+                                else if (config.roleSettings.ClericAllowAuraOnNoTeam && angel.team == 0 && other.team == 0)
+                                {
+                                    isTeammate = true;
+                                }
+
+                                if (!isTeammate)
+                                    continue;
+
+                                var otherCleric = other.GetModPlayer<ClericPlayer>();
+                                if (otherCleric.IsInSpiritForm)
+                                {
+                                    float distance = Vector2.Distance(angel.Center, other.Center);
+                                    if (distance <= config.roleSettings.AngelAuraRadius)
+                                    {
+                                        SoundEngine.PlaySound(SoundID.Item4, other.Center);
+                                        for (int d = 0; d < 30; d++)
+                                        {
+                                            Dust dust = Dust.NewDustPerfect(other.Center + Main.rand.NextVector2Circular(20f, 20f), DustID.GoldFlame, Main.rand.NextVector2Circular(3f, 3f), 100, Color.Gold, 1.5f);
+                                            dust.noGravity = true;
+                                        }
+                                        if (Main.myPlayer == other.whoAmI)
+                                        {
+                                            otherCleric.ResurrectLocal(healPercent, invulTime);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncAngelState)
+            {
+                int playerIndex = reader.ReadInt32();
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    var clericPlayer = Main.player[playerIndex].GetModPlayer<ClericPlayer>();
+                    bool wasInSpirit = clericPlayer.IsInSpiritForm;
+                    clericPlayer.IsInSpiritForm = reader.ReadBoolean();
+                    clericPlayer.SpiritFormTimer = reader.ReadInt32();
+                    clericPlayer.SpiritAngelWhoAmI = reader.ReadInt32();
+                    clericPlayer.DivineResurrectionCooldownTimer = reader.ReadInt32();
+                    
+                    bool wasChanneling = clericPlayer.IsResurrectionChanneling;
+                    clericPlayer.IsResurrectionChanneling = reader.ReadBoolean();
+                    clericPlayer.ChannelingTimer = reader.ReadInt32();
+                    clericPlayer.ChannelingMaxTime = reader.ReadInt32();
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        clericPlayer.SyncAngelState(toWho: -1, fromWho: whoAmI);
+                    }
+                    else
+                    {
+                        if (playerIndex != Main.myPlayer)
+                        {
+                            // Play spirit form entry effects
+                            if (!wasInSpirit && clericPlayer.IsInSpiritForm)
+                            {
+                                SoundEngine.PlaySound(SoundID.Item8, clericPlayer.Player.Center);
+                                for (int i = 0; i < 20; i++)
+                                {
+                                    Dust dust = Dust.NewDustPerfect(clericPlayer.Player.Center, DustID.MagicMirror, Main.rand.NextVector2Circular(3f, 3f), 150, Color.Cyan, 1.2f);
+                                    dust.noGravity = true;
+                                }
+                            }
+                            
+                            // Play channeling start sound
+                            if (!wasChanneling && clericPlayer.IsResurrectionChanneling)
+                            {
+                                SoundEngine.PlaySound(SoundID.Item29, clericPlayer.Player.Center);
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -9,10 +9,8 @@ namespace Stataria
     {
         protected override bool IsVisible(Player player, RPGPlayer rpgPlayer, StatariaConfig config)
         {
-            var configClient = ModContent.GetInstance<StatariaClientConfig>();
-            if (!configClient.EnableLastStandCooldownBar) return false;
-            float cooldown = config.rebirthAbilities.LastStandCooldown * 60f;
-            return rpgPlayer.lastStandCooldownTimer > 0 && cooldown > 0;
+            // Disabled under player drawing; now handled in the dedicated HUD RoleCooldowns layer
+            return false;
         }
 
         protected override float GetProgress(Player player, RPGPlayer rpgPlayer, StatariaConfig config)

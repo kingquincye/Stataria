@@ -2,6 +2,10 @@ Keybinds: {
 	"Toggle Stataria UI.DisplayName": 切换 Stataria 界面
 	"AGI Teleport.DisplayName": 传送
 	"Divine Intervention.DisplayName": 神圣干涉
+	// "Soul Recall.DisplayName": Soul  Recall
+	// "Savage Roar.DisplayName": Savage Roar
+	// "Elemental Discharge.DisplayName": Elemental Discharge
+	// "Divine Resurrection.DisplayName": Divine  Resurrection
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1330,6 +1334,11 @@ Configs: {
 	RoleSettings: {
 		Tooltip: ""
 
+		EnableRoleSystem: {
+			Label: 启用职业定位系统
+			Tooltip: 如果禁用，整个职业定位选择系统都将被关闭，停用已激活的职业并隐藏该选项卡。
+		}
+
 		Headers: {
 			Role_System: 职业定位系统
 			Crit_God: 暴击之神
@@ -1339,6 +1348,10 @@ Configs: {
 			Black_Knight: 黑骑士
 			Cleric: 牧师
 			Guardian: 守护者
+			Necromancer: 死灵法师
+			Berserker: 狂战士
+			Spellweaver: 织法者
+			// Angel: Angel Header
 		}
 
 		BaseSwitchCost: {
@@ -1536,6 +1549,11 @@ Configs: {
 			Label: 禁用牧师的 VIT 恢复
 		}
 
+		ClericAllowAuraOnNoTeam: {
+			Tooltip: When enabled, Cleric and Angel aura benefits, Soul Anchor, and Divine Resurrection will affect players on No Team (neutral) in addition to teamed teammates.
+			Label: Cleric Allow Aura On No Team
+		}
+
 		ClericDefensePenalty: {
 			Tooltip: 减少牧师的防御力百分比以平衡强度。
 			Label: 牧师防御力惩罚
@@ -1623,6 +1641,186 @@ Configs: {
 				输入减益 ID (数字) 或准确的减益英文名称。
 				例如: "123", "Tipsy", "SomeModdedBuff"
 				'''
+		}
+
+		NecromancerBaseSoulCapacity: {
+			// Label: Base Soul Capacity
+			// Tooltip: The starting soul reserve capacity for the Necromancer role.
+		}
+
+		NecromancerSPRPerSoul: {
+			// Label: SPR Per Soul
+			// Tooltip: The number of SPR stat points required to increase soul capacity by 1.
+		}
+
+		NecromancerBaseSoulDuration: {
+			// Label: Base Soul Duration
+			// Tooltip: The base duration in seconds that a fresh soul lasts.
+		}
+
+		NecromancerSoulDurationPerSPR: {
+			// Label: Soul Duration Per SPR
+			// Tooltip: The amount of extra soul duration (in seconds) added per SPR point.
+		}
+
+		NecromancerBossSoulHarvestChance: {
+			// Label: Boss Soul Harvest Chance
+			// Tooltip: The percentage chance to harvest a soul when hitting a boss with magic or summon damage.
+		}
+
+		NecromancerActiveThrallsLimit: {
+			// Label: Active Thralls Limit
+			// Tooltip: The maximum number of active zombie thralls you can summon at once.
+		}
+
+		NecromancerBoneArmorDRPerThrall: {
+			// Label: Bone Armor DR Per Thrall
+			// Tooltip: The percentage damage reduction gained per active zombie thrall.
+		}
+
+		NecromancerThrallBaseDamage: {
+			// Label: Thrall Base Damage
+			// Tooltip: The base attack damage of summoned zombie thralls.
+		}
+
+		NecromancerThrallINTScale: {
+			// Label: Thrall INT Scale
+			// Tooltip: The percentage increase to zombie thrall attack damage per point of INT.
+		}
+
+		BerserkerBloodbathMaxDamageBonus: {
+			Label: 浴血最高伤害加成
+			Tooltip: 在仅剩 1 点生命值时获得的最大近战伤害加成百分比。
+		}
+
+		BerserkerBloodbathMaxSpeedBonus: {
+			Label: 浴血最高攻速加成
+			Tooltip: 在仅剩 1 点生命值时获得的最大近战攻击速度加成百分比。
+		}
+
+		BerserkerBloodbathImmunityThreshold: {
+			Label: 浴血免控阈值
+			Tooltip: 生命值低于该百分比时获得减速和击退免疫 (默认: 40%)。
+		}
+
+		BerserkerSavageRoarDuration: {
+			Label: 野性咆哮持续时间
+			Tooltip: 野性咆哮不死效果的持续时间（秒）。
+		}
+
+		BerserkerSavageRoarCooldown: {
+			Label: 野性咆哮冷却时间
+			Tooltip: 野性咆哮能力的冷却时间（秒）。
+		}
+
+		SpellweaverManaAegisPercent: {
+			Label: 法力护盾比例
+			Tooltip: 受到的伤害扣除法力值而非生命值的比例。
+		}
+
+		SpellweaverManaCritRestorePercent: {
+			Label: 魔法暴击法力恢复比例
+			Tooltip: 魔法暴击时恢复最大法力值的比例。
+		}
+
+		SpellweaverMaxElementalCharge: {
+			Label: 基础最大元素能量
+			Tooltip: 元素能量的基准最大容量值。
+		}
+
+		SpellweaverElementalDischargeBaseMult: {
+			Label: 元素释放基础伤害倍率
+			Tooltip: 应用于消耗的能量值的倍率，用以确定爆炸伤害。
+		}
+
+		SpellweaverElementalDischargeINTScale: {
+			Label: 最大能量 INT 缩放比例
+			Tooltip: 每点 INT 增加的额外最大元素能量上限值。
+		}
+
+		AngelResurrectionCooldown: {
+			Tooltip: 天使能够再次使用“神圣复活”之前的冷却时间（秒）。
+			Label: 天使复活冷却时间
+		}
+
+		AngelResurrectionInvulTime: {
+			Tooltip: 被复活的的队友在复活后获得的无敌持续时间（秒）。
+			Label: 天使复活无敌时间
+		}
+
+		AngelResurrectionHealPercent: {
+			Tooltip: 队友被复活时，恢复的最大生命值百分比。
+			Label: 天使复活生命恢复比例
+		}
+
+		AngelResurrectionChannelTime: {
+			Tooltip: 引导并完成对队友施加“神圣复活”所需的时间（秒）。
+			Label: 天使复活引导时间
+		}
+
+		AngelSpiritFormDuration: {
+			Tooltip: 天使在受到致命伤害后，保持灵魂形态的持续时间（秒）。
+			Label: 天使灵魂形态持续时间
+		}
+
+		AngelSoulAnchorDamageReduction: {
+			Tooltip: 灵魂之锚为处于灵魂形态的逝去队友提供的伤害减免百分比。
+			Label: 天使灵魂之锚伤害减免
+		}
+
+		AngelInAirMoveSpeedBonus: {
+			Tooltip: 天使在空中（飞行或跳跃）时获得的移动速度加成百分比。
+			Label: 天使空中移动速度加成
+		}
+
+		AngelWingFlightTime: {
+			Tooltip: 天使翅膀的最大飞行时间（秒）。
+			Label: 天使翅膀飞行时间
+		}
+
+		AngelRegenInterval: {
+			Tooltip: 每次生命值恢复跳字的间隔时间（秒）。
+			Label: 天使生命恢复间隔
+		}
+
+		AngelTeammateRegenPercent: {
+			Tooltip: 队友在光环内每个间隔恢复的最大生命值百分比。
+			Label: 天使队友恢复比例
+		}
+
+		AngelSelfRegenPercent: {
+			Tooltip: 天使自身每个间隔恢复的最大生命值百分比。
+			Label: 天使自身恢复比例
+		}
+
+		AngelTeammateHealthBonus: {
+			Tooltip: 天使光环内队友增加的最大生命值百分比。
+			Label: 天使队友生命值加成
+		}
+
+		AngelDefensePenalty: {
+			Tooltip: 减少天使的防御力百分比以平衡强度。
+			Label: 天使防御力惩罚
+		}
+
+		AngelHealthBonus: {
+			Tooltip: 天使自身最大生命值增加的百分比。
+			Label: 天使生命值加成
+		}
+
+		AngelAuraRadius: {
+			Tooltip: 天使神圣治疗光环的半径（单位：像素）。
+			Label: 天使光环半径
+		}
+
+		AngelUnlockCost: {
+			Tooltip: 解锁天使职业所需的转生点数。
+			Label: 天使解锁消耗
+		}
+
+		AngelRebirthRequirement: {
+			Tooltip: 解锁天使职业所需的最低转生次数。
+			Label: 天使转生次数要求
 		}
 	}
 
@@ -1797,19 +1995,9 @@ Configs: {
 	}
 
 	StatariaClientConfig: {
-		EnableDivineInterventionCooldownBar: {
-			Label: 启用神圣干涉冷却条
-			Tooltip: 显示“神圣干涉”能力的冷却时间条。
-		}
-
-		EnableTeleportCooldownBar: {
-			Label: 启用传送冷却条
-			Tooltip: 打开传送冷却时间条显示。
-		}
-
-		EnableLastStandCooldownBar: {
-			Label: 启用破釜沉舟冷却条
-			Tooltip: 显示破釜沉舟剩余冷却时间的读条。
+		EnableRoleCooldownHUD: {
+			Label: 启用职业冷却 HUD
+			Tooltip: 显示一个可拖动的 HUD 来追踪职业和转生能力的冷却时间。
 		}
 
 		Headers: {
@@ -1818,7 +2006,7 @@ Configs: {
 			Enemy_Level_Indicators: 敌人等级指示器
 			BossBars: 首领血条
 			ResourceBars: 资源条
-			CooldownBars: 冷却条
+			HUD: HUD 设置
 			SocketingSystem: 镶嵌系统
 			General: 通用设置
 		}
@@ -2028,6 +2216,19 @@ Buffs: {
 			身处牧师的神圣光环内
 			+{0}% 最大生命值
 			接受神圣的恢复之力
+			'''
+		AngelNameSelf: Angel Aura (Self)
+		AngelTooltipSelf:
+			'''
+			You are radiating divine energy and wings of grace
+			Aura radius: {0} pixels
+			'''
+		AngelNameTeammate: Angel Aura
+		AngelTooltipTeammate:
+			'''
+			Within an Angel's protective aura
+			+{0}% max health
+			Receiving divine regeneration
 			'''
 		Description: Mods.Stataria.Buffs.ClericAuraBuff.Description
 		DisplayName: 牧师光环
@@ -2293,6 +2494,18 @@ RoleEffects: {
 		DisabledRegen: • 为了平衡，已禁用来自 VIT 的生命恢复效果
 	}
 
+	Angel: {
+		MaxHealth: • +{0}% Max Health
+		DefensePenalty: • -{0}% Defense
+		ProtectAura: • Radiates protective aura (radius: {0} pixels)
+		AuraHealth: • Teammates in aura: +{0}% max health
+		SelfRegen: • Self regeneration: {0}% max health per {1}s
+		TeamRegen: • Teammate regeneration: {0}% max health per {1}s
+		Wings: • Passive - Seraphim Wings: Complete fall damage immunity and +{0}% movement speed in the air. Can fly if no wings are equipped.
+		SoulAnchor: • Passive - Soul Anchor: Allies within aura enter Spirit Form on fatal damage instead of dying. Angel gains +{0}% damage reduction while a spirit is active. Connection breaks and spirits die if Angel dies.
+		DivineResurrection: • Active - Divine Resurrection: Channel near a Spirit within aura to resurrect them with {0}% Max HP and {1}s invulnerability ({2}s cooldown).
+	}
+
 	Guardian: {
 		MaxHealth: • +{0}% 最大生命值
 		Defense: • +{0} 防御力
@@ -2305,6 +2518,27 @@ RoleEffects: {
 		ImmuneKnockback: • 免疫击退
 		ReducedVIT: • VIT 的效果降低 {0}%
 		DisabledEND: • END 的击退抗性和伤害减免效果已失效
+	}
+
+	Necromancer: {
+		// SoulReserve: • Soul Reserve: Capacity is {0} (+1 per {1} SPR)
+		// SoulDuration: • Soul Duration: Base {0}s (+{1}s per SPR)
+		// ThrallsLimit: • Active Thralls: Max {0} at a time
+		// BoneArmor: • Bone Armor: +{0}% Damage Reduction per active thrall
+		// ThrallDamage: • Thrall Attack: {0} Base Damage (+{1}% per INT)
+	}
+
+	Berserker: {
+		// BloodbathDmg: • Bloodbath: Melee damage increases by up to +{0}% proportional to missing life
+		// BloodbathSpeed: • Bloodbath Speed: Melee speed increases by up to +{0}% proportional to missing life
+		// BloodbathImmunity: • Bloodbath Resolve: Gain knockback and slow immunity when below {0}% HP
+		// SavageRoar: • Savage Roar: For {0}s, you cannot be reduced below 1 HP, but defense is reduced to 0 ({1}s cooldown)
+	}
+
+	Spellweaver: {
+		ManaAegis: • 法力护盾: 受到伤害的 {0}% 将扣除法力值而非生命值
+		ManaCrit: • 法力流动: 魔法暴击恢复最大法力值的 {0}%
+		Discharge: • 元素释放: 消耗法力可积攒能量 (基础上限: {0}, 每点 INT 增加 +{2} 上限). 释放全部能量以进行元素爆炸 (无冷却时间, 伤害等于消耗的能量乘以 {1}).
 	}
 }
 
@@ -2379,6 +2613,9 @@ UI: {
 		LockedRole: 未解锁 - 需要转生 2 次
 		SwitchCostButton: 切换职业 - 消耗: {0} RP
 		SelectFreeButton: 选择职业 (免费)
+		AscendButton: ASCEND
+		AscendRequirements: Requires Rebirth {0} & {1} RP
+		AscendReady: Ready to Ascend! Click to evolve into the Angel.
 	}
 
 	Socketing: {
@@ -2648,6 +2885,10 @@ RoleName: {
 	BlackKnight: 黑骑士
 	Cleric: 牧师
 	Guardian: 守护者
+	// Necromancer: Necromancer
+	// Berserker: Berserker
+	// Spellweaver: Spellweaver
+	Angel: Angel
 }
 
 RoleDescription: {
@@ -2658,6 +2899,10 @@ RoleDescription: {
 	BlackKnight: 全能的魔剑士。将武艺与奥术完美融合，在剑与魔法的协同作用中汲取力量。
 	Cleric: 神圣的治疗者。在神圣光环内保护并强化盟友，不惜牺牲自身的防御来换取团队的生存。
 	Guardian: 坚不可摧的庇护者。通过分担盟友受到的伤害并将痛楚反弹给攻击者，牢牢护住身后的同伴。
+	// Necromancer: A tactical commander who raises invincible zombie thralls and conserves their lifetimes in a unique soul reserve.
+	// Berserker: A high-risk frontline fighter who gets faster and deadlier as their health drops.
+	// Spellweaver: An elemental combatant who channels spells to build massive combo discharges while shielding themselves with mana.
+	// Angel: An ascended Cleric who gains wings and commands the boundary of life and death, reviving fallen teammates and shielding them in a powerful aura.
 }
 
 RoleFlavorText: {
@@ -2668,6 +2913,15 @@ RoleFlavorText: {
 	BlackKnight: 钢铁与法术的交响——让魔法为利刃充能，让利刃成为魔法的焦点。
 	Cleric: 接受作为希望灯塔的使命吧——你的力量不在于冰冷的钢铁，而在于你赐予他人的神圣庇护。
 	Guardian: 化身不可撼动之盾。让盟友的痛苦转化为你的力量，让你的决意成为他们最终的救赎。
+	// Necromancer: Commanded thralls, rise and fall at my whim - your very lifetime is mine to command and conserve.
+	// Berserker: Feed the rage, ignore the pain - the closer you are to death, the closer your enemies are to theirs.
+	// Spellweaver: Weave the elements, command the storm - let your mana shield your body, and let your discharge consume the battlefield.
+	Angel: Evolve beyond mortality - look down from on high with wings of grace, holding the anchor of your allies' souls.
+}
+
+DeathMessage: {
+	SoulAnchorBroken: "{0}'s soul anchor was severed!"
+	SpiritFormExpired: "{0}'s spirit form faded away..."
 }
 
 Logging: {
@@ -2700,4 +2954,9 @@ Logging: {
 		ModCallIncorrectArgs: "{0}: 参数不正确。"
 		ModCallUnknownMessage: 未知的 ModCall 消息: {0}
 	}
+}
+
+Projectiles: {
+	// ZombieThrallProjectile.DisplayName: Zombie Thrall Projectile
+	// ElementalDischargeProjectile.DisplayName: Elemental Discharge Projectile
 }

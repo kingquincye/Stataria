@@ -36,6 +36,8 @@ namespace Stataria
         private bool wasLastStandTriggered = false;
         private int lastStandHealAmount;
         public int divineInterventionCooldownTimer = 0;
+        public float CooldownHUDX = -1f;
+        public float CooldownHUDY = -1f;
 
         private bool appliedPotionReduction = false;
         private bool appliedManaSickReduction = false;
@@ -47,9 +49,26 @@ namespace Stataria
 
         public Color? OriginalEyeColor { get; set; } = null;
 
-        public Role ActiveRole { get; set; }
+        private Role _activeRole;
+        public Role ActiveRole
+        {
+            get
+            {
+                var config = ModContent.GetInstance<StatariaConfig>();
+                if (config != null && !config.roleSettings.EnableRoleSystem)
+                    return null;
+                return _activeRole;
+            }
+            set => _activeRole = value;
+        }
+        public Role RawActiveRole
+        {
+            get => _activeRole;
+            set => _activeRole = value;
+        }
         public int RoleSwitchCount { get; set; }
         public Dictionary<string, Role> AvailableRoles { get; private set; } = new Dictionary<string, Role>();
+        public HashSet<string> AscendedRoles { get; private set; } = new HashSet<string>();
         private HashSet<int> currentMinionTypes = new HashSet<int>();
         private int beastmasterBonusSlots = 0;
         private HashSet<int> apexSummonerMinionTypes = new HashSet<int>();
@@ -80,6 +99,7 @@ namespace Stataria
             RebirthPoints = 0;
             BossKillsCount = 0;
             RebirthAbilities = new Dictionary<string, RebirthAbility>();
+            AscendedRoles = new HashSet<string>();
             RegisterDefaultAbilities();
             RegisterDefaultRoles();
             xpVerifier = new XPVerificationSystem(this);
@@ -103,6 +123,8 @@ namespace Stataria
             tag["RewardedBosses"] = new List<int>(rewardedBosses);
             tag["lastStandCooldownTimer"] = lastStandCooldownTimer;
             tag["divineInterventionCooldownTimer"] = divineInterventionCooldownTimer;
+            tag["CooldownHUDX"] = CooldownHUDX;
+            tag["CooldownHUDY"] = CooldownHUDY;
             tag["RebirthCount"] = RebirthCount;
             tag["RebirthPoints"] = RebirthPoints;
             tag["BossKillsCount"] = BossKillsCount;
@@ -115,9 +137,10 @@ namespace Stataria
                 abilitiesData.Add(abilityTag);
             }
             tag["RebirthAbilities"] = abilitiesData;
-            if (ActiveRole != null)
-                tag["ActiveRoleID"] = ActiveRole.ID;
+            if (_activeRole != null)
+                tag["ActiveRoleID"] = _activeRole.ID;
             tag["RoleSwitchCount"] = RoleSwitchCount;
+            tag["AscendedRoles"] = new List<string>(AscendedRoles);
 
             if (OriginalEyeColor.HasValue)
             {
@@ -133,6 +156,7 @@ namespace Stataria
 
         public override void LoadData(TagCompound tag)
         {
+            var config = ModContent.GetInstance<StatariaConfig>();
             LastActiveTab = tag.ContainsKey("LastActiveTab")
                 ? (TabBarUI.TabType)tag.GetInt("LastActiveTab")
                 : TabBarUI.TabType.Stats;
@@ -157,6 +181,8 @@ namespace Stataria
                 rewardedBosses = tag.Get<List<int>>("RewardedBosses").ToHashSet();
             lastStandCooldownTimer = tag.ContainsKey("lastStandCooldownTimer") ? tag.GetInt("lastStandCooldownTimer") : 0;
             divineInterventionCooldownTimer = tag.ContainsKey("divineInterventionCooldownTimer") ? tag.GetInt("divineInterventionCooldownTimer") : 0;
+            CooldownHUDX = tag.ContainsKey("CooldownHUDX") ? tag.GetFloat("CooldownHUDX") : -1f;
+            CooldownHUDY = tag.ContainsKey("CooldownHUDY") ? tag.GetFloat("CooldownHUDY") : -1f;
             RebirthCount = tag.ContainsKey("RebirthCount") ? tag.GetInt("RebirthCount") : 0;
             RebirthPoints = tag.ContainsKey("RebirthPoints") ? tag.GetInt("RebirthPoints") : 0;
             BossKillsCount = tag.ContainsKey("BossKillsCount") ? tag.GetInt("BossKillsCount") : 0;
@@ -180,11 +206,14 @@ namespace Stataria
                 string activeRoleID = tag.GetString("ActiveRoleID");
                 if (AvailableRoles.ContainsKey(activeRoleID))
                 {
-                    ActiveRole = AvailableRoles[activeRoleID];
-                    ActiveRole.Status = RoleStatus.Active;
+                    _activeRole = AvailableRoles[activeRoleID];
+                    _activeRole.Status = RoleStatus.Active;
                 }
             }
             RoleSwitchCount = tag.ContainsKey("RoleSwitchCount") ? tag.GetInt("RoleSwitchCount") : 0;
+            AscendedRoles = tag.ContainsKey("AscendedRoles") ? new HashSet<string>(tag.Get<List<string>>("AscendedRoles")) : new HashSet<string>();
+            UpdateAscendedRoleProperties();
+
 
             if (tag.ContainsKey("OriginalEyeR"))
             {
@@ -202,7 +231,6 @@ namespace Stataria
 
             if (!WasRetroRPGranted && RebirthCount > 0)
             {
-                var config = ModContent.GetInstance<StatariaConfig>();
                 if (config.rebirthSystem.EnableRebirthSystem)
                 {
                     int calculatedTotalRPShouldHave = 0;
@@ -475,6 +503,30 @@ namespace Stataria
             );
             AvailableRoles["Guardian"] = guardian;
 
+            var necromancer = new Role(
+                "Necromancer",
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Necromancer"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Necromancer"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Necromancer")
+            );
+            AvailableRoles["Necromancer"] = necromancer;
+
+            var berserker = new Role(
+                "Berserker",
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Berserker"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Berserker"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Berserker")
+            );
+            AvailableRoles["Berserker"] = berserker;
+
+            var spellweaver = new Role(
+                "Spellweaver",
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Spellweaver"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Spellweaver"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Spellweaver")
+            );
+            AvailableRoles["Spellweaver"] = spellweaver;
+
             foreach (var role in AvailableRoles.Values)
             {
                 if (ActiveRole?.ID == role.ID)
@@ -482,10 +534,35 @@ namespace Stataria
                 else
                     role.Status = RoleStatus.Available;
             }
+            UpdateAscendedRoleProperties();
         }
+
+        public void UpdateAscendedRoleProperties()
+        {
+            if (AvailableRoles.TryGetValue("Cleric", out Role clericRole))
+            {
+                if (AscendedRoles.Contains("Cleric"))
+                {
+                    clericRole.Name = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Angel");
+                    clericRole.Description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Angel");
+                    clericRole.FlavorText = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Angel");
+                }
+                else
+                {
+                    clericRole.Name = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Cleric");
+                    clericRole.Description = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Cleric");
+                    clericRole.FlavorText = Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Cleric");
+                }
+            }
+        }
+
 
         public bool SwitchToRole(string roleID)
         {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (!config.roleSettings.EnableRoleSystem)
+                return false;
+
             if (!AvailableRoles.ContainsKey(roleID))
                 return false;
 
@@ -497,16 +574,16 @@ namespace Stataria
             int cost = isReactivation ? 0 : newRole.GetCurrentSwitchCost(this);
 
             // Restore original eye color when switching away from Vampire
-            if (ActiveRole != null && ActiveRole.ID == "Vampire" && ActiveRole.ID != roleID)
+            if (_activeRole != null && _activeRole.ID == "Vampire" && _activeRole.ID != roleID)
             {
                 RestoreOriginalEyeColor();
             }
 
-            if (ActiveRole != null && ActiveRole.ID != roleID)
+            if (_activeRole != null && _activeRole.ID != roleID)
             {
                 RebirthPoints -= cost;
                 RoleSwitchCount++;
-                ActiveRole.Status = RoleStatus.Available;
+                _activeRole.Status = RoleStatus.Available;
             }
 
             // Capture original eye color when switching to Vampire
@@ -515,8 +592,8 @@ namespace Stataria
                 OriginalEyeColor = Player.eyeColor;
             }
 
-            ActiveRole = newRole;
-            ActiveRole.Status = RoleStatus.Active;
+            _activeRole = newRole;
+            _activeRole.Status = RoleStatus.Active;
 
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
@@ -528,16 +605,16 @@ namespace Stataria
 
         public bool DeactivateRole()
         {
-            if (ActiveRole == null || ActiveRole.Status != RoleStatus.Active)
+            if (_activeRole == null || _activeRole.Status != RoleStatus.Active)
                 return false;
 
             // Restore original eye color when deactivating Vampire
-            if (ActiveRole.ID == "Vampire")
+            if (_activeRole.ID == "Vampire")
             {
                 RestoreOriginalEyeColor();
             }
 
-            ActiveRole.Status = RoleStatus.Deactivated;
+            _activeRole.Status = RoleStatus.Deactivated;
 
             if (Main.netMode != NetmodeID.SinglePlayer)
             {
@@ -550,17 +627,47 @@ namespace Stataria
         public void ResetRoles()
         {
             // Restore original eye color when resetting roles
-            if (ActiveRole?.ID == "Vampire")
+            if (_activeRole?.ID == "Vampire")
             {
                 RestoreOriginalEyeColor();
             }
 
-            if (ActiveRole != null)
+            if (_activeRole != null)
             {
-                ActiveRole.Status = RoleStatus.Available;
-                ActiveRole = null;
+                _activeRole.Status = RoleStatus.Available;
+                _activeRole = null;
             }
             RoleSwitchCount = 0;
+
+            // Revert Angel ascension role properties and clear AscendedRoles
+            AscendedRoles.Clear();
+            UpdateAscendedRoleProperties();
+
+            // Reset Cleric / Angel player state fields
+            var clericPlayer = Player.GetModPlayer<ClericPlayer>();
+            if (clericPlayer != null)
+            {
+                clericPlayer.IsInSpiritForm = false;
+                clericPlayer.SpiritFormTimer = 0;
+                clericPlayer.SpiritAngelWhoAmI = -1;
+                clericPlayer.DivineResurrectionCooldownTimer = 0;
+                clericPlayer.IsResurrectionChanneling = false;
+                clericPlayer.ChannelingTargetWhoAmI = -1;
+                clericPlayer.ChannelingTimer = 0;
+                clericPlayer.ChannelingMaxTime = 0;
+                clericPlayer.ResurrectionInvincibilityTimer = 0;
+                clericPlayer.SyncAngelState();
+            }
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                StatariaUI.RoleSelectionPanel?.RefreshRolesList();
+            }
+
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                SyncPlayer(-1, Player.whoAmI, false);
+            }
         }
 
         private void RestoreOriginalEyeColor()
@@ -617,6 +724,33 @@ namespace Stataria
                     Terraria.Audio.SoundEngine.PlaySound(SoundID.Item29, Player.position);
                 }
             }
+            if (StatariaKeybinds.SoulRecallKey.JustPressed &&
+                !Terraria.GameInput.PlayerInput.WritingText &&
+                ActiveRole?.ID == "Necromancer" && ActiveRole.Status == RoleStatus.Active)
+            {
+                var necromancerPlayer = Player.GetModPlayer<NecromancerPlayer>();
+                necromancerPlayer.PerformSoulRecall();
+            }
+            if (StatariaKeybinds.SavageRoarKey.JustPressed &&
+                !Terraria.GameInput.PlayerInput.WritingText &&
+                ActiveRole?.ID == "Berserker" && ActiveRole.Status == RoleStatus.Active)
+            {
+                var berserkerPlayer = Player.GetModPlayer<BerserkerPlayer>();
+                if (berserkerPlayer.SavageRoarCooldownTimer <= 0)
+                {
+                    berserkerPlayer.ActivateSavageRoar();
+                }
+            }
+            if (StatariaKeybinds.ElementalDischargeKey.JustPressed &&
+                !Terraria.GameInput.PlayerInput.WritingText &&
+                ActiveRole?.ID == "Spellweaver" && ActiveRole.Status == RoleStatus.Active)
+            {
+                var spellweaverPlayer = Player.GetModPlayer<SpellweaverPlayer>();
+                if (spellweaverPlayer.ElementalCharge > 0)
+                {
+                    spellweaverPlayer.ActivateElementalDischarge();
+                }
+            }
         }
 
         private void OpenUIOnTab(TabBarUI.TabType tab)
@@ -641,8 +775,16 @@ namespace Stataria
                     }
                     break;
                 case TabBarUI.TabType.Roles:
-                    StatariaUI.RoleSelectionUI.SetState(StatariaUI.RoleSelectionPanel);
-                    StatariaUI.RoleSelectionPanel?.RefreshRolesList();
+                    if (config.roleSettings.EnableRoleSystem)
+                    {
+                        StatariaUI.RoleSelectionUI.SetState(StatariaUI.RoleSelectionPanel);
+                        StatariaUI.RoleSelectionPanel?.RefreshRolesList();
+                    }
+                    else
+                    {
+                        LastActiveTab = TabBarUI.TabType.Stats;
+                        StatariaUI.StatUI.SetState(StatariaUI.Panel);
+                    }
                     break;
                 case TabBarUI.TabType.Socketing:
                     if (config.socketingSystem.EnableSocketingSystem)
@@ -2718,6 +2860,11 @@ namespace Stataria
             packet.Write(divineInterventionCooldownTimer);
             packet.Write(RebirthCount);
             packet.Write(RebirthPoints);
+            packet.Write(AscendedRoles.Count);
+            foreach (string roleId in AscendedRoles)
+            {
+                packet.Write(roleId);
+            }
 
             packet.Write(AutoAllocateEnabled);
             packet.Write(AutoAllocateStats.Count);
@@ -2732,11 +2879,11 @@ namespace Stataria
                 packet.Write(bossId);
             }
 
-            if (ActiveRole != null)
+            if (_activeRole != null)
             {
                 packet.Write(true);
-                packet.Write(ActiveRole.ID);
-                packet.Write((byte)ActiveRole.Status);
+                packet.Write(_activeRole.ID);
+                packet.Write((byte)_activeRole.Status);
             }
             else
             {

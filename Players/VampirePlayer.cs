@@ -9,7 +9,7 @@ namespace Stataria
     public class VampirePlayer : ModPlayer
     {
         public int BleedCooldownTimer;
-        public bool IsVampireActive => GetVampireRole()?.Status == RoleStatus.Active;
+        public bool IsVampireActive => GetVampireRole()?.Status == RoleStatus.Active && ModContent.GetInstance<StatariaConfig>().roleSettings.EnableRoleSystem;
 
         private Role GetVampireRole()
         {

@@ -2,6 +2,10 @@ Keybinds: {
 	"Toggle Stataria UI.DisplayName": Toggle Stataria UI
 	"AGI Teleport.DisplayName": Teleport
 	"Divine Intervention.DisplayName": Divine Intervention
+	"Soul Recall.DisplayName": Soul  Recall
+	"Savage Roar.DisplayName": Savage Roar
+	"Elemental Discharge.DisplayName": Elemental Discharge
+	"Divine Resurrection.DisplayName": Divine  Resurrection
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1330,6 +1334,11 @@ Configs: {
 	RoleSettings: {
 		Tooltip: ""
 
+		EnableRoleSystem: {
+			Label: Enable Role System
+			Tooltip: If disabled, the entire Role selection system is turned off, deactivating active roles and hiding the tab.
+		}
+
 		Headers: {
 			Role_System: Role System
 			Crit_God: Crit God
@@ -1339,6 +1348,10 @@ Configs: {
 			Black_Knight: Black Knight
 			Cleric: Cleric
 			Guardian: Guardian
+			Necromancer: Necromancer
+			Berserker: Berserker
+			Spellweaver: Spellweaver
+			Angel: Angel Header
 		}
 
 		BaseSwitchCost: {
@@ -1536,6 +1549,11 @@ Configs: {
 			Label: Cleric Disable Vit Regen
 		}
 
+		ClericAllowAuraOnNoTeam: {
+			Tooltip: When enabled, Cleric and Angel aura benefits, Soul Anchor, and Divine Resurrection will affect players on No Team (neutral) in addition to teamed teammates.
+			Label: Cleric Allow Aura On No Team
+		}
+
 		ClericDefensePenalty: {
 			Tooltip: Percentage decrease to the Cleric's defense for balance.
 			Label: Cleric Defense Penalty
@@ -1623,6 +1641,186 @@ Configs: {
 				Enter buff IDs (numbers) or exact buff names.
 				Examples: "123", "Tipsy", "SomeModdedBuff"
 				'''
+		}
+
+		NecromancerBaseSoulCapacity: {
+			Label: Base Soul Capacity
+			Tooltip: The starting soul reserve capacity for the Necromancer role.
+		}
+
+		NecromancerSPRPerSoul: {
+			Label: SPR Per Soul
+			Tooltip: The number of SPR stat points required to increase soul capacity by 1.
+		}
+
+		NecromancerBaseSoulDuration: {
+			Label: Base Soul Duration
+			Tooltip: The base duration in seconds that a fresh soul lasts.
+		}
+
+		NecromancerSoulDurationPerSPR: {
+			Label: Soul Duration Per SPR
+			Tooltip: The amount of extra soul duration (in seconds) added per SPR point.
+		}
+
+		NecromancerBossSoulHarvestChance: {
+			Label: Boss Soul Harvest Chance
+			Tooltip: The percentage chance to harvest a soul when hitting a boss with magic or summon damage.
+		}
+
+		NecromancerActiveThrallsLimit: {
+			Label: Active Thralls Limit
+			Tooltip: The maximum number of active zombie thralls you can summon at once.
+		}
+
+		NecromancerBoneArmorDRPerThrall: {
+			Label: Bone Armor DR Per Thrall
+			Tooltip: The percentage damage reduction gained per active zombie thrall.
+		}
+
+		NecromancerThrallBaseDamage: {
+			Label: Thrall Base Damage
+			Tooltip: The base attack damage of summoned zombie thralls.
+		}
+
+		NecromancerThrallINTScale: {
+			Label: Thrall INT Scale
+			Tooltip: The percentage increase to zombie thrall attack damage per point of INT.
+		}
+
+		BerserkerBloodbathMaxDamageBonus: {
+			Label: Bloodbath Max Damage Bonus
+			Tooltip: The maximum percentage melee damage bonus gained at 1 HP.
+		}
+
+		BerserkerBloodbathMaxSpeedBonus: {
+			Label: Bloodbath Max Speed Bonus
+			Tooltip: The maximum percentage melee attack speed bonus gained at 1 HP.
+		}
+
+		BerserkerBloodbathImmunityThreshold: {
+			Label: Bloodbath Immunity Threshold
+			Tooltip: Health percentage threshold below which you gain slow and knockback immunity (default: 40%).
+		}
+
+		BerserkerSavageRoarDuration: {
+			Label: Savage Roar Duration
+			Tooltip: The active duration in seconds of the Savage Roar immortality effect.
+		}
+
+		BerserkerSavageRoarCooldown: {
+			Label: Savage Roar Cooldown
+			Tooltip: The cooldown in seconds of the Savage Roar ability.
+		}
+
+		SpellweaverManaAegisPercent: {
+			Label: Mana Aegis Percentage
+			Tooltip: The percentage of incoming damage subtracted from Mana instead of Health.
+		}
+
+		SpellweaverManaCritRestorePercent: {
+			Label: Mana Crit Restore Percentage
+			Tooltip: The percentage of maximum Mana restored on magic critical hits.
+		}
+
+		SpellweaverMaxElementalCharge: {
+			Label: Base Max Elemental Charge
+			Tooltip: The baseline maximum capacity for Elemental Charge.
+		}
+
+		SpellweaverElementalDischargeBaseMult: {
+			Label: Elemental Discharge Base Multiplier
+			Tooltip: The multiplier applied to the amount of consumed charge to determine the blast's damage.
+		}
+
+		SpellweaverElementalDischargeINTScale: {
+			Label: Max Charge INT Scaling
+			Tooltip: The amount of extra maximum Elemental Charge capacity gained per point of INT.
+		}
+
+		AngelResurrectionCooldown: {
+			Tooltip: Cooldown in seconds before the Angel can perform Divine Resurrection again.
+			Label: Angel Resurrection Cooldown
+		}
+
+		AngelResurrectionInvulTime: {
+			Tooltip: Duration in seconds of invulnerability granted to the resurrected teammate.
+			Label: Angel Resurrection Invul Time
+		}
+
+		AngelResurrectionHealPercent: {
+			Tooltip: Percentage of maximum health the resurrected teammate is healed for upon resurrection.
+			Label: Angel Resurrection Heal Percent
+		}
+
+		AngelResurrectionChannelTime: {
+			Tooltip: Time in seconds required to channel and complete Divine Resurrection on a teammate.
+			Label: Angel Resurrection Channel Time
+		}
+
+		AngelSpiritFormDuration: {
+			Tooltip: Duration in seconds that the Angel remains in Spirit Form after taking fatal damage.
+			Label: Angel Spirit Form Duration
+		}
+
+		AngelSoulAnchorDamageReduction: {
+			Tooltip: Percentage damage reduction provided by the Soul Anchor to deceased teammates.
+			Label: Angel Soul Anchor Damage Reduction
+		}
+
+		AngelInAirMoveSpeedBonus: {
+			Tooltip: Percentage movement speed bonus for the Angel while in the air (flying or jumping).
+			Label: Angel In Air Move Speed Bonus
+		}
+
+		AngelWingFlightTime: {
+			Tooltip: Maximum flight time of the Angel's wings in seconds.
+			Label: Angel Wing Flight Time
+		}
+
+		AngelRegenInterval: {
+			Tooltip: Time in seconds between health regeneration ticks.
+			Label: Angel Regen Interval
+		}
+
+		AngelTeammateRegenPercent: {
+			Tooltip: Percentage of max health teammates regenerate per interval while in the aura.
+			Label: Angel Teammate Regen Percent
+		}
+
+		AngelSelfRegenPercent: {
+			Tooltip: Percentage of max health the Angel regenerates per interval.
+			Label: Angel Self Regen Percent
+		}
+
+		AngelTeammateHealthBonus: {
+			Tooltip: Percentage increase to max health for teammates within the Angel's aura.
+			Label: Angel Teammate Health Bonus
+		}
+
+		AngelDefensePenalty: {
+			Tooltip: Percentage decrease to the Angel's defense for balance.
+			Label: Angel Defense Penalty
+		}
+
+		AngelHealthBonus: {
+			Tooltip: Percentage increase to the Angel's maximum health.
+			Label: Angel Health Bonus
+		}
+
+		AngelAuraRadius: {
+			Tooltip: Radius (in pixels) of the Angel's holy healing aura.
+			Label: Angel Aura Radius
+		}
+
+		AngelUnlockCost: {
+			Tooltip: Rebirth Point cost to unlock the Angel role.
+			Label: Angel Unlock Cost
+		}
+
+		AngelRebirthRequirement: {
+			Tooltip: The minimum rebirth count required to unlock the Angel role.
+			Label: Angel Rebirth Requirement
 		}
 	}
 
@@ -1797,19 +1995,9 @@ Configs: {
 	}
 
 	StatariaClientConfig: {
-		EnableDivineInterventionCooldownBar: {
-			Label: Enable Divine Intervention Cooldown Bar
-			Tooltip: Shows a cooldown bar for the Divine Intervention ability.
-		}
-
-		EnableTeleportCooldownBar: {
-			Label: Enable Teleport Cooldown Bar
-			Tooltip: Turns teleport cooldown bar on.
-		}
-
-		EnableLastStandCooldownBar: {
-			Label: Enable Last Stand Cooldown Bar
-			Tooltip: Displays a bar showing the remaining cooldown for Last Stand.
+		EnableRoleCooldownHUD: {
+			Label: Enable Role Cooldown HUD
+			Tooltip: Displays a draggable HUD for role and rebirth abilities cooldowns.
 		}
 
 		Headers: {
@@ -1818,7 +2006,7 @@ Configs: {
 			Enemy_Level_Indicators: Enemy Level Indicators
 			BossBars: Boss Bars
 			ResourceBars: Resource Bars
-			CooldownBars: Cooldown Bars
+			HUD: HUD Settings
 			SocketingSystem: Socketing System
 			General: General
 		}
@@ -2026,6 +2214,19 @@ Buffs: {
 		GuardianTooltipTeammate:
 			'''
 			Within a Cleric's protective aura
+			+{0}% max health
+			Receiving divine regeneration
+			'''
+		AngelNameSelf: Angel Aura (Self)
+		AngelTooltipSelf:
+			'''
+			You are radiating divine energy and wings of grace
+			Aura radius: {0} pixels
+			'''
+		AngelNameTeammate: Angel Aura
+		AngelTooltipTeammate:
+			'''
+			Within an Angel's protective aura
 			+{0}% max health
 			Receiving divine regeneration
 			'''
@@ -2293,6 +2494,18 @@ RoleEffects: {
 		DisabledRegen: • VIT regeneration effects disabled for balance
 	}
 
+	Angel: {
+		MaxHealth: • +{0}% Max Health
+		DefensePenalty: • -{0}% Defense
+		ProtectAura: • Radiates protective aura (radius: {0} pixels)
+		AuraHealth: • Teammates in aura: +{0}% max health
+		SelfRegen: • Self regeneration: {0}% max health per {1}s
+		TeamRegen: • Teammate regeneration: {0}% max health per {1}s
+		Wings: • Passive - Seraphim Wings: Complete fall damage immunity and +{0}% movement speed in the air. Can fly if no wings are equipped.
+		SoulAnchor: • Passive - Soul Anchor: Allies within aura enter Spirit Form on fatal damage instead of dying. Angel gains +{0}% damage reduction while a spirit is active. Connection breaks and spirits die if Angel dies.
+		DivineResurrection: • Active - Divine Resurrection: Channel near a Spirit within aura to resurrect them with {0}% Max HP and {1}s invulnerability ({2}s cooldown).
+	}
+
 	Guardian: {
 		MaxHealth: • +{0}% Max Health
 		Defense: • +{0} Defense
@@ -2305,6 +2518,27 @@ RoleEffects: {
 		ImmuneKnockback: • Immune to knockback
 		ReducedVIT: • VIT effects reduced by {0}%
 		DisabledEND: • END knockback resistance and damage reduction disabled
+	}
+
+	Necromancer: {
+		SoulReserve: • Soul Reserve: Capacity is {0} (+1 per {1} SPR)
+		SoulDuration: • Soul Duration: Base {0}s (+{1}s per SPR)
+		ThrallsLimit: • Active Thralls: Max {0} at a time
+		BoneArmor: • Bone Armor: +{0}% Damage Reduction per active thrall
+		ThrallDamage: • Thrall Attack: {0} Base Damage (+{1}% per INT)
+	}
+
+	Berserker: {
+		BloodbathDmg: • Bloodbath: Melee damage increases by up to +{0}% proportional to missing life
+		BloodbathSpeed: • Bloodbath Speed: Melee speed increases by up to +{0}% proportional to missing life
+		BloodbathImmunity: • Bloodbath Resolve: Gain knockback and slow immunity when below {0}% HP
+		SavageRoar: • Savage Roar: For {0}s, you cannot be reduced below 1 HP, but defense is reduced to 0 ({1}s cooldown)
+	}
+
+	Spellweaver: {
+		ManaAegis: • Mana Aegis: {0}% of incoming damage is subtracted from Mana instead of Health
+		ManaCrit: • Mana Flow: Magic critical hits restore {0}% of max Mana
+		Discharge: • Elemental Discharge: Spending mana builds charge (base max: {0}, +{2} cap per INT). Consume all charge to fire an elemental blast with no cooldown, dealing damage equal to consumed charge multiplied by {1}.
 	}
 }
 
@@ -2379,6 +2613,9 @@ UI: {
 		LockedRole: LOCKED - Requires Rebirth 2
 		SwitchCostButton: SWITCH - Cost: {0} RP
 		SelectFreeButton: SELECT (Free)
+		AscendButton: ASCEND
+		AscendRequirements: Requires Rebirth {0} & {1} RP
+		AscendReady: Ready to Ascend! Click to evolve into the Angel.
 	}
 
 	Socketing: {
@@ -2648,6 +2885,10 @@ RoleName: {
 	BlackKnight: Black Knight
 	Cleric: Cleric
 	Guardian: Guardian
+	Necromancer: Necromancer
+	Berserker: Berserker
+	Spellweaver: Spellweaver
+	Angel: Angel
 }
 
 RoleDescription: {
@@ -2658,6 +2899,10 @@ RoleDescription: {
 	BlackKnight: A versatile warrior-mage who blends martial prowess with arcane mastery, gaining power through the synergy of sword and spell.
 	Cleric: A divine healer who protects and empowers allies within their sacred aura, sacrificing personal defense for team support.
 	Guardian: A stalwart protector who shields allies from harm by sharing their burden and reflecting damage back to attackers.
+	Necromancer: A tactical commander who raises invincible zombie thralls and conserves their lifetimes in a unique soul reserve.
+	Berserker: A high-risk frontline fighter who gets faster and deadlier as their health drops.
+	Spellweaver: An elemental combatant who channels spells to build massive combo discharges while shielding themselves with mana.
+	Angel: An ascended Cleric who gains wings and commands the boundary of life and death, reviving fallen teammates and shielding them in a powerful aura.
 }
 
 RoleFlavorText: {
@@ -2668,6 +2913,15 @@ RoleFlavorText: {
 	BlackKnight: Steel and sorcery united - let magic fuel your blade, and let your blade focus your magic.
 	Cleric: Embrace your calling as a beacon of hope - your strength lies not in steel, but in the divine protection you provide to others.
 	Guardian: Stand as the unbreakable shield - let your allies' pain become your strength, and your resolve become their salvation.
+	Necromancer: Commanded thralls, rise and fall at my whim - your very lifetime is mine to command and conserve.
+	Berserker: Feed the rage, ignore the pain - the closer you are to death, the closer your enemies are to theirs.
+	Spellweaver: Weave the elements, command the storm - let your mana shield your body, and let your discharge consume the battlefield.
+	Angel: Evolve beyond mortality - look down from on high with wings of grace, holding the anchor of your allies' souls.
+}
+
+DeathMessage: {
+	SoulAnchorBroken: "{0}'s soul anchor was severed!"
+	SpiritFormExpired: "{0}'s spirit form faded away..."
 }
 
 Logging: {
@@ -2700,4 +2954,9 @@ Logging: {
 		ModCallIncorrectArgs: "{0}: Incorrect arguments."
 		ModCallUnknownMessage: Unknown ModCall message: {0}
 	}
+}
+
+Projectiles: {
+	ZombieThrallProjectile.DisplayName: Zombie Thrall Projectile
+	ElementalDischargeProjectile.DisplayName: Elemental Discharge Projectile
 }

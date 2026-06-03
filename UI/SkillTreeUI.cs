@@ -28,6 +28,8 @@ namespace Stataria
         private bool showHiddenAbilities = false;
 
         private const float MaxVisibleHeight = 600f;
+        private float desiredWidth = 500f;
+        private float desiredHeight = MaxVisibleHeight;
 
         public override void OnInitialize()
         {
@@ -95,7 +97,7 @@ namespace Stataria
             showHiddenButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.SkillTree.ShowHidden"), 0.9f, false);
             showHiddenButton.Width.Set(120f, 0f);
             showHiddenButton.Height.Set(30f, 0f);
-            showHiddenButton.Top.Set(skillPanel.Height.Pixels - 60f, 0f);
+            showHiddenButton.Top.Set(-60f, 1f);
             showHiddenButton.HAlign = 0.5f;
             showHiddenButton.BackgroundColor = new Color(100, 100, 100, 200);
             showHiddenButton.BorderColor = new Color(150, 150, 150, 200);
@@ -369,6 +371,30 @@ namespace Stataria
                 if (rpg != null)
                     pointsText.SetText(Language.GetTextValue("Mods.Stataria.UI.SkillTree.RebirthPoints", rpg.RebirthPoints));
             }
+        }
+
+        public override void Recalculate()
+        {
+            if (skillPanel != null)
+            {
+                float targetWidth = Math.Min(desiredWidth, Main.screenWidth - 20f);
+                float targetHeight = Math.Min(desiredHeight, Main.screenHeight - 70f);
+
+                skillPanel.Width.Set(targetWidth, 0f);
+                skillPanel.Height.Set(targetHeight, 0f);
+
+                float baseX = (Main.screenWidth - targetWidth) * 0.5f;
+                float baseY = (Main.screenHeight - targetHeight) * 0.5f;
+
+                float clampedLeft = Math.Clamp(skillPanel.Left.Pixels, -baseX + 10f, Math.Max(-baseX + 10f, baseX - 10f));
+                float minY = 50f - baseY;
+                float maxY = baseY - 10f;
+                float clampedTop = Math.Clamp(skillPanel.Top.Pixels, minY, Math.Max(minY, maxY));
+
+                skillPanel.Left.Set(clampedLeft, 0f);
+                skillPanel.Top.Set(clampedTop, 0f);
+            }
+            base.Recalculate();
         }
 
         private string WrapText(string text, int maxWidth)

@@ -170,12 +170,16 @@ namespace Stataria.UI
         {
             if (mainPanel != null)
             {
+                float targetWidth = Math.Min(1300f, Main.screenWidth - 40f);
                 float targetHeight = Math.Min(750f, Main.screenHeight - 120f);
+
+                mainPanel.Width.Set(targetWidth, 0f);
                 mainPanel.Height.Set(targetHeight, 0f);
 
                 if (closeButton != null)
                 {
-                    closeButton.Top.Set(targetHeight / 2f + 35f, 0f);
+                    closeButton.VAlign = 0.5f;
+                    closeButton.Top.Set(targetHeight / 2f + 20f, 0f);
                 }
             }
             base.Recalculate();

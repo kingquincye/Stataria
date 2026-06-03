@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
-using Microsoft.Xna.Framework;
-using System.Collections.Generic;
+using Stataria.UI;
+using ReLogic.Graphics;
 
 namespace Stataria
 {
@@ -40,6 +45,38 @@ namespace Stataria
             SocketingUI = new UserInterface();
             SocketingPanel = new SocketingUI();
             SocketingPanel.Activate();
+
+            Main.OnResolutionChanged += OnResolutionChanged;
+        }
+
+        public override void Unload()
+        {
+            if (!Main.dedServ)
+            {
+                Main.OnResolutionChanged -= OnResolutionChanged;
+            }
+
+            StatUI = null;
+            Panel = null;
+            SkillTreeUI = null;
+            SkillTreePanel = null;
+            XPVerificationUI = null;
+            RoleSelectionUI = null;
+            RoleSelectionPanel = null;
+            TabBarInterface = null;
+            TabBarPanel = null;
+            SocketingUI = null;
+            SocketingPanel = null;
+        }
+
+        private static void OnResolutionChanged(Vector2 size)
+        {
+            StatUI?.Recalculate();
+            SkillTreeUI?.Recalculate();
+            XPVerificationUI?.Recalculate();
+            RoleSelectionUI?.Recalculate();
+            SocketingUI?.Recalculate();
+            TabBarInterface?.Recalculate();
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -166,6 +203,126 @@ namespace Stataria
                     },
                     InterfaceScaleType.UI)
                 );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Necromancer Souls",
+                    delegate
+                    {
+                        NecromancerUI.Draw(Main.spriteBatch);
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Spellweaver Charge",
+                    delegate
+                    {
+                        SpellweaverUI.Draw(Main.spriteBatch);
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Berserker Vignette",
+                    delegate
+                    {
+                        Player player = Main.LocalPlayer;
+                        if (player != null && player.active && !player.dead)
+                        {
+                            var berserkerPlayer = player.GetModPlayer<BerserkerPlayer>();
+                            if (berserkerPlayer.IsBerserkerActive && berserkerPlayer.IsSavageRoarActive)
+                            {
+                                int maxRoarTimer = (int)(ModContent.GetInstance<StatariaConfig>().roleSettings.BerserkerSavageRoarDuration * 60f);
+                                if (maxRoarTimer > 0)
+                                {
+                                    float ratio = (float)berserkerPlayer.SavageRoarTimer / maxRoarTimer;
+                                    float pulse = 0.5f + 0.15f * (float)Math.Sin(Main.timeForVisualEffects * 0.15f);
+                                    float baseOpacity = Math.Clamp(ratio * pulse * 1.5f, 0f, 0.7f);
+
+                                    if (baseOpacity > 0f)
+                                    {
+                                        Texture2D pixel = TextureAssets.MagicPixel.Value;
+                                        int maxDepth = 120;
+                                        int step = 4;
+                                        for (int i = 0; i < maxDepth; i += step)
+                                        {
+                                            float opacity = baseOpacity * (float)Math.Pow((float)(maxDepth - i) / maxDepth, 1.5f);
+                                            Color color = Color.Red * opacity;
+                                            // Top
+                                            Main.spriteBatch.Draw(pixel, new Rectangle(i, i, Main.screenWidth - 2 * i, step), color);
+                                            // Bottom
+                                            Main.spriteBatch.Draw(pixel, new Rectangle(i, Main.screenHeight - step - i, Main.screenWidth - 2 * i, step), color);
+                                            // Left
+                                            Main.spriteBatch.Draw(pixel, new Rectangle(i, i + step, step, Main.screenHeight - 2 * i - 2 * step), color);
+                                            // Right
+                                            Main.spriteBatch.Draw(pixel, new Rectangle(Main.screenWidth - step - i, i + step, step, Main.screenHeight - 2 * i - 2 * step), color);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Role Cooldowns",
+                    delegate
+                    {
+                        RoleCooldownUI.Draw(Main.spriteBatch);
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Spirit Indicators",
+                    delegate
+                    {
+                        DrawSpiritIndicators(Main.spriteBatch);
+                        return true;
+                    },
+                    InterfaceScaleType.Game)
+                );
+            }
+        }
+
+        private static void DrawSpiritIndicators(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < Main.maxPlayers; i++)
+            {
+                Player player = Main.player[i];
+                if (player == null || !player.active)
+                    continue;
+
+                var clericPlayer = player.GetModPlayer<ClericPlayer>();
+                if (clericPlayer != null && clericPlayer.IsInSpiritForm)
+                {
+                    Vector2 pos = player.MountedCenter - Main.screenPosition;
+                    pos.Y -= 65f;
+
+                    string titleText = "Spirit Anchor";
+                    float timerSeconds = clericPlayer.SpiritFormTimer / 60f;
+                    string timerText = timerSeconds.ToString("0.0") + "s";
+                    string fullText = $"{player.name} - {titleText} ({timerText})";
+
+                    var font = FontAssets.MouseText.Value;
+                    Vector2 textSize = font.MeasureString(fullText);
+                    Vector2 textPos = new Vector2(pos.X - textSize.X / 2f, pos.Y - textSize.Y / 2f);
+
+                    int teamIndex = Math.Clamp(player.team, 0, Main.teamColor.Length - 1);
+                    Color textColor = Main.teamColor[teamIndex];
+                    if (player.team == 0)
+                    {
+                        textColor = new Color(200, 220, 255);
+                    }
+
+                    spriteBatch.DrawString(font, fullText, new Vector2(textPos.X + 1f, textPos.Y + 1f), Color.Black * 0.7f);
+                    spriteBatch.DrawString(font, fullText, textPos, textColor);
+                }
             }
         }
     }

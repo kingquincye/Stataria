@@ -42,6 +42,9 @@ namespace Stataria
         private SocketedCore? selectedAttachedCore;
         private (CoreType type, int tier)? selectedCompatibleCore;
 
+        private const float desiredWidth = 800f;
+        private const float desiredHeight = 600f;
+
         private bool dragging = false;
         private Vector2 offset;
 
@@ -88,8 +91,8 @@ namespace Stataria
             socketingPanel.Append(titleText);
 
             rebirthPointsText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.RebirthPoints").WithFormatArgs(0), 1f);
-            rebirthPointsText.Top.Set(560f, 0f);
-            rebirthPointsText.Left.Set(600f, 0f);
+            rebirthPointsText.Top.Set(-40f, 1f);
+            rebirthPointsText.Left.Set(-200f, 1f);
             rebirthPointsText.TextColor = new Color(255, 215, 100);
             socketingPanel.Append(rebirthPointsText);
         }
@@ -175,7 +178,7 @@ namespace Stataria
             expandButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.Socketing.ExpandSlotButton"), 1f, false);
             expandButton.Width.Set(150f, 0f);
             expandButton.Height.Set(40f, 0f);
-            expandButton.Top.Set(370f, 0f);
+            expandButton.Top.Set(-230f, 1f);
             expandButton.Left.Set(30f, 0f);
             expandButton.BackgroundColor = new Color(80, 120, 80, 200);
             expandButton.BorderColor = new Color(120, 180, 120, 255);
@@ -183,7 +186,7 @@ namespace Stataria
             socketingPanel.Append(expandButton);
 
             expandCostText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.CostNone"), 0.9f);
-            expandCostText.Top.Set(415f, 0f);
+            expandCostText.Top.Set(-185f, 1f);
             expandCostText.Left.Set(30f, 0f);
             expandCostText.TextColor = Color.Yellow;
             socketingPanel.Append(expandCostText);
@@ -191,7 +194,7 @@ namespace Stataria
             attachButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.Socketing.AttachCoreButton"), 1f, false);
             attachButton.Width.Set(150f, 0f);
             attachButton.Height.Set(40f, 0f);
-            attachButton.Top.Set(500f, 0f);
+            attachButton.Top.Set(-100f, 1f);
             attachButton.Left.Set(200f, 0f);
             attachButton.BackgroundColor = new Color(60, 60, 60, 150);
             attachButton.BorderColor = new Color(120, 120, 120, 200);
@@ -201,7 +204,7 @@ namespace Stataria
             extractButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.Socketing.ExtractCoreButton"), 1f, false);
             extractButton.Width.Set(150f, 0f);
             extractButton.Height.Set(40f, 0f);
-            extractButton.Top.Set(500f, 0f);
+            extractButton.Top.Set(-100f, 1f);
             extractButton.Left.Set(400f, 0f);
             extractButton.BackgroundColor = new Color(60, 60, 60, 150);
             extractButton.BorderColor = new Color(120, 120, 120, 200);
@@ -209,7 +212,7 @@ namespace Stataria
             socketingPanel.Append(extractButton);
 
             extractCostText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.CostNone"), 0.9f);
-            extractCostText.Top.Set(545f, 0f);
+            extractCostText.Top.Set(-55f, 1f);
             extractCostText.Left.Set(400f, 0f);
             extractCostText.TextColor = Color.Yellow;
             socketingPanel.Append(extractCostText);
@@ -651,6 +654,77 @@ namespace Stataria
             extractButton.BackgroundColor = canExtract && canAffordExtract
                 ? new Color(120, 80, 80, 200)
                 : new Color(60, 60, 60, 150);
+        }
+
+        public override void Recalculate()
+        {
+            if (socketingPanel != null)
+            {
+                float targetWidth = Math.Min(desiredWidth, Main.screenWidth - 20f);
+                float targetHeight = Math.Min(desiredHeight, Main.screenHeight - 70f);
+
+                socketingPanel.Width.Set(targetWidth, 0f);
+                socketingPanel.Height.Set(targetHeight, 0f);
+
+                float baseX = (Main.screenWidth - targetWidth) * 0.5f;
+                float baseY = (Main.screenHeight - targetHeight) * 0.5f;
+
+                float clampedLeft = Math.Clamp(socketingPanel.Left.Pixels, -baseX + 10f, Math.Max(-baseX + 10f, baseX - 10f));
+                float minY = 50f - baseY;
+                float maxY = baseY - 10f;
+                float clampedTop = Math.Clamp(socketingPanel.Top.Pixels, minY, Math.Max(minY, maxY));
+
+                socketingPanel.Left.Set(clampedLeft, 0f);
+                socketingPanel.Top.Set(clampedTop, 0f);
+
+                float padding = 15f;
+                float availableWidth = targetWidth - padding * 2f;
+
+                float compatibleWidth = Math.Clamp(availableWidth * 0.46f, 200f, 350f);
+                float leftWidth = availableWidth - compatibleWidth - 20f;
+
+                if (compatibleCoresPanel != null)
+                {
+                    compatibleCoresPanel.Width.Set(compatibleWidth, 0f);
+                    compatibleCoresPanel.Left.Set(-compatibleWidth - 10f, 1f);
+                    compatibleCoresPanel.Height.Set(Math.Max(200f, targetHeight - 120f), 0f);
+                }
+
+                if (attachedCoresList != null)
+                {
+                    attachedCoresList.Width.Set(leftWidth, 0f);
+                    attachedCoresList.Height.Set(Math.Max(80f, targetHeight - 325f), 0f);
+                }
+
+                if (expandButton != null)
+                {
+                    expandButton.Left.Set(30f, 0f);
+                    expandButton.Width.Set(Math.Min(150f, leftWidth * 0.45f), 0f);
+                }
+                if (expandCostText != null)
+                {
+                    expandCostText.Left.Set(30f, 0f);
+                }
+
+                if (attachButton != null)
+                {
+                    float attachLeft = 30f + Math.Min(150f, leftWidth * 0.45f) + 15f;
+                    attachButton.Left.Set(attachLeft, 0f);
+                    attachButton.Width.Set(Math.Min(150f, leftWidth * 0.45f), 0f);
+                }
+
+                if (extractButton != null)
+                {
+                    float extractWidth = Math.Min(150f, compatibleWidth * 0.45f);
+                    extractButton.Width.Set(extractWidth, 0f);
+                    extractButton.Left.Set(-extractWidth - 30f, 1f);
+                    if (extractCostText != null)
+                    {
+                        extractCostText.Left.Set(-extractWidth - 30f, 1f);
+                    }
+                }
+            }
+            base.Recalculate();
         }
 
         public override void Update(GameTime gameTime)

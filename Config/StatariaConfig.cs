@@ -195,6 +195,7 @@ namespace Stataria
         public class RoleSettings
         {
             [Header("Role_System")]
+            [DefaultValue(true)] public bool EnableRoleSystem { get; set; } = true;
             [DefaultValue(50)][Range(0, 1000)] public int BaseSwitchCost { get; set; } = 50;
             [DefaultValue(1f)][Range(0f, 5f)] public float SwitchCostMultiplier { get; set; } = 1f;
             [DefaultValue(true)] public bool EnableRoleProximity { get; set; } = true;
@@ -244,6 +245,8 @@ namespace Stataria
             [Range(0f, 100f)][DefaultValue(20f)] public float ClericHealthBonus { get; set; } = 20f;
             [Range(0f, 90f)][DefaultValue(50f)] public float ClericDefensePenalty { get; set; } = 50f;
             [DefaultValue(true)] public bool ClericDisableVitRegen { get; set; } = true;
+            [DefaultValue(false)] public bool ClericAllowAuraOnNoTeam { get; set; } = false;
+
             [Range(0f, 100f)][DefaultValue(15f)] public float ClericTeammateHealthBonus { get; set; } = 15f;
             [Range(0.1f, 10f)][DefaultValue(2f)] public float ClericSelfRegenPercent { get; set; } = 2f;
             [Range(0.1f, 10f)][DefaultValue(1f)] public float ClericTeammateRegenPercent { get; set; } = 1f;
@@ -251,6 +254,26 @@ namespace Stataria
             [Range(1f, 30f)][DefaultValue(10f)] public float DivineInterventionDuration { get; set; } = 10f;
             [Range(30f, 600f)][DefaultValue(120f)] public float DivineInterventionCooldown { get; set; } = 120f;
             public List<string> DivineInterventionExemptBuffs { get; set; } = new List<string>();
+
+            [Header("Angel")]
+            [Range(1, 100)][DefaultValue(3)] public int AngelRebirthRequirement { get; set; } = 3;
+            [Range(0, 1000)][DefaultValue(100)] public int AngelUnlockCost { get; set; } = 100;
+            [Range(100f, 1000f)][DefaultValue(350f)] public float AngelAuraRadius { get; set; } = 350f;
+            [Range(0f, 100f)][DefaultValue(30f)] public float AngelHealthBonus { get; set; } = 30f;
+            [Range(0f, 90f)][DefaultValue(30f)] public float AngelDefensePenalty { get; set; } = 30f;
+            [Range(0f, 100f)][DefaultValue(25f)] public float AngelTeammateHealthBonus { get; set; } = 25f;
+            [Range(0.1f, 10f)][DefaultValue(3f)] public float AngelSelfRegenPercent { get; set; } = 3f;
+            [Range(0.1f, 10f)][DefaultValue(1.5f)] public float AngelTeammateRegenPercent { get; set; } = 1.5f;
+            [Range(1f, 10f)][DefaultValue(3f)] public float AngelRegenInterval { get; set; } = 3f;
+            [Range(0f, 100f)][DefaultValue(25f)] public float AngelInAirMoveSpeedBonus { get; set; } = 25f;
+            [Range(1f, 15f)][DefaultValue(5f)] public float AngelWingFlightTime { get; set; } = 5f;
+
+            [Range(0f, 100f)][DefaultValue(20f)] public float AngelSoulAnchorDamageReduction { get; set; } = 20f;
+            [Range(5f, 300f)][DefaultValue(30f)] public float AngelSpiritFormDuration { get; set; } = 30f;
+            [Range(1f, 10f)][DefaultValue(3f)] public float AngelResurrectionChannelTime { get; set; } = 3f;
+            [Range(1f, 100f)][DefaultValue(50f)] public float AngelResurrectionHealPercent { get; set; } = 50f;
+            [Range(1f, 30f)][DefaultValue(3f)] public float AngelResurrectionInvulTime { get; set; } = 3f;
+            [Range(10f, 600f)][DefaultValue(180f)] public float AngelResurrectionCooldown { get; set; } = 180f;
 
             [Header("Guardian")]
             [DefaultValue(300f)][Range(100f, 1000f)] public float GuardianAuraRadius { get; set; } = 300f;
@@ -264,6 +287,31 @@ namespace Stataria
             [DefaultValue(true)] public bool GuardianReduceVitEffects { get; set; } = true;
             [DefaultValue(50f)][Range(0f, 100f)] public float GuardianVitEffectReduction { get; set; } = 50f;
             [DefaultValue(true)] public bool GuardianDisableEndEffects { get; set; } = true;
+
+            [Header("Necromancer")]
+            [DefaultValue(5)][Range(1, 20)] public int NecromancerBaseSoulCapacity { get; set; } = 5;
+            [DefaultValue(20)][Range(5, 100)] public int NecromancerSPRPerSoul { get; set; } = 20;
+            [DefaultValue(30f)][Range(5f, 300f)] public float NecromancerBaseSoulDuration { get; set; } = 30f;
+            [DefaultValue(0.5f)][Range(0.1f, 5f)] public float NecromancerSoulDurationPerSPR { get; set; } = 0.5f;
+            [DefaultValue(10f)][Range(0f, 100f)] public float NecromancerBossSoulHarvestChance { get; set; } = 10f;
+            [DefaultValue(3)][Range(1, 100)] public int NecromancerActiveThrallsLimit { get; set; } = 3;
+            [DefaultValue(3f)][Range(0f, 10f)] public float NecromancerBoneArmorDRPerThrall { get; set; } = 3f;
+            [DefaultValue(20)][Range(5, 500)] public int NecromancerThrallBaseDamage { get; set; } = 20;
+            [DefaultValue(1.5f)][Range(0f, 10f)] public float NecromancerThrallINTScale { get; set; } = 1.5f;
+
+            [Header("Berserker")]
+            [DefaultValue(50f)][Range(0f, 200f)] public float BerserkerBloodbathMaxDamageBonus { get; set; } = 50f;
+            [DefaultValue(30f)][Range(0f, 200f)] public float BerserkerBloodbathMaxSpeedBonus { get; set; } = 30f;
+            [DefaultValue(40f)][Range(0f, 100f)] public float BerserkerBloodbathImmunityThreshold { get; set; } = 40f;
+            [DefaultValue(5f)][Range(1f, 30f)] public float BerserkerSavageRoarDuration { get; set; } = 5f;
+            [DefaultValue(60f)][Range(10f, 300f)] public float BerserkerSavageRoarCooldown { get; set; } = 60f;
+
+            [Header("Spellweaver")]
+            [DefaultValue(30f)][Range(0f, 100f)] public float SpellweaverManaAegisPercent { get; set; } = 30f;
+            [DefaultValue(2f)][Range(0f, 50f)] public float SpellweaverManaCritRestorePercent { get; set; } = 2f;
+            [DefaultValue(100f)][Range(100f, 2000f)] public float SpellweaverMaxElementalCharge { get; set; } = 100f;
+            [DefaultValue(10f)][Range(1f, 50f)] public float SpellweaverElementalDischargeBaseMult { get; set; } = 10f;
+            [DefaultValue(4f)][Range(0f, 50f)] public float SpellweaverElementalDischargeINTScale { get; set; } = 4f;
         }
 
         public class MultiplayerSettings
@@ -287,8 +335,8 @@ namespace Stataria
 
             [Header("Boss_Scaling")]
             [DefaultValue(true)] public bool EnableBossScaling { get; set; } = true;
-            [Range(0f, 10f)][DefaultValue(0.2f)] public float BossHealthScaling { get; set; } = 0.05f;
-            [Range(0f, 10f)][DefaultValue(0.1f)] public float BossDamageScaling { get; set; } = 0.02f;
+            [Range(0f, 10f)][DefaultValue(0.05f)] public float BossHealthScaling { get; set; } = 0.05f;
+            [Range(0f, 10f)][DefaultValue(0.02f)] public float BossDamageScaling { get; set; } = 0.02f;
 
             [Header("Flat_Scaling")]
             [DefaultValue(false)] public bool EnableFlatEnemyScaling { get; set; } = false;
@@ -514,10 +562,8 @@ namespace Stataria
         [Header("SocketingSystem")]
         [DefaultValue(true)] public bool ShowSocketedCoresInTooltip { get; set; } = true;
 
-        [Header("CooldownBars")]
-        [DefaultValue(true)] public bool EnableLastStandCooldownBar { get; set; } = true;
-        [DefaultValue(true)] public bool EnableTeleportCooldownBar { get; set; } = true;
-        [DefaultValue(true)] public bool EnableDivineInterventionCooldownBar { get; set; } = true;
+        [Header("HUD")]
+        [DefaultValue(true)] public bool EnableRoleCooldownHUD { get; set; } = true;
 
         [Header("ResourceBars")]
         [DefaultValue(0.79f)][Range(0f, 0.95f)][Slider][SliderColor(150, 0, 150)] public float PositionXPercent { get; set; } = 0.79f;
