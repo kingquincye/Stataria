@@ -1351,7 +1351,7 @@ Configs: {
 			Necromancer: Некромант
 			Berserker: Берсерк
 			Spellweaver: Заклинатель
-			// Angel: Angel Header
+			Angel: Ангел
 		}
 
 		BaseSwitchCost: {

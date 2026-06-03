@@ -1351,7 +1351,7 @@ Configs: {
 			Necromancer: 死灵法师
 			Berserker: 狂战士
 			Spellweaver: 织法者
-			// Angel: Angel Header
+			Angel: 天使
 		}
 
 		BaseSwitchCost: {
