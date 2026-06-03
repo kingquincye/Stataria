@@ -1700,7 +1700,7 @@ Configs: {
 
 		BerserkerBloodbathImmunityThreshold: {
 			Label: Порог иммунитета Кровавой бойни
-			Tooltip: Порог здоровья в процентах, ниже которого вы получаете невосприимчивость к замедлению и отбрасыванию (по умолчанию: 40%).
+			Tooltip: Порог здоровья в процентах, ниже которого вы получаете невосприимчивость к отбрасыванию и дебаффам замедления (Замедление, Слабость, Охлаждение, Горение, Жижа) (по умолчанию: 40%).
 		}
 
 		BerserkerSavageRoarDuration: {
@@ -2531,7 +2531,7 @@ RoleEffects: {
 	Berserker: {
 		// BloodbathDmg: • Bloodbath: Melee damage increases by up to +{0}% proportional to missing life
 		// BloodbathSpeed: • Bloodbath Speed: Melee speed increases by up to +{0}% proportional to missing life
-		// BloodbathImmunity: • Bloodbath Resolve: Gain knockback and slow immunity when below {0}% HP
+		// BloodbathImmunity: • Bloodbath Resolve: Gain knockback, Slow, Weak, Chilled, Burning, and Oozed immunity when below {0}% HP
 		// SavageRoar: • Savage Roar: For {0}s, you cannot be reduced below 1 HP, but defense is reduced to 0 ({1}s cooldown)
 	}
 

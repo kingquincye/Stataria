@@ -1700,7 +1700,7 @@ Configs: {
 
 		BerserkerBloodbathImmunityThreshold: {
 			Label: 浴血免控阈值
-			Tooltip: 生命值低于该百分比时获得减速和击退免疫 (默认: 40%)。
+			Tooltip: 生命值低于该百分比时获得击退、减速、虚弱、冰冻、燃烧和渗出物免疫 (默认: 40%)。
 		}
 
 		BerserkerSavageRoarDuration: {
@@ -2531,7 +2531,7 @@ RoleEffects: {
 	Berserker: {
 		// BloodbathDmg: • Bloodbath: Melee damage increases by up to +{0}% proportional to missing life
 		// BloodbathSpeed: • Bloodbath Speed: Melee speed increases by up to +{0}% proportional to missing life
-		// BloodbathImmunity: • Bloodbath Resolve: Gain knockback and slow immunity when below {0}% HP
+		// BloodbathImmunity: • Bloodbath Resolve: Gain knockback, Slow, Weak, Chilled, Burning, and Oozed immunity when below {0}% HP
 		// SavageRoar: • Savage Roar: For {0}s, you cannot be reduced below 1 HP, but defense is reduced to 0 ({1}s cooldown)
 	}
 

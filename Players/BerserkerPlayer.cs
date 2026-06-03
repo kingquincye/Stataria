@@ -63,6 +63,9 @@ namespace Stataria
                 Player.noKnockback = true;
                 Player.buffImmune[BuffID.Slow] = true;
                 Player.buffImmune[BuffID.Chilled] = true;
+                Player.buffImmune[BuffID.Weak] = true;
+                Player.buffImmune[BuffID.Burning] = true;
+                Player.buffImmune[BuffID.OgreSpit] = true;
             }
 
             // Savage Roar Active: defense reduced to 0
