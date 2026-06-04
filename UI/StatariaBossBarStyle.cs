@@ -204,18 +204,28 @@ namespace Stataria
             currentlyDisplayedBars = newBars;
         }
 
-        private void CalculateEoWChainHealth(NPC headNpc, out float currentLife, out float maxLife)
+        private void CalculateEoWChainHealth(NPC headNpc, out double currentLife, out double maxLife)
         {
-            currentLife = 0f;
-            maxLife = 0f;
+            currentLife = 0;
+            maxLife = 0;
             
             NPC currentSegment = headNpc;
             int segmentsChecked = 0;
             
             while (currentSegment != null && currentSegment.active && segmentsChecked < 100)
             {
-                currentLife += currentSegment.life;
-                maxLife += currentSegment.lifeMax;
+                if (currentSegment.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scalingNPC) && scalingNPC.UsesCustomHP)
+                {
+                    maxLife += scalingNPC.CustomLifeMax;
+                    currentLife += (Main.netMode == NetmodeID.SinglePlayer)
+                        ? scalingNPC.CustomLife
+                        : scalingNPC.CustomLifeMax * ((double)currentSegment.life / currentSegment.lifeMax);
+                }
+                else
+                {
+                    currentLife += currentSegment.life;
+                    maxLife += currentSegment.lifeMax;
+                }
                 
                 int nextIndex = (int)currentSegment.ai[0];
                 if (nextIndex >= 0 && nextIndex < Main.maxNPCs)
@@ -266,7 +276,7 @@ namespace Stataria
                 DistanceToPlayer = Vector2.Distance(npc.Center, Main.LocalPlayer.Center)
             };
 
-            CalculateHealthValues(npc, out float currentLife, out float maxLife);
+            CalculateHealthValues(npc, out double currentLife, out double maxLife);
 
             barData.CurrentHp = currentLife;
             barData.MaxHp = maxLife;
@@ -276,8 +286,17 @@ namespace Stataria
             return barData;
         }
 
-        private void CalculateHealthValues(NPC npc, out float currentLife, out float maxLife)
+        private void CalculateHealthValues(NPC npc, out double currentLife, out double maxLife)
         {
+            if (npc.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scalingNPC) && scalingNPC.UsesCustomHP)
+            {
+                maxLife = scalingNPC.CustomLifeMax;
+                currentLife = (Main.netMode == NetmodeID.SinglePlayer)
+                    ? scalingNPC.CustomLife
+                    : scalingNPC.CustomLifeMax * ((double)npc.life / npc.lifeMax);
+                return;
+            }
+
             currentLife = npc.life;
             maxLife = npc.lifeMax;
             
@@ -302,8 +321,18 @@ namespace Stataria
                     NPC segment = Main.npc[j];
                     if (segment.active && segment.realLife == npc.whoAmI)
                     {
-                        currentLife += segment.life;
-                        maxLife += segment.lifeMax;
+                        if (segment.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var segScaling) && segScaling.UsesCustomHP)
+                        {
+                            maxLife += segScaling.CustomLifeMax;
+                            currentLife += (Main.netMode == NetmodeID.SinglePlayer)
+                                ? segScaling.CustomLife
+                                : segScaling.CustomLifeMax * ((double)segment.life / segment.lifeMax);
+                        }
+                        else
+                        {
+                            currentLife += segment.life;
+                            maxLife += segment.lifeMax;
+                        }
                     }
                 }
             }
@@ -319,7 +348,7 @@ namespace Stataria
                     mainType = npc.type;
                 }
 
-                float sumLife = 0, sumMax = 0;
+                double sumLife = 0, sumMax = 0;
 
                 for (int j = 0; j < Main.maxNPCs; j++)
                 {
@@ -328,13 +357,33 @@ namespace Stataria
 
                     if (part.type == mainType)
                     {
-                        sumLife += part.life;
-                        sumMax += part.lifeMax;
+                        if (part.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var partScaling) && partScaling.UsesCustomHP)
+                        {
+                            sumMax += partScaling.CustomLifeMax;
+                            sumLife += (Main.netMode == NetmodeID.SinglePlayer)
+                                ? partScaling.CustomLife
+                                : partScaling.CustomLifeMax * ((double)part.life / part.lifeMax);
+                        }
+                        else
+                        {
+                            sumLife += part.life;
+                            sumMax += part.lifeMax;
+                        }
                     }
                     else if (BossPartGroups.ContainsKey(part.type) && BossPartGroups[part.type] == mainType)
                     {
-                        sumLife += part.life;
-                        sumMax += part.lifeMax;
+                        if (part.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var partScaling) && partScaling.UsesCustomHP)
+                        {
+                            sumMax += partScaling.CustomLifeMax;
+                            sumLife += (Main.netMode == NetmodeID.SinglePlayer)
+                                ? partScaling.CustomLife
+                                : partScaling.CustomLifeMax * ((double)part.life / part.lifeMax);
+                        }
+                        else
+                        {
+                            sumLife += part.life;
+                            sumMax += part.lifeMax;
+                        }
                     }
                 }
 
@@ -431,7 +480,7 @@ namespace Stataria
             int height = barData.CurrentHeight;
             float scale = barData.CurrentScale;
 
-            float lifePercent = barData.MaxHp > 0 ? barData.CurrentHp / barData.MaxHp : 0f;
+            float lifePercent = barData.MaxHp > 0 ? (float)(barData.CurrentHp / barData.MaxHp) : 0f;
 
             Rectangle barRect = new Rectangle((int)position.X, (int)position.Y, width, height);
             spriteBatch.Draw(TextureAssets.MagicPixel.Value, barRect, bgColor);
@@ -511,7 +560,7 @@ namespace Stataria
 
         private void DrawHealthText(SpriteBatch spriteBatch, BossBarUIData barData, Vector2 position, int height)
         {
-            string healthText = $"{(int)barData.CurrentHp} / {(int)barData.MaxHp}";
+            string healthText = $"{(long)Math.Round(barData.CurrentHp)} / {(long)Math.Round(barData.MaxHp)}";
             DynamicSpriteFont font = FontAssets.ItemStack.Value;
             Vector2 textSize = font.MeasureString(healthText) * textScale;
 
@@ -542,8 +591,8 @@ namespace Stataria
     public class BossBarUIData
     {
         public int NpcWhoAmI;
-        public float CurrentHp;
-        public float MaxHp;
+        public double CurrentHp;
+        public double MaxHp;
         public string DisplayName;
         public int HeadTextureId;
         public Vector2 CalculatedPosition;

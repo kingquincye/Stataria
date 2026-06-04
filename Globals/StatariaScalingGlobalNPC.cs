@@ -8,6 +8,7 @@ using Terraria.GameContent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
 using Terraria.Localization;
@@ -22,6 +23,10 @@ namespace Stataria
         public int Level { get; set; }
         public float damageMult = 1f;
         public bool hasBeenScaled = false;
+        public double CustomLifeMax { get; set; } = -1;
+        public double CustomLife { get; set; } = -1;
+        public bool UsesCustomHP => CustomLifeMax > 0;
+        private int lastLife = -1;
 
         private bool IsWormSegmentOrPart(NPC npc)
         {
@@ -365,6 +370,9 @@ namespace Stataria
             IsElite = false;
             Level = 1;
             hasBeenScaled = false;
+            CustomLifeMax = -1;
+            CustomLife = -1;
+            lastLife = -1;
 
             var config = ModContent.GetInstance<StatariaConfig>();
 
@@ -562,14 +570,25 @@ namespace Stataria
             }
 
             float healthRatio = npc.lifeMax > 0 ? (float)npc.life / npc.lifeMax : 1f;
-            int newHealth = (int)(npc.lifeMax * healthMult) + additionalFlatHealth;
+            double targetMaxHealth = (double)npc.lifeMax * healthMult + additionalFlatHealth;
 
             const int MAX_SAFE_HEALTH = 1000000000;
-            if (newHealth > MAX_SAFE_HEALTH)
-                newHealth = MAX_SAFE_HEALTH;
-
-            npc.lifeMax = newHealth;
-            npc.life = (int)Math.Round(newHealth * healthRatio);
+            if (targetMaxHealth > MAX_SAFE_HEALTH)
+            {
+                CustomLifeMax = targetMaxHealth;
+                CustomLife = targetMaxHealth * healthRatio;
+                npc.lifeMax = MAX_SAFE_HEALTH;
+                npc.life = (int)Math.Round(MAX_SAFE_HEALTH * healthRatio);
+                lastLife = npc.life;
+            }
+            else
+            {
+                CustomLifeMax = -1;
+                CustomLife = -1;
+                lastLife = -1;
+                npc.lifeMax = (int)targetMaxHealth;
+                npc.life = (int)Math.Round(targetMaxHealth * healthRatio);
+            }
         }
 
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
@@ -719,6 +738,7 @@ namespace Stataria
                     {
                         this.IsElite = scalingData.IsElite;
                         this.Level = scalingData.Level;
+                        this.CustomLifeMax = scalingData.CustomLifeMax;
                         this.ApplyScaling(npc);
                         this.hasBeenScaled = true;
 
@@ -742,6 +762,34 @@ namespace Stataria
 
         public override void PostAI(NPC npc)
         {
+            if (UsesCustomHP && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                if (lastLife != -1 && npc.life < lastLife)
+                {
+                    int damageTaken = lastLife - npc.life;
+                    CustomLife -= damageTaken;
+                    if (CustomLife <= 0)
+                    {
+                        npc.life = 0;
+                        npc.checkDead();
+                    }
+                    else
+                    {
+                        double percentage = CustomLife / CustomLifeMax;
+                        int newLife = (int)Math.Max(1, Math.Round(npc.lifeMax * percentage));
+                        if (newLife != npc.life)
+                        {
+                            npc.life = newLife;
+                            if (Main.netMode == NetmodeID.Server)
+                            {
+                                npc.netUpdate = true;
+                            }
+                        }
+                    }
+                }
+                lastLife = npc.life;
+            }
+
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 if (npc.active && !this.hasBeenScaled)
@@ -750,6 +798,7 @@ namespace Stataria
                     {
                         this.IsElite = scalingData.IsElite;
                         this.Level = scalingData.Level;
+                        this.CustomLifeMax = scalingData.CustomLifeMax;
                         this.ApplyScaling(npc);
                         this.hasBeenScaled = true;
 
@@ -775,6 +824,9 @@ namespace Stataria
         {
             base.OnKill(npc);
             hasBeenScaled = false;
+            CustomLifeMax = -1;
+            CustomLife = -1;
+            lastLife = -1;
 
             if (npc.boss)
             {
@@ -803,11 +855,34 @@ namespace Stataria
             }
         }
 
+        public override void SendExtraAI(NPC npc, BitWriter bitWriter, BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(hasBeenScaled);
+            binaryWriter.Write(IsElite);
+            binaryWriter.Write(Level);
+            binaryWriter.Write(CustomLifeMax);
+        }
+
+        public override void ReceiveExtraAI(NPC npc, BitReader bitReader, BinaryReader binaryReader)
+        {
+            hasBeenScaled = binaryReader.ReadBoolean();
+            IsElite = binaryReader.ReadBoolean();
+            Level = binaryReader.ReadInt32();
+            CustomLifeMax = binaryReader.ReadDouble();
+            
+            if (hasBeenScaled)
+            {
+                ApplyScaling(npc);
+            }
+        }
+
         public override void SaveData(NPC npc, TagCompound tag)
         {
             tag["IsElite"] = IsElite;
             tag["Level"] = Level;
             tag["hasBeenScaled"] = hasBeenScaled;
+            tag["CustomLifeMax"] = CustomLifeMax;
+            tag["CustomLife"] = CustomLife;
         }
 
         public override void LoadData(NPC npc, TagCompound tag)
@@ -815,6 +890,8 @@ namespace Stataria
             IsElite = tag.GetBool("IsElite");
             Level = tag.GetInt("Level");
             hasBeenScaled = tag.GetBool("hasBeenScaled");
+            CustomLifeMax = tag.ContainsKey("CustomLifeMax") ? tag.GetDouble("CustomLifeMax") : -1;
+            CustomLife = tag.ContainsKey("CustomLife") ? tag.GetDouble("CustomLife") : -1;
         }
     }
 }

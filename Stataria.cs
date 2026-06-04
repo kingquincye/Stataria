@@ -31,11 +31,11 @@ namespace Stataria
 
     public class Stataria : Mod
     {
-        public static Dictionary<int, (bool IsElite, int Level)> pendingNpcScaling = new Dictionary<int, (bool, int)>();
+        public static Dictionary<int, (bool IsElite, int Level, double CustomLifeMax)> pendingNpcScaling = new Dictionary<int, (bool, int, double)>();
 
         public override void Load()
         {
-            pendingNpcScaling = new Dictionary<int, (bool, int)>();
+            pendingNpcScaling = new Dictionary<int, (bool, int, double)>();
             StatariaLogger.GlobalDebugMode = false;
             StatariaLogger.Initialize(this);
             StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModLoadingStarted"));
@@ -116,6 +116,7 @@ namespace Stataria
             packet.Write(npcIndex);
             packet.Write(scalingData.IsElite);
             packet.Write(scalingData.Level);
+            packet.Write(scalingData.CustomLifeMax);
             packet.Send(toWho, fromWho);
         }
 
@@ -269,6 +270,7 @@ namespace Stataria
                 int npcIndex = reader.ReadInt32();
                 bool isElite = reader.ReadBoolean();
                 int level = reader.ReadInt32();
+                double customLifeMax = reader.ReadDouble();
 
                 if (npcIndex >= 0 && npcIndex < Main.maxNPCs && Main.npc[npcIndex] != null)
                 {
@@ -280,13 +282,14 @@ namespace Stataria
                         {
                             npcData.IsElite = isElite;
                             npcData.Level = level;
+                            npcData.CustomLifeMax = customLifeMax;
                             npcData.ApplyScaling(Main.npc[npcIndex]);
                             npcData.hasBeenScaled = true;
                         }
                     }
                     else
                     {
-                        pendingNpcScaling[npcIndex] = (isElite, level);
+                        pendingNpcScaling[npcIndex] = (isElite, level, customLifeMax);
                     }
                 }
             }
