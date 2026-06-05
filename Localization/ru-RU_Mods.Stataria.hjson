@@ -2,10 +2,10 @@ Keybinds: {
 	"Toggle Stataria UI.DisplayName": Переключить интерфейс Stataria
 	"AGI Teleport.DisplayName": Телепорт
 	"Divine Intervention.DisplayName": Божественное вмешательство
-	// "Soul Recall.DisplayName": Soul  Recall
-	// "Savage Roar.DisplayName": Savage Roar
-	// "Elemental Discharge.DisplayName": Elemental Discharge
-	// "Divine Resurrection.DisplayName": Divine  Resurrection
+	"Soul Recall.DisplayName": Отзыв души
+	"Savage Roar.DisplayName": Дикий рев
+	"Elemental Discharge.DisplayName": Элементальный разряд
+	"Divine Resurrection.DisplayName": Божественное воскрешение
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1550,8 +1550,8 @@ Configs: {
 		}
 
 		ClericAllowAuraOnNoTeam: {
-			Tooltip: When enabled, Cleric and Angel aura benefits, Soul Anchor, and Divine Resurrection will affect players on No Team (neutral) in addition to teamed teammates.
-			Label: Cleric Allow Aura On No Team
+			Tooltip: Если включено, ауры Жреца и Ангела, Якорь души и Божественное воскрешение будут также влиять на игроков без команды (нейтральных), помимо союзников.
+			Label: Разрешить ауру Жреца без команды
 		}
 
 		ClericDefensePenalty: {
@@ -1644,48 +1644,48 @@ Configs: {
 		}
 
 		NecromancerBaseSoulCapacity: {
-			// Label: Base Soul Capacity
-			// Tooltip: The starting soul reserve capacity for the Necromancer role.
+			Label: Базовая вместимость душ
+			Tooltip: Начальная вместимость запаса душ для роли Некроманта.
 		}
 
 		NecromancerSPRPerSoul: {
-			// Label: SPR Per Soul
-			// Tooltip: The number of SPR stat points required to increase soul capacity by 1.
+			Label: SPR за душу
+			Tooltip: Количество очков характеристик SPR, необходимое для увеличения вместимости душ на 1.
 		}
 
 		NecromancerBaseSoulDuration: {
-			// Label: Base Soul Duration
-			// Tooltip: The base duration in seconds that a fresh soul lasts.
+			Label: Базовая длительность души
+			Tooltip: Базовая длительность в секундах, которую существует свежая душа.
 		}
 
 		NecromancerSoulDurationPerSPR: {
-			// Label: Soul Duration Per SPR
-			// Tooltip: The amount of extra soul duration (in seconds) added per SPR point.
+			Label: Длительность души за SPR
+			Tooltip: Количество дополнительного времени существования души (в секундах), добавляемое за каждое очко SPR.
 		}
 
 		NecromancerBossSoulHarvestChance: {
-			// Label: Boss Soul Harvest Chance
-			// Tooltip: The percentage chance to harvest a soul when hitting a boss with magic or summon damage.
+			Label: Шанс сбора душ с боссов
+			Tooltip: Процентный шанс собрать душу при нанесении урона боссу магией или призывом.
 		}
 
 		NecromancerActiveThrallsLimit: {
-			// Label: Active Thralls Limit
-			// Tooltip: The maximum number of active zombie thralls you can summon at once.
+			Label: Лимит активных прислужников
+			Tooltip: Максимальное количество активных зомби-прислужников, которых вы можете призвать одновременно.
 		}
 
 		NecromancerBoneArmorDRPerThrall: {
-			// Label: Bone Armor DR Per Thrall
-			// Tooltip: The percentage damage reduction gained per active zombie thrall.
+			Label: Снижение урона от костяной брони за прислужника
+			Tooltip: Процент снижения входящего урона, получаемый за каждого активного зомби-прислужника.
 		}
 
 		NecromancerThrallBaseDamage: {
-			// Label: Thrall Base Damage
-			// Tooltip: The base attack damage of summoned zombie thralls.
+			Label: Базовый урон прислужника
+			Tooltip: Базовый урон от атак призываемых зомби-прислужников.
 		}
 
 		NecromancerThrallINTScale: {
-			// Label: Thrall INT Scale
-			// Tooltip: The percentage increase to zombie thrall attack damage per point of INT.
+			Label: Коэффициент INT прислужника
+			Tooltip: Процент увеличения урона от атак зомби-прислужника за каждое очко характеристики INT.
 		}
 
 		BerserkerBloodbathMaxDamageBonus: {
@@ -2217,18 +2217,18 @@ Buffs: {
 			+{0}% макс. здоровья
 			Получает божественную регенерацию
 			'''
-		AngelNameSelf: Angel Aura (Self)
+		AngelNameSelf: Аура Ангела (На Себя)
 		AngelTooltipSelf:
 			'''
-			You are radiating divine energy and wings of grace
-			Aura radius: {0} pixels
+			Вы излучаете божественную энергию и несете крылья грации
+			Радиус ауры: {0} пикс.
 			'''
-		AngelNameTeammate: Angel Aura
+		AngelNameTeammate: Аура Ангела
 		AngelTooltipTeammate:
 			'''
-			Within an Angel's protective aura
-			+{0}% max health
-			Receiving divine regeneration
+			Находится в защитной ауре Ангела
+			+{0}% макс. здоровья
+			Получает божественную регенерацию
 			'''
 		Description: Mods.Stataria.Buffs.ClericAuraBuff.Description
 		DisplayName: Аура Жреца
@@ -2495,15 +2495,15 @@ RoleEffects: {
 	}
 
 	Angel: {
-		MaxHealth: • +{0}% Max Health
-		DefensePenalty: • -{0}% Defense
-		ProtectAura: • Radiates protective aura (radius: {0} pixels)
-		AuraHealth: • Teammates in aura: +{0}% max health
-		SelfRegen: • Self regeneration: {0}% max health per {1}s
-		TeamRegen: • Teammate regeneration: {0}% max health per {1}s
-		Wings: • Passive - Seraphim Wings: Complete fall damage immunity and +{0}% movement speed in the air. Can fly if no wings are equipped.
-		SoulAnchor: • Passive - Soul Anchor: Allies within aura enter Spirit Form on fatal damage instead of dying. Angel gains +{0}% damage reduction while a spirit is active. Connection breaks and spirits die if Angel dies.
-		DivineResurrection: • Active - Divine Resurrection: Channel near a Spirit within aura to resurrect them with {0}% Max HP and {1}s invulnerability ({2}s cooldown).
+		MaxHealth: • +{0}% Макс. Здоровья
+		DefensePenalty: • -{0}% Защиты
+		ProtectAura: • Излучает защитную ауру (радиус: {0} пикс.)
+		AuraHealth: • Союзники в ауре: +{0}% макс. здоровья
+		SelfRegen: • Саморегенерация: {0}% макс. здоровья каждые {1}с.
+		TeamRegen: • Реген союзников: {0}% макс. здоровья каждые {1}с.
+		Wings: • Пассивное - Крылья Серафима: Полный иммунитет к урону от падения и +{0}% скорости передвижения в воздухе. Может летать, если крылья не экипированы.
+		SoulAnchor: • Пассивное - Якорь Души: Союзники в ауре при смертельном уроне входят в форму духа вместо смерти. Ангел получает +{0}% снижения урона, пока дух активен. Связь разрывается и духи погибают, если Ангел умирает.
+		DivineResurrection: • Активное - Божественное Воскрешение: Поддерживайте ченнелинг рядом с духом в ауре, чтобы воскресить его с {0}% макс. здоровья и {1} сек. неуязвимости (перезарядка {2} сек.).
 	}
 
 	Guardian: {
@@ -2521,18 +2521,18 @@ RoleEffects: {
 	}
 
 	Necromancer: {
-		// SoulReserve: • Soul Reserve: Capacity is {0} (+1 per {1} SPR)
-		// SoulDuration: • Soul Duration: Base {0}s (+{1}s per SPR)
-		// ThrallsLimit: • Active Thralls: Max {0} at a time
-		// BoneArmor: • Bone Armor: +{0}% Damage Reduction per active thrall
-		// ThrallDamage: • Thrall Attack: {0} Base Damage (+{1}% per INT)
+		SoulReserve: • Запас душ: Вместимость {0} (+1 за каждые {1} очков SPR)
+		SoulDuration: • Длительность жизни душ: Базовая {0}с (+{1}с за очко SPR)
+		ThrallsLimit: • Активные прислужники: Максимум {0} одновременно
+		BoneArmor: • Костяная броня: +{0}% снижения урона за каждого активного прислужника
+		ThrallDamage: • Атака прислужника: {0} базового урона (+{1}% за очко INT)
 	}
 
 	Berserker: {
-		// BloodbathDmg: • Bloodbath: Melee damage increases by up to +{0}% proportional to missing life
-		// BloodbathSpeed: • Bloodbath Speed: Melee speed increases by up to +{0}% proportional to missing life
-		// BloodbathImmunity: • Bloodbath Resolve: Gain knockback, Slow, Weak, Chilled, Burning, and Oozed immunity when below {0}% HP
-		// SavageRoar: • Savage Roar: For {0}s, you cannot be reduced below 1 HP, but defense is reduced to 0 ({1}s cooldown)
+		BloodbathDmg: • Кровавая баня: Увеличивает урон в ближнем бою до +{0}% пропорционально потерянному здоровью
+		BloodbathSpeed: • Скорость кровавой бани: Увеличивает скорость атаки ближнего боя до +{0}% пропорционально потерянному здоровью
+		BloodbathImmunity: • Решимость кровавой бани: Дает иммунитет к отбрасыванию, замедлению, слабости, охлаждению, горению и слизи при здоровье ниже {0}%
+		SavageRoar: • Дикий рев: На {0} сек. ваше здоровье не может упасть ниже 1 HP, но защита снижается до 0 (перезарядка {1} сек.)
 	}
 
 	Spellweaver: {
@@ -2613,9 +2613,11 @@ UI: {
 		LockedRole: ЗАБЛОКИРОВАНО - Нужно Перерождение 2
 		SwitchCostButton: СМЕНИТЬ - Стоит: {0} ОП
 		SelectFreeButton: ВЫБРАТЬ (Бесплатно)
-		AscendButton: ASCEND
-		AscendRequirements: Requires Rebirth {0} & {1} RP
-		AscendReady: Ready to Ascend! Click to evolve into the Angel.
+		AscendButton: ВОЗВЫСИТЬСЯ
+		AscendRequirements: Требуется Перерождение {0} и {1} ОП
+		AscendReady: Готов к возвышению! Нажмите, чтобы превратиться в Ангела.
+		ConfirmSwitch: ПОДТВЕРДИТЬ?
+		ConfirmAscend: ПОДТВЕРДИТЬ?
 	}
 
 	Socketing: {
@@ -2626,6 +2628,7 @@ UI: {
 		CompatibleCoresTitle: Совместимые Ядра
 		AttachedCoresTitle: Вставленные Ядра:
 		ExpandSlotButton: Расширить Слот
+		ConfirmExpand: Подтвердить?
 		CostNone: Цена: --- ОП
 		AttachCoreButton: Вставить Ядро
 		ExtractCoreButton: Извлечь Ядро
@@ -2659,6 +2662,7 @@ UI: {
 		RequireLevelPrompt: Требуется уровень {0}!
 		ConfirmRebirthPrompt: Вы уверены, что хотите совершить Перерождение?
 		ConfirmRebirth: Подтвердить Перерождение
+		ConfirmReset: ПОДТВЕРДИТЬ?
 		UnknownStat: Неизвестный Стат
 		XPInfoTitle: Инфо о Системе Опыта:
 		StatPointsPerLevelBonus: Очков Статов за Уровень: {0} + {1} (Бонус Перерождения) = {2}
@@ -2885,10 +2889,10 @@ RoleName: {
 	BlackKnight: Черный Рыцарь
 	Cleric: Жрец
 	Guardian: Страж
-	// Necromancer: Necromancer
-	// Berserker: Berserker
-	// Spellweaver: Spellweaver
-	Angel: Angel
+	Necromancer: Некромант
+	Berserker: Берсерк
+	Spellweaver: Чародей
+	Angel: Ангел
 }
 
 RoleDescription: {
@@ -2899,10 +2903,10 @@ RoleDescription: {
 	BlackKnight: Универсальный воин-маг. Смешивает боевое мастерство и магию, получая невероятную синергию меча и заклинаний.
 	Cleric: Божественный целитель. Защищает и усиливает союзников внутри своей священной ауры, жертвуя собственной защитой ради команды.
 	Guardian: Непоколебимый защитник. Укрывает союзников от вреда, разделяя их бремя и отражая урон обратно в атакующих.
-	// Necromancer: A tactical commander who raises invincible zombie thralls and conserves their lifetimes in a unique soul reserve.
-	// Berserker: A high-risk frontline fighter who gets faster and deadlier as their health drops.
-	// Spellweaver: An elemental combatant who channels spells to build massive combo discharges while shielding themselves with mana.
-	Angel: An ascended Cleric who gains wings and commands the boundary of life and death, reviving fallen teammates and shielding them in a powerful aura.
+	Necromancer: Тактический командир, который поднимает непобедимых зомби-прислужников и сохраняет их жизненное время в уникальном запасе душ.
+	Berserker: Высокорисковый боец передовой, который становится быстрее и смертоноснее по мере падения своего здоровья.
+	Spellweaver: Боец стихий, направляющий заклинания для накопления мощных комбо-выбросов, одновременно защищая себя маной.
+	Angel: Вознесшийся Жрец, обретший крылья и управляющий границей жизни и смерти, воскрешающий павших союзников и защищающий их мощной аурой.
 }
 
 RoleFlavorText: {
@@ -2913,15 +2917,15 @@ RoleFlavorText: {
 	BlackKnight: Сталь и волшебство едины. Пусть магия заряжает клинок, а клинок фокусирует магию.
 	Cleric: Прими свое призвание как маяк надежды. Твоя сила не в стали, а в божественной защите, которую ты даришь другим.
 	Guardian: Стань несокрушимым щитом. Пусть боль твоих союзников станет твоей силой, а твоя решимость — их спасением.
-	// Necromancer: Commanded thralls, rise and fall at my whim - your very lifetime is mine to command and conserve.
-	// Berserker: Feed the rage, ignore the pain - the closer you are to death, the closer your enemies are to theirs.
-	// Spellweaver: Weave the elements, command the storm - let your mana shield your body, and let your discharge consume the battlefield.
-	Angel: Evolve beyond mortality - look down from on high with wings of grace, holding the anchor of your allies' souls.
+	Necromancer: Повинующиеся слуги, восстаньте и падите по моей прихоти — само ваше время жизни принадлежит мне для управления и сохранения.
+	Berserker: Питай ярость, игнорируй боль — чем ты ближе к смерти, тем ближе к ней твои враги.
+	Spellweaver: Тки стихии, повелевай бурей — пусть мана защищает твое тело, а твой разряд поглотит поле битвы.
+	Angel: Эволюционируй за пределы смертности — смотри свысока с крыльями грации, удерживая якорь душ твоих союзников.
 }
 
 DeathMessage: {
-	SoulAnchorBroken: "{0}'s soul anchor was severed!"
-	SpiritFormExpired: "{0}'s spirit form faded away..."
+	SoulAnchorBroken: Якорь души игрока {0} был разорван!
+	SpiritFormExpired: Духовная форма игрока {0} рассеялась...
 }
 
 Logging: {
@@ -2957,6 +2961,6 @@ Logging: {
 }
 
 Projectiles: {
-	// ZombieThrallProjectile.DisplayName: Zombie Thrall Projectile
-	// ElementalDischargeProjectile.DisplayName: Elemental Discharge Projectile
+	ZombieThrallProjectile.DisplayName: Зомби-прислужник
+	ElementalDischargeProjectile.DisplayName: Элементальный разряд
 }

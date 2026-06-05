@@ -26,6 +26,7 @@ namespace Stataria
         private bool dragging = false;
         private Vector2 offset;
         private bool showHiddenAbilities = false;
+        private bool resetConfirmationShown = false;
 
         private const float MaxVisibleHeight = 600f;
         private float desiredWidth = 500f;
@@ -69,13 +70,13 @@ namespace Stataria
 
             abilityList = new UIList();
             abilityList.Width.Set(-25f, 1f);
-            abilityList.Height.Set(-120f, 1f);
+            abilityList.Height.Set(-150f, 1f);
             abilityList.Top.Set(70f, 0f);
             abilityList.ListPadding = 10f;
             skillPanel.Append(abilityList);
 
             scrollbar = new UIScrollbar();
-            scrollbar.Height.Set(-140f, 1f);
+            scrollbar.Height.Set(-170f, 1f);
             scrollbar.Top.Set(70f, 0f);
             scrollbar.Left.Set(-20f, 1f);
             skillPanel.Append(scrollbar);
@@ -85,10 +86,20 @@ namespace Stataria
             resetAbilitiesButton.Width.Set(80f, 0f);
             resetAbilitiesButton.Height.Set(30f, 0f);
             resetAbilitiesButton.Top.Set(10f, 0f);
-            resetAbilitiesButton.Left.Set(skillPanel.Width.Pixels - 100f, 0f);
+            resetAbilitiesButton.HAlign = 1f;
+            resetAbilitiesButton.Left.Set(-10f, 0f);
             resetAbilitiesButton.BackgroundColor = new Color(180, 80, 80, 255);
             resetAbilitiesButton.OnLeftClick += (evt, el) =>
             {
+                if (!resetConfirmationShown)
+                {
+                    resetConfirmationShown = true;
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                    resetAbilitiesButton.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.ConfirmReset"), 0.9f, false);
+                    return;
+                }
+                resetConfirmationShown = false;
+                resetAbilitiesButton.SetText(Language.GetText("Mods.Stataria.UI.SkillTree.ResetButton"), 0.9f, false);
                 ResetAllAbilities();
                 SoundEngine.PlaySound(SoundID.MenuClose);
             };
@@ -97,7 +108,7 @@ namespace Stataria
             showHiddenButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.SkillTree.ShowHidden"), 0.9f, false);
             showHiddenButton.Width.Set(120f, 0f);
             showHiddenButton.Height.Set(30f, 0f);
-            showHiddenButton.Top.Set(-60f, 1f);
+            showHiddenButton.Top.Set(-45f, 1f);
             showHiddenButton.HAlign = 0.5f;
             showHiddenButton.BackgroundColor = new Color(100, 100, 100, 200);
             showHiddenButton.BorderColor = new Color(150, 150, 150, 200);
@@ -113,6 +124,8 @@ namespace Stataria
 
         private bool IsClickingOnInteractiveElement(Vector2 mousePosition)
         {
+            if (abilityList?.ContainsPoint(mousePosition) == true)
+                return true;
             if (resetAbilitiesButton?.ContainsPoint(mousePosition) == true)
                 return true;
             if (showHiddenButton?.ContainsPoint(mousePosition) == true)
@@ -349,9 +362,27 @@ namespace Stataria
                 rpg.SyncAbilities();
         }
 
+        public void ResetConfirmation()
+        {
+            if (resetConfirmationShown)
+            {
+                resetConfirmationShown = false;
+                resetAbilitiesButton?.SetText(Language.GetText("Mods.Stataria.UI.SkillTree.ResetButton"), 0.9f, false);
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if (resetConfirmationShown && Main.mouseLeft)
+            {
+                if (resetAbilitiesButton == null || !resetAbilitiesButton.ContainsPoint(Main.MouseScreen))
+                {
+                    resetConfirmationShown = false;
+                    resetAbilitiesButton.SetText(Language.GetText("Mods.Stataria.UI.SkillTree.ResetButton"), 0.9f, false);
+                }
+            }
 
             if (skillPanel.ContainsPoint(Main.MouseScreen))
                 Main.LocalPlayer.mouseInterface = true;

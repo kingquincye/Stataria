@@ -2,10 +2,10 @@ Keybinds: {
 	"Toggle Stataria UI.DisplayName": 切换 Stataria 界面
 	"AGI Teleport.DisplayName": 传送
 	"Divine Intervention.DisplayName": 神圣干涉
-	// "Soul Recall.DisplayName": Soul  Recall
-	// "Savage Roar.DisplayName": Savage Roar
-	// "Elemental Discharge.DisplayName": Elemental Discharge
-	// "Divine Resurrection.DisplayName": Divine  Resurrection
+	"Soul Recall.DisplayName": 灵魂召回
+	"Savage Roar.DisplayName": 野性咆哮
+	"Elemental Discharge.DisplayName": 元素释放
+	"Divine Resurrection.DisplayName": 神圣复活
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1550,8 +1550,8 @@ Configs: {
 		}
 
 		ClericAllowAuraOnNoTeam: {
-			Tooltip: When enabled, Cleric and Angel aura benefits, Soul Anchor, and Divine Resurrection will affect players on No Team (neutral) in addition to teamed teammates.
-			Label: Cleric Allow Aura On No Team
+			Tooltip: 开启后，牧师和天使的光环效果、灵魂之锚以及神圣复活除了作用于同队队友外，还会作用于处于无队伍状态（中立）的玩家。
+			Label: 无队伍时允许牧师光环
 		}
 
 		ClericDefensePenalty: {
@@ -1644,48 +1644,48 @@ Configs: {
 		}
 
 		NecromancerBaseSoulCapacity: {
-			// Label: Base Soul Capacity
-			// Tooltip: The starting soul reserve capacity for the Necromancer role.
+			Label: 基础灵魂容量
+			Tooltip: 死灵法师职业的初始灵魂储备容量。
 		}
 
 		NecromancerSPRPerSoul: {
-			// Label: SPR Per Soul
-			// Tooltip: The number of SPR stat points required to increase soul capacity by 1.
+			Label: 灵魂所需SPR
+			Tooltip: 每增加1个灵魂容量所需的SPR属性点数。
 		}
 
 		NecromancerBaseSoulDuration: {
-			// Label: Base Soul Duration
-			// Tooltip: The base duration in seconds that a fresh soul lasts.
+			Label: 基础灵魂持续时间
+			Tooltip: 新收获的灵魂持续的基础时间（秒）。
 		}
 
 		NecromancerSoulDurationPerSPR: {
-			// Label: Soul Duration Per SPR
-			// Tooltip: The amount of extra soul duration (in seconds) added per SPR point.
+			Label: 灵魂持续时间SPR加成
+			Tooltip: 每点SPR属性增加的额外灵魂持续时间（秒）。
 		}
 
 		NecromancerBossSoulHarvestChance: {
-			// Label: Boss Soul Harvest Chance
-			// Tooltip: The percentage chance to harvest a soul when hitting a boss with magic or summon damage.
+			Label: 首领灵魂收获概率
+			Tooltip: 使用魔法或召唤伤害击中首领时，收获灵魂的百分比概率。
 		}
 
 		NecromancerActiveThrallsLimit: {
-			// Label: Active Thralls Limit
-			// Tooltip: The maximum number of active zombie thralls you can summon at once.
+			Label: 活跃奴仆上限
+			Tooltip: 你同时可以召唤的活跃僵尸奴仆的最大数量。
 		}
 
 		NecromancerBoneArmorDRPerThrall: {
-			// Label: Bone Armor DR Per Thrall
-			// Tooltip: The percentage damage reduction gained per active zombie thrall.
+			Label: 每个奴仆骨甲DR
+			Tooltip: 每个活跃的僵尸奴仆所提供的伤害减免百分比。
 		}
 
 		NecromancerThrallBaseDamage: {
-			// Label: Thrall Base Damage
-			// Tooltip: The base attack damage of summoned zombie thralls.
+			Label: 奴仆基础伤害
+			Tooltip: 召唤的僵尸奴仆的基础攻击伤害。
 		}
 
 		NecromancerThrallINTScale: {
-			// Label: Thrall INT Scale
-			// Tooltip: The percentage increase to zombie thrall attack damage per point of INT.
+			Label: 奴仆INT加成比例
+			Tooltip: 每点INT属性对僵尸奴仆攻击伤害的提升百分比。
 		}
 
 		BerserkerBloodbathMaxDamageBonus: {
@@ -2217,18 +2217,18 @@ Buffs: {
 			+{0}% 最大生命值
 			接受神圣的恢复之力
 			'''
-		AngelNameSelf: Angel Aura (Self)
+		AngelNameSelf: 天使光环 (自身)
 		AngelTooltipSelf:
 			'''
-			You are radiating divine energy and wings of grace
-			Aura radius: {0} pixels
+			您正散发着神圣的能量与优雅之翼
+			光环半径: {0} 像素
 			'''
-		AngelNameTeammate: Angel Aura
+		AngelNameTeammate: 天使光环
 		AngelTooltipTeammate:
 			'''
-			Within an Angel's protective aura
-			+{0}% max health
-			Receiving divine regeneration
+			身处天使的保护光环内
+			+{0}% 最大生命值
+			接受神圣的生命恢复效果
 			'''
 		Description: Mods.Stataria.Buffs.ClericAuraBuff.Description
 		DisplayName: 牧师光环
@@ -2495,15 +2495,15 @@ RoleEffects: {
 	}
 
 	Angel: {
-		MaxHealth: • +{0}% Max Health
-		DefensePenalty: • -{0}% Defense
-		ProtectAura: • Radiates protective aura (radius: {0} pixels)
-		AuraHealth: • Teammates in aura: +{0}% max health
-		SelfRegen: • Self regeneration: {0}% max health per {1}s
-		TeamRegen: • Teammate regeneration: {0}% max health per {1}s
-		Wings: • Passive - Seraphim Wings: Complete fall damage immunity and +{0}% movement speed in the air. Can fly if no wings are equipped.
-		SoulAnchor: • Passive - Soul Anchor: Allies within aura enter Spirit Form on fatal damage instead of dying. Angel gains +{0}% damage reduction while a spirit is active. Connection breaks and spirits die if Angel dies.
-		DivineResurrection: • Active - Divine Resurrection: Channel near a Spirit within aura to resurrect them with {0}% Max HP and {1}s invulnerability ({2}s cooldown).
+		MaxHealth: • +{0}% 最大生命值
+		DefensePenalty: • -{0}% 防御力
+		ProtectAura: • 散发保护光环 (半径: {0} 像素)
+		AuraHealth: • 光环内的队友: +{0}% 最大生命值
+		SelfRegen: • 自我生命恢复: 每 {1} 秒恢复 {0}% 最大生命值
+		TeamRegen: • 队友生命恢复: 每 {1} 秒恢复 {0}% 最大生命值
+		Wings: • 被动 - 炽天使之翼: 完全免疫坠落伤害，并在空中获得 +{0}% 移动速度加成。未装备任何翅膀时亦可飞行。
+		SoulAnchor: • 被动 - 灵魂锚点: 光环内的盟友受到致命伤害时会进入灵魂形态而非死亡。灵魂激活期间，天使获得 +{0}% 伤害减免。天使死亡时该连接断开且灵魂死亡。
+		DivineResurrection: • 主动 - 神圣复活: 在光环内的灵魂附近引导施法，以 {0}% 的最大生命值复活他们并获得 {1} 秒无敌时间（冷却时间 {2} 秒）。
 	}
 
 	Guardian: {
@@ -2521,18 +2521,18 @@ RoleEffects: {
 	}
 
 	Necromancer: {
-		// SoulReserve: • Soul Reserve: Capacity is {0} (+1 per {1} SPR)
-		// SoulDuration: • Soul Duration: Base {0}s (+{1}s per SPR)
-		// ThrallsLimit: • Active Thralls: Max {0} at a time
-		// BoneArmor: • Bone Armor: +{0}% Damage Reduction per active thrall
-		// ThrallDamage: • Thrall Attack: {0} Base Damage (+{1}% per INT)
+		SoulReserve: • 灵魂储备: 容量为 {0} (每拥有 {1} 点 SPR 增加 1)
+		SoulDuration: • 灵魂持续时间: 基础 {0} 秒 (每点 SPR 增加 +{1} 秒)
+		ThrallsLimit: • 活跃奴仆: 同时最多存在 {0} 个
+		BoneArmor: • 骨甲: 每个活跃奴仆提供 +{0}% 伤害减免
+		ThrallDamage: • 奴仆攻击: {0} 基础伤害 (每点 INT 增加 +{1}%)
 	}
 
 	Berserker: {
-		// BloodbathDmg: • Bloodbath: Melee damage increases by up to +{0}% proportional to missing life
-		// BloodbathSpeed: • Bloodbath Speed: Melee speed increases by up to +{0}% proportional to missing life
-		// BloodbathImmunity: • Bloodbath Resolve: Gain knockback, Slow, Weak, Chilled, Burning, and Oozed immunity when below {0}% HP
-		// SavageRoar: • Savage Roar: For {0}s, you cannot be reduced below 1 HP, but defense is reduced to 0 ({1}s cooldown)
+		BloodbathDmg: • 浴血奋战: 近战伤害提升最多 +{0}%，与失去的生命值成正比
+		BloodbathSpeed: • 浴血之速: 近战速度提升最多 +{0}%，与失去的生命值成正比
+		BloodbathImmunity: • 浴血决意: 生命值低于 {0}% 时免疫击退、缓慢、虚弱、冷冻、燃烧和油污
+		SavageRoar: • 野性咆哮: 持续 {0} 秒内生命值不会降至 1 以下，但防御力降至 0 (冷却时间 {1} 秒)
 	}
 
 	Spellweaver: {
@@ -2613,9 +2613,11 @@ UI: {
 		LockedRole: 未解锁 - 需要转生 2 次
 		SwitchCostButton: 切换职业 - 消耗: {0} RP
 		SelectFreeButton: 选择职业 (免费)
-		AscendButton: ASCEND
-		AscendRequirements: Requires Rebirth {0} & {1} RP
-		AscendReady: Ready to Ascend! Click to evolve into the Angel.
+		AscendButton: 飞升
+		AscendRequirements: 需要转生 {0} 且拥有 {1} RP
+		AscendReady: 准备好飞升了！点击进化为天使。
+		ConfirmSwitch: 确认切换？
+		ConfirmAscend: 确认飞升？
 	}
 
 	Socketing: {
@@ -2626,6 +2628,7 @@ UI: {
 		CompatibleCoresTitle: 兼容的核心
 		AttachedCoresTitle: 已附着核心:
 		ExpandSlotButton: 扩充孔位
+		ConfirmExpand: 确认扩充？
 		CostNone: 消耗: --- RP
 		AttachCoreButton: 镶嵌核心
 		ExtractCoreButton: 提取核心
@@ -2659,6 +2662,7 @@ UI: {
 		RequireLevelPrompt: 需要达到等级 {0}！
 		ConfirmRebirthPrompt: 您确定要进行转生吗？
 		ConfirmRebirth: 确认转生
+		ConfirmReset: 确认重置？
 		UnknownStat: 未知属性
 		XPInfoTitle: 经验系统信息:
 		StatPointsPerLevelBonus: 每级属性点: {0} + {1} (转生加成) = {2}
@@ -2885,10 +2889,10 @@ RoleName: {
 	BlackKnight: 黑骑士
 	Cleric: 牧师
 	Guardian: 守护者
-	// Necromancer: Necromancer
-	// Berserker: Berserker
-	// Spellweaver: Spellweaver
-	Angel: Angel
+	Necromancer: 死灵法师
+	Berserker: 狂战士
+	Spellweaver: 织法者
+	Angel: 天使
 }
 
 RoleDescription: {
@@ -2899,10 +2903,10 @@ RoleDescription: {
 	BlackKnight: 全能的魔剑士。将武艺与奥术完美融合，在剑与魔法的协同作用中汲取力量。
 	Cleric: 神圣的治疗者。在神圣光环内保护并强化盟友，不惜牺牲自身的防御来换取团队的生存。
 	Guardian: 坚不可摧的庇护者。通过分担盟友受到的伤害并将痛楚反弹给攻击者，牢牢护住身后的同伴。
-	// Necromancer: A tactical commander who raises invincible zombie thralls and conserves their lifetimes in a unique soul reserve.
-	// Berserker: A high-risk frontline fighter who gets faster and deadlier as their health drops.
-	// Spellweaver: An elemental combatant who channels spells to build massive combo discharges while shielding themselves with mana.
-	// Angel: An ascended Cleric who gains wings and commands the boundary of life and death, reviving fallen teammates and shielding them in a powerful aura.
+	Necromancer: 战术指挥官，能唤醒无敌的僵尸奴仆，并在独特的灵魂池中保存它们的生命周期。
+	Berserker: 高风险的近战战士，生命值越低，速度越快、致命性越高。
+	Spellweaver: 元素战斗人员，通过引导法术积累庞大的组合释放，同时用法力保护自己。
+	Angel: 飞升的牧师，获得了双翼并掌控生死边界，能复活倒下的队友并在强大的光环中庇护他们。
 }
 
 RoleFlavorText: {
@@ -2913,15 +2917,15 @@ RoleFlavorText: {
 	BlackKnight: 钢铁与法术的交响——让魔法为利刃充能，让利刃成为魔法的焦点。
 	Cleric: 接受作为希望灯塔的使命吧——你的力量不在于冰冷的钢铁，而在于你赐予他人的神圣庇护。
 	Guardian: 化身不可撼动之盾。让盟友的痛苦转化为你的力量，让你的决意成为他们最终的救赎。
-	// Necromancer: Commanded thralls, rise and fall at my whim - your very lifetime is mine to command and conserve.
-	// Berserker: Feed the rage, ignore the pain - the closer you are to death, the closer your enemies are to theirs.
-	// Spellweaver: Weave the elements, command the storm - let your mana shield your body, and let your discharge consume the battlefield.
-	Angel: Evolve beyond mortality - look down from on high with wings of grace, holding the anchor of your allies' souls.
+	Necromancer: 受我驱使的奴仆，随我心意起伏——你们的生命皆由我掌控与保留。
+	Berserker: 释放狂怒，忘却痛苦——离死亡越近，你的敌人就离他们的死期越近。
+	Spellweaver: 编织元素，掌控风暴——让法力护卫你的身躯，让能量释放吞噬战场。
+	Angel: 超脱凡尘——从高空以优雅的双翼俯瞰，维系着盟友灵魂的锚点。
 }
 
 DeathMessage: {
-	SoulAnchorBroken: "{0}'s soul anchor was severed!"
-	SpiritFormExpired: "{0}'s spirit form faded away..."
+	SoulAnchorBroken: "{0}的灵魂锚点被折断了！"
+	SpiritFormExpired: "{0}的灵魂形态消散了..."
 }
 
 Logging: {
@@ -2957,6 +2961,6 @@ Logging: {
 }
 
 Projectiles: {
-	// ZombieThrallProjectile.DisplayName: Zombie Thrall Projectile
-	// ElementalDischargeProjectile.DisplayName: Elemental Discharge Projectile
+	ZombieThrallProjectile.DisplayName: 僵尸奴仆
+	ElementalDischargeProjectile.DisplayName: 元素释放
 }

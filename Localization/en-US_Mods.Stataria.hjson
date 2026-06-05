@@ -2616,6 +2616,8 @@ UI: {
 		AscendButton: ASCEND
 		AscendRequirements: Requires Rebirth {0} & {1} RP
 		AscendReady: Ready to Ascend! Click to evolve into the Angel.
+		ConfirmSwitch: CONFIRM?
+		ConfirmAscend: CONFIRM?
 	}
 
 	Socketing: {
@@ -2626,6 +2628,7 @@ UI: {
 		CompatibleCoresTitle: Compatible Cores
 		AttachedCoresTitle: Attached Cores:
 		ExpandSlotButton: Expand Slot
+		ConfirmExpand: Confirm?
 		CostNone: Cost: --- RP
 		AttachCoreButton: Attach Core
 		ExtractCoreButton: Extract Core
@@ -2659,6 +2662,7 @@ UI: {
 		RequireLevelPrompt: Requires level {0}!
 		ConfirmRebirthPrompt: Are you sure you want to Rebirth?
 		ConfirmRebirth: Confirm Rebirth
+		ConfirmReset: Confirm Reset
 		UnknownStat: Unknown Stat
 		XPInfoTitle: XP System Info:
 		StatPointsPerLevelBonus: Stat Points per Level: {0} + {1} (Rebirth Bonus) = {2}

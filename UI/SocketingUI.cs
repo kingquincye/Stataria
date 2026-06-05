@@ -41,6 +41,7 @@ namespace Stataria
 
         private SocketedCore? selectedAttachedCore;
         private (CoreType type, int tier)? selectedCompatibleCore;
+        private bool expandConfirmationShown = false;
 
         private const float desiredWidth = 800f;
         private const float desiredHeight = 600f;
@@ -243,6 +244,7 @@ namespace Stataria
         {
             selectedCompatibleCore = null;
             selectedAttachedCore = null;
+            expandConfirmationShown = false;
             RefreshUI();
         }
 
@@ -262,6 +264,15 @@ namespace Stataria
             int cost = socketingData.GetExpandCost();
             if (rpg.RebirthPoints < cost) return;
 
+            if (!expandConfirmationShown)
+            {
+                expandConfirmationShown = true;
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                RefreshUI();
+                return;
+            }
+
+            expandConfirmationShown = false;
             rpg.RebirthPoints -= cost;
             socketingData.ExpandSlots();
 
@@ -278,6 +289,7 @@ namespace Stataria
 
         private void OnAttachClick(UIMouseEvent evt, UIElement listeningElement)
         {
+            expandConfirmationShown = false;
             if (!selectedCompatibleCore.HasValue) return;
 
             Player player = Main.LocalPlayer;
@@ -308,6 +320,7 @@ namespace Stataria
 
         private void OnExtractClick(UIMouseEvent evt, UIElement listeningElement)
         {
+            expandConfirmationShown = false;
             if (!selectedAttachedCore.HasValue) return;
 
             Player player = Main.LocalPlayer;
@@ -446,6 +459,8 @@ namespace Stataria
             {
                 itemNameText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.ItemNone"));
                 slotsText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.SlotsNone"));
+                expandConfirmationShown = false;
+                expandButton.SetText(Language.GetText("Mods.Stataria.UI.Socketing.ExpandSlotButton"), 1f, false);
 
                 compatibleCoresList.Clear();
                 var placeholderText = new UIText(Language.GetText("Mods.Stataria.UI.Socketing.PlaceholderCores"), 0.9f);
@@ -477,6 +492,15 @@ namespace Stataria
             RefreshAttachedCores(socketingData);
 
             UpdateButtonStates(true, selectedCompatibleCore.HasValue, selectedAttachedCore.HasValue);
+
+            if (expandConfirmationShown)
+            {
+                expandButton.SetText(Language.GetText("Mods.Stataria.UI.Socketing.ConfirmExpand"), 1f, false);
+            }
+            else
+            {
+                expandButton.SetText(Language.GetText("Mods.Stataria.UI.Socketing.ExpandSlotButton"), 1f, false);
+            }
 
             var config = ModContent.GetInstance<StatariaConfig>().socketingSystem;
             expandCostText.SetText(Language.GetText("Mods.Stataria.UI.Socketing.CostRP").WithFormatArgs(socketingData.GetExpandCost()));
@@ -531,6 +555,7 @@ namespace Stataria
 
             panel.OnLeftClick += (evt, el) =>
             {
+                expandConfirmationShown = false;
                 if (selectedCompatibleCore?.type == type && selectedCompatibleCore?.tier == tier)
                 {
                     selectedCompatibleCore = null;
@@ -589,6 +614,7 @@ namespace Stataria
 
             panel.OnLeftClick += (evt, el) =>
             {
+                expandConfirmationShown = false;
                 if (selectedAttachedCore?.Type == core.Type && selectedAttachedCore?.Tier == core.Tier)
                 {
                     selectedAttachedCore = null;
@@ -687,12 +713,12 @@ namespace Stataria
                 {
                     compatibleCoresPanel.Width.Set(compatibleWidth, 0f);
                     compatibleCoresPanel.Left.Set(-compatibleWidth - 10f, 1f);
-                    compatibleCoresPanel.Height.Set(Math.Max(200f, targetHeight - 120f), 0f);
+                    compatibleCoresPanel.Height.Set(Math.Max(150f, targetHeight - 190f), 0f);
                 }
 
                 if (attachedCoresList != null)
                 {
-                    attachedCoresList.Width.Set(leftWidth, 0f);
+                    attachedCoresList.Width.Set(leftWidth - 30f, 0f);
                     attachedCoresList.Height.Set(Math.Max(80f, targetHeight - 325f), 0f);
                 }
 
@@ -727,9 +753,27 @@ namespace Stataria
             base.Recalculate();
         }
 
+        public void ResetConfirmation()
+        {
+            if (expandConfirmationShown)
+            {
+                expandConfirmationShown = false;
+                RefreshUI();
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if (expandConfirmationShown && Main.mouseLeft)
+            {
+                if (expandButton == null || !expandButton.ContainsPoint(Main.MouseScreen))
+                {
+                    expandConfirmationShown = false;
+                    RefreshUI();
+                }
+            }
 
             if (!SocketingItemSlot.IsAir != !lastItem.IsAir ||
                 SocketingItemSlot.type != lastItem.type ||

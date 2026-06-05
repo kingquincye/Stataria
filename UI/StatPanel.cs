@@ -36,6 +36,7 @@ namespace Stataria
         private bool autoAllocationEnabled = false;
 
         private UITextPanel<LocalizedText> resetButton;
+        private bool resetConfirmationShown = false;
         private float[] holdTimers;
         private float[] holdTimersDown;
         private const float buttonRepeatDelay = 0.15f;
@@ -1222,6 +1223,21 @@ namespace Stataria
             }
         }
 
+        public void ResetConfirmation()
+        {
+            if (rebirthConfirmationShown)
+            {
+                rebirthConfirmationShown = false;
+                statPanel.RemoveChild(rebirthConfirmationText);
+                rebirthButton?.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.Rebirth"), 0.9f, large: false);
+            }
+            if (resetConfirmationShown)
+            {
+                resetConfirmationShown = false;
+                resetButton?.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.ResetStats"), 0.9f, false);
+            }
+        }
+
         private void UpdateAutoButton()
         {
             if (autoAllocationEnabled)
@@ -1510,6 +1526,17 @@ namespace Stataria
                 return;
             }
 
+            if (!resetConfirmationShown)
+            {
+                resetConfirmationShown = true;
+                SoundEngine.PlaySound(SoundID.MenuTick);
+                resetButton.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.ConfirmReset"), 0.9f, false);
+                return;
+            }
+
+            resetConfirmationShown = false;
+            resetButton.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.ResetStats"), 0.9f, false);
+
             var activeStats = GetActiveStats();
 
             int total = 0;
@@ -1683,6 +1710,14 @@ namespace Stataria
                 rebirthConfirmationShown = false;
                 statPanel.RemoveChild(rebirthConfirmationText);
                 rebirthButton.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.Rebirth"), 0.9f, large: false);
+            }
+
+            if (resetConfirmationShown &&
+                ((Main.mouseLeft && !resetButton.ContainsPoint(Main.MouseScreen)) ||
+                Main.gameMenu))
+            {
+                resetConfirmationShown = false;
+                resetButton.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.ResetStats"), 0.9f, false);
             }
 
 

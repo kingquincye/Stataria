@@ -136,6 +136,12 @@ namespace Stataria
                 rpg.LastActiveTab = newTab;
             }
 
+            // Reset confirmations on tab switch
+            StatariaUI.Panel?.ResetConfirmation();
+            StatariaUI.RoleSelectionPanel?.ResetConfirmation();
+            StatariaUI.SocketingPanel?.ResetConfirmation();
+            StatariaUI.SkillTreePanel?.ResetConfirmation();
+
             UpdateTabAppearance();
 
             switch (newTab)

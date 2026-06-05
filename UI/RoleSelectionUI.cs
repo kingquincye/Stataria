@@ -33,6 +33,9 @@ namespace Stataria
 
         private bool dragging = false;
         private Vector2 offset;
+        private string confirmRoleID = null;
+        private bool confirmAscend = false;
+        private UIElement activeConfirmButton = null;
 
         public override void OnInitialize()
         {
@@ -271,7 +274,8 @@ namespace Stataria
                     int requiredPoints = config.roleSettings.AngelUnlockCost;
                     bool meetsRequirements = rpg.RebirthCount >= requiredRebirths && rpg.RebirthPoints >= requiredPoints;
 
-                    var ascendButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.RoleSelection.AscendButton"), 1f, false);
+                    LocalizedText buttonText = confirmAscend ? Language.GetText("Mods.Stataria.UI.RoleSelection.ConfirmAscend") : Language.GetText("Mods.Stataria.UI.RoleSelection.AscendButton");
+                    var ascendButton = new UITextPanel<LocalizedText>(buttonText, 1f, false);
                     ascendButton.Width.Set(180f, 0f);
                     ascendButton.Height.Set(35f, 0f);
                     ascendButton.HAlign = 0.5f;
@@ -287,6 +291,17 @@ namespace Stataria
 
                         ascendButton.OnLeftClick += (evt, el) =>
                         {
+                            if (!confirmAscend)
+                            {
+                                confirmAscend = true;
+                                confirmRoleID = null;
+                                activeConfirmButton = ascendButton;
+                                SoundEngine.PlaySound(SoundID.MenuTick);
+                                RefreshRolesList();
+                                return;
+                            }
+                            confirmAscend = false;
+                            activeConfirmButton = null;
                             rpg.RebirthPoints -= requiredPoints;
                             rpg.AscendedRoles.Add("Cleric");
                             rpg.UpdateAscendedRoleProperties();
@@ -376,7 +391,7 @@ namespace Stataria
             else
             {
                 int cost = role.GetCurrentSwitchCost(rpg);
-                LocalizedText buttonText = cost > 0 ? Language.GetText("Mods.Stataria.UI.RoleSelection.SwitchCostButton").WithFormatArgs(cost) : Language.GetText("Mods.Stataria.UI.RoleSelection.SelectFreeButton");
+                LocalizedText buttonText = confirmRoleID == role.ID ? Language.GetText("Mods.Stataria.UI.RoleSelection.ConfirmSwitch") : (cost > 0 ? Language.GetText("Mods.Stataria.UI.RoleSelection.SwitchCostButton").WithFormatArgs(cost) : Language.GetText("Mods.Stataria.UI.RoleSelection.SelectFreeButton"));
 
                 var switchButton = new UITextPanel<LocalizedText>(buttonText, 1f, false);
                 switchButton.Width.Set(250f, 0f);
@@ -390,6 +405,17 @@ namespace Stataria
                     switchButton.BorderColor = new Color(100, 200, 100, 255);
                     switchButton.OnLeftClick += (evt, el) =>
                     {
+                        if (confirmRoleID != role.ID)
+                        {
+                            confirmRoleID = role.ID;
+                            confirmAscend = false;
+                            activeConfirmButton = switchButton;
+                            SoundEngine.PlaySound(SoundID.MenuTick);
+                            RefreshRolesList();
+                            return;
+                        }
+                        confirmRoleID = null;
+                        activeConfirmButton = null;
                         if (rpg.SwitchToRole(role.ID))
                         {
                             SoundEngine.PlaySound(SoundID.Research);
@@ -412,17 +438,8 @@ namespace Stataria
 
         private bool IsClickingOnInteractiveElement(Vector2 mousePosition)
         {
-            foreach (var child in rolesList._items)
-            {
-                if (child is UIPanel rolePanel)
-                {
-                    foreach (var panelChild in rolePanel.Children)
-                    {
-                        if (panelChild is UITextPanel<LocalizedText> button && button.ContainsPoint(mousePosition))
-                            return true;
-                    }
-                }
-            }
+            if (rolesList?.ContainsPoint(mousePosition) == true)
+                return true;
 
             if (scrollbar?.ContainsPoint(mousePosition) == true)
                 return true;
@@ -503,9 +520,31 @@ namespace Stataria
             return lineCount * font.LineSpacing * textScale;
         }
 
+        public void ResetConfirmation()
+        {
+            if (confirmRoleID != null || confirmAscend)
+            {
+                confirmRoleID = null;
+                confirmAscend = false;
+                activeConfirmButton = null;
+                RefreshRolesList();
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if ((confirmRoleID != null || confirmAscend) && Main.mouseLeft)
+            {
+                if (activeConfirmButton == null || !activeConfirmButton.ContainsPoint(Main.MouseScreen))
+                {
+                    confirmRoleID = null;
+                    confirmAscend = false;
+                    activeConfirmButton = null;
+                    RefreshRolesList();
+                }
+            }
 
             if (rolePanel.ContainsPoint(Main.MouseScreen))
                 Main.LocalPlayer.mouseInterface = true;
