@@ -2031,6 +2031,16 @@ Configs: {
 			Tooltip: 开启后，在敌人的头顶上显示其等级。
 		}
 
+		ShowCustomNormalMobHPBar: {
+			Label: 显示普通怪物自定义血条
+			Tooltip: 开启后，为使用自定义大数值血量（超过15亿）的普通怪物在下方显示一条自定义血条。
+		}
+
+		CustomNormalMobHPBarHoverOnly: {
+			Label: 普通怪物数值血量仅悬浮显示
+			Tooltip: 开启后，普通怪物自定义血条下方的精确生命数值仅在鼠标悬浮于怪物身上时显示。
+		}
+
 		resourceBars: {
 			Label: 资源条设置
 			Tooltip: 自定义生命值、法力值和首领血条的外观与位置。

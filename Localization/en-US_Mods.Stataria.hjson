@@ -2031,6 +2031,16 @@ Configs: {
 			Tooltip: When enabled, displays enemy levels above their heads.
 		}
 
+		ShowCustomNormalMobHPBar: {
+			Label: Show Custom Normal Mob HP Bar
+			Tooltip: When enabled, displays a custom health bar for normal mobs when they use custom HP (health exceeds 1.5 billion).
+		}
+
+		CustomNormalMobHPBarHoverOnly: {
+			Label: Custom Normal Mob HP Numbers on Hover Only
+			Tooltip: When enabled, the numerical health values on the custom normal mob HP bar are only shown when hovering the mouse over the NPC.
+		}
+
 		resourceBars: {
 			Label: Resource Bars
 			Tooltip: Customize the appearance and position of health, mana, and boss health bars.

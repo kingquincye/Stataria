@@ -614,6 +614,20 @@ namespace Stataria
                 return null;
             }
 
+            NPC GetNPC(object npcArg)
+            {
+                if (npcArg is NPC npc)
+                {
+                    return npc;
+                }
+                else if (npcArg is int npcIndex && npcIndex >= 0 && npcIndex < Main.maxNPCs)
+                {
+                    return Main.npc[npcIndex];
+                }
+                Logger.Warn($"Stataria Mod.Call ({message}): Expected NPC instance or NPC index as second argument.");
+                return null;
+            }
+
             switch (message)
             {
                 case "GetPlayerLevel":
@@ -683,6 +697,36 @@ namespace Stataria
                     if (args.Length < 2) { Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallNotEnoughArgs", "GetRebirthPoints")); return null; }
                     rpgPlayer = GetRPGPlayer(args[1]);
                     return rpgPlayer?.RebirthPoints;
+
+                case "GetNPCCustomLifeMax":
+                    if (args.Length < 2) { Logger.Warn($"Stataria Mod.Call: Not enough arguments for GetNPCCustomLifeMax"); return null; }
+                    var npcMax = GetNPC(args[1]);
+                    if (npcMax == null) return null;
+                    if (npcMax.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scalingMax))
+                    {
+                        return scalingMax.CustomLifeMax;
+                    }
+                    return -1.0;
+
+                case "GetNPCCustomLife":
+                    if (args.Length < 2) { Logger.Warn($"Stataria Mod.Call: Not enough arguments for GetNPCCustomLife"); return null; }
+                    var npcLife = GetNPC(args[1]);
+                    if (npcLife == null) return null;
+                    if (npcLife.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scalingLife))
+                    {
+                        return scalingLife.CustomLife;
+                    }
+                    return -1.0;
+
+                case "UsesNPCCustomHP":
+                    if (args.Length < 2) { Logger.Warn($"Stataria Mod.Call: Not enough arguments for UsesNPCCustomHP"); return null; }
+                    var npcUse = GetNPC(args[1]);
+                    if (npcUse == null) return null;
+                    if (npcUse.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scalingUse))
+                    {
+                        return scalingUse.UsesCustomHP;
+                    }
+                    return false;
 
                 default:
                     Logger.Warn(Language.GetTextValue("Mods.Stataria.Logging.Stataria.ModCallUnknownMessage", message));

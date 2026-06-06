@@ -27,6 +27,9 @@ namespace Stataria
         public double CustomLife { get; set; } = -1;
         public bool UsesCustomHP => CustomLifeMax > 0;
         private int lastLife = -1;
+        private Vector2 _customGrabbedBarPos;
+        private bool _drawCustomBarThisFrame;
+        private byte _customGrabbedHbPosition;
 
         private bool IsWormSegmentOrPart(NPC npc)
         {
@@ -383,6 +386,8 @@ namespace Stataria
                 return;
         }
 
+
+
         private void CalculateEnemyLevel(NPC npc)
         {
             if (IsWormSegmentOrPart(npc))
@@ -572,11 +577,16 @@ namespace Stataria
             float healthRatio = npc.lifeMax > 0 ? (float)npc.life / npc.lifeMax : 1f;
             double targetMaxHealth = (double)npc.lifeMax * healthMult + additionalFlatHealth;
 
-            const int MAX_SAFE_HEALTH = 1000000000;
-            if (targetMaxHealth > MAX_SAFE_HEALTH)
+            const int MAX_SAFE_HEALTH = 1500000000;
+            bool useCustomHP = Main.netMode == NetmodeID.MultiplayerClient ? (CustomLifeMax > MAX_SAFE_HEALTH) : (targetMaxHealth > MAX_SAFE_HEALTH);
+
+            if (useCustomHP)
             {
-                CustomLifeMax = targetMaxHealth;
-                CustomLife = targetMaxHealth * healthRatio;
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    CustomLifeMax = targetMaxHealth;
+                }
+                CustomLife = CustomLifeMax * healthRatio;
                 npc.lifeMax = MAX_SAFE_HEALTH;
                 npc.life = (int)Math.Round(MAX_SAFE_HEALTH * healthRatio);
                 lastLife = npc.life;
@@ -726,6 +736,91 @@ namespace Stataria
 
             Color textColor = IsElite ? new Color(255, 50, 50) * opacity : Color.White * opacity;
             spriteBatch.DrawString(font, levelText, textPos, textColor);
+
+            bool isCustomBarEnabled = UsesCustomHP && !npc.boss && configClient.ShowCustomNormalMobHPBar;
+            Rectangle hoverRect = npc.getRect();
+            hoverRect.Inflate(32, 32);
+            bool isMouseHovering = hoverRect.Contains(Main.MouseWorld.ToPoint());
+
+            if (isCustomBarEnabled)
+            {
+                float barWidth = 40f;
+                float barHeight = 4f;
+
+                // Determine the bar's world position
+                Vector2 barWorldPos;
+                if (_drawCustomBarThisFrame)
+                {
+                    barWorldPos = _customGrabbedBarPos;
+                }
+                else
+                {
+                    float defaultY = npc.position.Y + (_customGrabbedHbPosition == 1 ? -16f : npc.height + 8f);
+                    barWorldPos = new Vector2(npc.Center.X, defaultY);
+                }
+
+                Vector2 barPos = barWorldPos - screenPos;
+                barPos.X -= barWidth / 2f;
+
+                // Draw background
+                Rectangle bgRect = new Rectangle((int)barPos.X, (int)barPos.Y, (int)barWidth, (int)barHeight);
+                spriteBatch.Draw(TextureAssets.MagicPixel.Value, bgRect, new Color(30, 30, 30) * (opacity * 0.7f));
+
+                // Draw health fill
+                float lifePercent = CustomLifeMax > 0 ? (float)(CustomLife / CustomLifeMax) : 0f;
+                lifePercent = Math.Clamp(lifePercent, 0f, 1f);
+                if (lifePercent > 0f)
+                {
+                    Rectangle fgRect = new Rectangle((int)barPos.X, (int)barPos.Y, (int)(barWidth * lifePercent), (int)barHeight);
+                    // Emerald Green to Coral Red
+                    Color lowHPColor = new Color(240, 70, 70); // Soft crimson
+                    Color highHPColor = new Color(50, 205, 110); // Mint/emerald green
+                    Color barColor = Color.Lerp(lowHPColor, highHPColor, lifePercent);
+                    spriteBatch.Draw(TextureAssets.MagicPixel.Value, fgRect, barColor * opacity);
+                }
+
+                // Draw thin border
+                int borderThickness = 1;
+                Color borderColor = Color.Black * opacity;
+                spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)barPos.X - borderThickness, (int)barPos.Y - borderThickness, (int)barWidth + borderThickness * 2, borderThickness), borderColor);
+                spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)barPos.X - borderThickness, (int)barPos.Y + (int)barHeight, (int)barWidth + borderThickness * 2, borderThickness), borderColor);
+                spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)barPos.X - borderThickness, (int)barPos.Y, borderThickness, (int)barHeight), borderColor);
+                spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle((int)barPos.X + (int)barWidth, (int)barPos.Y, borderThickness, (int)barHeight), borderColor);
+
+                // Draw health text below the bar if hovered or if numerical values are not hover-only
+                if (!configClient.CustomNormalMobHPBarHoverOnly || isMouseHovering)
+                {
+                    string healthText = $"{(long)Math.Round(CustomLife):N0} / {(long)Math.Round(CustomLifeMax):N0}";
+                    DynamicSpriteFont hpFont = FontAssets.ItemStack.Value;
+                    float hpTextScale = 0.50f;
+                    Vector2 hpTextSize = hpFont.MeasureString(healthText) * hpTextScale;
+                    Vector2 hpTextPos = new Vector2(barWorldPos.X - hpTextSize.X / 2f - screenPos.X, barPos.Y + barHeight + 4f);
+
+                    spriteBatch.DrawString(hpFont, healthText, hpTextPos + new Vector2(1, 1) * hpTextScale, Color.Black * (opacity * 0.7f), 0f, Vector2.Zero, hpTextScale, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(hpFont, healthText, hpTextPos, Color.White * opacity, 0f, Vector2.Zero, hpTextScale, SpriteEffects.None, 0f);
+                }
+
+                // Queue the custom NPC name tooltip next to the cursor when hovered
+                if (isMouseHovering)
+                {
+                    Main.instance.MouseText(npc.GivenOrTypeName);
+                }
+
+                _drawCustomBarThisFrame = false;
+            }
+        }
+
+        public override bool? DrawHealthBar(NPC npc, byte hbPosition, ref float scale, ref Vector2 position)
+        {
+            var configClient = ModContent.GetInstance<StatariaClientConfig>();
+            if (UsesCustomHP && !npc.boss && configClient.ShowCustomNormalMobHPBar)
+            {
+                _customGrabbedBarPos = position;
+                _customGrabbedHbPosition = hbPosition;
+                _drawCustomBarThisFrame = true;
+                return false;
+            }
+            return null;
         }
 
         public override void AI(NPC npc)
@@ -762,32 +857,42 @@ namespace Stataria
 
         public override void PostAI(NPC npc)
         {
-            if (UsesCustomHP && Main.netMode != NetmodeID.MultiplayerClient)
+            if (UsesCustomHP)
             {
-                if (lastLife != -1 && npc.life < lastLife)
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int damageTaken = lastLife - npc.life;
-                    CustomLife -= damageTaken;
-                    if (CustomLife <= 0)
+                    if (lastLife != -1 && npc.life < lastLife)
                     {
-                        npc.life = 0;
-                        npc.checkDead();
-                    }
-                    else
-                    {
-                        double percentage = CustomLife / CustomLifeMax;
-                        int newLife = (int)Math.Max(1, Math.Round(npc.lifeMax * percentage));
-                        if (newLife != npc.life)
+                        int damageTaken = lastLife - npc.life;
+                        CustomLife -= damageTaken;
+                        if (CustomLife <= 0)
                         {
-                            npc.life = newLife;
-                            if (Main.netMode == NetmodeID.Server)
+                            npc.life = 0;
+                            npc.checkDead();
+                        }
+                        else
+                        {
+                            double percentage = CustomLife / CustomLifeMax;
+                            int newLife = (int)Math.Max(1, Math.Round(npc.lifeMax * percentage));
+                            if (newLife != npc.life)
                             {
-                                npc.netUpdate = true;
+                                npc.life = newLife;
+                                if (Main.netMode == NetmodeID.Server)
+                                {
+                                    npc.netUpdate = true;
+                                }
                             }
                         }
                     }
+                    lastLife = npc.life;
                 }
-                lastLife = npc.life;
+                else // MultiplayerClient
+                {
+                    if (npc.lifeMax > 0)
+                    {
+                        CustomLife = CustomLifeMax * ((double)npc.life / npc.lifeMax);
+                    }
+                }
             }
 
             if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -815,6 +920,22 @@ namespace Stataria
                     if (Main.netMode == NetmodeID.Server)
                     {
                         Stataria.SyncNPCScaling(npc.whoAmI);
+                    }
+                }
+            }
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (npc.active && !npc.townNPC && !npc.friendly && !NPCID.Sets.CountsAsCritter[npc.type] && npc.lifeMax > 9)
+                {
+                    var configClient = ModContent.GetInstance<StatariaClientConfig>();
+                    if (UsesCustomHP && !npc.boss && configClient.ShowCustomNormalMobHPBar)
+                    {
+                        npc.ShowNameOnHover = false;
+                    }
+                    else
+                    {
+                        npc.ShowNameOnHover = true;
                     }
                 }
             }
@@ -852,27 +973,6 @@ namespace Stataria
                         }
                     }
                 }
-            }
-        }
-
-        public override void SendExtraAI(NPC npc, BitWriter bitWriter, BinaryWriter binaryWriter)
-        {
-            binaryWriter.Write(hasBeenScaled);
-            binaryWriter.Write(IsElite);
-            binaryWriter.Write(Level);
-            binaryWriter.Write(CustomLifeMax);
-        }
-
-        public override void ReceiveExtraAI(NPC npc, BitReader bitReader, BinaryReader binaryReader)
-        {
-            hasBeenScaled = binaryReader.ReadBoolean();
-            IsElite = binaryReader.ReadBoolean();
-            Level = binaryReader.ReadInt32();
-            CustomLifeMax = binaryReader.ReadDouble();
-            
-            if (hasBeenScaled)
-            {
-                ApplyScaling(npc);
             }
         }
 

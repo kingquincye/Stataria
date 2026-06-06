@@ -558,6 +558,8 @@ namespace Stataria
         [DefaultValue(true)] public bool ShowEnemyLevelIndicator { get; set; } = true;
         [DefaultValue(true)] public bool ShowEnemyLevelBehindWalls { get; set; } = true;
         [Range(0f, 2f)][DefaultValue(1f)] public float EnemyIndicatorOpacity { get; set; } = 1f;
+        [DefaultValue(true)] public bool ShowCustomNormalMobHPBar { get; set; } = true;
+        [DefaultValue(true)] public bool CustomNormalMobHPBarHoverOnly { get; set; } = true;
 
         [Header("SocketingSystem")]
         [DefaultValue(true)] public bool ShowSocketedCoresInTooltip { get; set; } = true;
