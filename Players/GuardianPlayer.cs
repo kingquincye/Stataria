@@ -67,7 +67,17 @@ namespace Stataria
                 if (otherPlayer == null || !otherPlayer.active || otherPlayer.dead || otherPlayer.whoAmI == Player.whoAmI)
                     continue;
 
-                if (otherPlayer.team == 0 || otherPlayer.team != Player.team)
+                bool isTeammate = false;
+                if (Player.team != 0 && Player.team == otherPlayer.team)
+                {
+                    isTeammate = true;
+                }
+                else if (config.roleSettings.GuardianAllowAuraOnNoTeam && Player.team == 0 && otherPlayer.team == 0)
+                {
+                    isTeammate = true;
+                }
+
+                if (!isTeammate)
                     continue;
 
                 float distance = Vector2.Distance(Player.Center, otherPlayer.Center);

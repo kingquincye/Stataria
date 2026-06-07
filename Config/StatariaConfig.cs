@@ -277,6 +277,7 @@ namespace Stataria
 
             [Header("Guardian")]
             [DefaultValue(300f)][Range(100f, 1000f)] public float GuardianAuraRadius { get; set; } = 300f;
+            [DefaultValue(false)] public bool GuardianAllowAuraOnNoTeam { get; set; } = false;
             [DefaultValue(15f)][Range(0f, 100f)] public float GuardianTeammateDefenseBonus { get; set; } = 15f;
             [DefaultValue(20f)][Range(0f, 80f)] public float GuardianTeammateDamageReduction { get; set; } = 20f;
             [DefaultValue(25f)][Range(0f, 50f)] public float GuardianMovementSpeedPenalty { get; set; } = 25f;

@@ -89,6 +89,7 @@ namespace Stataria
 
         public override void ResetEffects()
         {
+            float savedHealthBonus = ReceivedTeammateHealthBonus;
             ReceivedTeammateHealthBonus = 0f;
 
             if (ResurrectionInvincibilityTimer > 0)
@@ -100,6 +101,10 @@ namespace Stataria
             if (!IsClericActive)
             {
                 playersInAura.Clear();
+                if (savedHealthBonus > 0f)
+                {
+                    Player.statLifeMax2 = (int)(Player.statLifeMax2 * (1f + savedHealthBonus / 100f));
+                }
                 return;
             }
 
@@ -179,12 +184,6 @@ namespace Stataria
                 Player.statDefense = Player.statDefense * (1f - defensePenalty);
             }
 
-            // Apply received teammate health bonus if we are not the Cleric ourselves
-            if (ReceivedTeammateHealthBonus > 0f && !IsClericActive)
-            {
-                Player.statLifeMax2 = (int)(Player.statLifeMax2 * (1f + ReceivedTeammateHealthBonus / 100f));
-            }
-            
             Player.AddBuff(ModContent.BuffType<ClericAuraBuff>(), 2);
         }
 

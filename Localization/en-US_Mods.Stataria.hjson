@@ -1574,6 +1574,11 @@ Configs: {
 			Tooltip: The radius in pixels of the Guardian's protective aura.
 		}
 
+		GuardianAllowAuraOnNoTeam: {
+			Tooltip: When enabled, Guardian aura benefits will affect players on No Team (neutral) in addition to teamed teammates.
+			Label: Guardian Allow Aura On No Team
+		}
+
 		GuardianTeammateDefenseBonus: {
 			Label: Teammate Defense Bonus
 			Tooltip: Percentage increase to defense for teammates within the Guardian's aura.

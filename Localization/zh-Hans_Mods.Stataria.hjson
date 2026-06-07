@@ -1574,6 +1574,11 @@ Configs: {
 			Tooltip: 守护者保护光环的半径（单位：像素）。
 		}
 
+		GuardianAllowAuraOnNoTeam: {
+			Tooltip: 开启后，守护者的保护光环除了作用于同队队友外，还会作用于处于无队伍状态（中立）的玩家。
+			Label: 无队伍时允许守护者光环
+		}
+
 		GuardianTeammateDefenseBonus: {
 			Label: 队友防御加成
 			Tooltip: 守护者光环内队友增加的防御力百分比。
