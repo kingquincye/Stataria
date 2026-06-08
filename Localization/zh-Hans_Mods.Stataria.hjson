@@ -1693,6 +1693,21 @@ Configs: {
 			Tooltip: 每点INT属性对僵尸奴仆攻击伤害的提升百分比。
 		}
 
+		NecromancerThrallDamageIncreasePerRebirth: {
+			Label: 每次转生奴仆伤害加成
+			Tooltip: 每次转生增加的僵尸奴仆基础攻击伤害百分比。
+		}
+
+		NecromancerThrallDamageIncreasePerLevel: {
+			Label: 每次升级奴仆伤害加成
+			Tooltip: 每个玩家等级增加的僵尸奴仆基础攻击伤害固定值。
+		}
+
+		NecromancerThrallBlacklistedNPCs: {
+			Label: 僵尸奴仆黑名单
+			Tooltip: 僵尸奴仆不应攻击的NPC名字或ID列表。
+		}
+
 		BerserkerBloodbathMaxDamageBonus: {
 			Label: 浴血最高伤害加成
 			Tooltip: 在仅剩 1 点生命值时获得的最大近战伤害加成百分比。
@@ -2540,7 +2555,7 @@ RoleEffects: {
 		SoulDuration: • 灵魂持续时间: 基础 {0} 秒 (每点 SPR 增加 +{1} 秒)
 		ThrallsLimit: • 活跃奴仆: 同时最多存在 {0} 个
 		BoneArmor: • 骨甲: 每个活跃奴仆提供 +{0}% 伤害减免
-		ThrallDamage: • 奴仆攻击: {0} 基础伤害 (每点 INT 增加 +{1}%)
+		ThrallDamage: • 奴仆攻击: {0} 基础伤害 (每点 INT 增加 +{1}%) (每次转生增加 +{2}%) (每个等级增加 +{3})
 	}
 
 	Berserker: {

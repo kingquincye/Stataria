@@ -237,7 +237,7 @@ namespace Stataria
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.SoulDuration", config.roleSettings.NecromancerBaseSoulDuration, config.roleSettings.NecromancerSoulDurationPerSPR),
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallsLimit", config.roleSettings.NecromancerActiveThrallsLimit),
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.BoneArmor", config.roleSettings.NecromancerBoneArmorDRPerThrall),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallDamage", config.roleSettings.NecromancerThrallBaseDamage, config.roleSettings.NecromancerThrallINTScale)
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallDamage", config.roleSettings.NecromancerThrallBaseDamage, config.roleSettings.NecromancerThrallINTScale, config.roleSettings.NecromancerThrallDamageIncreasePerRebirth, config.roleSettings.NecromancerThrallDamageIncreasePerLevel)
                 };
 
                 return string.Join("\n", effects);

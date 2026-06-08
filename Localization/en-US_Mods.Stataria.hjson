@@ -1693,6 +1693,21 @@ Configs: {
 			Tooltip: The percentage increase to zombie thrall attack damage per point of INT.
 		}
 
+		NecromancerThrallDamageIncreasePerRebirth: {
+			Label: Thrall DMG Increase Per Rebirth
+			Tooltip: The percentage increase to zombie thrall base attack damage per Rebirth count.
+		}
+
+		NecromancerThrallDamageIncreasePerLevel: {
+			Label: Thrall DMG Increase Per Level
+			Tooltip: The flat increase to zombie thrall base attack damage per player level.
+		}
+
+		NecromancerThrallBlacklistedNPCs: {
+			Label: Zombie Thrall Blacklist
+			Tooltip: A list of NPC names or IDs that zombie thralls should not target.
+		}
+
 		BerserkerBloodbathMaxDamageBonus: {
 			Label: Bloodbath Max Damage Bonus
 			Tooltip: The maximum percentage melee damage bonus gained at 1 HP.
@@ -2540,7 +2555,7 @@ RoleEffects: {
 		SoulDuration: • Soul Duration: Base {0}s (+{1}s per SPR)
 		ThrallsLimit: • Active Thralls: Max {0} at a time
 		BoneArmor: • Bone Armor: +{0}% Damage Reduction per active thrall
-		ThrallDamage: • Thrall Attack: {0} Base Damage (+{1}% per INT)
+		ThrallDamage: • Thrall Attack: {0} Base Damage (+{1}% per INT) (+{2}% per Rebirth) (+{3} per Level)
 	}
 
 	Berserker: {

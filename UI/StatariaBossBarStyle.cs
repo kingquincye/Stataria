@@ -20,7 +20,7 @@ namespace Stataria
 
         private List<BossBarUIData> currentlyDisplayedBars = new List<BossBarUIData>();
         private static readonly Dictionary<int, int> BossPartGroups = new Dictionary<int, int>();
-        private static readonly HashSet<int> TreatAsBoss = new HashSet<int>();
+        public static readonly HashSet<int> TreatAsBoss = new HashSet<int>();
         private static readonly HashSet<int> ExcludeFromBossBar = new HashSet<int>();
         private Color borderColor = Color.White * 0.8f;
         private Color textColor = Color.White;

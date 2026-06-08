@@ -69,15 +69,6 @@ namespace Stataria
                         }
 
                         hasBeenScaled = true;
-                        
-                        // We also directly scale projectile.damage. This naturally propagates across network spawns
-                        // for most projectiles and provides a safe fallback without requiring exact sync for everything.
-                        // By scaling it directly, we don't need to apply it in ModifyHitPlayer to avoid double dipping,
-                        // UNLESS we want to purely use ModifyHitPlayer. Since directly scaling projectile.damage covers 
-                        // all vanilla AI behaviors and hardcoded projectile.damage resets are rare, directly scaling
-                        // the projectile damage is extremely stable and handles double-dipping naturally since 
-                        // child projectiles inherit projectile.damage.
-                        // However, we will just use the projectile.damage modification as requested by the simplest fix.
                     }
                 }
             }

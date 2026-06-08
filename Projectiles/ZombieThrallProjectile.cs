@@ -13,6 +13,8 @@ namespace Stataria.Projectiles
         public override string Texture => "Stataria/icon";
 
         public int RemainingLifetimeTicks { get; set; } = 1800; // Default 30s in ticks
+        public int TargetNoContactTimer { get; set; } = 0;
+        public int LastTargetWhoAmI { get; set; } = -1;
 
         public override void SetStaticDefaults()
         {
@@ -79,7 +81,7 @@ namespace Stataria.Projectiles
             if (player.HasMinionAttackTargetNPC)
             {
                 NPC npc = Main.npc[player.MinionAttackTargetNPC];
-                if (npc.active && !npc.friendly && npc.lifeMax > 5 && Vector2.Distance(Projectile.Center, npc.Center) < maxDistance)
+                if (IsValidTarget(npc) && Vector2.Distance(Projectile.Center, npc.Center) < maxDistance)
                 {
                     target = npc;
                 }
@@ -90,7 +92,7 @@ namespace Stataria.Projectiles
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC npc = Main.npc[i];
-                    if (npc.active && !npc.friendly && npc.lifeMax > 5 && !npc.dontTakeDamage && npc.type != NPCID.TargetDummy)
+                    if (IsValidTarget(npc))
                     {
                         float dist = Vector2.Distance(Projectile.Center, npc.Center);
                         if (dist < closestDist)
@@ -124,17 +126,32 @@ namespace Stataria.Projectiles
 
             if (target != null)
             {
+                if (target.whoAmI != LastTargetWhoAmI)
+                {
+                    LastTargetWhoAmI = target.whoAmI;
+                    TargetNoContactTimer = 0;
+                }
+                else
+                {
+                    TargetNoContactTimer++;
+                }
+
                 float dx = Math.Abs(target.Center.X - Projectile.Center.X);
                 float dy = Projectile.Center.Y - target.Center.Y; // positive if target is above projectile
 
-                if (dx > 560f || dy > 240f)
+                // Teleport if too far or if stuck without contact for 4 seconds (240 ticks)
+                if (dx > 560f || dy > 240f || TargetNoContactTimer >= 240)
                 {
                     shouldTeleport = true;
                     teleportTargetPos = target.Bottom - new Vector2(Projectile.width / 2, Projectile.height);
+                    TargetNoContactTimer = 0;
                 }
             }
             else
             {
+                LastTargetWhoAmI = -1;
+                TargetNoContactTimer = 0;
+
                 // Follow player, teleport if too far
                 float dx = Math.Abs(player.Center.X - Projectile.Center.X);
                 float dy = Math.Abs(player.Center.Y - Projectile.Center.Y);
@@ -343,6 +360,11 @@ namespace Stataria.Projectiles
             // Right
         }
 
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            TargetNoContactTimer = 0;
+        }
+
         public override void OnKill(int timeLeft)
         {
             if (RemainingLifetimeTicks <= 0)
@@ -370,6 +392,30 @@ namespace Stataria.Projectiles
                     Main.dust[d].velocity *= 1.5f;
                 }
             }
+        }
+
+        private bool IsValidTarget(NPC npc)
+        {
+            if (npc == null || !npc.active || npc.friendly || npc.townNPC || npc.dontTakeDamage)
+                return false;
+
+            if (npc.lifeMax <= 9 || NPCID.Sets.CountsAsCritter[npc.type])
+                return false;
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config?.roleSettings?.NecromancerThrallBlacklistedNPCs != null)
+            {
+                foreach (string entry in config.roleSettings.NecromancerThrallBlacklistedNPCs)
+                {
+                    if (entry.Equals(Lang.GetNPCNameValue(npc.type), StringComparison.OrdinalIgnoreCase) ||
+                        (int.TryParse(entry, out int id) && id == npc.type))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

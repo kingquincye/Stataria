@@ -189,9 +189,5 @@ namespace Stataria
                 }
             }
         }
-
-        public override void PostUpdateEverything()
-        {
-        }
     }
 }

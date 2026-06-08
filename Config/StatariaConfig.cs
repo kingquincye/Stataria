@@ -299,6 +299,9 @@ namespace Stataria
             [DefaultValue(3f)][Range(0f, 10f)] public float NecromancerBoneArmorDRPerThrall { get; set; } = 3f;
             [DefaultValue(20)][Range(5, 500)] public int NecromancerThrallBaseDamage { get; set; } = 20;
             [DefaultValue(1.5f)][Range(0f, 10f)] public float NecromancerThrallINTScale { get; set; } = 1.5f;
+            [DefaultValue(10f)][Range(0f, 100f)] public float NecromancerThrallDamageIncreasePerRebirth { get; set; } = 10f;
+            [DefaultValue(1f)][Range(0f, 100f)] public float NecromancerThrallDamageIncreasePerLevel { get; set; } = 1f;
+            public List<string> NecromancerThrallBlacklistedNPCs { get; set; } = new List<string>();
 
             [Header("Berserker")]
             [DefaultValue(50f)][Range(0f, 200f)] public float BerserkerBloodbathMaxDamageBonus { get; set; } = 50f;

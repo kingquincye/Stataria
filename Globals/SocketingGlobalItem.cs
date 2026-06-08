@@ -18,10 +18,6 @@ namespace Stataria
 
         public override bool InstancePerEntity => true;
 
-        public override void SetStaticDefaults()
-        {
-        }
-
         public override void SetDefaults(Item item)
         {
             if (IsWeapon(item) || IsArmor(item))

@@ -116,33 +116,6 @@ namespace Stataria.UI.Elements
 
         private void HandleMouseInput(Rectangle sliderRect, Rectangle textInputRect)
         {
-            if (Main.mouseLeft && sliderRect.Contains(Main.MouseScreen.ToPoint()) && !_dragging && !Main.mouseLeftRelease)
-            {
-                // Wait for a fresh click to start dragging
-            }
-            else if (Main.mouseLeft && sliderRect.Contains(Main.MouseScreen.ToPoint()) && Main.mouseLeftRelease)
-            {
-                // We just clicked the slider now
-                _dragging = true;
-                _typing = false;
-            }
-            else if (Main.mouseLeft && !sliderRect.Contains(Main.MouseScreen.ToPoint()) && !_dragging)
-            {
-                // We are clicking elsewhere, don't start dragging
-            }
-            
-            // Simplified cleaner drag start logic:
-            if (Main.mouseLeft)
-            {
-                if (sliderRect.Contains(Main.MouseScreen.ToPoint()) && Main.mouseLeftRelease)
-                {
-                    _dragging = true;
-                    _typing = false;
-                }
-            }
-
-            // Real Drag Start logic based on Terraria UI standards:
-            // Actually, tmod UI elements usually use OnLeftMouseDown. But here we just check if it was clicked this frame.
             bool justPressed = Main.mouseLeft && Main.mouseLeftRelease;
 
             if (justPressed && sliderRect.Contains(Main.MouseScreen.ToPoint()))

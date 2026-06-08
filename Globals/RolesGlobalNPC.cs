@@ -77,7 +77,16 @@ namespace Stataria
             var necromancerPlayer = player.GetModPlayer<NecromancerPlayer>();
             if (necromancerPlayer.IsNecromancerActive)
             {
-                necromancerPlayer.HarvestSoulOnKill();
+                if (Main.netMode == NetmodeID.SinglePlayer)
+                {
+                    necromancerPlayer.HarvestSoul();
+                }
+                else if (Main.netMode == NetmodeID.Server)
+                {
+                    var packet = ModContent.GetInstance<Stataria>().GetPacket();
+                    packet.Write((byte)StatariaMessageType.NecromancerHarvestSoulOnKill);
+                    packet.Send(player.whoAmI);
+                }
             }
         }
     }

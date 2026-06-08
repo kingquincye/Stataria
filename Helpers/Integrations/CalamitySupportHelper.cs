@@ -233,11 +233,6 @@ namespace Stataria
             return field;
         }
 
-        private static FieldInfo GetField(Player player, string fieldName)
-        {
-            return GetFieldInfoCached(fieldName);
-        }
-
         public static T GetFieldValue<T>(Player player, string fieldName, T defaultValue = default)
         {
             try

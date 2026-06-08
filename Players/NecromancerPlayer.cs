@@ -35,11 +35,40 @@ namespace Stataria
         }
 
         public bool IsRecalled { get; set; } = false;
+        public float NecromancerHUDX { get; set; } = -1f;
+        public float NecromancerHUDY { get; set; } = -1f;
 
         public override void SaveData(TagCompound tag)
         {
-            tag["SoulReserveLifetimes"] = new List<float>(SoulReserveLifetimes);
+            List<float> savedLifetimes = new List<float>(SoulReserveLifetimes);
+            int maxCap = GetMaxSoulCapacity();
+            if (savedLifetimes.Count < maxCap)
+            {
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    Projectile proj = Main.projectile[i];
+                    if (proj.active && proj.owner == Player.whoAmI && proj.type == ModContent.ProjectileType<ZombieThrallProjectile>())
+                    {
+                        var thrall = proj.ModProjectile as ZombieThrallProjectile;
+                        if (thrall != null)
+                        {
+                            float remainingSeconds = thrall.RemainingLifetimeTicks / 60f;
+                            if (remainingSeconds > 0.1f)
+                            {
+                                if (savedLifetimes.Count < maxCap)
+                                {
+                                    savedLifetimes.Add(remainingSeconds);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            tag["SoulReserveLifetimes"] = savedLifetimes;
             tag["IsRecalled"] = IsRecalled;
+            tag["NecromancerHUDX"] = NecromancerHUDX;
+            tag["NecromancerHUDY"] = NecromancerHUDY;
         }
 
         public override void LoadData(TagCompound tag)
@@ -53,11 +82,15 @@ namespace Stataria
                 SoulReserveLifetimes = new List<float>();
             }
             IsRecalled = tag.ContainsKey("IsRecalled") && tag.GetBool("IsRecalled");
+            NecromancerHUDX = tag.ContainsKey("NecromancerHUDX") ? tag.GetFloat("NecromancerHUDX") : -1f;
+            NecromancerHUDY = tag.ContainsKey("NecromancerHUDY") ? tag.GetFloat("NecromancerHUDY") : -1f;
         }
 
         public override void Initialize()
         {
             SoulReserveLifetimes.Clear();
+            NecromancerHUDX = -1f;
+            NecromancerHUDY = -1f;
             IsRecalled = false;
         }
 
@@ -79,6 +112,16 @@ namespace Stataria
                 KillAllThralls();
                 IsRecalled = false;
                 return;
+            }
+
+            int maxCap = GetMaxSoulCapacity();
+            if (SoulReserveLifetimes.Count > maxCap)
+            {
+                SoulReserveLifetimes.RemoveRange(maxCap, SoulReserveLifetimes.Count - maxCap);
+                if (Main.netMode != NetmodeID.SinglePlayer && Player.whoAmI == Main.myPlayer)
+                {
+                    SyncSouls();
+                }
             }
 
             // Auto-summoning logic (only if not recalled, and only on the owner's client)
@@ -138,11 +181,6 @@ namespace Stataria
             }
         }
 
-        public void HarvestSoulOnKill()
-        {
-            HarvestSoul();
-        }
-
         public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (IsNecromancerActive && (item.DamageType == DamageClass.Magic || item.DamageType == DamageClass.Summon))
@@ -159,10 +197,42 @@ namespace Stataria
             }
         }
 
+        private bool IsBossOrMiniBoss(NPC target)
+        {
+            if (target.boss)
+                return true;
+
+            if (target.realLife >= 0 && Main.npc[target.realLife].boss)
+                return true;
+
+            // Eater of Worlds segments do not set boss = true or realLife
+            if (target.type == NPCID.EaterofWorldsHead || 
+                target.type == NPCID.EaterofWorldsBody || 
+                target.type == NPCID.EaterofWorldsTail)
+            {
+                return true;
+            }
+
+            // Check if the NPC is treated as a boss by the custom boss bar system (like Giant Clam, etc.)
+            if (StatariaBossBarStyle.TreatAsBoss.Contains(target.type))
+                return true;
+
+            // Check client-side configuration lists
+            var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
+            if (clientConfig != null)
+            {
+                if (clientConfig.MiniBossNPCIDs?.Contains(target.type) == true)
+                    return true;
+                if (clientConfig.ForcedBossNPCIDs?.Contains(target.type) == true)
+                    return true;
+            }
+
+            return false;
+        }
+
         private void TryHarvestSoulOnBossHit(NPC target)
         {
-            bool isBoss = target.boss || (target.realLife >= 0 && Main.npc[target.realLife].boss);
-            if (!isBoss)
+            if (!IsBossOrMiniBoss(target))
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -236,7 +306,12 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
             int baseDamage = config.roleSettings.NecromancerThrallBaseDamage;
             int intStat = Player.GetModPlayer<RPGPlayer>().GetEffectiveStat("INT");
-            int damage = (int)(baseDamage * (1f + intStat * config.roleSettings.NecromancerThrallINTScale / 100f));
+            int rebirthCount = Player.GetModPlayer<RPGPlayer>().RebirthCount;
+            int level = Player.GetModPlayer<RPGPlayer>().Level;
+            float levelBonus = level * config.roleSettings.NecromancerThrallDamageIncreasePerLevel;
+            float totalBaseDamage = baseDamage + levelBonus;
+            float rebirthMult = 1f + (rebirthCount * config.roleSettings.NecromancerThrallDamageIncreasePerRebirth / 100f);
+            int damage = (int)(totalBaseDamage * rebirthMult * (1f + intStat * config.roleSettings.NecromancerThrallINTScale / 100f));
 
             if (Player.whoAmI == Main.myPlayer)
             {

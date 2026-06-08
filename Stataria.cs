@@ -2,8 +2,6 @@ using System;
 using Terraria.Localization;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ModLoader;
 using System.IO;
 using Terraria;
@@ -26,7 +24,8 @@ namespace Stataria
         SyncBerserkerSavageRoar,
         SyncSpellweaverState,
         AngelResurrect,
-        SyncAngelState
+        SyncAngelState,
+        NecromancerHarvestSoulOnKill
     }
 
     public class Stataria : Mod
@@ -579,6 +578,17 @@ namespace Stataria
                                 SoundEngine.PlaySound(SoundID.Item29, clericPlayer.Player.Center);
                             }
                         }
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.NecromancerHarvestSoulOnKill)
+            {
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    var necPlayer = Main.LocalPlayer.GetModPlayer<NecromancerPlayer>();
+                    if (necPlayer.IsNecromancerActive)
+                    {
+                        necPlayer.HarvestSoul();
                     }
                 }
             }
