@@ -2020,6 +2020,11 @@ Configs: {
 			Tooltip: Displays a draggable HUD for role and rebirth abilities cooldowns.
 		}
 
+		EnableNecromancerHUD: {
+			Label: Enable Necromancer HUD
+			Tooltip: Displays the draggable circular Soul Orb and Active Thralls HUD.
+		}
+
 		Headers: {
 			Cooldown_Bars: Cooldown Bars
 			Socketing_System: Socketing System
@@ -2586,6 +2591,12 @@ UI: {
 	CoreVitality: +{0} Max Health
 	CoreEvasion: +{0}% Evade Chance
 	EnemyLevel: Lv.{0}
+	CooldownHUDDragInstruction: Hold Left Control or Left Alt to drag the Cooldown HUD
+	NecromancerHUDDragInstruction: Hold Left Control or Left Alt to drag the Necromancer HUD
+	CooldownHUDPlaceholder: HUD
+	CooldownHUDDragLabel: Cooldown HUD (Drag)
+	NecromancerHUDReserve: Reserve
+	NecromancerHUDStats: DMG: {0}  •  Thralls: {1}/{2}
 
 	XPVerification: {
 		Title: Suspicious XP Gain Detected
@@ -2830,6 +2841,12 @@ RPGPlayer: {
 }
 
 Combat.Bleed: Bleed!
+
+AbilityName: {
+	SavageRoar: Savage Roar
+	DivineIntervention: Divine Intervention
+	DivineResurrection: Divine Resurrection
+}
 
 RebirthAbilityName: {
 	EnhancedFortune: Enhanced Fortune

@@ -2020,6 +2020,11 @@ Configs: {
 			Tooltip: 显示一个可拖动的 HUD 来追踪职业和转生能力的冷却时间。
 		}
 
+		EnableNecromancerHUD: {
+			Label: 启用死灵法师 HUD
+			Tooltip: 显示一个可拖动的环形灵魂球和活跃奴仆 HUD。
+		}
+
 		Headers: {
 			Cooldown_Bars: 冷却条
 			Socketing_System: 镶嵌系统
@@ -2586,6 +2591,12 @@ UI: {
 	CoreVitality: +{0} 最大生命值
 	CoreEvasion: +{0}% 闪避几率
 	EnemyLevel: Lv.{0}
+	CooldownHUDDragInstruction: 按住左 Ctrl 或左 Alt 键以拖动冷却 HUD
+	NecromancerHUDDragInstruction: 按住左 Ctrl 或左 Alt 键以拖动死灵法师 HUD
+	CooldownHUDPlaceholder: HUD
+	CooldownHUDDragLabel: 冷却 HUD (拖动)
+	NecromancerHUDReserve: 储备
+	NecromancerHUDStats: 伤害: {0}  •  奴仆: {1}/{2}
 
 	XPVerification: {
 		Title: 检测到可疑的经验获取
@@ -2830,6 +2841,12 @@ RPGPlayer: {
 }
 
 Combat.Bleed: 流血!
+
+AbilityName: {
+	SavageRoar: 野性咆哮
+	DivineIntervention: 神圣干涉
+	DivineResurrection: 神圣复活
+}
 
 RebirthAbilityName: {
 	EnhancedFortune: 强效幸运

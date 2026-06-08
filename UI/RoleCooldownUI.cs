@@ -58,7 +58,7 @@ namespace Stataria.UI
             if (berserker.IsBerserkerActive && berserker.SavageRoarCooldownTimer > 0)
             {
                 activeCooldowns.Add(new ActiveCooldown(
-                    "Savage Roar", "R", 
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.AbilityName.SavageRoar"), "R", 
                     berserker.SavageRoarCooldownTimer / 60f, 
                     config.roleSettings.BerserkerSavageRoarCooldown, 
                     Color.Red
@@ -70,7 +70,7 @@ namespace Stataria.UI
             if (rpg.ActiveRole?.ID == "Cleric" && rpg.divineInterventionCooldownTimer > 0)
             {
                 activeCooldowns.Add(new ActiveCooldown(
-                    "Divine Intervention", "I", 
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.AbilityName.DivineIntervention"), "I", 
                     rpg.divineInterventionCooldownTimer / 60f, 
                     config.roleSettings.DivineInterventionCooldown, 
                     Color.Gold
@@ -82,7 +82,7 @@ namespace Stataria.UI
             if (cleric.IsAngelActive && cleric.DivineResurrectionCooldownTimer > 0)
             {
                 activeCooldowns.Add(new ActiveCooldown(
-                    "Divine Resurrection", "R", 
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.AbilityName.DivineResurrection"), "R", 
                     cleric.DivineResurrectionCooldownTimer / 60f, 
                     config.roleSettings.AngelResurrectionCooldown, 
                     Color.Gold
@@ -94,7 +94,7 @@ namespace Stataria.UI
             if (rpg.teleportCooldownTimer > 0)
             {
                 activeCooldowns.Add(new ActiveCooldown(
-                    "Teleport", "T", 
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.Teleport"), "T", 
                     rpg.teleportCooldownTimer / 60f, 
                     config.rebirthAbilities.TeleportCooldown, 
                     Color.Violet
@@ -105,7 +105,7 @@ namespace Stataria.UI
             if (rpg.lastStandCooldownTimer > 0)
             {
                 activeCooldowns.Add(new ActiveCooldown(
-                    "Last Stand", "L", 
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RebirthAbilityName.LastStand"), "L", 
                     rpg.lastStandCooldownTimer / 60f, 
                     config.rebirthAbilities.LastStandCooldown, 
                     Color.LimeGreen
@@ -185,7 +185,7 @@ namespace Stataria.UI
                 if (hudBounds.Contains(mouseScreen.ToPoint()))
                 {
                     player.mouseInterface = true; // Prevent clicking through
-                    Main.instance.MouseText("Hold Left Control or Left Alt to drag the Cooldown HUD");
+                    Main.instance.MouseText(Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.CooldownHUDDragInstruction"));
                 }
             }
 
@@ -203,11 +203,11 @@ namespace Stataria.UI
                 DrawCircleOutline(spriteBatch, center, circleDiameter / 2f, 1f, Color.White * 0.5f);
 
                 // Draw helper text
-                string initial = "HUD";
+                string initial = Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.CooldownHUDPlaceholder");
                 Vector2 initialSize = font.MeasureString(initial) * 0.8f;
                 spriteBatch.DrawString(font, initial, center - initialSize / 2f, Color.LightGray * 0.7f, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0f);
 
-                string helpText = "Cooldown HUD (Drag)";
+                string helpText = Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.CooldownHUDDragLabel");
                 Vector2 helpSize = font.MeasureString(helpText) * 0.7f;
                 Vector2 helpPos = new Vector2(center.X - helpSize.X / 2f, center.Y + circleDiameter / 2f + 4f);
                 spriteBatch.DrawString(font, helpText, helpPos + new Vector2(1, 1), Color.Black * 0.8f, 0f, Vector2.Zero, 0.7f, SpriteEffects.None, 0f);

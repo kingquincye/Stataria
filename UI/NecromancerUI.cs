@@ -27,6 +27,9 @@ namespace Stataria.UI
                 return;
 
             var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
+            if (clientConfig == null || !clientConfig.EnableNecromancerHUD)
+                return;
+
             var config = ModContent.GetInstance<StatariaConfig>();
 
             // 1. Initialize default coordinates if not set
@@ -96,7 +99,7 @@ namespace Stataria.UI
                 if (hudBounds.Contains(mouseScreen.ToPoint()))
                 {
                     player.mouseInterface = true; // Prevent clicking through
-                    Main.instance.MouseText("Hold Left Control or Left Alt to drag the Necromancer HUD");
+                    Main.instance.MouseText(Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.NecromancerHUDDragInstruction"));
                 }
             }
 
@@ -122,7 +125,7 @@ namespace Stataria.UI
 
             // Draw Soul count text centered inside the orb
             DynamicSpriteFont font = FontAssets.ItemStack.Value;
-            string line1 = "Reserve";
+            string line1 = Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.NecromancerHUDReserve");
             string line2 = $"{currentSouls}/{maxCapacity}";
             Vector2 size1 = font.MeasureString(line1);
             Vector2 size2 = font.MeasureString(line2);
@@ -164,7 +167,7 @@ namespace Stataria.UI
             float maxDuration = necPlayer.GetMaxSoulDuration();
 
             // Stats text below the orb
-            string statsText = $"DMG: {damage}  •  Thralls: {currentActive}/{thrallLimit}";
+            string statsText = Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.NecromancerHUDStats", damage, currentActive, thrallLimit);
             float statsTextScale = 0.70f;
             Vector2 statsTextSize = font.MeasureString(statsText) * statsTextScale;
             Vector2 statsTextPosition = new Vector2(

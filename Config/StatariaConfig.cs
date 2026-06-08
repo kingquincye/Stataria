@@ -570,6 +570,7 @@ namespace Stataria
 
         [Header("HUD")]
         [DefaultValue(true)] public bool EnableRoleCooldownHUD { get; set; } = true;
+        [DefaultValue(true)] public bool EnableNecromancerHUD { get; set; } = true;
 
         [Header("ResourceBars")]
         [DefaultValue(0.79f)][Range(0f, 0.95f)][Slider][SliderColor(150, 0, 150)] public float PositionXPercent { get; set; } = 0.79f;

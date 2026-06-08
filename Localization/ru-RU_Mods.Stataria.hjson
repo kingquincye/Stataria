@@ -2020,6 +2020,11 @@ Configs: {
 			Tooltip: Отображает перетаскиваемый HUD для отслеживания перезарядки классовых способностей и перерождения.
 		}
 
+		EnableNecromancerHUD: {
+			Label: Включить HUD Некроманта
+			Tooltip: Отображает перетаскиваемый круглый HUD для запаса душ и активных прислужников.
+		}
+
 		Headers: {
 			Cooldown_Bars: Полоски Перезарядки
 			Socketing_System: Система Инкрустации
@@ -2586,6 +2591,12 @@ UI: {
 	CoreVitality: +{0} к Макс. Здоровью
 	CoreEvasion: +{0}% Шанс Уклонения
 	EnemyLevel: Ур.{0}
+	CooldownHUDDragInstruction: Зажмите Левый Control или Левый Alt для перемещения HUD Перезарядки
+	NecromancerHUDDragInstruction: Зажмите Левый Control или Левый Alt для перемещения HUD Некроманта
+	CooldownHUDPlaceholder: HUD
+	CooldownHUDDragLabel: HUD Перезарядки (Перетащить)
+	NecromancerHUDReserve: Запас
+	NecromancerHUDStats: УРОН: {0}  •  Прислужники: {1}/{2}
 
 	XPVerification: {
 		Title: Обнаружен Подозрительный Опыт
@@ -2830,6 +2841,12 @@ RPGPlayer: {
 }
 
 Combat.Bleed: Кровотечение!
+
+AbilityName: {
+	SavageRoar: Дикий рев
+	DivineIntervention: Божественное Вмешательство
+	DivineResurrection: Божественное воскрешение
+}
 
 RebirthAbilityName: {
 	EnhancedFortune: Расширенная Удача
