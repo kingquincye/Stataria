@@ -452,6 +452,11 @@ Configs: {
 			Label: Allow Self Reset In Multiplayer
 			Tooltip: When enabled, allows non-admin players to reset their own Stataria progress using '/stataria selfreset' command in multiplayer.
 		}
+
+		AdminSteamIDs: {
+			Label: Admin Steam IDs
+			Tooltip: A list of 17-digit Steam IDs of players who are allowed to use admin commands in multiplayer.
+		}
 	}
 
 	EnemyScaling: {

@@ -89,5 +89,46 @@ namespace Stataria
                 }
             }
         }
+
+        private static readonly System.Reflection.FieldInfo _critOverrideField = 
+            typeof(NPC.HitModifiers).GetField("_critOverride", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            if (projectile.owner >= 0 && projectile.owner < Main.maxPlayers)
+            {
+                Player player = Main.player[projectile.owner];
+                if (player != null && player.active && !player.dead)
+                {
+                    var critGodPlayer = player.GetModPlayer<CritGodPlayer>();
+                    if (critGodPlayer.EnableSummonCrits)
+                    {
+                        bool isSummonProjectile = projectile.minion || projectile.sentry || projectile.CountsAsClass(DamageClass.Summon);
+                        if (isSummonProjectile)
+                        {
+                            var config = ModContent.GetInstance<StatariaConfig>();
+                            var rpg = player.GetModPlayer<RPGPlayer>();
+
+                            float critChance = config.roleSettings.CritGodCritChance;
+                            critChance += rpg.GetEffectiveStat("LUC") * config.statSettings.LUC_Crit;
+
+                            if (Main.rand.NextFloat(100f) < critChance)
+                            {
+                                if (_critOverrideField != null)
+                                {
+                                    object boxed = modifiers;
+                                    _critOverrideField.SetValue(boxed, true);
+                                    modifiers = (NPC.HitModifiers)boxed;
+                                }
+                                else
+                                {
+                                    modifiers.SetCrit();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

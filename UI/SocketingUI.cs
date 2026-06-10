@@ -43,6 +43,9 @@ namespace Stataria
         private (CoreType type, int tier)? selectedCompatibleCore;
         private bool expandConfirmationShown = false;
 
+        private float attachHoldTime = 0f;
+        private float extractHoldTime = 0f;
+
         private const float desiredWidth = 800f;
         private const float desiredHeight = 600f;
 
@@ -287,7 +290,7 @@ namespace Stataria
             RefreshUI();
         }
 
-        private void OnAttachClick(UIMouseEvent evt, UIElement listeningElement)
+        private void TryAttachCore()
         {
             expandConfirmationShown = false;
             if (!selectedCompatibleCore.HasValue) return;
@@ -314,11 +317,22 @@ namespace Stataria
                 SocketingGlobalItem.SyncSocketedItem(player, item, -1);
             }
 
+            bool hasMoreCores = player.HasItem(coreItemType);
+            bool hasFreeSlots = socketingData.GetUsedSlots() < socketingData.MaxSlots;
+            if (!hasMoreCores || !hasFreeSlots)
+            {
+                selectedCompatibleCore = null;
+            }
+
             RefreshUI();
-            selectedCompatibleCore = null;
         }
 
-        private void OnExtractClick(UIMouseEvent evt, UIElement listeningElement)
+        private void OnAttachClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            TryAttachCore();
+        }
+
+        private void TryExtractCore()
         {
             expandConfirmationShown = false;
             if (!selectedAttachedCore.HasValue) return;
@@ -335,6 +349,9 @@ namespace Stataria
             var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
             var core = selectedAttachedCore.Value;
 
+            var existingCore = socketingData.SocketedCores.FirstOrDefault(c => c.Type == core.Type && c.Tier == core.Tier);
+            if (existingCore.Count <= 0) return;
+
             if (!socketingData.ExtractCore(core.Type, core.Tier)) return;
 
             rpg.RebirthPoints -= config.ExtractCost;
@@ -350,8 +367,19 @@ namespace Stataria
                 rpg.SyncPlayer(-1, player.whoAmI, false);
             }
 
+            bool hasRemainingAttached = socketingData.SocketedCores.Any(c => c.Type == core.Type && c.Tier == core.Tier);
+            bool canAffordMore = rpg.RebirthPoints >= config.ExtractCost;
+            if (!hasRemainingAttached || !canAffordMore)
+            {
+                selectedAttachedCore = null;
+            }
+
             RefreshUI();
-            selectedAttachedCore = null;
+        }
+
+        private void OnExtractClick(UIMouseEvent evt, UIElement listeningElement)
+        {
+            TryExtractCore();
         }
 
         private int GetCoreItemType(CoreType type, int tier)
@@ -773,6 +801,44 @@ namespace Stataria
                     expandConfirmationShown = false;
                     RefreshUI();
                 }
+            }
+
+            if (attachButton != null && attachButton.IsMouseHovering && Main.mouseLeft)
+            {
+                attachHoldTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                float initialDelay = 0.4f;
+                float repeatRate = 0.12f;
+
+                if (attachHoldTime > initialDelay)
+                {
+                    if ((attachHoldTime - initialDelay) % repeatRate < (float)gameTime.ElapsedGameTime.TotalSeconds)
+                    {
+                        TryAttachCore();
+                    }
+                }
+            }
+            else
+            {
+                attachHoldTime = 0f;
+            }
+
+            if (extractButton != null && extractButton.IsMouseHovering && Main.mouseLeft)
+            {
+                extractHoldTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                float initialDelay = 0.4f;
+                float repeatRate = 0.12f;
+
+                if (extractHoldTime > initialDelay)
+                {
+                    if ((extractHoldTime - initialDelay) % repeatRate < (float)gameTime.ElapsedGameTime.TotalSeconds)
+                    {
+                        TryExtractCore();
+                    }
+                }
+            }
+            else
+            {
+                extractHoldTime = 0f;
             }
 
             if (!SocketingItemSlot.IsAir != !lastItem.IsAir ||

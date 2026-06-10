@@ -26,16 +26,37 @@ namespace Stataria
 
         private bool IsAdmin(CommandCaller caller)
         {
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                return true;
+            }
+
+            if (Main.netMode == NetmodeID.Server && caller.CommandType == CommandType.Console)
+            {
+                return true;
+            }
+
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
                 if (SteamUser.BLoggedOn())
                 {
                     var steamId = SteamUser.GetSteamID();
-                    if (steamId.m_SteamID.ToString() != AdminSteamID)
+                    string currentSteamIdStr = steamId.m_SteamID.ToString();
+
+                    if (currentSteamIdStr == AdminSteamID)
                     {
-                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.NoPermission"), Color.Red);
-                        return false;
+                        return true;
                     }
+
+                    var config = ModContent.GetInstance<StatariaConfig>();
+                    if (config.multiplayerSettings.AdminSteamIDs != null && 
+                        config.multiplayerSettings.AdminSteamIDs.Contains(currentSteamIdStr))
+                    {
+                        return true;
+                    }
+
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.NoPermission"), Color.Red);
+                    return false;
                 }
                 else
                 {

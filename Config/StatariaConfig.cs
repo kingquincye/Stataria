@@ -325,6 +325,7 @@ namespace Stataria
             [DefaultValue(false)] public bool SplitKillXP { get; set; } = false;
             [DefaultValue(true)] public bool EnableXPProximity { get; set; } = true;
             [Range(500, 10000)][DefaultValue(1000)] public int XPProximityRange { get; set; } = 1000;
+            public List<string> AdminSteamIDs { get; set; } = new List<string>();
         }
 
         public class EnemyScaling

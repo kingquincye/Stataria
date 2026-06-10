@@ -452,6 +452,11 @@ Configs: {
 			Label: 允许在多人游戏中自行重置
 			Tooltip: 开启后，允许非管理员玩家在多人游戏中使用 '/stataria selfreset' 命令重置自己的进度。
 		}
+
+		AdminSteamIDs: {
+			Label: 管理员 Steam ID 列表
+			Tooltip: 允许在多人游戏中使用管理员命令的玩家 17 位 Steam ID 列表。
+		}
 	}
 
 	EnemyScaling: {
