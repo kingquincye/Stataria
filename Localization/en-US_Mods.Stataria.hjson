@@ -994,6 +994,11 @@ Configs: {
 			Label: THR Cap
 			Tooltip: ""
 		}
+
+		PST_Cap: {
+			Label: PST Cap
+			Tooltip: ""
+		}
 	}
 
 	ModIntegration: {
@@ -1011,6 +1016,7 @@ Configs: {
 			GMB_Settings: GMB Settings
 			SHM_Settings: SHM Settings
 			THR_Settings: THR Settings
+			PST_Settings: PST Settings
 		}
 
 		EnableCalamityIntegration: {
@@ -1181,6 +1187,26 @@ Configs: {
 		THR_Damage: {
 			Label: Damage
 			Tooltip: Percentage Throwing damage increase.
+		}
+
+		EnableSekirariaIntegration: {
+			Label: Enable Sekiraria Integration
+			Tooltip: Enable or disable integration with the Sekiraria mod. Must have Sekiraria installed for these settings to take effect.
+		}
+
+		PST_MaxPosture: {
+			Label: Max Posture Per Point
+			Tooltip: Gained max posture per PST point.
+		}
+
+		PST_PostureDamage: {
+			Label: Posture Damage Flat Bonus Per Point
+			Tooltip: Gained flat posture damage per PST point.
+		}
+
+		PST_BlockDamageReduction: {
+			Label: Block Damage Reduction Factor
+			Tooltip: Diminishing returns factor for damage reduction while late-blocking.
 		}
 	}
 
@@ -2795,6 +2821,9 @@ UI: {
 		CLK_ClickDamage: +{0}% Click Damage (+{1}% per point)
 		CLK_ClickRadius: +{0} Click Radius Units (+{1} units per point)
 		CLK_EffectsDiminishing: -{0}% Clicks for Effects (Diminishing)
+		PST_MaxPosture: +{0} Max Posture (+{1} per point)
+		PST_PostureDamage: +{0} Posture Damage Flat Bonus (+{1} per point)
+		PST_BlockDamageReduction: +{0}% Block Damage Reduction (diminishing)
 		Generic_Damage: +{0}% {1} Damage (+{2}% per point)
 	}
 }

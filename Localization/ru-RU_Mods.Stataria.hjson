@@ -994,6 +994,11 @@ Configs: {
 			Label: Лимит THR
 			Tooltip: ""
 		}
+
+		PST_Cap: {
+			Label: Лимит PST
+			Tooltip: ""
+		}
 	}
 
 	ModIntegration: {
@@ -1011,6 +1016,7 @@ Configs: {
 			GMB_Settings: Настройки GMB (Азартный игрок)
 			SHM_Settings: Настройки SHM (Шаман)
 			THR_Settings: Настройки THR (Метатель)
+			PST_Settings: Настройки PST (Осанка)
 		}
 
 		EnableCalamityIntegration: {
@@ -1181,6 +1187,26 @@ Configs: {
 		THR_Damage: {
 			Label: Урон
 			Tooltip: Урон Метателя (Throwing).
+		}
+
+		EnableSekirariaIntegration: {
+			Label: Включить Интеграцию с Sekiraria
+			Tooltip: Включает интеграцию с модом Sekiraria. Должен быть установлен мод Sekiraria.
+		}
+
+		PST_MaxPosture: {
+			Label: Макс. Осанка за Очко
+			Tooltip: Максимальная осанка, получаемая за очко PST.
+		}
+
+		PST_PostureDamage: {
+			Label: Плоский Бонус к Урону Осанки за Очко
+			Tooltip: Плоский бонус к урону осанки, получаемый за очко PST.
+		}
+
+		PST_BlockDamageReduction: {
+			Label: Коэффициент снижения урона при блокировании
+			Tooltip: Коэффициент убывающей доходности для снижения урона при позднем блокировании.
 		}
 	}
 
@@ -2795,6 +2821,9 @@ UI: {
 		CLK_ClickDamage: +{0}% Урон Клика (+{1}% за очко)
 		CLK_ClickRadius: +{0} Ед. Радиуса Клика (+{1} ед. за очко)
 		CLK_EffectsDiminishing: -{0}% Кликов для Эффектов (Убывает)
+		PST_MaxPosture: +{0} Макс. Осанка (+{1} за очко)
+		PST_PostureDamage: +{0} Плоский Бонус к Урону Осанки (+{1} за очко)
+		PST_BlockDamageReduction: +{0}% Снижение урона при блокировании (убывающее)
 		Generic_Damage: +{0}% {1} Урон (+{2}% за очко)
 	}
 }

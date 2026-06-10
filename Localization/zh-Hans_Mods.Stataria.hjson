@@ -994,6 +994,11 @@ Configs: {
 			Label: THR (投掷者) 上限
 			Tooltip: ""
 		}
+
+		PST_Cap: {
+			Label: PST 上限
+			Tooltip: ""
+		}
 	}
 
 	ModIntegration: {
@@ -1011,6 +1016,7 @@ Configs: {
 			GMB_Settings: GMB (赌徒) 设置
 			SHM_Settings: SHM (萨满) 设置
 			THR_Settings: THR (投掷者) 设置
+			PST_Settings: PST 设置
 		}
 
 		EnableCalamityIntegration: {
@@ -1181,6 +1187,26 @@ Configs: {
 		THR_Damage: {
 			Label: 投掷者伤害
 			Tooltip: 投掷 (Throwing) 伤害的百分比加成。
+		}
+
+		EnableSekirariaIntegration: {
+			Label: 启用 Sekiraria 整合
+			Tooltip: 启用或禁用与 Sekiraria 模组的整合。必须安装 Sekiraria 才能使这些设置生效。
+		}
+
+		PST_MaxPosture: {
+			Label: 每点最大架势值
+			Tooltip: 每点 PST 增加的最大架势值。
+		}
+
+		PST_PostureDamage: {
+			Label: 每点架势伤害固定加成
+			Tooltip: 每点 PST 增加的固定架势伤害。
+		}
+
+		PST_BlockDamageReduction: {
+			Label: 格挡伤害减免系数
+			Tooltip: 降低进行迟缓格挡（非完美弹反）时受到的伤害的收益递减系数。
 		}
 	}
 
@@ -2795,6 +2821,9 @@ UI: {
 		CLK_ClickDamage: +{0}% 点击伤害 (+{1}% 每点)
 		CLK_ClickRadius: +{0} 点击半径单位 (+{1} 单位 每点)
 		CLK_EffectsDiminishing: -{0}% 触发效果所需点击数 (收益递减)
+		PST_MaxPosture: +{0} 最大架势 (+{1} 每点)
+		PST_PostureDamage: +{0} 固定架势伤害加成 (+{1} 每点)
+		PST_BlockDamageReduction: +{0}% 格挡伤害减免 (收益递减)
 		Generic_Damage: +{0}% {1}伤害 (+{2}% 每点)
 	}
 }

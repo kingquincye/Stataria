@@ -152,6 +152,7 @@ namespace Stataria
                 rpg.GMB = reader.ReadInt32();
                 rpg.SHM = reader.ReadInt32();
                 rpg.THR = reader.ReadInt32();
+                rpg.PST = reader.ReadInt32();
                 rpg.lastStandCooldownTimer = reader.ReadInt32();
                 rpg.divineInterventionCooldownTimer = reader.ReadInt32();
                 rpg.RebirthCount = reader.ReadInt32();
@@ -684,7 +685,8 @@ namespace Stataria
                         { "HNT", rpgPlayer.HNT },
                         { "GMB", rpgPlayer.GMB },
                         { "SHM", rpgPlayer.SHM },
-                        { "THR", rpgPlayer.THR }
+                        { "THR", rpgPlayer.THR },
+                        { "PST", rpgPlayer.PST }
                     };
 
                 case "GetEffectiveStat":

@@ -397,6 +397,7 @@ namespace Stataria
             [Range(-1, 10000)][DefaultValue(1000)] public int GMB_Cap { get; set; } = 1000;
             [Range(-1, 10000)][DefaultValue(1000)] public int SHM_Cap { get; set; } = 1000;
             [Range(-1, 10000)][DefaultValue(1000)] public int THR_Cap { get; set; } = 1000;
+            [Range(-1, 10000)][DefaultValue(1000)] public int PST_Cap { get; set; } = 1000;
 
             [Header("VIT_Settings")]
             [Increment(0.1f)][Range(0f, 1000f)][DefaultValue(2f)] public float VIT_HP { get; set; } = 2f;
@@ -471,6 +472,7 @@ namespace Stataria
             [DefaultValue(true)] public bool EnableThoriumIntegration { get; set; } = true;
             [DefaultValue(true)] public bool EnableClickerClassIntegration { get; set; } = true;
             [DefaultValue(true)] public bool EnableGenericModIntegration { get; set; } = true;
+            [DefaultValue(true)] public bool EnableSekirariaIntegration { get; set; } = true;
 
             [Header("RGE_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float RGE_Damage { get; set; } = 0.5f;
@@ -521,6 +523,11 @@ namespace Stataria
 
             [Header("THR_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float THR_Damage { get; set; } = 0.5f;
+
+            [Header("PST_Settings")]
+            [Range(0f, 100f)][DefaultValue(5f)] public float PST_MaxPosture { get; set; } = 5f;
+            [Range(0f, 500f)][DefaultValue(20f)] public float PST_PostureDamage { get; set; } = 20f;
+            [Range(0f, 0.1f)][DefaultValue(0.01f)] public float PST_BlockDamageReduction { get; set; } = 0.01f;
         }
 
         public class ExtraLuckSettings

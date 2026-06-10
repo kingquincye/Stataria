@@ -87,7 +87,7 @@ namespace Stataria
                     rpg.XP = 0L;
                     rpg.XPToNext = (long)(100L * Math.Pow(rpg.Level, cfg.generalBalance.LevelScalingFactor));
                     rpg.StatPoints = 0;
-                    rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = rpg.BLH = rpg.HNT = rpg.GMB = rpg.SHM = rpg.THR = 0;
+                    rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = rpg.BLH = rpg.HNT = rpg.GMB = rpg.SHM = rpg.THR = rpg.PST = 0;
                     rpg.rewardedBosses.Clear();
                     rpg.RebirthCount = 0;
                     rpg.RebirthPoints = 0;
@@ -586,7 +586,7 @@ namespace Stataria
             rpg.XP = 0L;
             rpg.XPToNext = (long)(100L * Math.Pow(rpg.Level, cfg.generalBalance.LevelScalingFactor));
             rpg.StatPoints = 0;
-            rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = rpg.BLH = rpg.HNT = rpg.GMB = rpg.SHM = rpg.THR = 0;
+            rpg.VIT = rpg.STR = rpg.AGI = rpg.INT = rpg.LUC = rpg.END = rpg.POW = rpg.DEX = rpg.SPR = rpg.RGE = rpg.BRD = rpg.HLR = rpg.TCH = rpg.CLK = rpg.BLH = rpg.HNT = rpg.GMB = rpg.SHM = rpg.THR = rpg.PST = 0;
             rpg.rewardedBosses.Clear();
             rpg.RebirthCount = 0;
             rpg.RebirthPoints = 0;
@@ -638,6 +638,7 @@ namespace Stataria
                 case "gmb": rpg.GMB = value; return true;
                 case "shm": rpg.SHM = value; return true;
                 case "thr": rpg.THR = value; return true;
+                case "pst": rpg.PST = value; return true;
                 default: return false;
             }
         }

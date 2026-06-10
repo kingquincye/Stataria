@@ -75,7 +75,7 @@ namespace Stataria
         private float apexSummonerDamageBonus = 0f;
         private int arcaneSurgeDamageBonus = 0;
 
-        public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0, BLH = 0, HNT = 0, GMB = 0, SHM = 0, THR = 0;
+        public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0, BLH = 0, HNT = 0, GMB = 0, SHM = 0, THR = 0, PST = 0;
         public HashSet<int> rewardedBosses = new();
 
         public bool AutoAllocateEnabled { get; set; } = false;
@@ -89,7 +89,7 @@ namespace Stataria
             XP = 0L;
             RecalculateXPToNext();
             StatPoints = 0;
-            VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = 0;
+            VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = PST = 0;
             GhostStats = new Dictionary<string, int>();
             rewardedBosses.Clear();
             lastStandCooldownTimer = 0;
@@ -120,6 +120,7 @@ namespace Stataria
             tag["BLH"] = BLH;
             tag["HNT"] = HNT; tag["GMB"] = GMB;
             tag["SHM"] = SHM; tag["THR"] = THR;
+            tag["PST"] = PST;
             tag["RewardedBosses"] = new List<int>(rewardedBosses);
             tag["lastStandCooldownTimer"] = lastStandCooldownTimer;
             tag["divineInterventionCooldownTimer"] = divineInterventionCooldownTimer;
@@ -177,6 +178,7 @@ namespace Stataria
             GMB = tag.ContainsKey("GMB") ? tag.GetInt("GMB") : 0;
             SHM = tag.ContainsKey("SHM") ? tag.GetInt("SHM") : 0;
             THR = tag.ContainsKey("THR") ? tag.GetInt("THR") : 0;
+            PST = tag.ContainsKey("PST") ? tag.GetInt("PST") : 0;
             if (tag.ContainsKey("RewardedBosses"))
                 rewardedBosses = tag.Get<List<int>>("RewardedBosses").ToHashSet();
             lastStandCooldownTimer = tag.ContainsKey("lastStandCooldownTimer") ? tag.GetInt("lastStandCooldownTimer") : 0;
@@ -856,7 +858,7 @@ namespace Stataria
             if (config.rebirthSystem.ResetStatsOnRebirth)
             {
                 StatPoints = config.generalBalance.StatPointsPerLevel;
-                VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = 0;
+                VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = PST = 0;
             }
             else
             {
@@ -890,7 +892,7 @@ namespace Stataria
             int shouldHaveStatPoints = (Level - 1) * config.generalBalance.StatPointsPerLevel;
 
             int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK + 
-                  BLH + HNT + GMB + SHM + THR;
+                  BLH + HNT + GMB + SHM + THR + PST;
 
             int totalPointsShould = shouldHaveStatPoints;
 
@@ -961,6 +963,7 @@ namespace Stataria
                         case "GMB": cap = config.statSettings.GMB_Cap; break;
                         case "SHM": cap = config.statSettings.SHM_Cap; break;
                         case "THR": cap = config.statSettings.THR_Cap; break;
+                        case "PST": cap = config.statSettings.PST_Cap; break;
                     }
 
                     if (cap != -1 && config.rebirthSystem.EnableProgressiveStatCaps && RebirthCount > 0)
@@ -992,6 +995,7 @@ namespace Stataria
                     case "GMB": baseStat = GMB; break;
                     case "SHM": baseStat = SHM; break;
                     case "THR": baseStat = THR; break;
+                    case "PST": baseStat = PST; break;
                 }
 
                 int clampedGhostValue = ghostStatValue;
@@ -1090,6 +1094,10 @@ namespace Stataria
                     baseStat = THR;
                     cap = config.statSettings.THR_Cap;
                     break;
+                case "PST":
+                    baseStat = PST;
+                    cap = config.statSettings.PST_Cap;
+                    break;
             }
 
             int totalStat = baseStat;
@@ -1179,7 +1187,7 @@ namespace Stataria
             }
 
             int spentPoints = VIT + STR + AGI + INT + LUC + END + POW + DEX + SPR + RGE + TCH + BRD + HLR + CLK + 
-                  BLH + HNT + GMB + SHM + THR;
+                  BLH + HNT + GMB + SHM + THR + PST;
             int totalPointsShould = shouldHaveBaseStatPoints + shouldHaveBonusStatPoints;
             int currentTotalPoints = spentPoints + StatPoints;
 
@@ -2036,6 +2044,7 @@ namespace Stataria
                         case "GMB": currentBaseStat = GMB; cap = config.statSettings.GMB_Cap; break;
                         case "SHM": currentBaseStat = SHM; cap = config.statSettings.SHM_Cap; break;
                         case "THR": currentBaseStat = THR; cap = config.statSettings.THR_Cap; break;
+                        case "PST": currentBaseStat = PST; cap = config.statSettings.PST_Cap; break;
                         default: continue;
                     }
 
@@ -2111,6 +2120,7 @@ namespace Stataria
                         case "GMB": currentBaseStat = GMB; cap = config.statSettings.GMB_Cap; break;
                         case "SHM": currentBaseStat = SHM; cap = config.statSettings.SHM_Cap; break;
                         case "THR": currentBaseStat = THR; cap = config.statSettings.THR_Cap; break;
+                        case "PST": currentBaseStat = PST; cap = config.statSettings.PST_Cap; break;
                         default: continue;
                     }
 
@@ -2155,6 +2165,7 @@ namespace Stataria
                         case "GMB": GMB += pointsToAdd; break;
                         case "SHM": SHM += pointsToAdd; break;
                         case "THR": THR += pointsToAdd; break;
+                        case "PST": PST += pointsToAdd; break;
                     }
 
                     totalPointsToAllocate += pointsToAdd;
@@ -2169,6 +2180,22 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
             int effectiveAGI = GetEffectiveStat("AGI");
             Player.wingTimeMax += (int)(effectiveAGI * config.statSettings.AGI_WingTime);
+
+            if (config.modIntegration.EnableSekirariaIntegration && SekirariaSupportHelper.SekirariaLoaded)
+            {
+                int effectivePST = GetEffectiveStat("PST");
+                if (effectivePST > 0)
+                {
+                    float maxPostureBonus = effectivePST * config.modIntegration.PST_MaxPosture;
+                    float damageFlatBonus = effectivePST * config.modIntegration.PST_PostureDamage;
+                    float blockDamageMult = 1f / (1f + effectivePST * config.modIntegration.PST_BlockDamageReduction);
+
+                    SekirariaSupportHelper.AddPlayerPostureMaxBonus(Player, maxPostureBonus);
+                    SekirariaSupportHelper.AddPlayerPostureDamageFlatBonus(Player, damageFlatBonus);
+                    SekirariaSupportHelper.AddPlayerBlockDamageMultiplier(Player, blockDamageMult - 1f);
+                    SekirariaSupportHelper.SyncPlayerPostureMax(Player);
+                }
+            }
         }
 
         public override void PostUpdate()
@@ -2856,6 +2883,7 @@ namespace Stataria
             packet.Write(GMB);
             packet.Write(SHM);
             packet.Write(THR);
+            packet.Write(PST);
             packet.Write(lastStandCooldownTimer);
             packet.Write(divineInterventionCooldownTimer);
             packet.Write(RebirthCount);

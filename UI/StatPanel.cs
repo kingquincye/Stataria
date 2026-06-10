@@ -505,6 +505,30 @@ namespace Stataria
                     return string.Join("\n", tooltips);
                 }
             });
+
+            statDefinitions.Add(new StatDefinition
+            {
+                Name = "PST",
+                GetValue = player => player.PST,
+                SetValue = (player, value) => player.PST = value,
+                GetCap = cfg => cfg.statSettings.PST_Cap,
+                IsModLoaded = () => config.modIntegration.EnableSekirariaIntegration && SekirariaSupportHelper.SekirariaLoaded,
+                GetTooltip = cfg =>
+                {
+                    var player = Main.LocalPlayer;
+                    var rpg = player.GetModPlayer<RPGPlayer>();
+                    int effectivePST = rpg.GetEffectiveStat("PST");
+                    float blockReductionPercent = (1f - 1f / (1f + effectivePST * cfg.modIntegration.PST_BlockDamageReduction)) * 100f;
+                    var tooltips = new List<string>
+                    {
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.PST_MaxPosture", (effectivePST * cfg.modIntegration.PST_MaxPosture).ToString("0.#"), cfg.modIntegration.PST_MaxPosture.ToString("0.#")),
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.PST_PostureDamage", (effectivePST * cfg.modIntegration.PST_PostureDamage).ToString("0.#"), cfg.modIntegration.PST_PostureDamage.ToString("0.#")),
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.PST_BlockDamageReduction", blockReductionPercent.ToString("0.#"))
+                    };
+                    return string.Join("\n", tooltips);
+                }
+            });
+
             
             GenericModSupportHelper.Initialize();
             var visibleMods = GenericModSupportHelper.GetVisibleMods();
