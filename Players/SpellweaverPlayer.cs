@@ -153,30 +153,7 @@ namespace Stataria
             }
         }
 
-        public override void OnConsumeMana(Item item, int manaConsumed)
-        {
-            if (IsSpellweaverActive)
-            {
-                float oldCharge = ElementalCharge;
-                ElementalCharge = Math.Min(MaxElementalCharge, ElementalCharge + manaConsumed);
-                
-                if (ElementalCharge > oldCharge && Main.netMode != NetmodeID.Server)
-                {
-                    if (Player.whoAmI == Main.myPlayer)
-                    {
-                        // Spawn small sparks on charge gain
-                        int d = Dust.NewDust(Player.position, Player.width, Player.height, DustID.Electric, 0, 0, 100, default, 0.7f);
-                        Main.dust[d].velocity *= 0.3f;
-                        Main.dust[d].noGravity = true;
-                    }
-                }
 
-                if (Player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.SinglePlayer)
-                {
-                    SyncSpellweaverState();
-                }
-            }
-        }
 
         public void ActivateElementalDischarge()
         {

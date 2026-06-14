@@ -6,13 +6,14 @@ Keybinds: {
 	"Savage Roar.DisplayName": Дикий рев
 	"Elemental Discharge.DisplayName": Элементальный разряд
 	"Divine Resurrection.DisplayName": Божественное воскрешение
+	"Mortal Draw.DisplayName": Смертельный выпад
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
 
 Commands: {
 	StatariaCommands: {
-		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
 		Description: Команды для мода Stataria
 		NoPermission: У вас нет прав на использование этой команды.
 		SteamNotAvailable: Steam недоступен. Невозможно проверить права администратора.
@@ -22,6 +23,8 @@ Commands: {
 		SetLevelUsage: Использование: /stataria setlevel <число>
 		SetXPSuccess: Опыт установлен на {0}
 		SetXPUsage: Использование: /stataria setxp <число>
+		SetRebirthSuccess: Счетчик перерождений установлен на {0}
+		SetRebirthUsage: Использование: /stataria setrebirth <число>
 		SetPointsRPSuccess: Очки Перерождения установлены на {0}
 		SetPointsRPUsage: Использование: /stataria setpoints rp <число>
 		SetPointsStatSuccess: Очки характеристик установлены на {0}
@@ -227,6 +230,16 @@ Configs: {
 		StatPointsPerLevel: {
 			Label: Очки Характеристик за Уровень
 			Tooltip: Количество очков характеристик, получаемых за повышение уровня.
+		}
+
+		EnableStatResetting: {
+			Label: Разрешить сброс характеристик
+			Tooltip: Если включено, позволяет игрокам сбрасывать очки характеристик на панели характеристик.
+		}
+
+		EnableSkillResetting: {
+			Label: Разрешить сброс способностей
+			Tooltip: Если включено, позволяет игрокам сбрасывать очки дерева умений/способностей.
 		}
 
 		DamageXP: {
@@ -1383,6 +1396,7 @@ Configs: {
 			Berserker: Берсерк
 			Spellweaver: Заклинатель
 			Angel: Ангел
+			Shinobi: Синоби
 		}
 
 		BaseSwitchCost: {
@@ -1463,6 +1477,21 @@ Configs: {
 		VampireKillHealPercent: {
 			Label: Лечение за Убийство
 			Tooltip: Процент макс. здоровья, восстанавливаемый при убийстве врага.
+		}
+
+		ShinobiExecutionHealPercent: {
+			Label: Лечение от казней Синоби
+			Tooltip: Процент максимального здоровья, восстанавливаемый при казни врага.
+		}
+
+		ShinobiMortalDrawCooldown: {
+			Label: Перезарядка Смертельного выпада Синоби
+			Tooltip: Время перезарядки навыка Смертельный выпад в секундах.
+		}
+
+		ShinobiMortalDrawRange: {
+			Label: Дальность Смертельного выпада Синоби
+			Tooltip: Дальность в пикселях, в пределах которой казнятся враги с пробитой осанкой.
 		}
 
 		BeastmasterDamagePerUniqueMinion: {
@@ -1704,9 +1733,24 @@ Configs: {
 			Tooltip: Процентный шанс собрать душу при нанесении урона боссу магией или призывом.
 		}
 
+		NecromancerLimitZombieThralls: {
+			Label: Ограничить число активных слуг
+			Tooltip: Если включено, ограничивает максимальное количество активных зомби-слуг лимитом, указанным ниже. ВНИМАНИЕ: Отключение параметра позволяет призывать слуг без ограничений, что может вызвать сильные лаги, особенно в мультиплеере!
+		}
+
 		NecromancerActiveThrallsLimit: {
-			Label: Лимит активных прислужников
-			Tooltip: Максимальное количество активных зомби-прислужников, которых вы можете призвать одновременно.
+			Label: Лимит активных слуг
+			Tooltip: Максимальное количество одновременно активных зомби-слуг при включенном ограничении.
+		}
+
+		NecromancerBaseThralls: {
+			Label: Базовое число слуг
+			Tooltip: Начальный лимит зомби-слуг, которых вы можете призвать до учета каких-либо характеристик.
+		}
+
+		NecromancerSPRPerThrall: {
+			Label: SPR за каждого доп. слугу
+			Tooltip: Количество очков SPR, необходимое для увеличения лимита активных слуг на 1.
 		}
 
 		NecromancerBoneArmorDRPerThrall: {
@@ -1719,9 +1763,9 @@ Configs: {
 			Tooltip: Базовый урон от атак призываемых зомби-прислужников.
 		}
 
-		NecromancerThrallINTScale: {
-			Label: Коэффициент INT прислужника
-			Tooltip: Процент увеличения урона от атак зомби-прислужника за каждое очко характеристики INT.
+		NecromancerThrallSPRScale: {
+			Label: Коэффициент SPR прислужника
+			Tooltip: Процент увеличения урона от атак зомби-прислужника за каждое очко характеристики SPR.
 		}
 
 		NecromancerThrallDamageIncreasePerRebirth: {
@@ -2590,8 +2634,9 @@ RoleEffects: {
 		SoulReserve: • Запас душ: Вместимость {0} (+1 за каждые {1} очков SPR)
 		SoulDuration: • Длительность жизни душ: Базовая {0}с (+{1}с за очко SPR)
 		ThrallsLimit: • Активные прислужники: Максимум {0} одновременно
+		ThrallsNoLimit: • Активные прислужники: Максимум {0} (Без лимита)
 		BoneArmor: • Костяная броня: +{0}% снижения урона за каждого активного прислужника
-		ThrallDamage: • Атака прислужника: {0} базового урона (+{1}% за очко INT) (+{2}% за перерождение) (+{3} за уровень)
+		ThrallDamage: • Атака прислужника: {0} базового урона (+{1}% за очко SPR) (+{2}% за перерождение) (+{3} за уровень)
 	}
 
 	Berserker: {
@@ -2604,7 +2649,13 @@ RoleEffects: {
 	Spellweaver: {
 		ManaAegis: • Эгида Маны: {0}% входящего урона вычитается из Маны вместо Здоровья
 		ManaCrit: • Поток Маны: Магические критические удары восстанавливают {0}% от макс. Маны
-		Discharge: • Элементальный разряд: Расход маны накапливает заряд (базовый макс.: {0}, +{2} к объему за INT). Расходуйте весь заряд для выброса элементального взрыва без перезарядки, урон равен количеству поглощенного заряда, умноженному на {1}.
+		Discharge: • Элементальный разряд: Использование магического оружия накапливает заряд на основе его базовой стоимости маны (базовый макс.: {0}, +{2} к лимиту за INT). Расходуйте весь заряд для выброса элементального взрыва без перезарядки, урон равен количеству поглощенного заряда, умноженному на {1}.
+	}
+
+	Shinobi: {
+		HealOnExecution: • Лечение на {0}% от макс. здоровья при казни
+		MortalDraw: • Смертельный выпад: Взмахните мечом парирования, чтобы нанести удар и казнить всех врагов с пробитой осанкой в пределах досягаемости (перезарядка {0} сек.)
+		MortalDrawRange: • Дальность Смертельного выпада: {0} пикс.
 	}
 }
 
@@ -2874,12 +2925,16 @@ RPGPlayer: {
 	LastStand: Последний Рубеж!
 }
 
-Combat.Bleed: Кровотечение!
+Combat: {
+	Bleed: Кровотечение!
+	RequiresParrySword: Требуется экипированный Меч парирования!
+}
 
 AbilityName: {
 	SavageRoar: Дикий рев
 	DivineIntervention: Божественное Вмешательство
 	DivineResurrection: Божественное воскрешение
+	MortalDraw: Смертельный выпад
 }
 
 RebirthAbilityName: {
@@ -2974,6 +3029,7 @@ RoleName: {
 	Berserker: Берсерк
 	Spellweaver: Чародей
 	Angel: Ангел
+	Shinobi: Синоби
 }
 
 RoleDescription: {
@@ -2988,6 +3044,7 @@ RoleDescription: {
 	Berserker: Высокорисковый боец передовой, который становится быстрее и смертоноснее по мере падения своего здоровья.
 	Spellweaver: Боец стихий, направляющий заклинания для накопления мощных комбо-выбросов, одновременно защищая себя маной.
 	Angel: Вознесшийся Жрец, обретший крылья и управляющий границей жизни и смерти, воскрешающий павших союзников и защищающий их мощной аурой.
+	Shinobi: Быстрый теневой воин из Sekiraria. Восстанавливает здоровье при казнях и может применить смертоносный Смертельный выпад при экипированном Мече парирования.
 }
 
 RoleFlavorText: {
@@ -3002,6 +3059,7 @@ RoleFlavorText: {
 	Berserker: Питай ярость, игнорируй боль — чем ты ближе к смерти, тем ближе к ней твои враги.
 	Spellweaver: Тки стихии, повелевай бурей — пусть мана защищает твое тело, а твой разряд поглотит поле битвы.
 	Angel: Эволюционируй за пределы смертности — смотри свысока с крыльями грации, удерживая якорь душ твоих союзников.
+	Shinobi: Колебание — это поражение. Наноси удары из тени, казни с точностью и поглощай их сущность.
 }
 
 DeathMessage: {

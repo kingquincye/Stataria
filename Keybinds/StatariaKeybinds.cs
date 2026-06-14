@@ -13,6 +13,7 @@ namespace Stataria
         public static ModKeybind SoulRecallKey;
         public static ModKeybind SavageRoarKey;
         public static ModKeybind ElementalDischargeKey;
+        public static ModKeybind MortalDrawKey;
 
         public override void Load()
         {
@@ -25,6 +26,7 @@ namespace Stataria
             SoulRecallKey = KeybindLoader.RegisterKeybind(Mod, "Soul Recall", "C");
             SavageRoarKey = KeybindLoader.RegisterKeybind(Mod, "Savage Roar", "V");
             ElementalDischargeKey = KeybindLoader.RegisterKeybind(Mod, "Elemental Discharge", "Z");
+            MortalDrawKey = KeybindLoader.RegisterKeybind(Mod, "Mortal Draw", "H");
         }
 
         public override void Unload()
@@ -36,6 +38,7 @@ namespace Stataria
             SoulRecallKey = null;
             SavageRoarKey = null;
             ElementalDischargeKey = null;
+            MortalDrawKey = null;
         }
     }
 }

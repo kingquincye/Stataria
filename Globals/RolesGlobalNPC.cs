@@ -49,6 +49,29 @@ namespace Stataria
                 {
                     HandleVampireKill(p, config);
                     HandleNecromancerKill(p, config);
+                    HandleShinobiExecution(p, npc, config);
+                }
+            }
+        }
+
+        private void HandleShinobiExecution(Player player, NPC npc, StatariaConfig config)
+        {
+            var shinobiPlayer = player.GetModPlayer<ShinobiPlayer>();
+            if (!shinobiPlayer.IsShinobiActive)
+                return;
+
+            if (SekirariaSupportHelper.SekirariaLoaded && SekirariaSupportHelper.IsPlayerExecutingNPC(player, npc))
+            {
+                int healAmount = (int)(player.statLifeMax2 * config.roleSettings.ShinobiExecutionHealPercent / 100f);
+                healAmount = Math.Max(1, healAmount);
+
+                player.statLife += healAmount;
+                if (player.statLife > player.statLifeMax2)
+                    player.statLife = player.statLifeMax2;
+
+                if (healAmount > 0 && Main.netMode != NetmodeID.Server)
+                {
+                    player.HealEffect(healAmount, true);
                 }
             }
         }

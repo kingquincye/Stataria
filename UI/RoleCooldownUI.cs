@@ -89,6 +89,18 @@ namespace Stataria.UI
                 ));
             }
 
+            // Shinobi: Mortal Draw
+            var shinobi = player.GetModPlayer<ShinobiPlayer>();
+            if (shinobi.IsShinobiActive && shinobi.MortalDrawCooldownTimer > 0)
+            {
+                activeCooldowns.Add(new ActiveCooldown(
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.AbilityName.MortalDraw"), "H", 
+                    shinobi.MortalDrawCooldownTimer / 60f, 
+                    config.roleSettings.ShinobiMortalDrawCooldown, 
+                    Color.Purple
+                ));
+            }
+
 
             // Rebirth: Teleport
             if (rpg.teleportCooldownTimer > 0)

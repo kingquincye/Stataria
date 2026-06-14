@@ -61,5 +61,32 @@ namespace Stataria
 
             return base.ConsumeItem(item, player);
         }
+
+        public override bool? UseItem(Item item, Player player)
+        {
+            var spellweaverPlayer = player.GetModPlayer<SpellweaverPlayer>();
+            if (spellweaverPlayer.IsSpellweaverActive && item.DamageType == DamageClass.Magic && item.mana > 0)
+            {
+                float oldCharge = spellweaverPlayer.ElementalCharge;
+                spellweaverPlayer.ElementalCharge = System.Math.Min(spellweaverPlayer.MaxElementalCharge, spellweaverPlayer.ElementalCharge + item.mana);
+                
+                if (spellweaverPlayer.ElementalCharge > oldCharge && Main.netMode != NetmodeID.Server)
+                {
+                    if (player.whoAmI == Main.myPlayer)
+                    {
+                        // Spawn small sparks on charge gain
+                        int d = Dust.NewDust(player.position, player.width, player.height, DustID.Electric, 0, 0, 100, default, 0.7f);
+                        Main.dust[d].velocity *= 0.3f;
+                        Main.dust[d].noGravity = true;
+                    }
+                }
+
+                if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.SinglePlayer)
+                {
+                    spellweaverPlayer.SyncSpellweaverState();
+                }
+            }
+            return null;
+        }
     }
 }

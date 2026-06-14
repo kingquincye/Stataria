@@ -32,6 +32,18 @@ namespace Stataria
         private float desiredWidth = 500f;
         private float desiredHeight = MaxVisibleHeight;
 
+        private static readonly List<string> AbilityOrder = new List<string>
+        {
+            "EnhancedFortune", "ReducedPotionSickness", "ExtraAccessorySlot", "LastStand", "Dash",
+            "AutoJump", "NoFallDamage", "WaterFreedom", "Teleport", "TreasureHunter",
+            "Sustenance", "ArcheryMastery", "BattleReady", "AnglerLuck", "VitalityFortitude",
+            "InnerCalm", "ElementalResistance", "ShadowVeil", "FortuneFavored", "ArcaneMastery",
+            "MasterBuilder", "BattleFury", "SurfaceSkimmer", "ThornGuard", "FleetFooted",
+            "SummonerPact", "LavaWalker", "ZeroGravity", "NightVision", "Sanctuary",
+            "CombatStations", "GiantsGrip", "GoldenTouch", "EnhancedSpawns", "ShadowTrail",
+            "AuraPulse", "AutoClicker"
+        };
+
         public override void OnInitialize()
         {
             skillPanel = new UIPanel();
@@ -73,6 +85,7 @@ namespace Stataria
             abilityList.Height.Set(-150f, 1f);
             abilityList.Top.Set(70f, 0f);
             abilityList.ListPadding = 10f;
+            abilityList.ManualSortMethod = (elements) => { };
             skillPanel.Append(abilityList);
 
             scrollbar = new UIScrollbar();
@@ -82,6 +95,7 @@ namespace Stataria
             skillPanel.Append(scrollbar);
             abilityList.SetScrollbar(scrollbar);
 
+            var config = ModContent.GetInstance<StatariaConfig>();
             resetAbilitiesButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.SkillTree.ResetButton"), 0.9f, false);
             resetAbilitiesButton.Width.Set(80f, 0f);
             resetAbilitiesButton.Height.Set(30f, 0f);
@@ -103,7 +117,11 @@ namespace Stataria
                 ResetAllAbilities();
                 SoundEngine.PlaySound(SoundID.MenuClose);
             };
-            skillPanel.Append(resetAbilitiesButton);
+
+            if (config.generalBalance.EnableSkillResetting)
+            {
+                skillPanel.Append(resetAbilitiesButton);
+            }
 
             showHiddenButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.SkillTree.ShowHidden"), 0.9f, false);
             showHiddenButton.Width.Set(120f, 0f);
@@ -152,6 +170,8 @@ namespace Stataria
 
         public void RefreshAbilitiesList()
         {
+            float currentScroll = scrollbar != null ? scrollbar.ViewPosition : 0f;
+
             abilityList.Clear();
 
             Player player = Main.LocalPlayer;
@@ -161,7 +181,16 @@ namespace Stataria
 
             pointsText.SetText(Language.GetTextValue("Mods.Stataria.UI.SkillTree.RebirthPoints", rpg.RebirthPoints));
 
-            foreach (var kvp in rpg.RebirthAbilities)
+            var sortedAbilities = new List<KeyValuePair<string, RebirthAbility>>(rpg.RebirthAbilities);
+            sortedAbilities.Sort((a, b) => {
+                int indexA = AbilityOrder.IndexOf(a.Key);
+                int indexB = AbilityOrder.IndexOf(b.Key);
+                if (indexA == -1) indexA = int.MaxValue;
+                if (indexB == -1) indexB = int.MaxValue;
+                return indexA.CompareTo(indexB);
+            });
+
+            foreach (var kvp in sortedAbilities)
             {
                 var ability = kvp.Value;
                 string abilityKey = kvp.Key;
@@ -311,6 +340,12 @@ namespace Stataria
 
                 abilityList.Add(abilityPanel);
             }
+
+            abilityList.Recalculate();
+            if (scrollbar != null)
+            {
+                scrollbar.ViewPosition = currentScroll;
+            }
         }
 
         private void ResetAllAbilities()
@@ -375,12 +410,28 @@ namespace Stataria
         {
             base.Update(gameTime);
 
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (!config.generalBalance.EnableSkillResetting)
+            {
+                if (resetAbilitiesButton != null && skillPanel.HasChild(resetAbilitiesButton))
+                {
+                    skillPanel.RemoveChild(resetAbilitiesButton);
+                }
+            }
+            else
+            {
+                if (resetAbilitiesButton != null && !skillPanel.HasChild(resetAbilitiesButton))
+                {
+                    skillPanel.Append(resetAbilitiesButton);
+                }
+            }
+
             if (resetConfirmationShown && Main.mouseLeft)
             {
                 if (resetAbilitiesButton == null || !resetAbilitiesButton.ContainsPoint(Main.MouseScreen))
                 {
                     resetConfirmationShown = false;
-                    resetAbilitiesButton.SetText(Language.GetText("Mods.Stataria.UI.SkillTree.ResetButton"), 0.9f, false);
+                    resetAbilitiesButton?.SetText(Language.GetText("Mods.Stataria.UI.SkillTree.ResetButton"), 0.9f, false);
                 }
             }
 

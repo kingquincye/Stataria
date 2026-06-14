@@ -91,6 +91,11 @@ namespace Stataria
                     Main.dust[d].velocity *= 1.5f;
                     Main.dust[d].noGravity = true;
                 }
+
+                if (Player.statLife <= 0)
+                {
+                    Player.statLife = 1;
+                }
             }
 
             if (SavageRoarCooldownTimer > 0)
@@ -111,6 +116,16 @@ namespace Stataria
                     }
                 };
             }
+        }
+
+        public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref Terraria.DataStructures.PlayerDeathReason damageSource)
+        {
+            if (IsBerserkerActive && IsSavageRoarActive)
+            {
+                Player.statLife = 1;
+                return false; // Prevent death!
+            }
+            return true;
         }
 
         public void ActivateSavageRoar()

@@ -128,7 +128,17 @@ namespace Stataria
             if (Player.whoAmI == Main.myPlayer && !IsRecalled)
             {
                 var config = ModContent.GetInstance<StatariaConfig>();
-                int limit = config.roleSettings.NecromancerActiveThrallsLimit;
+                int baseLimit = config.roleSettings.NecromancerBaseThralls;
+                int spr = Player.GetModPlayer<RPGPlayer>().GetEffectiveStat("SPR");
+                int sprPerThrall = config.roleSettings.NecromancerSPRPerThrall;
+                int calculatedLimit = baseLimit + (spr / sprPerThrall);
+
+                int limit = calculatedLimit;
+                if (config.roleSettings.NecromancerLimitZombieThralls)
+                {
+                    limit = Math.Min(limit, config.roleSettings.NecromancerActiveThrallsLimit);
+                }
+
                 int currentActive = GetActiveThrallCount();
 
                 if (currentActive < limit && SoulReserveLifetimes.Count > 0)
@@ -305,13 +315,13 @@ namespace Stataria
 
             var config = ModContent.GetInstance<StatariaConfig>();
             int baseDamage = config.roleSettings.NecromancerThrallBaseDamage;
-            int intStat = Player.GetModPlayer<RPGPlayer>().GetEffectiveStat("INT");
+            int sprStat = Player.GetModPlayer<RPGPlayer>().GetEffectiveStat("SPR");
             int rebirthCount = Player.GetModPlayer<RPGPlayer>().RebirthCount;
             int level = Player.GetModPlayer<RPGPlayer>().Level;
             float levelBonus = level * config.roleSettings.NecromancerThrallDamageIncreasePerLevel;
             float totalBaseDamage = baseDamage + levelBonus;
             float rebirthMult = 1f + (rebirthCount * config.roleSettings.NecromancerThrallDamageIncreasePerRebirth / 100f);
-            int damage = (int)(totalBaseDamage * rebirthMult * (1f + intStat * config.roleSettings.NecromancerThrallINTScale / 100f));
+            int damage = (int)(totalBaseDamage * rebirthMult * (1f + sprStat * config.roleSettings.NecromancerThrallSPRScale / 100f));
 
             if (Player.whoAmI == Main.myPlayer)
             {

@@ -56,6 +56,9 @@ namespace Stataria
             [Range(1, 100000000)][DefaultValue(50)] public int LevelCapValue { get; set; } = 50;
             [DefaultValue(true)] public bool EnableStatPointRecalculation { get; set; } = true;
             [Range(1, 1000)][DefaultValue(2)] public int StatPointsPerLevel { get; set; } = 2;
+            [DefaultValue(true)] public bool EnableStatResetting { get; set; } = true;
+            [DefaultValue(true)] public bool EnableSkillResetting { get; set; } = true;
+
 
             [Header("Diminishing_Returns")]
             [DefaultValue(false)] public bool EnableDiminishingReturns { get; set; } = false;
@@ -295,13 +298,17 @@ namespace Stataria
             [DefaultValue(30f)][Range(5f, 300f)] public float NecromancerBaseSoulDuration { get; set; } = 30f;
             [DefaultValue(0.5f)][Range(0.1f, 5f)] public float NecromancerSoulDurationPerSPR { get; set; } = 0.5f;
             [DefaultValue(10f)][Range(0f, 100f)] public float NecromancerBossSoulHarvestChance { get; set; } = 10f;
-            [DefaultValue(3)][Range(1, 100)] public int NecromancerActiveThrallsLimit { get; set; } = 3;
+            [DefaultValue(true)] public bool NecromancerLimitZombieThralls { get; set; } = true;
+            [DefaultValue(3)][Range(1, 1000)] public int NecromancerActiveThrallsLimit { get; set; } = 3;
+            [DefaultValue(3)][Range(1, 100)] public int NecromancerBaseThralls { get; set; } = 3;
+            [DefaultValue(10)][Range(1, 100)] public int NecromancerSPRPerThrall { get; set; } = 10;
             [DefaultValue(3f)][Range(0f, 10f)] public float NecromancerBoneArmorDRPerThrall { get; set; } = 3f;
             [DefaultValue(20)][Range(5, 500)] public int NecromancerThrallBaseDamage { get; set; } = 20;
-            [DefaultValue(1.5f)][Range(0f, 10f)] public float NecromancerThrallINTScale { get; set; } = 1.5f;
+            [DefaultValue(1.5f)][Range(0f, 10f)] public float NecromancerThrallSPRScale { get; set; } = 1.5f;
             [DefaultValue(10f)][Range(0f, 100f)] public float NecromancerThrallDamageIncreasePerRebirth { get; set; } = 10f;
             [DefaultValue(1f)][Range(0f, 100f)] public float NecromancerThrallDamageIncreasePerLevel { get; set; } = 1f;
             public List<string> NecromancerThrallBlacklistedNPCs { get; set; } = new List<string>();
+
 
             [Header("Berserker")]
             [DefaultValue(50f)][Range(0f, 200f)] public float BerserkerBloodbathMaxDamageBonus { get; set; } = 50f;
@@ -316,6 +323,11 @@ namespace Stataria
             [DefaultValue(100f)][Range(100f, 2000f)] public float SpellweaverMaxElementalCharge { get; set; } = 100f;
             [DefaultValue(10f)][Range(1f, 50f)] public float SpellweaverElementalDischargeBaseMult { get; set; } = 10f;
             [DefaultValue(4f)][Range(0f, 50f)] public float SpellweaverElementalDischargeINTScale { get; set; } = 4f;
+
+            [Header("Shinobi")]
+            [DefaultValue(15f)][Range(0f, 100f)] public float ShinobiExecutionHealPercent { get; set; } = 15f;
+            [DefaultValue(30f)][Range(1f, 300f)] public float ShinobiMortalDrawCooldown { get; set; } = 30f;
+            [DefaultValue(1200f)][Range(100f, 5000f)] public float ShinobiMortalDrawRange { get; set; } = 1200f;
         }
 
         public class MultiplayerSettings

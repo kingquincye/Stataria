@@ -25,7 +25,8 @@ namespace Stataria
         SyncSpellweaverState,
         AngelResurrect,
         SyncAngelState,
-        NecromancerHarvestSoulOnKill
+        NecromancerHarvestSoulOnKill,
+        SyncShinobiState
     }
 
     public class Stataria : Mod
@@ -590,6 +591,24 @@ namespace Stataria
                     if (necPlayer.IsNecromancerActive)
                     {
                         necPlayer.HarvestSoul();
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncShinobiState)
+            {
+                int playerIndex = reader.ReadInt32();
+                int mdCooldown = reader.ReadInt32();
+                int mdAnim = reader.ReadInt32();
+
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    var shinobiPlayer = Main.player[playerIndex].GetModPlayer<ShinobiPlayer>();
+                    shinobiPlayer.MortalDrawCooldownTimer = mdCooldown;
+                    shinobiPlayer.MortalDrawAnimationTimer = mdAnim;
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        shinobiPlayer.SyncShinobiState(toWho: -1, fromWho: whoAmI);
                     }
                 }
             }

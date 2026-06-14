@@ -447,6 +447,7 @@ namespace Stataria
 
         private void RegisterDefaultRoles()
         {
+            var config = ModContent.GetInstance<StatariaConfig>();
             AvailableRoles.Clear();
 
             var critGod = new Role(
@@ -528,6 +529,17 @@ namespace Stataria
                 Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Spellweaver")
             );
             AvailableRoles["Spellweaver"] = spellweaver;
+
+            if (config.modIntegration.EnableSekirariaIntegration && SekirariaSupportHelper.SekirariaLoaded)
+            {
+                var shinobi = new Role(
+                    "Shinobi",
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Shinobi"),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Shinobi"),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Shinobi")
+                );
+                AvailableRoles["Shinobi"] = shinobi;
+            }
 
             foreach (var role in AvailableRoles.Values)
             {
@@ -751,6 +763,26 @@ namespace Stataria
                 if (spellweaverPlayer.ElementalCharge > 0)
                 {
                     spellweaverPlayer.ActivateElementalDischarge();
+                }
+            }
+            if (StatariaKeybinds.MortalDrawKey.JustPressed &&
+                !Terraria.GameInput.PlayerInput.WritingText &&
+                ActiveRole?.ID == "Shinobi" && ActiveRole.Status == RoleStatus.Active)
+            {
+                var shinobiPlayer = Player.GetModPlayer<ShinobiPlayer>();
+                if (shinobiPlayer.MortalDrawCooldownTimer <= 0 && shinobiPlayer.MortalDrawAnimationTimer <= 0)
+                {
+                    if (SekirariaSupportHelper.HasParrySword(Player, out _))
+                    {
+                        shinobiPlayer.ActivateMortalDraw();
+                    }
+                    else
+                    {
+                        if (Main.netMode != NetmodeID.Server)
+                        {
+                            CombatText.NewText(Player.Hitbox, Color.Red, Terraria.Localization.Language.GetTextValue("Mods.Stataria.Combat.RequiresParrySword"), true);
+                        }
+                    }
                 }
             }
         }

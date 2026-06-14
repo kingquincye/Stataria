@@ -6,13 +6,14 @@ Keybinds: {
 	"Savage Roar.DisplayName": Savage Roar
 	"Elemental Discharge.DisplayName": Elemental Discharge
 	"Divine Resurrection.DisplayName": Divine  Resurrection
+	"Mortal Draw.DisplayName": Mortal Draw
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
 
 Commands: {
 	StatariaCommands: {
-		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
 		Description: Commands for Stataria mod
 		NoPermission: You do not have permission to use this command.
 		SteamNotAvailable: Steam not available. Cannot verify admin identity.
@@ -22,6 +23,8 @@ Commands: {
 		SetLevelUsage: Usage: /stataria setlevel <number>
 		SetXPSuccess: XP set to {0}
 		SetXPUsage: Usage: /stataria setxp <number>
+		SetRebirthSuccess: Rebirth count set to {0}
+		SetRebirthUsage: Usage: /stataria setrebirth <number>
 		SetPointsRPSuccess: Rebirth Points set to {0}
 		SetPointsRPUsage: Usage: /stataria setpoints rp <number>
 		SetPointsStatSuccess: Stat points set to {0}
@@ -227,6 +230,16 @@ Configs: {
 		StatPointsPerLevel: {
 			Label: Stat Points Per Level
 			Tooltip: Amount of stat points received per level up.
+		}
+
+		EnableStatResetting: {
+			Label: Enable Stat Resetting
+			Tooltip: If enabled, allows players to reset their stat points in the Stat Panel.
+		}
+
+		EnableSkillResetting: {
+			Label: Enable Skill Resetting
+			Tooltip: If enabled, allows players to reset their skill tree/ability points.
 		}
 
 		DamageXP: {
@@ -1383,6 +1396,7 @@ Configs: {
 			Berserker: Berserker
 			Spellweaver: Spellweaver
 			Angel: Angel
+			Shinobi: Shinobi
 		}
 
 		BaseSwitchCost: {
@@ -1463,6 +1477,21 @@ Configs: {
 		VampireKillHealPercent: {
 			Label: Kill Heal Percent
 			Tooltip: Percentage of max health restored when killing an enemy.
+		}
+
+		ShinobiExecutionHealPercent: {
+			Label: Shinobi Execution Heal Percent
+			Tooltip: Percentage of max health restored when executing an enemy.
+		}
+
+		ShinobiMortalDrawCooldown: {
+			Label: Shinobi Mortal Draw Cooldown
+			Tooltip: Cooldown of the Mortal Draw skill in seconds.
+		}
+
+		ShinobiMortalDrawRange: {
+			Label: Shinobi Mortal Draw Range
+			Tooltip: The range in pixels within which posture-broken enemies are executed.
 		}
 
 		BeastmasterDamagePerUniqueMinion: {
@@ -1704,9 +1733,24 @@ Configs: {
 			Tooltip: The percentage chance to harvest a soul when hitting a boss with magic or summon damage.
 		}
 
+		NecromancerLimitZombieThralls: {
+			Label: Enforce Active Thralls Cap
+			Tooltip: If enabled, caps the maximum number of active zombie thralls to the limit below. WARNING: Disabling this allows infinite thralls, which may cause severe performance drops, especially in multiplayer!
+		}
+
 		NecromancerActiveThrallsLimit: {
-			Label: Active Thralls Limit
-			Tooltip: The maximum number of active zombie thralls you can summon at once.
+			Label: Max Active Thralls Cap
+			Tooltip: The absolute maximum number of zombie thralls allowed at once when the cap toggle is enabled.
+		}
+
+		NecromancerBaseThralls: {
+			Label: Base Summon Limit
+			Tooltip: The starting maximum number of zombie thralls you can summon before any stats are factored in.
+		}
+
+		NecromancerSPRPerThrall: {
+			Label: SPR Per Extra Summon
+			Tooltip: The amount of Spirituality (SPR) required to increase your active thrall limit by 1.
 		}
 
 		NecromancerBoneArmorDRPerThrall: {
@@ -1719,9 +1763,9 @@ Configs: {
 			Tooltip: The base attack damage of summoned zombie thralls.
 		}
 
-		NecromancerThrallINTScale: {
-			Label: Thrall INT Scale
-			Tooltip: The percentage increase to zombie thrall attack damage per point of INT.
+		NecromancerThrallSPRScale: {
+			Label: Thrall SPR Scale
+			Tooltip: The percentage increase to zombie thrall attack damage per point of SPR.
 		}
 
 		NecromancerThrallDamageIncreasePerRebirth: {
@@ -2590,8 +2634,9 @@ RoleEffects: {
 		SoulReserve: • Soul Reserve: Capacity is {0} (+1 per {1} SPR)
 		SoulDuration: • Soul Duration: Base {0}s (+{1}s per SPR)
 		ThrallsLimit: • Active Thralls: Max {0} at a time
+		ThrallsNoLimit: • Active Thralls: Max {0} (Uncapped)
 		BoneArmor: • Bone Armor: +{0}% Damage Reduction per active thrall
-		ThrallDamage: • Thrall Attack: {0} Base Damage (+{1}% per INT) (+{2}% per Rebirth) (+{3} per Level)
+		ThrallDamage: • Thrall Attack: {0} Base Damage (+{1}% per SPR) (+{2}% per Rebirth) (+{3} per Level)
 	}
 
 	Berserker: {
@@ -2604,7 +2649,13 @@ RoleEffects: {
 	Spellweaver: {
 		ManaAegis: • Mana Aegis: {0}% of incoming damage is subtracted from Mana instead of Health
 		ManaCrit: • Mana Flow: Magic critical hits restore {0}% of max Mana
-		Discharge: • Elemental Discharge: Spending mana builds charge (base max: {0}, +{2} cap per INT). Consume all charge to fire an elemental blast with no cooldown, dealing damage equal to consumed charge multiplied by {1}.
+		Discharge: • Elemental Discharge: Using magic weapons builds charge based on their base mana cost (base max: {0}, +{2} cap per INT). Consume all charge to fire an elemental blast with no cooldown, dealing damage equal to consumed charge multiplied by {1}.
+	}
+
+	Shinobi: {
+		HealOnExecution: • Heal for {0}% of max health on execution
+		MortalDraw: • Mortal Draw: Swing parry sword to slash and execute all posture-broken enemies in range ({0}s cooldown)
+		MortalDrawRange: • Mortal Draw Range: {0} pixels
 	}
 }
 
@@ -2874,12 +2925,16 @@ RPGPlayer: {
 	LastStand: Last Stand!
 }
 
-Combat.Bleed: Bleed!
+Combat: {
+	Bleed: Bleed!
+	RequiresParrySword: Requires Parry Sword equipped!
+}
 
 AbilityName: {
 	SavageRoar: Savage Roar
 	DivineIntervention: Divine Intervention
 	DivineResurrection: Divine Resurrection
+	MortalDraw: Mortal Draw
 }
 
 RebirthAbilityName: {
@@ -2974,6 +3029,7 @@ RoleName: {
 	Berserker: Berserker
 	Spellweaver: Spellweaver
 	Angel: Angel
+	Shinobi: Shinobi
 }
 
 RoleDescription: {
@@ -2988,6 +3044,7 @@ RoleDescription: {
 	Berserker: A high-risk frontline fighter who gets faster and deadlier as their health drops.
 	Spellweaver: An elemental combatant who channels spells to build massive combo discharges while shielding themselves with mana.
 	Angel: An ascended Cleric who gains wings and commands the boundary of life and death, reviving fallen teammates and shielding them in a powerful aura.
+	Shinobi: A swift shadow warrior from Sekiraria. Gains healing on executions, and can trigger the deadly Mortal Draw skill with a Parry Sword equipped.
 }
 
 RoleFlavorText: {
@@ -3002,6 +3059,7 @@ RoleFlavorText: {
 	Berserker: Feed the rage, ignore the pain - the closer you are to death, the closer your enemies are to theirs.
 	Spellweaver: Weave the elements, command the storm - let your mana shield your body, and let your discharge consume the battlefield.
 	Angel: Evolve beyond mortality - look down from on high with wings of grace, holding the anchor of your allies' souls.
+	Shinobi: Hesitation is defeat. Strike from the shadows, execute with precision, and consume their essence.
 }
 
 DeathMessage: {

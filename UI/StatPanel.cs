@@ -790,7 +790,11 @@ namespace Stataria
                 ShowTooltip(Language.GetTextValue("Mods.Stataria.UI.StatPanel.ResetStatsTooltip"));
             };
             resetButton.OnMouseOut += (evt, el) => HideTooltip();
-            statPanel.Append(resetButton);
+
+            if (config.generalBalance.EnableStatResetting)
+            {
+                statPanel.Append(resetButton);
+            }
 
             float rebirthButtonY = bottomControlsTop + 45f;
             if (config.rebirthSystem.EnableRebirthSystem)
@@ -822,7 +826,7 @@ namespace Stataria
             if (config.rebirthSystem.EnableRebirthSystem)
                 bulkBaseY = bottomControlsTop;
             else
-                bulkBaseY = bottomControlsTop + resetButton.Height.Pixels + 10f;
+                bulkBaseY = bottomControlsTop + (resetButton != null ? resetButton.Height.Pixels + 10f : 0f);
 
             bulkManager.Initialize(statPanel, bulkBaseY);
 
@@ -1055,7 +1059,11 @@ namespace Stataria
                 ShowTooltip(Language.GetTextValue("Mods.Stataria.UI.StatPanel.ResetStatsTooltip"));
             };
             resetButton.OnMouseOut += (evt, el) => HideTooltip();
-            statPanel.Append(resetButton);
+
+            if (config.generalBalance.EnableStatResetting)
+            {
+                statPanel.Append(resetButton);
+            }
 
             float rebirthButtonY = bottomControlsTop + 45f;
             if (config.rebirthSystem.EnableRebirthSystem)
@@ -1087,7 +1095,7 @@ namespace Stataria
             if (config.rebirthSystem.EnableRebirthSystem)
                 bulkBaseY = bottomControlsTop;
             else
-                bulkBaseY = bottomControlsTop + resetButton.Height.Pixels + 10f;
+                bulkBaseY = bottomControlsTop + (resetButton != null ? resetButton.Height.Pixels + 10f : 0f);
 
             bulkManager.Initialize(statPanel, bulkBaseY);
 
@@ -1583,6 +1591,22 @@ namespace Stataria
         {
             base.Update(gameTime);
 
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (!config.generalBalance.EnableStatResetting)
+            {
+                if (resetButton != null && statPanel.HasChild(resetButton))
+                {
+                    statPanel.RemoveChild(resetButton);
+                }
+            }
+            else
+            {
+                if (resetButton != null && !statPanel.HasChild(resetButton))
+                {
+                    statPanel.Append(resetButton);
+                }
+            }
+
             if (statPanel.ContainsPoint(Main.MouseScreen))
             {
                 Main.LocalPlayer.mouseInterface = true;
@@ -1601,7 +1625,6 @@ namespace Stataria
 
             Player player = Main.LocalPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
-            var config = ModContent.GetInstance<StatariaConfig>();
 
             levelText.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.LevelText").WithFormatArgs(rpg.Level));
             statPointsText.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.PointsText").WithFormatArgs(rpg.StatPoints));
@@ -1737,11 +1760,11 @@ namespace Stataria
             }
 
             if (resetConfirmationShown &&
-                ((Main.mouseLeft && !resetButton.ContainsPoint(Main.MouseScreen)) ||
+                ((Main.mouseLeft && (resetButton == null || !resetButton.ContainsPoint(Main.MouseScreen))) ||
                 Main.gameMenu))
             {
                 resetConfirmationShown = false;
-                resetButton.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.ResetStats"), 0.9f, false);
+                resetButton?.SetText(Language.GetText("Mods.Stataria.UI.StatPanel.ResetStats"), 0.9f, false);
             }
 
 

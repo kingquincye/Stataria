@@ -110,7 +110,16 @@ namespace Stataria.UI
             DrawFilledCircle(spriteBatch, widgetCenter, innerDiameter / 2f, new Color(30, 10, 45, 230));
 
             // Outer Active Thralls Ring (emerald green)
-            int thrallLimit = config.roleSettings.NecromancerActiveThrallsLimit;
+            int baseLimit = config.roleSettings.NecromancerBaseThralls;
+            int spr = player.GetModPlayer<RPGPlayer>().GetEffectiveStat("SPR");
+            int sprPerThrall = config.roleSettings.NecromancerSPRPerThrall;
+            int calculatedLimit = baseLimit + (spr / sprPerThrall);
+
+            int thrallLimit = calculatedLimit;
+            if (config.roleSettings.NecromancerLimitZombieThralls)
+            {
+                thrallLimit = Math.Min(thrallLimit, config.roleSettings.NecromancerActiveThrallsLimit);
+            }
             int currentActive = necPlayer.GetActiveThrallCount();
             float thrallPct = thrallLimit > 0 ? (float)currentActive / thrallLimit : 0f;
             Color thrallColor = new Color(46, 204, 113); // Emerald / cursed green
@@ -157,13 +166,13 @@ namespace Stataria.UI
 
             // Draw Thralls Count Overlay on the outer ring edge or just floating stats below
             int baseDamage = config.roleSettings.NecromancerThrallBaseDamage;
-            int intStat = player.GetModPlayer<RPGPlayer>().GetEffectiveStat("INT");
+            int sprStat = player.GetModPlayer<RPGPlayer>().GetEffectiveStat("SPR");
             int rebirthCount = player.GetModPlayer<RPGPlayer>().RebirthCount;
             int level = player.GetModPlayer<RPGPlayer>().Level;
             float levelBonus = level * config.roleSettings.NecromancerThrallDamageIncreasePerLevel;
             float totalBaseDamage = baseDamage + levelBonus;
             float rebirthMult = 1f + (rebirthCount * config.roleSettings.NecromancerThrallDamageIncreasePerRebirth / 100f);
-            int damage = (int)(totalBaseDamage * rebirthMult * (1f + intStat * config.roleSettings.NecromancerThrallINTScale / 100f));
+            int damage = (int)(totalBaseDamage * rebirthMult * (1f + sprStat * config.roleSettings.NecromancerThrallSPRScale / 100f));
             float maxDuration = necPlayer.GetMaxSoulDuration();
 
             // Stats text below the orb

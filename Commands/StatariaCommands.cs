@@ -155,6 +155,23 @@ namespace Stataria
                     else caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetXPUsage"), Color.Red);
                     break;
 
+                case "setrebirth":
+                    if (!IsAdmin(caller)) return;
+
+                    if (args.Length >= 2 && int.TryParse(args[1], out int rebirthVal))
+                    {
+                        rpg.RebirthCount = Math.Max(0, rebirthVal);
+
+                        if (Main.netMode != NetmodeID.SinglePlayer)
+                        {
+                            rpg.SyncPlayer(-1, caller.Player.whoAmI, false);
+                        }
+
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetRebirthSuccess", rebirthVal), Color.Gold);
+                    }
+                    else caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetRebirthUsage"), Color.Red);
+                    break;
+
                 case "setpoints":
                     if (!IsAdmin(caller)) return;
 

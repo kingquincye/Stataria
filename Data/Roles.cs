@@ -231,13 +231,23 @@ namespace Stataria
 
             if (ID == "Necromancer")
             {
+                var rpg = Main.LocalPlayer.GetModPlayer<RPGPlayer>();
+                int spr = rpg.GetEffectiveStat("SPR");
+                int thrallMax = config.roleSettings.NecromancerBaseThralls + (spr / config.roleSettings.NecromancerSPRPerThrall);
+                if (config.roleSettings.NecromancerLimitZombieThralls)
+                {
+                    thrallMax = Math.Min(thrallMax, config.roleSettings.NecromancerActiveThrallsLimit);
+                }
+
                 var effects = new List<string>
                 {
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.SoulReserve", config.roleSettings.NecromancerBaseSoulCapacity, config.roleSettings.NecromancerSPRPerSoul),
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.SoulDuration", config.roleSettings.NecromancerBaseSoulDuration, config.roleSettings.NecromancerSoulDurationPerSPR),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallsLimit", config.roleSettings.NecromancerActiveThrallsLimit),
+                    config.roleSettings.NecromancerLimitZombieThralls
+                        ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallsLimit", thrallMax)
+                        : Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallsNoLimit", thrallMax),
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.BoneArmor", config.roleSettings.NecromancerBoneArmorDRPerThrall),
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallDamage", config.roleSettings.NecromancerThrallBaseDamage, config.roleSettings.NecromancerThrallINTScale, config.roleSettings.NecromancerThrallDamageIncreasePerRebirth, config.roleSettings.NecromancerThrallDamageIncreasePerLevel)
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Necromancer.ThrallDamage", config.roleSettings.NecromancerThrallBaseDamage, config.roleSettings.NecromancerThrallSPRScale, config.roleSettings.NecromancerThrallDamageIncreasePerRebirth, config.roleSettings.NecromancerThrallDamageIncreasePerLevel)
                 };
 
                 return string.Join("\n", effects);
@@ -263,6 +273,18 @@ namespace Stataria
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Spellweaver.ManaAegis", config.roleSettings.SpellweaverManaAegisPercent.ToString("0.##")),
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Spellweaver.ManaCrit", config.roleSettings.SpellweaverManaCritRestorePercent.ToString("0.##")),
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Spellweaver.Discharge", config.roleSettings.SpellweaverMaxElementalCharge.ToString("0.##"), config.roleSettings.SpellweaverElementalDischargeBaseMult.ToString("0.##"), config.roleSettings.SpellweaverElementalDischargeINTScale.ToString("0.##"))
+                };
+
+                return string.Join("\n", effects);
+            }
+
+            if (ID == "Shinobi")
+            {
+                var effects = new List<string>
+                {
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Shinobi.HealOnExecution", config.roleSettings.ShinobiExecutionHealPercent.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Shinobi.MortalDraw", config.roleSettings.ShinobiMortalDrawCooldown.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Shinobi.MortalDrawRange", config.roleSettings.ShinobiMortalDrawRange.ToString("0.##"))
                 };
 
                 return string.Join("\n", effects);

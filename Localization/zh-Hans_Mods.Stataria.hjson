@@ -6,13 +6,14 @@ Keybinds: {
 	"Savage Roar.DisplayName": 野性咆哮
 	"Elemental Discharge.DisplayName": 元素释放
 	"Divine Resurrection.DisplayName": 神圣复活
+	"Mortal Draw.DisplayName": 不死斩
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
 
 Commands: {
 	StatariaCommands: {
-		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
 		Description: Stataria 模组控制台命令
 		NoPermission: 您没有权限使用此命令。
 		SteamNotAvailable: Steam 不可用。无法验证管理员身份。
@@ -22,6 +23,8 @@ Commands: {
 		SetLevelUsage: 用法: /stataria setlevel <数字>
 		SetXPSuccess: 经验值已设置为 {0}
 		SetXPUsage: 用法: /stataria setxp <数字>
+		SetRebirthSuccess: 转生次数已设置为 {0}
+		SetRebirthUsage: 用法: /stataria setrebirth <数字>
 		SetPointsRPSuccess: 转生点数已设置为 {0}
 		SetPointsRPUsage: 用法: /stataria setpoints rp <数字>
 		SetPointsStatSuccess: 属性点已设置为 {0}
@@ -227,6 +230,16 @@ Configs: {
 		StatPointsPerLevel: {
 			Label: 升级获得的属性点
 			Tooltip: 每次升级获得的属性点数量。
+		}
+
+		EnableStatResetting: {
+			Label: 启用属性重置
+			Tooltip: 如果启用，允许玩家在属性面板中重置他们的属性点。
+		}
+
+		EnableSkillResetting: {
+			Label: 启用技能重置
+			Tooltip: 如果启用，允许玩家在技能树面板中重置他们的技能与能力点。
 		}
 
 		DamageXP: {
@@ -1383,6 +1396,7 @@ Configs: {
 			Berserker: 狂战士
 			Spellweaver: 织法者
 			Angel: 天使
+			Shinobi: 忍者
 		}
 
 		BaseSwitchCost: {
@@ -1463,6 +1477,21 @@ Configs: {
 		VampireKillHealPercent: {
 			Label: 击杀回血百分比
 			Tooltip: 击杀敌人时，恢复的最大生命值百分比。
+		}
+
+		ShinobiExecutionHealPercent: {
+			Label: 忍者处决生命值恢复百分比
+			Tooltip: 处决敌人时恢复最大生命值的百分比。
+		}
+
+		ShinobiMortalDrawCooldown: {
+			Label: 忍者不死斩冷却时间
+			Tooltip: 不死斩技能的冷却时间（秒）。
+		}
+
+		ShinobiMortalDrawRange: {
+			Label: 忍者不死斩范围
+			Tooltip: 处决架势崩溃敌人的像素范围。
 		}
 
 		BeastmasterDamagePerUniqueMinion: {
@@ -1704,9 +1733,24 @@ Configs: {
 			Tooltip: 使用魔法或召唤伤害击中首领时，收获灵魂的百分比概率。
 		}
 
+		NecromancerLimitZombieThralls: {
+			Label: 启用活跃仆从上限限制
+			Tooltip: 如果启用，将把活跃僵尸仆从的最大数量限制在下方设置的上限内。警告：禁用此项将允许召唤无限数量的仆从，可能导致严重的性能下降，特别是在多人游戏模式下！
+		}
+
 		NecromancerActiveThrallsLimit: {
-			Label: 活跃奴仆上限
-			Tooltip: 你同时可以召唤的活跃僵尸奴仆的最大数量。
+			Label: 活跃仆从上限
+			Tooltip: 启用限制时，最多能够同时存在的活跃僵尸仆从数量。
+		}
+
+		NecromancerBaseThralls: {
+			Label: 基础召唤活跃仆从数
+			Tooltip: 你可以召唤的僵尸仆从的基础最大数量。
+		}
+
+		NecromancerSPRPerThrall: {
+			Label: 增加活跃仆从上限所需 SPR
+			Tooltip: 每增加 1 个活跃仆从上限所需要的精神 (SPR) 属性点数。
 		}
 
 		NecromancerBoneArmorDRPerThrall: {
@@ -1719,9 +1763,9 @@ Configs: {
 			Tooltip: 召唤的僵尸奴仆的基础攻击伤害。
 		}
 
-		NecromancerThrallINTScale: {
-			Label: 奴仆INT加成比例
-			Tooltip: 每点INT属性对僵尸奴仆攻击伤害的提升百分比。
+		NecromancerThrallSPRScale: {
+			Label: 奴仆 SPR 属性缩放
+			Tooltip: 每点精神 (SPR) 属性给僵尸仆从增加的攻击伤害百分比。
 		}
 
 		NecromancerThrallDamageIncreasePerRebirth: {
@@ -2590,8 +2634,9 @@ RoleEffects: {
 		SoulReserve: • 灵魂储备: 容量为 {0} (每拥有 {1} 点 SPR 增加 1)
 		SoulDuration: • 灵魂持续时间: 基础 {0} 秒 (每点 SPR 增加 +{1} 秒)
 		ThrallsLimit: • 活跃奴仆: 同时最多存在 {0} 个
+		ThrallsNoLimit: • 活跃奴仆: 同时最多存在 {0} 个 (无上限)
 		BoneArmor: • 骨甲: 每个活跃奴仆提供 +{0}% 伤害减免
-		ThrallDamage: • 奴仆攻击: {0} 基础伤害 (每点 INT 增加 +{1}%) (每次转生增加 +{2}%) (每个等级增加 +{3})
+		ThrallDamage: • 奴仆攻击: {0} 基础伤害 (每点 SPR 增加 +{1}%) (每次转生增加 +{2}%) (每个等级增加 +{3})
 	}
 
 	Berserker: {
@@ -2604,7 +2649,13 @@ RoleEffects: {
 	Spellweaver: {
 		ManaAegis: • 法力护盾: 受到伤害的 {0}% 将扣除法力值而非生命值
 		ManaCrit: • 法力流动: 魔法暴击恢复最大法力值的 {0}%
-		Discharge: • 元素释放: 消耗法力可积攒能量 (基础上限: {0}, 每点 INT 增加 +{2} 上限). 释放全部能量以进行元素爆炸 (无冷却时间, 伤害等于消耗的能量乘以 {1}).
+		Discharge: • 元素释放: 使用魔法武器在基础法力消耗的基础上积攒能量 (基础上限: {0}, 每点 INT 增加 +{2} 上限). 释放全部能量以进行元素爆炸 (无冷却时间, 伤害等于消耗的能量乘以 {1}).
+	}
+
+	Shinobi: {
+		HealOnExecution: • 处决敌人时恢复最大生命值的 {0}%
+		MortalDraw: • 不死斩: 挥舞 Parry Sword 斩击并处决范围内所有架势值崩溃的敌人 ({0} 秒冷却时间)
+		MortalDrawRange: • 不死斩范围: {0} 像素
 	}
 }
 
@@ -2874,12 +2925,16 @@ RPGPlayer: {
 	LastStand: 破釜沉舟！
 }
 
-Combat.Bleed: 流血!
+Combat: {
+	Bleed: 流血!
+	RequiresParrySword: 需要装备 Parry Sword！
+}
 
 AbilityName: {
 	SavageRoar: 野性咆哮
 	DivineIntervention: 神圣干涉
 	DivineResurrection: 神圣复活
+	MortalDraw: 不死斩
 }
 
 RebirthAbilityName: {
@@ -2974,6 +3029,7 @@ RoleName: {
 	Berserker: 狂战士
 	Spellweaver: 织法者
 	Angel: 天使
+	Shinobi: 忍者
 }
 
 RoleDescription: {
@@ -2988,6 +3044,7 @@ RoleDescription: {
 	Berserker: 高风险的近战战士，生命值越低，速度越快、致命性越高。
 	Spellweaver: 元素战斗人员，通过引导法术积累庞大的组合释放，同时用法力保护自己。
 	Angel: 飞升的牧师，获得了双翼并掌控生死边界，能复活倒下的队友并在强大的光环中庇护他们。
+	Shinobi: 动作敏捷的 Sekiraria 影子武士。处决敌人时能获得治疗，并且在装备 Parry Sword 时可以触发致命的不死斩技能。
 }
 
 RoleFlavorText: {
@@ -3002,6 +3059,7 @@ RoleFlavorText: {
 	Berserker: 释放狂怒，忘却痛苦——离死亡越近，你的敌人就离他们的死期越近。
 	Spellweaver: 编织元素，掌控风暴——让法力护卫你的身躯，让能量释放吞噬战场。
 	Angel: 超脱凡尘——从高空以优雅的双翼俯瞰，维系着盟友灵魂的锚点。
+	Shinobi: 犹豫，就会败北。于暗影中突袭，以精准之势处决，夺取其生命精华。
 }
 
 DeathMessage: {
