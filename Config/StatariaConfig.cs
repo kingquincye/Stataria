@@ -457,6 +457,8 @@ namespace Stataria
 
             [Header("POW_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float POW_Damage { get; set; } = 0.5f;
+            [DefaultValue(false)] public bool EnablePOWPierce { get; set; } = false;
+            [Range(0, 1000)][DefaultValue(25)] public int POW_PierceScaling { get; set; } = 25;
 
             [Header("DEX_Settings")]
             [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float DEX_Damage { get; set; } = 0.5f;

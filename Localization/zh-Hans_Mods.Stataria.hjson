@@ -1012,6 +1012,16 @@ Configs: {
 			Label: PST 上限
 			Tooltip: ""
 		}
+
+		EnablePOWPierce: {
+			Label: 启用 POW 穿透 (实验性)
+			Tooltip: 警告: 实验性功能。可能会导致非预期的结果。
+		}
+
+		POW_PierceScaling: {
+			// Tooltip: ""
+			// Label: P O W_ Pierce Scaling
+		}
 	}
 
 	ModIntegration: {
@@ -2718,9 +2728,16 @@ UI: {
 		ToggleOn: 开启
 		ToggleOff: 关闭
 		RefundedRP: 已返还 +{0} RP！
+		ResetAbilitiesTooltip: 重置所有转生能力并退还您的转生点数
+		ShowHiddenTooltip: 切换隐藏能力的可见性
+		HideTooltip: 从列表中隐藏此能力 (可以通过显示隐藏重新查看)
 	}
 
-	BulkAllocation.Header: 批量分配数量:
+	BulkAllocation: {
+		Header: 批量分配数量:
+		HeaderTooltip: 每次点击分配的属性点数量
+		ButtonTooltip: 将分配数量设置为 {0}
+	}
 
 	RoleSelection: {
 		Title: 选择职业
@@ -2780,6 +2797,11 @@ UI: {
 		Rebirth: 进行转生
 		Auto: 自动
 		ResetStatsTooltip: 免费重置所有分配的属性点
+		RebirthReqLevel: 需要等级 {0}
+		RebirthXPBonusDesc: +{0}% 每个转生等级的永久经验加成
+		RebirthResetsStats: 重置您的等级与属性点
+		RebirthKeepsStats: 重置您的等级但保留已分配的属性点
+		RebirthResetsBosses: 重置首领击杀记录以重新获得经验奖励
 		AutoTooltip: 切换是否自动将获取的点数分配到已勾选的属性上
 		AutoAllocateTooltip: 勾选以自动将点数分配至该属性
 		RequireLevelPrompt: 需要达到等级 {0}！
@@ -2836,6 +2858,7 @@ UI: {
 		END_KnocksBackNonBosses: 受击时反弹击退非首领敌人
 		END_Aggro: +{0} 仇恨值 (+{1} 每点)
 		POW_GeneralDamage: +{0}% 通用伤害 (+{1}% 每点)
+		POW_PierceBonus: +{0} 目标穿透 (每 {1} 点力量)
 		POW_OtherDamage: +{0}% 其他类型伤害 (+0.1% 每点)
 		POW_RageDamage: +{0}% 暴怒伤害 (+{1}% 每点)
 		POW_RageDuration: +{0}秒 暴怒持续时间 (+{1}秒 每点, 最高 {2}秒)

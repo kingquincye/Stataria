@@ -49,14 +49,42 @@ namespace Stataria.NPCs
             NPC.width = 18;
             NPC.height = 40;
             NPC.aiStyle = NPCAIStyleID.Passive;
-            NPC.damage = 10;
-            NPC.defense = 15;
-            NPC.lifeMax = 250;
+            NPC.damage = 0;
+            NPC.defense = 9999;
+            NPC.lifeMax = 26000;
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.knockBackResist = 0.5f;
+            NPC.knockBackResist = 0f;
 
             AnimationType = NPCID.Guide;
+        }
+
+        public override void ModifyIncomingHit(ref NPC.HitModifiers modifiers)
+        {
+            modifiers.FinalDamage *= 0.01f;
+        }
+
+        public override void OnKill()
+        {
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                int spawnX = (int)(NPC.position.X);
+                int spawnY = (int)(NPC.position.Y);
+                
+                if (!NPC.homeless)
+                {
+                    spawnX = NPC.homeTileX * 16;
+                    spawnY = NPC.homeTileY * 16;
+                }
+                
+                int npcIndex = NPC.NewNPC(NPC.GetSource_Death(), spawnX, spawnY, Type);
+                if (npcIndex >= 0 && npcIndex < Main.maxNPCs)
+                {
+                    Main.npc[npcIndex].homeless = NPC.homeless;
+                    Main.npc[npcIndex].homeTileX = NPC.homeTileX;
+                    Main.npc[npcIndex].homeTileY = NPC.homeTileY;
+                }
+            }
         }
 
         public override bool CanTownNPCSpawn(int numTownNPCs)

@@ -91,6 +91,7 @@ namespace Stataria
                     int effectiveVIT = rpg.GetEffectiveStat("VIT");
                     var tooltips = new List<string>();
 
+                    tooltips.Add("[c/FFFFFF:Vitality (VIT)]");
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.VIT_MaxHealth", effectiveVIT * cfg.statSettings.VIT_HP, cfg.statSettings.VIT_HP));
 
                     bool isCleric = rpg.ActiveRole?.ID == "Cleric" && rpg.ActiveRole.Status == RoleStatus.Active;
@@ -147,6 +148,7 @@ namespace Stataria
                     int effectiveSTR = rpg.GetEffectiveStat("STR");
                     var tooltips = new List<string>();
 
+                    tooltips.Add("[c/FFFFFF:Strength (STR)]");
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.STR_MeleeDamage", (effectiveSTR * cfg.statSettings.STR_Damage).ToString("0.#"), cfg.statSettings.STR_Damage.ToString("0.#")));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.STR_MeleeKnockback", (effectiveSTR * cfg.statSettings.STR_Knockback).ToString("0.#"), cfg.statSettings.STR_Knockback.ToString("0.#")));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.STR_MeleeArmorPen", effectiveSTR * cfg.statSettings.STR_ArmorPen, cfg.statSettings.STR_ArmorPen));
@@ -173,7 +175,8 @@ namespace Stataria
                     var rpg = player.GetModPlayer<RPGPlayer>();
                     int effectiveAGI = rpg.GetEffectiveStat("AGI");
                     float diminishedAGI = effectiveAGI <= 50 ? effectiveAGI : 50 + (effectiveAGI - 50) * 0.5f;
-                    return Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_MoveSpeed", (diminishedAGI * (cfg.statSettings.AGI_MoveSpeed / 100f)).ToString("P1"), (cfg.statSettings.AGI_MoveSpeed / 100f).ToString("P1")) + "\n" +
+                    return "[c/FFFFFF:Agility (AGI)]\n" +
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_MoveSpeed", (diminishedAGI * (cfg.statSettings.AGI_MoveSpeed / 100f)).ToString("P1"), (cfg.statSettings.AGI_MoveSpeed / 100f).ToString("P1")) + "\n" +
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_AttackSpeed", (diminishedAGI * (cfg.statSettings.AGI_AttackSpeed / 100f)).ToString("P1"), (cfg.statSettings.AGI_AttackSpeed / 100f).ToString("P1")) + "\n" +
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_WingTime", effectiveAGI * cfg.statSettings.AGI_WingTime, cfg.statSettings.AGI_WingTime) + "\n" +
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_ImprovedJump");
@@ -195,6 +198,7 @@ namespace Stataria
                     float diminishingReduction = 1f - (1f / (1f + rawReduction));
                     var tooltips = new List<string>();
 
+                    tooltips.Add("[c/FFFFFF:Intelligence (INT)]");
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_MaxMana", effectiveINT * cfg.statSettings.INT_MP, cfg.statSettings.INT_MP));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_ManaRegen", (effectiveINT * 0.5f).ToString("0.#")));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_MagicDamage", (effectiveINT * cfg.statSettings.INT_Damage).ToString("0.#"), cfg.statSettings.INT_Damage.ToString("0.#")));
@@ -224,6 +228,7 @@ namespace Stataria
                     int effectiveLUC = rpg.GetEffectiveStat("LUC");
                     var tooltips = new List<string>
                     {
+                        "[c/FFFFFF:Luck (LUC)]",
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.LUC_Crit", (effectiveLUC * cfg.statSettings.LUC_Crit).ToString("0.#"), cfg.statSettings.LUC_Crit.ToString("0.#"))
                     };
                     if (cfg.statSettings.LUC_EnableLuckBonus)
@@ -253,6 +258,7 @@ namespace Stataria
                     var tooltips = new List<string>();
                     bool isGuardian = rpg.ActiveRole?.ID == "Guardian" && rpg.ActiveRole.Status == RoleStatus.Active;
 
+                    tooltips.Add("[c/FFFFFF:Endurance (END)]");
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.END_Defense", (effectiveEND * cfg.statSettings.END_Defense).ToString("0.#"), cfg.statSettings.END_Defense.ToString("0.#")));
 
                     if (isGuardian)
@@ -297,9 +303,14 @@ namespace Stataria
                     int effectivePOW = rpg.GetEffectiveStat("POW");
                     var tooltips = new List<string>
                     {
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_GeneralDamage", (effectivePOW * cfg.statSettings.POW_Damage).ToString("0.#"), cfg.statSettings.POW_Damage.ToString("0.#")),
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_OtherDamage", (effectivePOW * 0.1f).ToString("0.#"))
+                        "[c/FFFFFF:Power (POW)]",
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_GeneralDamage", (effectivePOW * cfg.statSettings.POW_Damage).ToString("0.#"), cfg.statSettings.POW_Damage.ToString("0.#"))
                     };
+                    if (cfg.statSettings.EnablePOWPierce)
+                    {
+                        tooltips.Add("• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_PierceBonus", effectivePOW / cfg.statSettings.POW_PierceScaling, cfg.statSettings.POW_PierceScaling));
+                    }
+                    tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_OtherDamage", (effectivePOW * 0.1f).ToString("0.#")));
                     if (cfg.modIntegration.EnableCalamityIntegration && CalamitySupportHelper.CalamityLoaded)
                     {
                         tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_RageDamage", (effectivePOW * cfg.modIntegration.POW_RageDamage).ToString("0.#"), cfg.modIntegration.POW_RageDamage.ToString("0.#")));
@@ -321,7 +332,8 @@ namespace Stataria
                     var player = Main.LocalPlayer;
                     var rpg = player.GetModPlayer<RPGPlayer>();
                     int effectiveDEX = rpg.GetEffectiveStat("DEX");
-                    return Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedDamage", (effectiveDEX * cfg.statSettings.DEX_Damage).ToString("0.#"), cfg.statSettings.DEX_Damage.ToString("0.#")) + "\n" +
+                    return "[c/FFFFFF:Dexterity (DEX)]\n" +
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedDamage", (effectiveDEX * cfg.statSettings.DEX_Damage).ToString("0.#"), cfg.statSettings.DEX_Damage.ToString("0.#")) + "\n" +
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedArmorPen", effectiveDEX * cfg.statSettings.DEX_ArmorPen, cfg.statSettings.DEX_ArmorPen) + "\n" +
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_AmmoSave", (effectiveDEX * cfg.statSettings.DEX_AmmoConservation).ToString("0.#"), cfg.statSettings.DEX_AmmoConservation.ToString("0.#"));
                 }
@@ -342,6 +354,7 @@ namespace Stataria
                     int sentrySlots = effectiveSPR / cfg.statSettings.SPR_SentriesPerX;
                     var tooltips = new List<string>();
 
+                    tooltips.Add("[c/FFFFFF:Spirituality (SPR)]");
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_SummonDamage", (effectiveSPR * cfg.statSettings.SPR_Damage).ToString("0.#"), cfg.statSettings.SPR_Damage.ToString("0.#")));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_MinionSlots", minionSlots, (minionSlots != 1 ? "s" : ""), cfg.statSettings.SPR_MinionsPerX));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_SentrySlots", sentrySlots, (sentrySlots != 1 ? "s" : ""), cfg.statSettings.SPR_SentriesPerX));
@@ -376,6 +389,7 @@ namespace Stataria
                     var rpg = player.GetModPlayer<RPGPlayer>();
                     int effectiveTCH = rpg.GetEffectiveStat("TCH");
                     var tooltips = new List<string>();
+                    tooltips.Add("[c/FFFFFF:Technician (TCH)]");
                     if (cfg.statSettings.TCH_EnableMiningSpeed)
                     {
                         tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.TCH_MiningSpeed", (effectiveTCH * cfg.statSettings.TCH_MiningSpeed).ToString("0.#"), cfg.statSettings.TCH_MiningSpeed.ToString("0.#")));
@@ -388,7 +402,7 @@ namespace Stataria
                     {
                         tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.TCH_TilesReach", effectiveTCH * cfg.statSettings.TCH_Range, cfg.statSettings.TCH_Range));
                     }
-                    return tooltips.Count > 0 ? string.Join("\n", tooltips) : Language.GetTextValue("Mods.Stataria.UI.StatPanel.TCH_NoEffects");
+                    return tooltips.Count > 1 ? string.Join("\n", tooltips) : Language.GetTextValue("Mods.Stataria.UI.StatPanel.TCH_NoEffects");
                 }
             });
 
@@ -406,6 +420,7 @@ namespace Stataria
                     int effectiveRGE = rpg.GetEffectiveStat("RGE");
                     var tooltips = new List<string>
                     {
+                        "[c/FFFFFF:Rogue (RGE)]",
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_RogueDamage", (effectiveRGE * cfg.modIntegration.RGE_Damage).ToString("0.#"), cfg.modIntegration.RGE_Damage.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_MaxStealth", (effectiveRGE * cfg.modIntegration.RGE_MaxStealthPerPoint).ToString("0.#"), cfg.modIntegration.RGE_MaxStealthPerPoint.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.RGE_Velocity", (effectiveRGE * cfg.modIntegration.RGE_Velocity).ToString("0.#"), cfg.modIntegration.RGE_Velocity.ToString("0.#")),
@@ -436,6 +451,7 @@ namespace Stataria
                     int effectiveBRD = rpg.GetEffectiveStat("BRD");
                     var tooltips = new List<string>
                     {
+                        "[c/FFFFFF:Bard (BRD)]",
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.BRD_SymphonicDamage", (effectiveBRD * cfg.modIntegration.BRD_Damage).ToString("0.#"), cfg.modIntegration.BRD_Damage.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.BRD_SymphonicArmorPen", effectiveBRD * cfg.modIntegration.BRD_ArmorPen, cfg.modIntegration.BRD_ArmorPen)
                     };
@@ -465,6 +481,7 @@ namespace Stataria
                     int effectiveHLR = rpg.GetEffectiveStat("HLR");
                     var tooltips = new List<string>
                     {
+                        "[c/FFFFFF:Healer (HLR)]",
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.HLR_RadiantDamage", (effectiveHLR * cfg.modIntegration.HLR_Damage).ToString("0.#"), cfg.modIntegration.HLR_Damage.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.HLR_RadiantArmorPen", effectiveHLR * cfg.modIntegration.HLR_ArmorPen, cfg.modIntegration.HLR_ArmorPen)
                     };
@@ -492,6 +509,7 @@ namespace Stataria
                     int effectiveCLK = rpg.GetEffectiveStat("CLK");
                     var tooltips = new List<string>
                     {
+                        "[c/FFFFFF:Clicker (CLK)]",
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.CLK_ClickDamage", (effectiveCLK * cfg.modIntegration.CLK_Damage).ToString("0.#"), cfg.modIntegration.CLK_Damage.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.CLK_ClickRadius", (effectiveCLK * cfg.modIntegration.CLK_Radius).ToString("0.#"), cfg.modIntegration.CLK_Radius.ToString("0.#"))
                     };
@@ -521,6 +539,7 @@ namespace Stataria
                     float blockReductionPercent = (1f - 1f / (1f + effectivePST * cfg.modIntegration.PST_BlockDamageReduction)) * 100f;
                     var tooltips = new List<string>
                     {
+                        "[c/FFFFFF:Posture (PST)]",
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.PST_MaxPosture", (effectivePST * cfg.modIntegration.PST_MaxPosture).ToString("0.#"), cfg.modIntegration.PST_MaxPosture.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.PST_PostureDamage", (effectivePST * cfg.modIntegration.PST_PostureDamage).ToString("0.#"), cfg.modIntegration.PST_PostureDamage.ToString("0.#")),
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.PST_BlockDamageReduction", blockReductionPercent.ToString("0.#"))
@@ -595,7 +614,18 @@ namespace Stataria
             int effectiveStat = rpg.GetEffectiveStat(statName);
             float damageBonus = rpg.GetGenericModDamageBonus(statName, cfg);
             
-            return Language.GetTextValue("Mods.Stataria.UI.StatPanel.Generic_Damage", (damageBonus * 100f).ToString("0.#"), displayName, GetDamagePerPoint(cfg, statName).ToString("0.#"));
+            string header = statName switch
+            {
+                "BLH" => "Blood Hunter (BLH)",
+                "HNT" => "Hunter (HNT)",
+                "GMB" => "Gambler (GMB)",
+                "SHM" => "Shaman (SHM)",
+                "THR" => "Thrower (THR)",
+                _ => displayName + " (" + statName + ")"
+            };
+
+            return "[c/FFFFFF:" + header + "]\n" + 
+                Language.GetTextValue("Mods.Stataria.UI.StatPanel.Generic_Damage", (damageBonus * 100f).ToString("0.#"), displayName, GetDamagePerPoint(cfg, statName).ToString("0.#"));
         }
 
         private static float GetDamagePerPoint(StatariaConfig cfg, string statName)
@@ -809,6 +839,8 @@ namespace Stataria
                     BorderColor = new Color(190, 120, 190, 255)
                 };
                 rebirthButton.OnLeftClick += OnRebirthButtonClick;
+                rebirthButton.OnMouseOver += (evt, el) => ShowTooltip(GetRebirthTooltip());
+                rebirthButton.OnMouseOut += (evt, el) => HideTooltip();
                 statPanel.Append(rebirthButton);
 
                 rebirthConfirmationText = new UIText(Language.GetText("Mods.Stataria.UI.StatPanel.ConfirmRebirthPrompt"), 0.9f)
@@ -828,7 +860,7 @@ namespace Stataria
             else
                 bulkBaseY = bottomControlsTop + (resetButton != null ? resetButton.Height.Pixels + 10f : 0f);
 
-            bulkManager.Initialize(statPanel, bulkBaseY);
+            bulkManager.Initialize(statPanel, bulkBaseY, ShowTooltip, HideTooltip);
 
             autoButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.StatPanel.Auto"), textScale: 0.9f, large: false)
             {
@@ -866,12 +898,12 @@ namespace Stataria
 
             statPanel.Recalculate();
 
-            float tooltipY = panelHeight + 10f;
+            float tooltipWidth = 300f;
             tooltipPanel = new UIPanel();
-            tooltipPanel.Width.Set(Math.Min(totalWidth - 20f, 600f), 0f);
+            tooltipPanel.Width.Set(tooltipWidth, 0f);
             tooltipPanel.Height.Set(0f, 0f);
-            tooltipPanel.Left.Set(10f, 0f);
-            tooltipPanel.Top.Set(tooltipY, 0f);
+            tooltipPanel.Left.Set(-tooltipWidth - 10f, 0f);
+            tooltipPanel.Top.Set(0f, 0f);
             tooltipPanel.BackgroundColor = Color.Transparent;
             tooltipPanel.BorderColor = Color.Transparent;
             statPanel.Append(tooltipPanel);
@@ -1078,6 +1110,8 @@ namespace Stataria
                     BorderColor = new Color(190, 120, 190, 255)
                 };
                 rebirthButton.OnLeftClick += OnRebirthButtonClick;
+                rebirthButton.OnMouseOver += (evt, el) => ShowTooltip(GetRebirthTooltip());
+                rebirthButton.OnMouseOut += (evt, el) => HideTooltip();
                 statPanel.Append(rebirthButton);
 
                 rebirthConfirmationText = new UIText(Language.GetText("Mods.Stataria.UI.StatPanel.ConfirmRebirthPrompt"), 0.9f)
@@ -1097,7 +1131,7 @@ namespace Stataria
             else
                 bulkBaseY = bottomControlsTop + (resetButton != null ? resetButton.Height.Pixels + 10f : 0f);
 
-            bulkManager.Initialize(statPanel, bulkBaseY);
+            bulkManager.Initialize(statPanel, bulkBaseY, ShowTooltip, HideTooltip);
 
             autoButton = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.StatPanel.Auto"), textScale: 0.9f, large: false)
             {
@@ -1138,12 +1172,12 @@ namespace Stataria
 
             statPanel.Recalculate();
 
-            float tooltipY = panelHeight + 10f;
+            float tooltipWidth = 300f;
             tooltipPanel = new UIPanel();
-            tooltipPanel.Width.Set(Math.Min(totalWidth - 20f, 600f), 0f);
+            tooltipPanel.Width.Set(tooltipWidth, 0f);
             tooltipPanel.Height.Set(0f, 0f);
-            tooltipPanel.Left.Set(10f, 0f);
-            tooltipPanel.Top.Set(tooltipY, 0f);
+            tooltipPanel.Left.Set(-tooltipWidth - 10f, 0f);
+            tooltipPanel.Top.Set(0f, 0f);
             tooltipPanel.BackgroundColor = Color.Transparent;
             tooltipPanel.BorderColor = Color.Transparent;
             statPanel.Append(tooltipPanel);
@@ -1171,7 +1205,9 @@ namespace Stataria
                 float baseX = (Main.screenWidth - targetWidth) * 0.5f;
                 float baseY = (Main.screenHeight - targetHeight) * 0.5f;
 
-                float clampedLeft = Math.Clamp(statPanel.Left.Pixels, -baseX + 10f, Math.Max(-baseX + 10f, baseX - 10f));
+                float tooltipWidth = 300f;
+                float minLeft = -baseX + tooltipWidth + 20f;
+                float clampedLeft = Math.Clamp(statPanel.Left.Pixels, minLeft, Math.Max(minLeft, baseX - 10f));
                 float minY = 50f - baseY;
                 float maxY = baseY - 10f;
                 float clampedTop = Math.Clamp(statPanel.Top.Pixels, minY, Math.Max(minY, maxY));
@@ -1316,15 +1352,15 @@ namespace Stataria
 
             if (bonusStatPoints > 0)
             {
-                tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.StatPointsPerLevelBonus", baseStatPoints, bonusStatPoints, baseStatPoints + bonusStatPoints) + "\n";
+                tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.StatPointsPerLevelBonus", baseStatPoints, bonusStatPoints, baseStatPoints + bonusStatPoints) + "\n";
             }
             else
             {
-                tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.StatPointsPerLevel", baseStatPoints) + "\n";
+                tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.StatPointsPerLevel", baseStatPoints) + "\n";
             }
-            tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.DamageXP", config.generalBalance.DamageXP.ToString("0.##")) + "\n";
-            tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.KillXP", config.generalBalance.KillXP.ToString("0.##")) + "\n";
-            tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.BossXPTitle") + " ";
+            tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.DamageXP", config.generalBalance.DamageXP.ToString("0.##")) + "\n";
+            tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.KillXP", config.generalBalance.KillXP.ToString("0.##")) + "\n";
+            tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.BossXPTitle") + " ";
             if (config.generalBalance.UseFlatBossXP)
                 tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.BossXPFlat", config.generalBalance.DefaultFlatBossXP) + "\n";
             else
@@ -1333,21 +1369,21 @@ namespace Stataria
             if (config.rebirthSystem.EnableRebirthSystem && rpg.RebirthCount > 0)
             {
                 float bonus = rpg.RebirthCount * config.rebirthSystem.RebirthXPMultiplier;
-                tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.RebirthXPBonus", bonus.ToString("P0"), rpg.RebirthCount, config.rebirthSystem.RebirthXPMultiplier.ToString("0.##")) + "\n";
+                tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.RebirthXPBonus", bonus.ToString("P0"), rpg.RebirthCount, config.rebirthSystem.RebirthXPMultiplier.ToString("0.##")) + "\n";
             }
 
-            string capText = Language.GetTextValue("Mods.Stataria.UI.StatPanel.LevelCapNone") + "\n";
+            string capText = "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.LevelCapNone") + "\n";
 
             if (config.rebirthSystem.EnableDynamicRebirthLevelCap)
             {
                 int nextRebirthRequirement = config.rebirthSystem.RebirthLevelRequirement +
                                         (rpg.RebirthCount * config.rebirthSystem.AdditionalLevelRequirementPerRebirth);
                 int dynamicLevelCap = (int)(nextRebirthRequirement * config.rebirthSystem.DynamicRebirthLevelCapMultiplier);
-                capText = Language.GetTextValue("Mods.Stataria.UI.StatPanel.DynamicLevelCap", dynamicLevelCap) + "\n";
+                capText = "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.DynamicLevelCap", dynamicLevelCap) + "\n";
             }
             else if (config.generalBalance.EnableLevelCap)
             {
-                capText = Language.GetTextValue("Mods.Stataria.UI.StatPanel.LevelCap", config.generalBalance.LevelCapValue) + "\n";
+                capText = "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.LevelCap", config.generalBalance.LevelCapValue) + "\n";
             }
             tooltip += capText;
 
@@ -1356,19 +1392,52 @@ namespace Stataria
                 if (config.rebirthSystem.EnableProgressiveStatCaps && rpg.RebirthCount > 0)
                 {
                     float capMultiplier = 1f + (rpg.RebirthCount * config.rebirthSystem.ProgressiveStatCapMultiplier);
-                    tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.StatCapsProgressive", capMultiplier.ToString("F2")) + "\n";
+                    tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.StatCapsProgressive", capMultiplier.ToString("F2")) + "\n";
                 }
                 else
                 {
-                    tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.StatCapsBase") + "\n";
+                    tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.StatCapsBase") + "\n";
                 }
             }
 
             if (config.multiplayerSettings.SplitKillXP)
-                tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.XPSplit") + "\n";
+                tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.XPSplit") + "\n";
 
             if (config.multiplayerSettings.EnableXPProximity)
-                tooltip += Language.GetTextValue("Mods.Stataria.UI.StatPanel.XPProximity", config.multiplayerSettings.XPProximityRange);
+                tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.XPProximity", config.multiplayerSettings.XPProximityRange);
+
+            return tooltip;
+        }
+
+        private string GetRebirthTooltip()
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            Player player = Main.LocalPlayer;
+            RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
+
+            int currentLevelRequirement = config.rebirthSystem.RebirthLevelRequirement;
+            if (config.rebirthSystem.IncreaseLevelRequirement && rpg.RebirthCount > 0)
+            {
+                currentLevelRequirement += rpg.RebirthCount * config.rebirthSystem.AdditionalLevelRequirementPerRebirth;
+            }
+
+            string tooltip = "[c/FFFFFF:" + Language.GetTextValue("Mods.Stataria.UI.StatPanel.Rebirth") + "]\n";
+            tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.RebirthReqLevel", currentLevelRequirement) + "\n";
+            tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.RebirthXPBonusDesc", (config.rebirthSystem.RebirthXPMultiplier * 100f).ToString("0.#")) + "\n";
+
+            if (config.rebirthSystem.ResetStatsOnRebirth)
+            {
+                tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.RebirthResetsStats") + "\n";
+            }
+            else
+            {
+                tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.RebirthKeepsStats") + "\n";
+            }
+
+            if (config.rebirthSystem.ResetBossRewardsOnRebirth)
+            {
+                tooltip += "• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.RebirthResetsBosses") + "\n";
+            }
 
             return tooltip;
         }

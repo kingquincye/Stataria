@@ -10,6 +10,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.GameContent;
 using Terraria.Localization;
+using ReLogic.Graphics;
 
 namespace Stataria
 {
@@ -22,6 +23,8 @@ namespace Stataria
         private UIText pointsText;
         private UITextPanel<LocalizedText> resetAbilitiesButton;
         private UITextPanel<LocalizedText> showHiddenButton;
+        private UIPanel tooltipPanel;
+        private UIText tooltipText;
 
         private bool dragging = false;
         private Vector2 offset;
@@ -117,6 +120,8 @@ namespace Stataria
                 ResetAllAbilities();
                 SoundEngine.PlaySound(SoundID.MenuClose);
             };
+            resetAbilitiesButton.OnMouseOver += (evt, el) => ShowTooltip(Language.GetTextValue("Mods.Stataria.UI.SkillTree.ResetAbilitiesTooltip"));
+            resetAbilitiesButton.OnMouseOut += (evt, el) => HideTooltip();
 
             if (config.generalBalance.EnableSkillResetting)
             {
@@ -137,7 +142,28 @@ namespace Stataria
                 RefreshAbilitiesList();
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
+            showHiddenButton.OnMouseOver += (evt, el) => ShowTooltip(Language.GetTextValue("Mods.Stataria.UI.SkillTree.ShowHiddenTooltip"));
+            showHiddenButton.OnMouseOut += (evt, el) => HideTooltip();
             skillPanel.Append(showHiddenButton);
+
+            float tooltipWidth = 300f;
+            tooltipPanel = new UIPanel();
+            tooltipPanel.Width.Set(tooltipWidth, 0f);
+            tooltipPanel.Height.Set(0f, 0f);
+            tooltipPanel.Left.Set(-tooltipWidth - 20f, 0f);
+            tooltipPanel.Top.Set(0f, 0f);
+            tooltipPanel.BackgroundColor = Color.Transparent;
+            tooltipPanel.BorderColor = Color.Transparent;
+            skillPanel.Append(tooltipPanel);
+            tooltipPanel.Recalculate();
+
+            tooltipText = new UIText("", textScale: 1f);
+            tooltipText.Width.Set(0, 1f);
+            tooltipText.Top.Set(4f, 0f);
+            tooltipText.Left.Set(4f, 0f);
+            tooltipPanel.Append(tooltipText);
+
+            skillPanel.Recalculate();
         }
 
         private bool IsClickingOnInteractiveElement(Vector2 mousePosition)
@@ -272,6 +298,8 @@ namespace Stataria
                     Main.mouseLeft = false;
                     Main.mouseLeftRelease = false;
                 };
+                hideButton.OnMouseOver += (evt, el) => ShowTooltip(Language.GetTextValue("Mods.Stataria.UI.SkillTree.HideTooltip"));
+                hideButton.OnMouseOut += (evt, el) => HideTooltip();
 
                 abilityPanel.Append(hideButton);
 
@@ -468,7 +496,10 @@ namespace Stataria
                 float baseX = (Main.screenWidth - targetWidth) * 0.5f;
                 float baseY = (Main.screenHeight - targetHeight) * 0.5f;
 
-                float clampedLeft = Math.Clamp(skillPanel.Left.Pixels, -baseX + 10f, Math.Max(-baseX + 10f, baseX - 10f));
+                float tooltipWidth = 300f;
+                float tooltipSpacing = 20f;
+                float minLeft = -baseX + tooltipWidth + tooltipSpacing + 10f;
+                float clampedLeft = Math.Clamp(skillPanel.Left.Pixels, minLeft, Math.Max(minLeft, baseX - 10f));
                 float minY = 50f - baseY;
                 float maxY = baseY - 10f;
                 float clampedTop = Math.Clamp(skillPanel.Top.Pixels, minY, Math.Max(minY, maxY));
@@ -477,6 +508,35 @@ namespace Stataria
                 skillPanel.Top.Set(clampedTop, 0f);
             }
             base.Recalculate();
+        }
+
+        private void ShowTooltip(string description)
+        {
+            tooltipPanel.BackgroundColor = new Color(33, 43, 79, 200);
+            tooltipPanel.BorderColor = new Color(255, 255, 255, 200);
+
+            float innerWidth = tooltipPanel.GetInnerDimensions().Width;
+            string wrappedText = WrapText(description, (int)innerWidth);
+            tooltipText.SetText(wrappedText);
+            tooltipText.Recalculate();
+
+            DynamicSpriteFont font = FontAssets.MouseText.Value;
+            float lineHeight = font.LineSpacing * 1f;
+            int lineCount = wrappedText.Split('\n').Length;
+            float totalTextHeight = lineCount * lineHeight;
+
+            float padding = tooltipPanel.PaddingTop + tooltipPanel.PaddingBottom;
+            tooltipPanel.Height.Set(totalTextHeight + padding + 8f, 0f);
+            tooltipPanel.Recalculate();
+        }
+
+        private void HideTooltip()
+        {
+            tooltipText.SetText("");
+            tooltipPanel.BackgroundColor = Color.Transparent;
+            tooltipPanel.BorderColor = Color.Transparent;
+            tooltipPanel.Height.Set(0f, 0f);
+            tooltipPanel.Recalculate();
         }
 
         private string WrapText(string text, int maxWidth)

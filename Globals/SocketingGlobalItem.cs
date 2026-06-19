@@ -89,6 +89,7 @@ namespace Stataria
         public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)
         {
             float powerBonus = GetTotalCoreEffect(CoreType.Power);
+
             if (powerBonus > 0)
             {
                 damage += powerBonus / 100f;
@@ -101,6 +102,7 @@ namespace Stataria
                 return;
 
             float forceBonus = GetTotalCoreEffect(CoreType.Force);
+
             if (forceBonus > 0)
             {
                 knockback += forceBonus / 100f;
@@ -113,9 +115,37 @@ namespace Stataria
                 return;
 
             float precisionBonus = GetTotalCoreEffect(CoreType.Precision);
+
+            if (item.useAmmo > 0)
+            {
+                Item ammoItem = player.ChooseAmmo(item);
+                if (ammoItem != null && !ammoItem.IsAir && ammoItem.TryGetGlobalItem<SocketingGlobalItem>(out var ammoSocketing))
+                {
+                    precisionBonus += ammoSocketing.GetTotalCoreEffect(CoreType.Precision);
+                }
+            }
+
             if (precisionBonus > 0)
             {
                 crit += precisionBonus;
+            }
+        }
+
+        public override void PickAmmo(Item weapon, Item ammo, Player player, ref int type, ref float speed, ref StatModifier damage, ref float knockback)
+        {
+            if (ammo.TryGetGlobalItem<SocketingGlobalItem>(out var ammoSocketing))
+            {
+                float powerBonus = ammoSocketing.GetTotalCoreEffect(CoreType.Power);
+                if (powerBonus > 0)
+                {
+                    damage += powerBonus / 100f;
+                }
+
+                float forceBonus = ammoSocketing.GetTotalCoreEffect(CoreType.Force);
+                if (forceBonus > 0)
+                {
+                    knockback *= 1f + (forceBonus / 100f);
+                }
             }
         }
 

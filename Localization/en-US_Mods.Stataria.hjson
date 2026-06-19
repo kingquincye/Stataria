@@ -1012,6 +1012,16 @@ Configs: {
 			Label: PST Cap
 			Tooltip: ""
 		}
+
+		EnablePOWPierce: {
+			Label: Enable POW Pierce
+			Tooltip: WARNING: Experimental. May cause unexpected results.
+		}
+
+		POW_PierceScaling: {
+			Tooltip: ""
+			Label: P O W_ Pierce Scaling
+		}
 	}
 
 	ModIntegration: {
@@ -2718,9 +2728,16 @@ UI: {
 		ToggleOn: On
 		ToggleOff: Off
 		RefundedRP: +{0} RP Refunded!
+		ResetAbilitiesTooltip: Reset all rebirth abilities and refund your Rebirth Points
+		ShowHiddenTooltip: Toggle visibility of hidden abilities
+		HideTooltip: Hide this ability from the list (can be shown again via Show Hidden)
 	}
 
-	BulkAllocation.Header: Allocation Amount:
+	BulkAllocation: {
+		Header: Allocation Amount:
+		HeaderTooltip: The number of stat points allocated per click
+		ButtonTooltip: Set allocation amount to {0}
+	}
 
 	RoleSelection: {
 		Title: ROLE SELECTION
@@ -2780,6 +2797,11 @@ UI: {
 		Rebirth: Rebirth
 		Auto: Auto
 		ResetStatsTooltip: Reset all stats for free
+		RebirthReqLevel: Requires Level {0}
+		RebirthXPBonusDesc: +{0}% permanent XP bonus per rebirth level
+		RebirthResetsStats: Resets your level and stat points
+		RebirthKeepsStats: Resets your level but keeps allocated stat points
+		RebirthResetsBosses: Resets boss kill flags for XP rewards
 		AutoTooltip: Toggle automatic point allocation to checked stats
 		AutoAllocateTooltip: Check to auto-allocate points to this stat
 		RequireLevelPrompt: Requires level {0}!
@@ -2836,6 +2858,7 @@ UI: {
 		END_KnocksBackNonBosses: Knocks Back Non-Bosses
 		END_Aggro: +{0} Aggro (+{1} per point)
 		POW_GeneralDamage: +{0}% General Damage (+{1}% per point)
+		POW_PierceBonus: +{0} Target Pierce (every {1} POW)
 		POW_OtherDamage: +{0}% Other Damage Types (+0.1% per point)
 		POW_RageDamage: +{0}% Rage Damage (+{1}% per point)
 		POW_RageDuration: +{0}s Rage Duration (+{1}s per point, max {2}s)

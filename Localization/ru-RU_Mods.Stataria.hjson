@@ -1012,6 +1012,16 @@ Configs: {
 			Label: Лимит PST
 			Tooltip: ""
 		}
+
+		EnablePOWPierce: {
+			Label: Enable POW Pierce (Экспериментально)
+			Tooltip: ВНИМАНИЕ: Экспериментально. Может вызвать неожиданные результаты.
+		}
+
+		POW_PierceScaling: {
+			// Tooltip: ""
+			// Label: P O W_ Pierce Scaling
+		}
 	}
 
 	ModIntegration: {
@@ -2718,9 +2728,16 @@ UI: {
 		ToggleOn: Вкл
 		ToggleOff: Выкл
 		RefundedRP: Возвращено {0} ОП!
+		ResetAbilitiesTooltip: Сбросить все способности перерождения и вернуть Очки Перерождения
+		ShowHiddenTooltip: Переключить видимость скрытых способностей
+		HideTooltip: Скрыть эту способность из списка (можно показать снова через Показать Скрытые)
 	}
 
-	BulkAllocation.Header: Количество за Клик:
+	BulkAllocation: {
+		Header: Количество за Клик:
+		HeaderTooltip: Количество очков характеристик, распределяемых за клик
+		ButtonTooltip: Установить количество распределения на {0}
+	}
 
 	RoleSelection: {
 		Title: ВЫБОР РОЛИ
@@ -2780,6 +2797,11 @@ UI: {
 		Rebirth: Перерождение
 		Auto: Авто
 		ResetStatsTooltip: Бесплатно сбросить все статы
+		RebirthReqLevel: Требуется уровень {0}
+		RebirthXPBonusDesc: +{0}% к постоянному бонусу опыта за уровень перерождения
+		RebirthResetsStats: Сбрасывает ваш уровень и очки характеристик
+		RebirthKeepsStats: Сбрасывает ваш уровень, но сохраняет распределенные характеристики
+		RebirthResetsBosses: Сбрасывает убийства боссов для получения наград опыта
 		AutoTooltip: Включить автоматическое распределение очков в отмеченные статы
 		AutoAllocateTooltip: Отметьте для авто-распределения очков в этот стат
 		RequireLevelPrompt: Требуется уровень {0}!
@@ -2836,6 +2858,7 @@ UI: {
 		END_KnocksBackNonBosses: Отбрасывает обычных врагов
 		END_Aggro: +{0} Агро (+{1} за очко)
 		POW_GeneralDamage: +{0}% Общий Урон (+{1}% за очко)
+		POW_PierceBonus: +{0} Пробитие целей (каждые {1} POW)
 		POW_OtherDamage: +{0}% Иные Типы Урона (+0.1% за очко)
 		POW_RageDamage: +{0}% Урон Ярости (+{1}% за очко)
 		POW_RageDuration: +{0}с Длительность Ярости (+{1}с за очко, макс {2}с)

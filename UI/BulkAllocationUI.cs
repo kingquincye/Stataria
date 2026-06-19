@@ -30,12 +30,17 @@ namespace Stataria
             bulkButtons = new UITextPanel<string>[BulkOptions.Length];
         }
 
-        public void Initialize(UIPanel panel, float baseY)
+        public void Initialize(UIPanel panel, float baseY, Action<string> showTooltip = null, Action hideTooltip = null)
         {
             var bulkHeader = new UIText(Language.GetText("Mods.Stataria.UI.BulkAllocation.Header"), 1f);
             baseY += 10f;
             bulkHeader.Top.Set(baseY, 0f);
             bulkHeader.Left.Set(10f, 0f);
+            if (showTooltip != null && hideTooltip != null)
+            {
+                bulkHeader.OnMouseOver += (evt, el) => showTooltip(Language.GetTextValue("Mods.Stataria.UI.BulkAllocation.HeaderTooltip"));
+                bulkHeader.OnMouseOut += (evt, el) => hideTooltip();
+            }
             panel.Append(bulkHeader);
 
             float buttonWidth = 45f;
@@ -48,8 +53,9 @@ namespace Stataria
             for (int i = 0; i < BulkOptions.Length; i++)
             {
                 int optionIndex = i;
+                int amount = BulkOptions[i];
 
-                bulkButtons[i] = new UITextPanel<string>(BulkOptions[i].ToString(), textScale: 1f, large: false)
+                bulkButtons[i] = new UITextPanel<string>(amount.ToString(), textScale: 1f, large: false)
                 {
                     Top = { Pixels = buttonY },
                     Left = { Pixels = startX + (buttonWidth + buttonSpacing) * i },
@@ -65,6 +71,12 @@ namespace Stataria
                 {
                     SelectBulkOption(optionIndex);
                 };
+
+                if (showTooltip != null && hideTooltip != null)
+                {
+                    bulkButtons[i].OnMouseOver += (evt, el) => showTooltip(Language.GetTextValue("Mods.Stataria.UI.BulkAllocation.ButtonTooltip", amount));
+                    bulkButtons[i].OnMouseOut += (evt, el) => hideTooltip();
+                }
 
                 panel.Append(bulkButtons[i]);
             }
