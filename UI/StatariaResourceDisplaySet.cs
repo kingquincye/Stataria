@@ -131,6 +131,30 @@ namespace Stataria
                 new Rectangle(0, 0, 1, 1),
                 healthColor);
 
+            // Draw Living Flesh Rally Bar segment if active
+            var lfPlayer = player.GetModPlayer<LivingFleshPlayer>();
+            if (lfPlayer.IsLivingFleshActive && lfPlayer.RallyableHealth > 0 && lfPlayer.RallyTimer > 0)
+            {
+                float rallyPercent = player.statLifeMax2 > 0 ? MathHelper.Clamp((float)lfPlayer.RallyableHealth / player.statLifeMax2, 0f, 1f) : 0f;
+                int rallyFillWidth = (int)(barWidth * rallyPercent);
+                
+                // Clamp width so it doesn't exceed the bar's borders
+                if (healthFillWidth + rallyFillWidth > barWidth)
+                {
+                    rallyFillWidth = barWidth - healthFillWidth;
+                }
+
+                if (rallyFillWidth > 0)
+                {
+                    Color rallyColor = Color.Red * 0.4f; // Faded red, not orange!
+                    spriteBatch.Draw(
+                        pixelTexture,
+                        new Rectangle((int)healthBarPosition.X + healthFillWidth, (int)healthBarPosition.Y, rallyFillWidth, barHeight),
+                        new Rectangle(0, 0, 1, 1),
+                        rallyColor);
+                }
+            }
+
             DrawBarBorders(spriteBatch, healthBarPosition, barWidth, barHeight);
 
             int displayHealth = Math.Min(player.statLife, player.statLifeMax2);

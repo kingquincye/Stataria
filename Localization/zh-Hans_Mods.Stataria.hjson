@@ -8,6 +8,7 @@ Keybinds: {
 	"Divine Resurrection.DisplayName": 神圣复活
 	"Mortal Draw.DisplayName": 不死斩
 	"Desperado Showdown.DisplayName": 决斗时刻
+	"Flesh Clone.DisplayName": 血肉克隆体
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1485,6 +1486,7 @@ Configs: {
 			Angel: 天使
 			Shinobi: 忍者
 			Desperado: 亡命徒
+			Living_Flesh: 活体血肉
 		}
 
 		BaseSwitchCost: {
@@ -2080,6 +2082,101 @@ Configs: {
 			Tooltip: 解锁天使职业所需的最低转生次数。
 			Label: 天使转生次数要求
 		}
+
+		LivingFleshMaxDamageMultiplier: {
+			Label: 活体血肉最大伤害倍率
+			Tooltip: 满血时获得的最大额外伤害提升比例（百分比）。
+		}
+
+		LivingFleshMinDamageMultiplier: {
+			Label: 活体血肉最小伤害倍率
+			Tooltip: 残血（接近0生命）时的伤害修改比例（百分比，可为负数以降低伤害）。
+		}
+
+		LivingFleshMaxHPBonus: {
+			Label: 活体血肉最大生命加成
+			Tooltip: 无护甲（0防御）时获得的最大生命值加成比例（百分比）。
+		}
+
+		LivingFleshMaxDR: {
+			Label: 活体血肉最大伤害减免
+			Tooltip: 无护甲（0防御）时获得的最大伤害减免（DR，百分比）。
+		}
+
+		LivingFleshDefenseToHPRatio: {
+			Label: 活体血肉护甲生命衰减比例
+			Tooltip: 防御力占最大生命值的百分比达到此值时，无甲加成完全失效。
+		}
+
+		LivingFleshRallyStorePercent: {
+			Label: 活体血肉拉力储存比例
+			Tooltip: 受到伤害时，转化为可攻击恢复的拉力生命值的百分比。
+		}
+
+		LivingFleshRallyHealPercent: {
+			Label: 活体血肉拉力恢复倍率
+			Tooltip: 攻击敌人时，造成的伤害转化为已储存拉力生命值恢复的百分比。
+		}
+
+		LivingFleshRallyDuration: {
+			Label: 活体血肉拉力持续时间
+			Tooltip: 受到伤害后，可进行拉力攻击恢复的时间窗口（秒）。
+		}
+
+		LivingFleshKillRegenDuration: {
+			Label: 击杀生命恢复持续时间
+			Tooltip: 击杀敌人后，生命恢复强化状态持续的时间（秒）。
+		}
+
+		LivingFleshKillRegenBase: {
+			Label: 击杀生命恢复基础值
+			Tooltip: 击杀敌人在持续时间内提供的基础生命回复速率。
+		}
+
+		LivingFleshKillRegenVitScale: {
+			Label: 击杀生命恢复生命力系数
+			Tooltip: 每点生命力（VIT）为击杀生命恢复速率提供的额外加成系数。
+		}
+
+		LivingFleshPassiveRegenPercent: {
+			Label: 持续生命恢复百分比
+			Tooltip: 活体血肉常驻被动每次恢复的最大生命值百分比。
+		}
+
+		LivingFleshPassiveRegenInterval: {
+			Label: 持续生命恢复间隔
+			Tooltip: 活体血肉常驻被动每次恢复的间隔时间（秒）。
+		}
+
+		LivingFleshCloneHPCost: {
+			Label: 血肉克隆体生命消耗比例
+			Tooltip: 激活技能时牺牲当前生命值的百分比（例如50%）。
+		}
+
+		LivingFleshCloneDuration: {
+			Label: 血肉克隆体持续时间
+			Tooltip: 召唤的克隆体在自动爆炸前的存在时间（秒）。
+		}
+
+		LivingFleshCloneCooldown: {
+			Label: 血肉克隆体冷却时间
+			Tooltip: 召唤克隆体技能的冷却时间（秒）。
+		}
+
+		LivingFleshCloneDamageMultiplier: {
+			Label: 血肉克隆体爆炸伤害倍率
+			Tooltip: 克隆体死亡爆炸造成的伤害相当于牺牲生命值的倍数。
+		}
+
+		LivingFleshCloneAggroRange: {
+			Label: 血肉克隆体仇恨范围
+			Tooltip: 克隆体吸引敌人的最大距离（像素）。
+		}
+
+		LivingFleshAllowOtherStats: {
+			Label: 活体血肉允许其他属性
+			Tooltip: 启用后，活体血肉职业仍能享受其他属性带来的伤害加成、自定义 VIT 生命恢复/药水强化以及耐力（END）的伤害减免（DR）。
+		}
 	}
 
 	SocketingSystem: {
@@ -2272,6 +2369,7 @@ Configs: {
 			HUD: HUD 设置
 			SocketingSystem: 镶嵌系统
 			General: 通用设置
+			LivingFleshClient: 活体血肉设置（客户端）
 		}
 
 		ShowSocketedCoresInTooltip: {
@@ -2440,6 +2538,11 @@ Configs: {
 			Tooltip: 将经验条拉伸到屏幕底部。
 			Label: 拉伸经验条到底部
 		}
+
+		EnableVanillaHUDFloatingRallyBar: {
+			Label: 启用原版HUD悬浮拉力条
+			Tooltip: 在使用游戏原版生命栏时，于玩家头顶绘制包含拉力虚血的生命条。
+		}
 	}
 }
 
@@ -2529,6 +2632,11 @@ Buffs: {
 	BleedDebuff: {
 		Description: Mods.Stataria.Buffs.BleedDebuff.Description
 		DisplayName: 流血
+	}
+
+	LivingFleshRegenBuff: {
+		DisplayName: 活体血肉恢复
+		Description: 击杀敌人后，你的生命力将加速你的恢复。
 	}
 }
 
@@ -2816,6 +2924,16 @@ RoleEffects: {
 		Showdown: • 决斗时刻: 立即获得最大节奏层数且在 {0} 秒内不再衰减。期间远程暴击率提高 {1}%，远程爆伤提高 {2}%（冷却 {3} 秒）。
 		NoAGISpeed: • 远程武器不再享受敏捷带来的攻击速度加成
 		NoPOWPierce: • 远程武器不再享受力量提供的穿透加成
+	}
+
+	LivingFlesh: {
+		HPBypasses: • 仅受 VIT 属性加成。禁用了 VIT 的自定义效果以及耐力（END）的伤害减免（DR）
+		HPScalingDamage: • 伤害随当前生命值百分比缩放：满血时伤害提升 +{0}%，残血时降至 +{1}%
+		ArmorBonus: • 无甲/低护甲加成：在 0 防御力时最多获得 +{0}% 最大生命值和 +{1}% 伤害减免（DR），该加成在防御力达到最大生命值的 {2}% 时归零
+		Rally: • 拉力机制：储存受到伤害的 {0}%；在 {2} 秒内攻击敌人可回复所造成伤害的 {1}%
+		KillRegen: • 击杀恢复：击杀敌人会获得持续生命回复 +{0}（每点 VIT 额外 +{1}）
+		PassiveRegen: • 持续回复：持续回复 {0}% 最大生命值，间隔为 {1} 秒（不受受伤打断影响）
+		FleshClone: • 血肉克隆体：牺牲 {0}% 当前生命值召唤一个诱饵克隆体。死亡时产生爆炸，造成 {1} 倍于牺牲生命值的伤害（持续 {2} 秒，冷却时间 {3} 秒）
 	}
 }
 
@@ -3115,6 +3233,7 @@ AbilityName: {
 	DivineResurrection: 神圣复活
 	MortalDraw: 不死斩
 	Showdown: 决斗时刻
+	// FleshClone: Flesh Clone
 }
 
 RebirthAbilityName: {
@@ -3211,6 +3330,7 @@ RoleName: {
 	Angel: 天使
 	Shinobi: 忍者
 	Desperado: 亡命徒
+	LivingFlesh: 活体血肉
 }
 
 RoleDescription: {
@@ -3227,6 +3347,7 @@ RoleDescription: {
 	Angel: 飞升的牧师，获得了双翼并掌控生死边界，能复活倒下的队友并在强大的光环中庇护他们。
 	Shinobi: 动作敏捷的 Sekiraria 影子武士。处决敌人时能获得治疗，并且在装备 Parry Sword 时可以触发致命的不死斩技能。
 	Desperado: 极速狂飙的的枪手，通过连续的远程攻击积累狂热的“节奏”层数，以牺牲敏捷带来的攻击速度加成为代价，发射额外弹幕并提高弹道速度。
+	LivingFlesh: 专注于生命值（HP）的职业，通过牺牲防御力换取庞大的最大生命值和伤害减免。生命值百分比越高，造成的伤害就越高。
 }
 
 RoleFlavorText: {
@@ -3243,6 +3364,7 @@ RoleFlavorText: {
 	Angel: 超脱凡尘——从高空以优雅的双翼俯瞰，维系着盟友灵魂的锚点。
 	Shinobi: 犹豫，就会败北。于暗影中突袭，以精准之势处决，夺取其生命精华。
 	Desperado: 开火永不停歇，回头绝无可能。让扳机的律动指引你的道路。
+	LivingFlesh: 让你的血肉成为你的盾牌与武器。
 }
 
 DeathMessage: {
@@ -3285,4 +3407,5 @@ Logging: {
 Projectiles: {
 	ZombieThrallProjectile.DisplayName: 僵尸奴仆
 	ElementalDischargeProjectile.DisplayName: 元素释放
+	FleshCloneProjectile.DisplayName: 血肉克隆体
 }

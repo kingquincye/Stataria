@@ -8,6 +8,7 @@ Keybinds: {
 	"Divine Resurrection.DisplayName": Divine Resurrection
 	"Mortal Draw.DisplayName": Mortal Draw
 	"Desperado Showdown.DisplayName": Desperado Showdown
+	"Flesh Clone.DisplayName": Flesh Clone
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1485,6 +1486,7 @@ Configs: {
 			Angel: Angel
 			Shinobi: Shinobi
 			Desperado: Desperado
+			Living_Flesh: Living Flesh
 		}
 
 		BaseSwitchCost: {
@@ -2080,6 +2082,101 @@ Configs: {
 			Tooltip: The minimum rebirth count required to unlock the Angel role.
 			Label: Angel Rebirth Requirement
 		}
+
+		LivingFleshMaxDamageMultiplier: {
+			Label: Living Flesh Max Damage Multiplier
+			Tooltip: Maximum damage multiplier at 100% health.
+		}
+
+		LivingFleshMinDamageMultiplier: {
+			Label: Living Flesh Min Damage Multiplier
+			Tooltip: Damage multiplier change at near-zero health (can be negative to reduce damage).
+		}
+
+		LivingFleshMaxHPBonus: {
+			Label: Living Flesh Max HP Bonus
+			Tooltip: Maximum max life multiplier bonus at 0 defense (e.g. 1.0 = double HP).
+		}
+
+		LivingFleshMaxDR: {
+			Label: Living Flesh Max DR
+			Tooltip: Maximum damage reduction (DR) bonus at 0 defense (e.g. 0.5 = 50% DR).
+		}
+
+		LivingFleshDefenseToHPRatio: {
+			Label: Living Flesh Defense to HP Ratio
+			Tooltip: The ratio of defense to max life at which the low-armor health/DR bonuses scale down to zero.
+		}
+
+		LivingFleshRallyStorePercent: {
+			Label: Living Flesh Rally Store Percent
+			Tooltip: Percent of damage taken stored as potential Rally healing.
+		}
+
+		LivingFleshRallyHealPercent: {
+			Label: Living Flesh Rally Heal Percent
+			Tooltip: Percent of damage dealt converted back to health on hit (up to stored Rally limit).
+		}
+
+		LivingFleshRallyDuration: {
+			Label: Living Flesh Rally Duration
+			Tooltip: Time window in seconds to heal back stored Rally damage.
+		}
+
+		LivingFleshKillRegenDuration: {
+			Label: Living Flesh Kill Regen Duration
+			Tooltip: Duration in seconds of the health regeneration buff gained on killing enemies.
+		}
+
+		LivingFleshKillRegenBase: {
+			Label: Living Flesh Kill Regen Base
+			Tooltip: Base health regeneration rate gained on killing enemies.
+		}
+
+		LivingFleshKillRegenVitScale: {
+			Label: Living Flesh Kill Regen VIT Scale
+			Tooltip: Vitality scaling factor added to the kill regeneration rate.
+		}
+
+		LivingFleshPassiveRegenPercent: {
+			Label: Living Flesh Passive Regen Percent
+			Tooltip: Percent of max health regenerated constantly at regular intervals.
+		}
+
+		LivingFleshPassiveRegenInterval: {
+			Label: Living Flesh Passive Regen Interval
+			Tooltip: The time interval in seconds between passive regeneration heals.
+		}
+
+		LivingFleshCloneHPCost: {
+			Label: Living Flesh Clone HP Cost
+			Tooltip: Percent of current health sacrificed to summon the decoy clone.
+		}
+
+		LivingFleshCloneDuration: {
+			Label: Living Flesh Clone Duration
+			Tooltip: Duration in seconds the decoy clone remains active before exploding.
+		}
+
+		LivingFleshCloneCooldown: {
+			Label: Living Flesh Clone Cooldown
+			Tooltip: Cooldown in seconds of the Flesh Clone active skill.
+		}
+
+		LivingFleshCloneDamageMultiplier: {
+			Label: Living Flesh Clone Damage Multiplier
+			Tooltip: Sacrificed health multiplier determining the clone's explosion damage.
+		}
+
+		LivingFleshCloneAggroRange: {
+			Label: Living Flesh Clone Aggro Range
+			Tooltip: Maximum range in pixels within which enemies are drawn to the decoy clone.
+		}
+
+		LivingFleshAllowOtherStats: {
+			Label: Living Flesh Allow Other Stats
+			Tooltip: When enabled, the Living Flesh role still receives damage scaling, custom VIT regen/potion boosts, and Endurance DR from other stats.
+		}
 	}
 
 	SocketingSystem: {
@@ -2272,6 +2369,7 @@ Configs: {
 			HUD: HUD Settings
 			SocketingSystem: Socketing System
 			General: General
+			LivingFleshClient: Living Flesh Settings
 		}
 
 		ShowSocketedCoresInTooltip: {
@@ -2440,6 +2538,11 @@ Configs: {
 			Tooltip: Stretches XP bar down the screen.
 			Label: Stretch XP Bar To Bottom
 		}
+
+		EnableVanillaHUDFloatingRallyBar: {
+			Label: Enable Vanilla HUD Floating Rally Bar
+			Tooltip: Draws a floating health bar showing potential Rally healing above the player when using the vanilla HUD.
+		}
 	}
 }
 
@@ -2529,6 +2632,11 @@ Buffs: {
 	BleedDebuff: {
 		Description: Mods.Stataria.Buffs.BleedDebuff.Description
 		DisplayName: Bleed Debuff
+	}
+
+	LivingFleshRegenBuff: {
+		DisplayName: Living Flesh Recovery
+		Description: Your Vitality accelerates your recovery after a kill.
 	}
 }
 
@@ -2816,6 +2924,16 @@ RoleEffects: {
 		Showdown: • Showdown: Instantly gain max Tempo stacks and lock them from decaying for {0}s. Ranged critical strike chance is increased by {1}% and ranged critical damage is increased by {2}% during this time ({3}s cooldown).
 		NoAGISpeed: • Ranged weapons do not benefit from AGI attack speed bonuses
 		NoPOWPierce: • Ranged weapons do not benefit from POW pierce bonuses
+	}
+
+	LivingFlesh: {
+		HPBypasses: • Only scales off VIT. Custom VIT effects and Endurance (END) DR are disabled
+		HPScalingDamage: • HP Damage Scaling: Deals +{0}% damage at 100% HP, down to +{1}% damage at low health
+		ArmorBonus: • Naked/Low-Armor Bonus: Up to +{0}% Max HP and +{1}% DR at 0 defense, scaling down to 0% at {2}% of Max HP as defense
+		Rally: • Rally: Store {0}% of damage taken; hitting enemies heals you for {1}% of damage dealt within {2}s
+		KillRegen: • Kill Regen: Killing enemies grants a steady +{0} health regen +{1} per VIT
+		PassiveRegen: • Constant Regen: Regenerate {0}% Max HP every {1}s (unaffected by damage delay)
+		FleshClone: • Flesh Clone: Sacrifice {0}% current HP to summon a decoy clone. Deals {1}x sacrificed HP as explosion damage on death ({2}s duration, {3}s cooldown)
 	}
 }
 
@@ -3115,6 +3233,7 @@ AbilityName: {
 	DivineResurrection: Divine Resurrection
 	MortalDraw: Mortal Draw
 	Showdown: Showdown
+	FleshClone: Flesh Clone
 }
 
 RebirthAbilityName: {
@@ -3211,6 +3330,7 @@ RoleName: {
 	Angel: Angel
 	Shinobi: Shinobi
 	Desperado: Desperado
+	LivingFlesh: Living Flesh
 }
 
 RoleDescription: {
@@ -3227,6 +3347,7 @@ RoleDescription: {
 	Angel: An ascended Cleric who gains wings and commands the boundary of life and death, reviving fallen teammates and shielding them in a powerful aura.
 	Shinobi: A swift shadow warrior from Sekiraria. Gains healing on executions, and can trigger the deadly Mortal Draw skill with a Parry Sword equipped.
 	Desperado: A high-octane gunslinger who builds intense Tempo through continuous ranged attacks, firing extra projectiles and gaining velocity at the cost of Agility use speed.
+	LivingFlesh: An HP-focused role that trades defense for massive health and damage reduction. Deals more damage the higher your HP percentage.
 }
 
 RoleFlavorText: {
@@ -3243,6 +3364,7 @@ RoleFlavorText: {
 	Angel: Evolve beyond mortality - look down from on high with wings of grace, holding the anchor of your allies' souls.
 	Shinobi: Hesitation is defeat. Strike from the shadows, execute with precision, and consume their essence.
 	Desperado: Never stop firing, never look back. Let the rhythm of the trigger guide your path.
+	LivingFlesh: Let your own flesh be your shield and weapon.
 }
 
 DeathMessage: {
@@ -3285,4 +3407,5 @@ Logging: {
 Projectiles: {
 	ZombieThrallProjectile.DisplayName: Zombie Thrall Projectile
 	ElementalDischargeProjectile.DisplayName: Elemental Discharge Projectile
+	FleshCloneProjectile.DisplayName: Flesh Clone Projectile
 }

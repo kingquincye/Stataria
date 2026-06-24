@@ -346,6 +346,27 @@ namespace Stataria
             [DefaultValue(6f)][Range(1f, 30f)] public float DesperadoShowdownDuration { get; set; } = 6f;
             [DefaultValue(20f)][Range(0f, 100f)] public float DesperadoShowdownCritChance { get; set; } = 20f;
             [DefaultValue(30f)][Range(0f, 200f)] public float DesperadoShowdownCritDamage { get; set; } = 30f;
+
+            [Header("Living_Flesh")]
+            [DefaultValue(1.5f)][Range(0.1f, 10f)] public float LivingFleshMaxDamageMultiplier { get; set; } = 1.5f;
+            [DefaultValue(0.05f)][Range(0f, 1f)] public float LivingFleshMinDamageMultiplier { get; set; } = 0.05f;
+            [DefaultValue(1.0f)][Range(0f, 5f)] public float LivingFleshMaxHPBonus { get; set; } = 1.0f;
+            [DefaultValue(0.5f)][Range(0f, 0.95f)] public float LivingFleshMaxDR { get; set; } = 0.5f;
+            [DefaultValue(0.10f)][Range(0.01f, 1f)] public float LivingFleshDefenseToHPRatio { get; set; } = 0.10f;
+            [DefaultValue(60f)][Range(0f, 100f)] public float LivingFleshRallyStorePercent { get; set; } = 60f;
+            [DefaultValue(30f)][Range(0f, 100f)] public float LivingFleshRallyHealPercent { get; set; } = 30f;
+            [DefaultValue(5f)][Range(1f, 30f)] public float LivingFleshRallyDuration { get; set; } = 5f;
+            [DefaultValue(6f)][Range(1f, 30f)] public float LivingFleshKillRegenDuration { get; set; } = 6f;
+            [DefaultValue(5f)][Range(0f, 50f)] public float LivingFleshKillRegenBase { get; set; } = 5f;
+            [DefaultValue(0.1f)][Range(0f, 2f)] public float LivingFleshKillRegenVitScale { get; set; } = 0.1f;
+            [DefaultValue(1f)][Range(0.1f, 10f)] public float LivingFleshPassiveRegenPercent { get; set; } = 1f;
+            [DefaultValue(1f)][Range(0.1f, 10f)] public float LivingFleshPassiveRegenInterval { get; set; } = 1f;
+            [DefaultValue(50f)][Range(10f, 90f)] public float LivingFleshCloneHPCost { get; set; } = 50f;
+            [DefaultValue(15f)][Range(1f, 60f)] public float LivingFleshCloneDuration { get; set; } = 15f;
+            [DefaultValue(30f)][Range(5f, 300f)] public float LivingFleshCloneCooldown { get; set; } = 30f;
+            [DefaultValue(2.5f)][Range(0.5f, 10f)] public float LivingFleshCloneDamageMultiplier { get; set; } = 2.5f;
+            [DefaultValue(1200f)][Range(200f, 5000f)] public float LivingFleshCloneAggroRange { get; set; } = 1200f;
+            [DefaultValue(false)] public bool LivingFleshAllowOtherStats { get; set; } = false;
         }
 
         public class MultiplayerSettings
@@ -648,5 +669,8 @@ namespace Stataria
         public List<int> MiniBossNPCIDs { get; set; } = new List<int>();
         public List<int> ForcedBossNPCIDs { get; set; } = new List<int>();
         public List<int> ExcludedBossNPCIDs { get; set; } = new List<int>();
+
+        [Header("LivingFleshClient")]
+        [DefaultValue(true)] public bool EnableVanillaHUDFloatingRallyBar { get; set; } = true;
     }
 }

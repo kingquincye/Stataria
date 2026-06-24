@@ -306,6 +306,22 @@ namespace Stataria
                 return string.Join("\n", effects);
             }
 
+            if (ID == "LivingFlesh")
+            {
+                var effects = new List<string>
+                {
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.LivingFlesh.HPBypasses"),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.LivingFlesh.HPScalingDamage", (config.roleSettings.LivingFleshMaxDamageMultiplier * 100f).ToString("0.##"), (config.roleSettings.LivingFleshMinDamageMultiplier * 100f).ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.LivingFlesh.ArmorBonus", (config.roleSettings.LivingFleshMaxHPBonus * 100f).ToString("0.##"), (config.roleSettings.LivingFleshMaxDR * 100f).ToString("0.##"), (config.roleSettings.LivingFleshDefenseToHPRatio * 100f).ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.LivingFlesh.Rally", config.roleSettings.LivingFleshRallyStorePercent.ToString("0.##"), config.roleSettings.LivingFleshRallyHealPercent.ToString("0.##"), config.roleSettings.LivingFleshRallyDuration.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.LivingFlesh.KillRegen", config.roleSettings.LivingFleshKillRegenBase.ToString("0.##"), config.roleSettings.LivingFleshKillRegenVitScale.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.LivingFlesh.PassiveRegen", config.roleSettings.LivingFleshPassiveRegenPercent.ToString("0.##"), config.roleSettings.LivingFleshPassiveRegenInterval.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.LivingFlesh.FleshClone", config.roleSettings.LivingFleshCloneHPCost.ToString("0.##"), config.roleSettings.LivingFleshCloneDamageMultiplier.ToString("0.##"), config.roleSettings.LivingFleshCloneDuration.ToString("0.##"), config.roleSettings.LivingFleshCloneCooldown.ToString("0.##"))
+                };
+
+                return string.Join("\n", effects);
+            }
+
             return Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.NoEffects");
         }
     }

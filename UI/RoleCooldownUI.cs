@@ -114,6 +114,19 @@ namespace Stataria.UI
             }
 
 
+            // Living Flesh: Flesh Clone
+            var livingFlesh = player.GetModPlayer<LivingFleshPlayer>();
+            if (livingFlesh.IsLivingFleshActive && livingFlesh.CloneCooldownTimer > 0)
+            {
+                activeCooldowns.Add(new ActiveCooldown(
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.AbilityName.FleshClone"), "C",
+                    livingFlesh.CloneCooldownTimer / 60f,
+                    config.roleSettings.LivingFleshCloneCooldown,
+                    new Color(180, 60, 60)
+                ));
+            }
+
+
             // Rebirth: Teleport
             if (rpg.teleportCooldownTimer > 0)
             {

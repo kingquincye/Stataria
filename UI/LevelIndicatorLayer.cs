@@ -42,6 +42,15 @@ namespace Stataria
             Main.spriteBatch.DrawString(font, levelText, textPos, Color.White * opacity);
         }
 
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => true;
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+        {
+            if (Main.dedServ) return false;
+            Player player = drawInfo.drawPlayer;
+            if (player == null) return false;
+            // Suppress during clone rendering to avoid the indicator appearing at the clone's position
+            var lfPlayer = player.GetModPlayer<LivingFleshPlayer>();
+            if (lfPlayer != null && lfPlayer.IsDrawingClone) return false;
+            return true;
+        }
     }
 }

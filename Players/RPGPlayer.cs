@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
 using Terraria.GameInput;
 using Stataria.Buffs;
+using Stataria.Projectiles;
 
 namespace Stataria
 {
@@ -538,6 +539,14 @@ namespace Stataria
             );
             AvailableRoles["Desperado"] = desperado;
 
+            var livingFlesh = new Role(
+                "LivingFlesh",
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.LivingFlesh"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.LivingFlesh"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.LivingFlesh")
+            );
+            AvailableRoles["LivingFlesh"] = livingFlesh;
+
             if (config.modIntegration.EnableSekirariaIntegration && SekirariaSupportHelper.SekirariaLoaded)
             {
                 var shinobi = new Role(
@@ -803,6 +812,16 @@ namespace Stataria
                     desperadoPlayer.ActivateShowdown();
                 }
             }
+            if (StatariaKeybinds.FleshCloneKey.JustPressed &&
+                !Terraria.GameInput.PlayerInput.WritingText &&
+                ActiveRole?.ID == "LivingFlesh" && ActiveRole.Status == RoleStatus.Active)
+            {
+                var livingFleshPlayer = Player.GetModPlayer<LivingFleshPlayer>();
+                if (livingFleshPlayer.CloneCooldownTimer <= 0)
+                {
+                    livingFleshPlayer.ActivateFleshClone();
+                }
+            }
         }
 
         private void OpenUIOnTab(TabBarUI.TabType tab)
@@ -1061,6 +1080,10 @@ namespace Stataria
         public int GetEffectiveStat(string statName)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
+            if (ActiveRole?.ID == "LivingFlesh" && ActiveRole.Status == RoleStatus.Active && statName != "VIT" && !config.roleSettings.LivingFleshAllowOtherStats)
+            {
+                return 0;
+            }
             bool capsEnabled = config.statSettings.EnableStatCaps;
 
             int baseStat = 0;
@@ -1448,6 +1471,10 @@ namespace Stataria
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (target.friendly || target.lifeMax <= 5 || proj.owner != Player.whoAmI)
+                return;
+
+            // Flesh Clone explosions should not award XP to the player
+            if (proj.type == ModContent.ProjectileType<FleshCloneProjectile>())
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -2315,7 +2342,8 @@ namespace Stataria
             int effectiveVIT = GetEffectiveStat("VIT");
             bool isCleric = ActiveRole?.ID == "Cleric" && ActiveRole.Status == RoleStatus.Active;
             bool isGuardian = ActiveRole?.ID == "Guardian" && ActiveRole.Status == RoleStatus.Active;
-            bool blockVITRegen = isCleric && config.roleSettings.ClericDisableVitRegen;
+            bool isLivingFlesh = ActiveRole?.ID == "LivingFlesh" && ActiveRole.Status == RoleStatus.Active && !config.roleSettings.LivingFleshAllowOtherStats;
+            bool blockVITRegen = (isCleric && config.roleSettings.ClericDisableVitRegen) || isLivingFlesh;
 
             if (config.statSettings.UseCustomHpRegen && !blockVITRegen)
             {
@@ -2638,7 +2666,7 @@ namespace Stataria
 
             int effectiveVIT = GetEffectiveStat("VIT");
 
-            if (config.statSettings.EnableHealingPotionBoost && effectiveVIT > 0 && healValue > 0)
+            if (config.statSettings.EnableHealingPotionBoost && effectiveVIT > 0 && healValue > 0 && !(ActiveRole?.ID == "LivingFlesh" && !config.roleSettings.LivingFleshAllowOtherStats))
             {
                 float boostMultiplier = 1f + (effectiveVIT * config.statSettings.HealingPotionBoostPercent / 100f);
                 int boostedHeal = (int)(healValue * boostMultiplier);

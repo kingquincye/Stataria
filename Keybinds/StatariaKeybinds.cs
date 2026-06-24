@@ -15,6 +15,7 @@ namespace Stataria
         public static ModKeybind ElementalDischargeKey;
         public static ModKeybind MortalDrawKey;
         public static ModKeybind DesperadoActiveKey;
+        public static ModKeybind FleshCloneKey;
 
         public override void Load()
         {
@@ -29,6 +30,7 @@ namespace Stataria
             ElementalDischargeKey = KeybindLoader.RegisterKeybind(Mod, "Elemental Discharge", "Z");
             MortalDrawKey = KeybindLoader.RegisterKeybind(Mod, "Mortal Draw", "H");
             DesperadoActiveKey = KeybindLoader.RegisterKeybind(Mod, "Desperado Showdown", "F");
+            FleshCloneKey = KeybindLoader.RegisterKeybind(Mod, "Flesh Clone", "B");
         }
 
         public override void Unload()
@@ -42,6 +44,7 @@ namespace Stataria
             ElementalDischargeKey = null;
             MortalDrawKey = null;
             DesperadoActiveKey = null;
+            FleshCloneKey = null;
         }
     }
 }
