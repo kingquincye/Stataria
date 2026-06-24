@@ -150,6 +150,10 @@ namespace Stataria
 
                     tooltips.Add("[c/FFFFFF:Strength (STR)]");
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.STR_MeleeDamage", (effectiveSTR * cfg.statSettings.STR_Damage).ToString("0.#"), cfg.statSettings.STR_Damage.ToString("0.#")));
+                    if (cfg.statSettings.EnableFlatDamageIncrease && cfg.statSettings.STR_FlatDamage > 0f)
+                    {
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.STR_MeleeFlatDamage", (effectiveSTR * cfg.statSettings.STR_FlatDamage).ToString("0.#"), cfg.statSettings.STR_FlatDamage.ToString("0.#")));
+                    }
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.STR_MeleeKnockback", (effectiveSTR * cfg.statSettings.STR_Knockback).ToString("0.#"), cfg.statSettings.STR_Knockback.ToString("0.#")));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.STR_MeleeArmorPen", effectiveSTR * cfg.statSettings.STR_ArmorPen, cfg.statSettings.STR_ArmorPen));
 
@@ -202,6 +206,10 @@ namespace Stataria
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_MaxMana", effectiveINT * cfg.statSettings.INT_MP, cfg.statSettings.INT_MP));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_ManaRegen", (effectiveINT * 0.5f).ToString("0.#")));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_MagicDamage", (effectiveINT * cfg.statSettings.INT_Damage).ToString("0.#"), cfg.statSettings.INT_Damage.ToString("0.#")));
+                    if (cfg.statSettings.EnableFlatDamageIncrease && cfg.statSettings.INT_FlatDamage > 0f)
+                    {
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_MagicFlatDamage", (effectiveINT * cfg.statSettings.INT_FlatDamage).ToString("0.#"), cfg.statSettings.INT_FlatDamage.ToString("0.#")));
+                    }
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_ManaCost", diminishingReduction.ToString("P1")));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_MagicArmorPen", effectiveINT * cfg.statSettings.INT_ArmorPen, cfg.statSettings.INT_ArmorPen));
 
@@ -306,11 +314,19 @@ namespace Stataria
                         "[c/FFFFFF:Power (POW)]",
                         Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_GeneralDamage", (effectivePOW * cfg.statSettings.POW_Damage).ToString("0.#"), cfg.statSettings.POW_Damage.ToString("0.#"))
                     };
+                    if (cfg.statSettings.EnableFlatDamageIncrease && cfg.statSettings.POW_FlatDamage > 0f)
+                    {
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_GeneralFlatDamage", (effectivePOW * cfg.statSettings.POW_FlatDamage).ToString("0.#"), cfg.statSettings.POW_FlatDamage.ToString("0.#")));
+                    }
                     if (cfg.statSettings.EnablePOWPierce)
                     {
                         tooltips.Add("• " + Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_PierceBonus", effectivePOW / cfg.statSettings.POW_PierceScaling, cfg.statSettings.POW_PierceScaling));
                     }
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_OtherDamage", (effectivePOW * 0.1f).ToString("0.#")));
+                    if (cfg.statSettings.EnableFlatDamageIncrease && cfg.statSettings.POW_FlatDamage > 0f)
+                    {
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_OtherFlatDamage", (effectivePOW * cfg.statSettings.POW_FlatDamage * 0.2f).ToString("0.#"), (cfg.statSettings.POW_FlatDamage * 0.2f).ToString("0.#")));
+                    }
                     if (cfg.modIntegration.EnableCalamityIntegration && CalamitySupportHelper.CalamityLoaded)
                     {
                         tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.POW_RageDamage", (effectivePOW * cfg.modIntegration.POW_RageDamage).ToString("0.#"), cfg.modIntegration.POW_RageDamage.ToString("0.#")));
@@ -332,10 +348,18 @@ namespace Stataria
                     var player = Main.LocalPlayer;
                     var rpg = player.GetModPlayer<RPGPlayer>();
                     int effectiveDEX = rpg.GetEffectiveStat("DEX");
-                    return "[c/FFFFFF:Dexterity (DEX)]\n" +
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedDamage", (effectiveDEX * cfg.statSettings.DEX_Damage).ToString("0.#"), cfg.statSettings.DEX_Damage.ToString("0.#")) + "\n" +
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedArmorPen", effectiveDEX * cfg.statSettings.DEX_ArmorPen, cfg.statSettings.DEX_ArmorPen) + "\n" +
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_AmmoSave", (effectiveDEX * cfg.statSettings.DEX_AmmoConservation).ToString("0.#"), cfg.statSettings.DEX_AmmoConservation.ToString("0.#"));
+                    var tooltips = new List<string>
+                    {
+                        "[c/FFFFFF:Dexterity (DEX)]",
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedDamage", (effectiveDEX * cfg.statSettings.DEX_Damage).ToString("0.#"), cfg.statSettings.DEX_Damage.ToString("0.#"))
+                    };
+                    if (cfg.statSettings.EnableFlatDamageIncrease && cfg.statSettings.DEX_FlatDamage > 0f)
+                    {
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedFlatDamage", (effectiveDEX * cfg.statSettings.DEX_FlatDamage).ToString("0.#"), cfg.statSettings.DEX_FlatDamage.ToString("0.#")));
+                    }
+                    tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedArmorPen", effectiveDEX * cfg.statSettings.DEX_ArmorPen, cfg.statSettings.DEX_ArmorPen));
+                    tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_AmmoSave", (effectiveDEX * cfg.statSettings.DEX_AmmoConservation).ToString("0.#"), cfg.statSettings.DEX_AmmoConservation.ToString("0.#")));
+                    return string.Join("\n", tooltips);
                 }
             });
 
@@ -356,6 +380,10 @@ namespace Stataria
 
                     tooltips.Add("[c/FFFFFF:Spirituality (SPR)]");
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_SummonDamage", (effectiveSPR * cfg.statSettings.SPR_Damage).ToString("0.#"), cfg.statSettings.SPR_Damage.ToString("0.#")));
+                    if (cfg.statSettings.EnableFlatDamageIncrease && cfg.statSettings.SPR_FlatDamage > 0f)
+                    {
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_SummonFlatDamage", (effectiveSPR * cfg.statSettings.SPR_FlatDamage).ToString("0.#"), cfg.statSettings.SPR_FlatDamage.ToString("0.#")));
+                    }
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_MinionSlots", minionSlots, (minionSlots != 1 ? "s" : ""), cfg.statSettings.SPR_MinionsPerX));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_SentrySlots", sentrySlots, (sentrySlots != 1 ? "s" : ""), cfg.statSettings.SPR_SentriesPerX));
 
@@ -778,6 +806,9 @@ namespace Stataria
                 statPanel.Append(minusBtn);
                 minusButtons[i] = minusBtn;
 
+                minusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(minusStatIndex));
+                minusBtn.OnMouseOut += (evt, el) => HideTooltip();
+
                 var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
                 {
                     Top = { Pixels = rowTop },
@@ -795,8 +826,6 @@ namespace Stataria
 
                 statLabel.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
                 statLabel.OnMouseOut += (evt, el) => HideTooltip();
-                minusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
-                minusBtn.OnMouseOut += (evt, el) => HideTooltip();
                 plusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
                 plusBtn.OnMouseOut += (evt, el) => HideTooltip();
                 checkbox.OnMouseOver += (evt, el) => ShowTooltip(Language.GetTextValue("Mods.Stataria.UI.StatPanel.AutoAllocateTooltip"));
@@ -1049,6 +1078,9 @@ namespace Stataria
                 statPanel.Append(minusBtn);
                 minusButtons[i] = minusBtn;
 
+                minusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(minusStatIndex));
+                minusBtn.OnMouseOut += (evt, el) => HideTooltip();
+
                 var plusBtn = new UITextPanel<string>("+", textScale: 1.2f, large: false)
                 {
                     Top = { Pixels = rowTop },
@@ -1068,8 +1100,6 @@ namespace Stataria
                 statLabel.OnMouseOut += (evt, el) => HideTooltip();
                 plusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
                 plusBtn.OnMouseOut += (evt, el) => HideTooltip();
-                minusBtn.OnMouseOver += (evt, el) => ShowTooltip(GetStatTooltip(localStatIndex));
-                minusBtn.OnMouseOut += (evt, el) => HideTooltip();
                 checkbox.OnMouseOver += (evt, el) => ShowTooltip(Language.GetTextValue("Mods.Stataria.UI.StatPanel.AutoAllocateTooltip"));
                 checkbox.OnMouseOut += (evt, el) => HideTooltip();
             }
@@ -1586,6 +1616,10 @@ namespace Stataria
 
         private void OnStatDecrease(int index)
         {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (!config.generalBalance.EnableStatDecrease)
+                return;
+
             Player player = Main.LocalPlayer;
             RPGPlayer rpg = player.GetModPlayer<RPGPlayer>();
 
@@ -1760,14 +1794,17 @@ namespace Stataria
                         ? new Color(200, 200, 200, 20)
                         : new Color(20, 20, 20, 150);
 
-                    bool canReduce = value > 0;
-                    minusButtons[i].BackgroundColor = canReduce
-                        ? new Color(150, 150, 150, 20)
-                        : new Color(80, 80, 80, 100);
+                    if (minusButtons[i] != null)
+                    {
+                        bool canReduce = value > 0 && config.generalBalance.EnableStatDecrease;
+                        minusButtons[i].BackgroundColor = canReduce
+                            ? new Color(150, 150, 150, 20)
+                            : new Color(80, 80, 80, 100);
 
-                    minusButtons[i].BorderColor = canReduce
-                        ? new Color(200, 200, 200, 20)
-                        : new Color(20, 20, 20, 150);
+                        minusButtons[i].BorderColor = canReduce
+                            ? new Color(200, 200, 200, 20)
+                            : new Color(20, 20, 20, 150);
+                    }
                 }
             }
 

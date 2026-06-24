@@ -179,11 +179,6 @@ Configs: {
 			Tooltip: 配置影响掉落率和其他基于运气机制的强化幸运系统。
 			Label: 额外幸运设置
 		}
-
-		ascensionSystem: {
-			Label: 飞升系统
-			Tooltip: 配置飞升机制、条件与奖励。
-		}
 	}
 
 	GeneralBalance: {
@@ -235,6 +230,11 @@ Configs: {
 		EnableStatResetting: {
 			Label: 启用属性重置
 			Tooltip: 如果启用，允许玩家在属性面板中重置他们的属性点。
+		}
+
+		EnableStatDecrease: {
+			Label: 允许单独减少属性点
+			Tooltip: 如果启用，允许玩家在属性面板中单独减少已分配的的属性点。
 		}
 
 		EnableSkillResetting: {
@@ -676,6 +676,7 @@ Configs: {
 			TCH_Settings: TCH (技巧) 设置
 			SPR_Settings: SPR (精神) 设置
 			Stat_Caps: 属性上限
+			Flat_Damage_Increase: 固定伤害加成
 		}
 
 		VIT_HP: {
@@ -711,6 +712,11 @@ Configs: {
 		STR_Damage: {
 			Label: 近战伤害
 			Tooltip: 每点按百分比增加近战伤害。
+		}
+
+		STR_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 STR 增加的近战固定伤害。
 		}
 
 		STR_Knockback: {
@@ -751,6 +757,11 @@ Configs: {
 		INT_Damage: {
 			Label: 魔法伤害
 			Tooltip: 每点按百分比增加魔法伤害。
+		}
+
+		INT_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 INT 增加的魔法固定伤害。
 		}
 
 		INT_MP: {
@@ -838,9 +849,19 @@ Configs: {
 			Tooltip: 按百分比增加由模组添加的武器的伤害。也会给所有原版伤害类型提供微小的加成。
 		}
 
+		POW_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 POW 增加的固定威力伤害。
+		}
+
 		DEX_Damage: {
 			Label: 远程伤害
 			Tooltip: 每点按百分比增加远程伤害。
+		}
+
+		DEX_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 DEX 增加的远程固定伤害。
 		}
 
 		DEX_ArmorPen: {
@@ -883,6 +904,11 @@ Configs: {
 			Tooltip: 每点按百分比增加召唤伤害。
 		}
 
+		SPR_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 SPR 增加的召唤固定伤害。
+		}
+
 		SPR_MinionsPerX: {
 			Label: 达到 X 点增加仆从上限
 			Tooltip: 每 X 点 SPR 增加 1 个仆从上限。
@@ -896,6 +922,11 @@ Configs: {
 		EnableStatCaps: {
 			Label: 启用属性上限
 			Tooltip: 启用所有属性的上限。将上限设置为 -1 代表无上限。
+		}
+
+		EnableFlatDamageIncrease: {
+			Label: 启用固定伤害加成
+			Tooltip: 开启后，属性将为武器提供固定伤害提升，而不仅仅是百分比提升。
 		}
 
 		VIT_Cap: {
@@ -1019,8 +1050,8 @@ Configs: {
 		}
 
 		POW_PierceScaling: {
-			// Tooltip: ""
-			// Label: P O W_ Pierce Scaling
+			Tooltip: ""
+			Label: POW 穿透缩放
 		}
 	}
 
@@ -1050,6 +1081,11 @@ Configs: {
 		RGE_Damage: {
 			Label: 盗贼伤害
 			Tooltip: 每点 RGE 按百分比增加盗贼武器的伤害。
+		}
+
+		RGE_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 RGE 增加的潜行/盗贼武器固定伤害。
 		}
 
 		RGE_Velocity: {
@@ -1112,6 +1148,11 @@ Configs: {
 			Tooltip: 每点 BRD 按百分比增加交响 (Symphonic) 伤害。
 		}
 
+		BRD_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 BRD 增加的交响固定伤害。
+		}
+
 		BRD_EnableEmpowermentBoost: {
 			Label: 启用琴音强化时间加成
 			Tooltip: 开启后，BRD 属性将延长吟游诗人乐器提供的赋能/强化效果的持续时间。
@@ -1125,6 +1166,11 @@ Configs: {
 		HLR_Damage: {
 			Label: 光辉伤害
 			Tooltip: 每点 HLR 增加光辉 (Radiant) 伤害的百分比。
+		}
+
+		HLR_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 HLR 增加的光辉固定伤害。
 		}
 
 		HLR_HealingPower: {
@@ -1167,6 +1213,11 @@ Configs: {
 			Tooltip: 每点 CLK 按百分比增加点击伤害。
 		}
 
+		CLK_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 CLK 增加的点击固定伤害。
+		}
+
 		CLK_Radius: {
 			Label: 点击范围
 			Tooltip: 每点 CLK 额外增加的点击者范围半径单位。
@@ -1192,9 +1243,19 @@ Configs: {
 			Tooltip: 血猎手 (Blood Hunter) 伤害的百分比加成。
 		}
 
+		BLH_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 BLH 增加的血猎手固定伤害。
+		}
+
 		HNT_Damage: {
 			Label: 猎人伤害
 			Tooltip: 猎人 (Hunter) 伤害的百分比加成。
+		}
+
+		HNT_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 HNT 增加的猎人固定伤害。
 		}
 
 		GMB_Damage: {
@@ -1202,14 +1263,29 @@ Configs: {
 			Tooltip: 赌徒/赌博 (Gambling) 伤害的百分比加成。
 		}
 
+		GMB_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 GMB 增加的赌徒固定伤害。
+		}
+
 		SHM_Damage: {
 			Label: 萨满伤害
 			Tooltip: 萨满 (Shamanic) 伤害的百分比加成。
 		}
 
+		SHM_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 SHM 增加的萨满固定伤害。
+		}
+
 		THR_Damage: {
 			Label: 投掷者伤害
 			Tooltip: 投掷 (Throwing) 伤害的百分比加成。
+		}
+
+		THR_FlatDamage: {
+			Label: 固定伤害增加
+			Tooltip: 每点 THR 增加的投掷者固定伤害。
 		}
 
 		EnableSekirariaIntegration: {
@@ -2288,31 +2364,6 @@ Configs: {
 			Label: 拉伸经验条到底部
 		}
 	}
-
-	AscensionSystem: {
-		Tooltip: 有关飞升系统的高级功能。
-		Headers.Ascension_System: 飞升系统
-
-		EnableAscension: {
-			Label: 开启飞升
-			Tooltip: 开启飞升功能的配置。
-		}
-
-		AscensionCostType: {
-			Label: 飞升消耗货币类型
-			Tooltip: 飞升消耗类型的配置。
-		}
-
-		AscensionCostBase: {
-			Label: 基础飞升消耗
-			Tooltip: 基础飞升消耗的配置。
-		}
-
-		AscensionLevelBonus: {
-			Label: 飞升等级奖励
-			Tooltip: 飞升等级奖励的配置。
-		}
-	}
 }
 
 Buffs: {
@@ -2833,6 +2884,7 @@ UI: {
 		VIT_LifeRegen: +{0} 生命恢复速度 (+0.5 每点)
 		VIT_Healing: +{0}% 治疗量提升 (+{1}% 每点)
 		STR_MeleeDamage: +{0}% 近战伤害 (+{1}% 每点)
+		STR_MeleeFlatDamage: +{0} 近战固定伤害 (+{1} 每点)
 		STR_MeleeKnockback: +{0}% 近战击退 (+{1}% 每点)
 		STR_MeleeArmorPen: +{0} 近战护甲穿透 (+{1} 每点)
 		STR_BlackKnight: 黑骑士: +{0}% 魔法伤害 (+{1}% 每点)
@@ -2843,6 +2895,7 @@ UI: {
 		INT_MaxMana: +{0} 最大法力值 (+{1} 每点)
 		INT_ManaRegen: +{0} 法力恢复速度 (+0.5 每点)
 		INT_MagicDamage: +{0}% 魔法伤害 (+{1}% 每点)
+		INT_MagicFlatDamage: +{0} 魔法固定伤害 (+{1} 每点)
 		INT_ManaCost: -{0} 法力消耗 (收益递减)
 		INT_MagicArmorPen: +{0} 魔法护甲穿透 (+{1} 每点)
 		INT_BlackKnight: 黑骑士: +{0}% 近战伤害 (+{1}% 每点)
@@ -2858,15 +2911,19 @@ UI: {
 		END_KnocksBackNonBosses: 受击时反弹击退非首领敌人
 		END_Aggro: +{0} 仇恨值 (+{1} 每点)
 		POW_GeneralDamage: +{0}% 通用伤害 (+{1}% 每点)
+		POW_GeneralFlatDamage: +{0} 通用固定伤害 (+{1} 每点)
 		POW_PierceBonus: +{0} 目标穿透 (每 {1} 点力量)
 		POW_OtherDamage: +{0}% 其他类型伤害 (+0.1% 每点)
+		POW_OtherFlatDamage: +{0} 其他固定伤害 (+{1}/每点)
 		POW_RageDamage: +{0}% 暴怒伤害 (+{1}% 每点)
 		POW_RageDuration: +{0}秒 暴怒持续时间 (+{1}秒 每点, 最高 {2}秒)
 		POW_AdrenalineDuration: +{0}秒 肾上腺素持续时间 (+{1}秒 每点)
 		DEX_RangedDamage: +{0}% 远程伤害 (+{1}% 每点)
+		DEX_RangedFlatDamage: +{0} 远程固定伤害 (+{1} 每点)
 		DEX_RangedArmorPen: +{0} 远程护甲穿透 (+{1} 每点)
 		DEX_AmmoSave: +{0}% 弹药节约几率 (+{1}% 每点)
 		SPR_SummonDamage: +{0}% 召唤伤害 (+{1}% 每点)
+		SPR_SummonFlatDamage: +{0} 召唤固定伤害 (+{1} 每点)
 		SPR_MinionSlots: +{0} 个仆从栏位 (每 {2} 点提供 1 个)
 		SPR_SentrySlots: +{0} 个哨兵栏位 (每 {2} 点提供 1 个)
 		SPR_BeastmasterSlots: 兽王: +{0} 个栏位 (每拥有 {2} 个基础栏位)

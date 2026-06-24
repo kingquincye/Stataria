@@ -179,11 +179,6 @@ Configs: {
 			Tooltip: Настройка расширенной системы удачи, влияющей на шанс выпадения предметов и другие механики.
 			Label: Дополнительные Настройки Удачи
 		}
-
-		ascensionSystem: {
-			Label: Система Возвышения
-			Tooltip: Настройка механик возвышения, требований и бонусов.
-		}
 	}
 
 	GeneralBalance: {
@@ -235,6 +230,11 @@ Configs: {
 		EnableStatResetting: {
 			Label: Разрешить сброс характеристик
 			Tooltip: Если включено, позволяет игрокам сбрасывать очки характеристик на панели характеристик.
+		}
+
+		EnableStatDecrease: {
+			Label: Разрешить уменьшение отдельных характеристик
+			Tooltip: Если включено, позволяет игрокам уменьшать отдельные очки характеристик на панели характеристик.
 		}
 
 		EnableSkillResetting: {
@@ -676,6 +676,7 @@ Configs: {
 			TCH_Settings: Настройки TCH
 			SPR_Settings: Настройки SPR
 			Stat_Caps: Лимиты Характеристик
+			Flat_Damage_Increase: Плоское Увеличение Урона
 		}
 
 		VIT_HP: {
@@ -711,6 +712,11 @@ Configs: {
 		STR_Damage: {
 			Label: Урон
 			Tooltip: Процентное увеличение урона ближнего боя за очко.
+		}
+
+		STR_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона ближнего боя за очко STR.
 		}
 
 		STR_Knockback: {
@@ -751,6 +757,11 @@ Configs: {
 		INT_Damage: {
 			Label: Урон
 			Tooltip: Процентное увеличение магического урона за очко.
+		}
+
+		INT_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение магического урона за очко INT.
 		}
 
 		INT_MP: {
@@ -838,9 +849,19 @@ Configs: {
 			Tooltip: Увеличивает урон модифицированного оружия (модов). Также дает небольшой бонус всем ванильным типам урона.
 		}
 
+		POW_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона силы за очко POW.
+		}
+
 		DEX_Damage: {
 			Label: Урон
 			Tooltip: Процентное увеличение урона дальнего боя за очко.
+		}
+
+		DEX_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона дальнего боя за очко DEX.
 		}
 
 		DEX_ArmorPen: {
@@ -883,6 +904,11 @@ Configs: {
 			Tooltip: Процентное увеличение урона призывов за очко.
 		}
 
+		SPR_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона призывов за очко SPR.
+		}
+
 		SPR_MinionsPerX: {
 			Label: Миньоны За X Очков
 			Tooltip: Дает +1 слот миньона за каждые X очков SPR.
@@ -896,6 +922,11 @@ Configs: {
 		EnableStatCaps: {
 			Label: Включить Лимиты Характеристик
 			Tooltip: Включает лимит для всех характеристик. Установите -1 для отключения ограничения.
+		}
+
+		EnableFlatDamageIncrease: {
+			Label: Включить Плоский Урон
+			Tooltip: Если включено, характеристики также будут увеличивать урон оружия на плоскую величину вместо чисто процентного урона.
 		}
 
 		VIT_Cap: {
@@ -1019,8 +1050,8 @@ Configs: {
 		}
 
 		POW_PierceScaling: {
-			// Tooltip: ""
-			// Label: P O W_ Pierce Scaling
+			Tooltip: ""
+			Label: POW Масштабирование пробития
 		}
 	}
 
@@ -1050,6 +1081,11 @@ Configs: {
 		RGE_Damage: {
 			Label: Урон
 			Tooltip: Увеличивает урон разбойника (Rogue) за очко RGE.
+		}
+
+		RGE_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона разбойника за очко RGE.
 		}
 
 		RGE_Velocity: {
@@ -1112,6 +1148,11 @@ Configs: {
 			Tooltip: Увеличивает симфонический (Bard) урон за очко BRD.
 		}
 
+		BRD_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение симфонического урона за очко BRD.
+		}
+
 		BRD_EnableEmpowermentBoost: {
 			Label: Усиление Воодушевления
 			Tooltip: Если включено, BRD увеличивает длительность баффов от инструментов барда.
@@ -1125,6 +1166,11 @@ Configs: {
 		HLR_Damage: {
 			Label: Урон
 			Tooltip: Процент урона Светом (Radiant), получаемый за очко HLR.
+		}
+
+		HLR_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона Светом за очко HLR.
 		}
 
 		HLR_HealingPower: {
@@ -1167,6 +1213,11 @@ Configs: {
 			Tooltip: Процент увеличения урона кликеров за очко CLK.
 		}
 
+		CLK_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона кликера за очко CLK.
+		}
+
 		CLK_Radius: {
 			Label: Радиус
 			Tooltip: Доп. радиус действия кликера за очко CLK.
@@ -1192,9 +1243,19 @@ Configs: {
 			Tooltip: Урон Кровавого Охотника (Blood Hunter).
 		}
 
+		BLH_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона Кровавого Охотника за очко BLH.
+		}
+
 		HNT_Damage: {
 			Label: Урон
 			Tooltip: Урон Охотника (Hunter).
+		}
+
+		HNT_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона Охотника за очко HNT.
 		}
 
 		GMB_Damage: {
@@ -1202,14 +1263,29 @@ Configs: {
 			Tooltip: Урон Азартного игрока (Gambler).
 		}
 
+		GMB_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона Азартного игрока за очко GMB.
+		}
+
 		SHM_Damage: {
 			Label: Урон
 			Tooltip: Урон Шамана (Shamanic).
 		}
 
+		SHM_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона Шамана за очко SHM.
+		}
+
 		THR_Damage: {
 			Label: Урон
 			Tooltip: Урон Метателя (Throwing).
+		}
+
+		THR_FlatDamage: {
+			Label: Плоский Урон
+			Tooltip: Плоское увеличение урона Метателя за очко THR.
 		}
 
 		EnableSekirariaIntegration: {
@@ -2288,31 +2364,6 @@ Configs: {
 			Label: Растянуть Полосу Опыта Вниз
 		}
 	}
-
-	AscensionSystem: {
-		Tooltip: Продвинутые механики системы возвышения.
-		Headers.Ascension_System: Система Возвышения
-
-		EnableAscension: {
-			Label: Включить Возвышение
-			Tooltip: Настройки включения Возвышения.
-		}
-
-		AscensionCostType: {
-			Label: Тип Валюты для Возвышения
-			Tooltip: Настройки типа валюты для Возвышения.
-		}
-
-		AscensionCostBase: {
-			Label: Базовая Стоимость Возвышения
-			Tooltip: Настройки базовой стоимости Возвышения.
-		}
-
-		AscensionLevelBonus: {
-			Label: Бонус Уровня Возвышения
-			Tooltip: Настройки бонуса уровня Возвышения.
-		}
-	}
 }
 
 Buffs: {
@@ -2833,6 +2884,7 @@ UI: {
 		VIT_LifeRegen: +{0} Реген Жизни (+0.5 за очко)
 		VIT_Healing: +{0}% Силы Лечения (+{1}% за очко)
 		STR_MeleeDamage: +{0}% Урон Ближнего Боя (+{1}% за очко)
+		STR_MeleeFlatDamage: +{0} Плоский Урон Ближнего Боя (+{1} за очко)
 		STR_MeleeKnockback: +{0}% Отбрасывание Ближнего Боя (+{1}% за очко)
 		STR_MeleeArmorPen: +{0} Пробивание Брони Бл. Боя (+{1} за очко)
 		STR_BlackKnight: Черный Рыцарь: +{0}% Маг. Урон (+{1}% за очко)
@@ -2843,6 +2895,7 @@ UI: {
 		INT_MaxMana: +{0} Макс. Мана (+{1} за очко)
 		INT_ManaRegen: +{0} Реген Маны (+0.5 за очко)
 		INT_MagicDamage: +{0}% Магический Урон (+{1}% за очко)
+		INT_MagicFlatDamage: +{0} Плоский Магический Урон (+{1} за очко)
 		INT_ManaCost: -{0} Стоимость Маны (Убывает)
 		INT_MagicArmorPen: +{0} Пробивание Маг. Брони (+{1} за очко)
 		INT_BlackKnight: Черный Рыцарь: +{0}% Урон Ближ. Боя (+{1}% за очко)
@@ -2858,15 +2911,19 @@ UI: {
 		END_KnocksBackNonBosses: Отбрасывает обычных врагов
 		END_Aggro: +{0} Агро (+{1} за очко)
 		POW_GeneralDamage: +{0}% Общий Урон (+{1}% за очко)
+		POW_GeneralFlatDamage: +{0} Общий Плоский Урон (+{1} за очко)
 		POW_PierceBonus: +{0} Пробитие целей (каждые {1} POW)
 		POW_OtherDamage: +{0}% Иные Типы Урона (+0.1% за очко)
+		POW_OtherFlatDamage: +{0} Другой Плоский Урон (+{1}/очко)
 		POW_RageDamage: +{0}% Урон Ярости (+{1}% за очко)
 		POW_RageDuration: +{0}с Длительность Ярости (+{1}с за очко, макс {2}с)
 		POW_AdrenalineDuration: +{0}с Длительность Адреналина (+{1}с за очко)
 		DEX_RangedDamage: +{0}% Урон Дальнего Боя (+{1}% за очко)
+		DEX_RangedFlatDamage: +{0} Плоский Урон Дальнего Боя (+{1} за очко)
 		DEX_RangedArmorPen: +{0} Пробив. Брони Дальнего Боя (+{1} за очко)
 		DEX_AmmoSave: +{0}% Шанс Экономии Патронов (+{1}% за очко)
 		SPR_SummonDamage: +{0}% Урон Призыва (+{1}% за очко)
+		SPR_SummonFlatDamage: +{0} Плоский Урон Миньонов (+{1} за очко)
 		SPR_MinionSlots: +{0} Слот(а) Миньонов (+1 за {2} очков)
 		SPR_SentrySlots: +{0} Слот(а) Стражей (+1 за {2} очков)
 		SPR_BeastmasterSlots: Повелитель Зверей: +{0} слот(а) за {2} всего слотов

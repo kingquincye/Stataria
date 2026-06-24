@@ -179,11 +179,6 @@ Configs: {
 			Tooltip: Configure the enhanced luck system that affects drop rates and other luck-based mechanics.
 			Label: Extra Luck Settings
 		}
-
-		ascensionSystem: {
-			Label: Ascension System
-			Tooltip: Configure the ascension mechanics, requirements, and bonuses.
-		}
 	}
 
 	GeneralBalance: {
@@ -235,6 +230,11 @@ Configs: {
 		EnableStatResetting: {
 			Label: Enable Stat Resetting
 			Tooltip: If enabled, allows players to reset their stat points in the Stat Panel.
+		}
+
+		EnableStatDecrease: {
+			Label: Enable Individual Stat Decrease
+			Tooltip: If enabled, allows players to decrease allocated stat points individually in the Stat Panel.
 		}
 
 		EnableSkillResetting: {
@@ -676,6 +676,7 @@ Configs: {
 			TCH_Settings: TCH Settings
 			SPR_Settings: SPR Settings
 			Stat_Caps: Stat Caps
+			Flat_Damage_Increase: Flat Damage Increase
 		}
 
 		VIT_HP: {
@@ -711,6 +712,11 @@ Configs: {
 		STR_Damage: {
 			Label: Damage
 			Tooltip: Increases melee damage by a percentage per point.
+		}
+
+		STR_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat damage increase added per point of STR.
 		}
 
 		STR_Knockback: {
@@ -751,6 +757,11 @@ Configs: {
 		INT_Damage: {
 			Label: Damage
 			Tooltip: Increases magic damage by a percentage per point.
+		}
+
+		INT_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat damage increase added per point of INT.
 		}
 
 		INT_MP: {
@@ -838,9 +849,19 @@ Configs: {
 			Tooltip: Increases modded weapon damage by a percentage. Also gives a small bonus to all vanilla damage types.
 		}
 
+		POW_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat damage increase added per point of POW.
+		}
+
 		DEX_Damage: {
 			Label: Damage
 			Tooltip: Increases ranged damage by a percentage per point.
+		}
+
+		DEX_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat damage increase added per point of DEX.
 		}
 
 		DEX_ArmorPen: {
@@ -883,6 +904,11 @@ Configs: {
 			Tooltip: Increases summon damage by a percentage per point.
 		}
 
+		SPR_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat damage increase added per point of SPR.
+		}
+
 		SPR_MinionsPerX: {
 			Label: Minions Per X
 			Tooltip: Adds +1 Minion for every X SPR points.
@@ -896,6 +922,11 @@ Configs: {
 		EnableStatCaps: {
 			Label: Enable Stat Caps
 			Tooltip: Enables a stat cap for all stats. Set a cap to -1 to make it unlimited.
+		}
+
+		EnableFlatDamageIncrease: {
+			Label: Enable Flat Damage Increase
+			Tooltip: If enabled, stats will also scale weapon damage by a flat amount instead of purely percentage-based damage.
 		}
 
 		VIT_Cap: {
@@ -1020,7 +1051,7 @@ Configs: {
 
 		POW_PierceScaling: {
 			Tooltip: ""
-			Label: P O W_ Pierce Scaling
+			Label: POW Pierce Scaling
 		}
 	}
 
@@ -1050,6 +1081,11 @@ Configs: {
 		RGE_Damage: {
 			Label: Damage
 			Tooltip: Increases your rogue weapon damage by a percentage per point in RGE.
+		}
+
+		RGE_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat rogue damage increase added per point in RGE.
 		}
 
 		RGE_Velocity: {
@@ -1112,6 +1148,11 @@ Configs: {
 			Tooltip: Increases symphonic damage by a percentage per point in BRD.
 		}
 
+		BRD_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat symphonic damage increase added per point in BRD.
+		}
+
 		BRD_EnableEmpowermentBoost: {
 			Label: Enable Empowerment Boost
 			Tooltip: When enabled, BRD stat will increase the duration of empowerments provided by Bard instruments.
@@ -1125,6 +1166,11 @@ Configs: {
 		HLR_Damage: {
 			Label: Damage
 			Tooltip: The percentage of Radiant Damage gained per HLR point.
+		}
+
+		HLR_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat radiant damage increase added per point in HLR.
 		}
 
 		HLR_HealingPower: {
@@ -1167,6 +1213,11 @@ Configs: {
 			Tooltip: Percentage Click Damage increase per CLK point.
 		}
 
+		CLK_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat click damage increase added per point in CLK.
+		}
+
 		CLK_Radius: {
 			Label: Radius
 			Tooltip: Additional Clicker Radius units per CLK point
@@ -1192,9 +1243,19 @@ Configs: {
 			Tooltip: Percentage Blood Hunter damage increase.
 		}
 
+		BLH_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat Blood Hunter damage increase added per point in BLH.
+		}
+
 		HNT_Damage: {
 			Label: Damage
 			Tooltip: Percentage Hunter damage increase.
+		}
+
+		HNT_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat Hunter damage increase added per point in HNT.
 		}
 
 		GMB_Damage: {
@@ -1202,14 +1263,29 @@ Configs: {
 			Tooltip: Percentage Gambling damage increase.
 		}
 
+		GMB_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat Gambling damage increase added per point in GMB.
+		}
+
 		SHM_Damage: {
 			Label: Damage
 			Tooltip: Percentage Shamanic damage increase.
 		}
 
+		SHM_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat Shamanic damage increase added per point in SHM.
+		}
+
 		THR_Damage: {
 			Label: Damage
 			Tooltip: Percentage Throwing damage increase.
+		}
+
+		THR_FlatDamage: {
+			Label: Flat Damage Increase
+			Tooltip: Flat Throwing damage increase added per point in THR.
 		}
 
 		EnableSekirariaIntegration: {
@@ -2288,31 +2364,6 @@ Configs: {
 			Label: Stretch XP Bar To Bottom
 		}
 	}
-
-	AscensionSystem: {
-		Tooltip: Advanced features relating to the ascension system.
-		Headers.Ascension_System: Ascension_ System Header
-
-		EnableAscension: {
-			Label: Enable Ascension
-			Tooltip: Configuration for Enable Ascension.
-		}
-
-		AscensionCostType: {
-			Label: Ascension Cost Type
-			Tooltip: Configuration for Ascension Cost Type.
-		}
-
-		AscensionCostBase: {
-			Label: Ascension Cost Base
-			Tooltip: Configuration for Ascension Cost Base.
-		}
-
-		AscensionLevelBonus: {
-			Label: Ascension Level Bonus
-			Tooltip: Configuration for Ascension Level Bonus.
-		}
-	}
 }
 
 Buffs: {
@@ -2833,6 +2884,7 @@ UI: {
 		VIT_LifeRegen: +{0} Life Regen (+0.5 per point)
 		VIT_Healing: +{0}% Healing (+{1}% per point)
 		STR_MeleeDamage: +{0}% Melee Damage (+{1}% per point)
+		STR_MeleeFlatDamage: +{0} Melee Flat Damage (+{1} per point)
 		STR_MeleeKnockback: +{0}% Melee Knockback (+{1}% per point)
 		STR_MeleeArmorPen: +{0} Melee Armor Pen. (+{1} per point)
 		STR_BlackKnight: Black Knight: +{0}% Magic Damage (+{1}% per point)
@@ -2843,6 +2895,7 @@ UI: {
 		INT_MaxMana: +{0} Max Mana (+{1} per point)
 		INT_ManaRegen: +{0} Mana Regen (+0.5 per point)
 		INT_MagicDamage: +{0}% Magic Damage (+{1}% per point)
+		INT_MagicFlatDamage: +{0} Magic Flat Damage (+{1} per point)
 		INT_ManaCost: -{0} Mana Cost (Diminishing)
 		INT_MagicArmorPen: +{0} Magic Armor Pen. (+{1} per point)
 		INT_BlackKnight: Black Knight: +{0}% Melee Damage (+{1}% per point)
@@ -2858,15 +2911,19 @@ UI: {
 		END_KnocksBackNonBosses: Knocks Back Non-Bosses
 		END_Aggro: +{0} Aggro (+{1} per point)
 		POW_GeneralDamage: +{0}% General Damage (+{1}% per point)
+		POW_GeneralFlatDamage: +{0} General Flat Damage (+{1} per point)
 		POW_PierceBonus: +{0} Target Pierce (every {1} POW)
 		POW_OtherDamage: +{0}% Other Damage Types (+0.1% per point)
+		POW_OtherFlatDamage: +{0} Other Flat Damage (+{1}/point)
 		POW_RageDamage: +{0}% Rage Damage (+{1}% per point)
 		POW_RageDuration: +{0}s Rage Duration (+{1}s per point, max {2}s)
 		POW_AdrenalineDuration: +{0}s Adrenaline Duration (+{1}s per point)
 		DEX_RangedDamage: +{0}% Ranged Damage (+{1}% per point)
+		DEX_RangedFlatDamage: +{0} Ranged Flat Damage (+{1} per point)
 		DEX_RangedArmorPen: +{0} Ranged Armor Pen. (+{1} per point)
 		DEX_AmmoSave: +{0}% Ammo Save Chance (+{1}% per point)
 		SPR_SummonDamage: +{0}% Summon Damage (+{1}% per point)
+		SPR_SummonFlatDamage: +{0} Summon Flat Damage (+{1} per point)
 		SPR_MinionSlots: +{0} Minion Slot{1} (+1 per {2} points)
 		SPR_SentrySlots: +{0} Sentry Slot{1} (+1 per {2} points)
 		SPR_BeastmasterSlots: Beastmaster: +{0} slot{1} per {2} total slots

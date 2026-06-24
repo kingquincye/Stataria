@@ -57,6 +57,7 @@ namespace Stataria
             [DefaultValue(true)] public bool EnableStatPointRecalculation { get; set; } = true;
             [Range(1, 1000)][DefaultValue(2)] public int StatPointsPerLevel { get; set; } = 2;
             [DefaultValue(true)] public bool EnableStatResetting { get; set; } = true;
+            [DefaultValue(true)] public bool EnableStatDecrease { get; set; } = true;
             [DefaultValue(true)] public bool EnableSkillResetting { get; set; } = true;
 
 
@@ -388,6 +389,9 @@ namespace Stataria
 
         public class StatSettings
         {
+            [Header("Flat_Damage_Increase")]
+            [DefaultValue(false)] public bool EnableFlatDamageIncrease { get; set; } = false;
+
             [Header("Stat_Caps")]
             [DefaultValue(false)] public bool EnableStatCaps { get; set; } = false;
             [Range(-1, 10000)][DefaultValue(1000)] public int VIT_Cap { get; set; } = 1000;
@@ -421,6 +425,7 @@ namespace Stataria
 
             [Header("STR_Settings")]
             [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float STR_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float STR_FlatDamage { get; set; } = 0f;
             [Increment(0.05f)][Range(0f, 10f)][DefaultValue(0.5f)] public float STR_Knockback { get; set; } = 0.5f;
             [Increment(0.05f)][DefaultValue(1f)] public float STR_ArmorPen { get; set; } = 1f;
 
@@ -433,6 +438,7 @@ namespace Stataria
 
             [Header("INT_Settings")]
             [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float INT_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float INT_FlatDamage { get; set; } = 0f;
             [Increment(0.01f)][Range(0f, 1000f)][DefaultValue(2f)] public float INT_MP { get; set; } = 2f;
             [Increment(0.01f)][Range(0f, 10f)][DefaultValue(1.2f)] public float INT_ManaCostReduction { get; set; } = 1.2f;
             [Increment(0.01f)][DefaultValue(1f)] public float INT_ArmorPen { get; set; } = 1f;
@@ -457,11 +463,13 @@ namespace Stataria
 
             [Header("POW_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float POW_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float POW_FlatDamage { get; set; } = 0f;
             [DefaultValue(false)] public bool EnablePOWPierce { get; set; } = false;
             [Range(0, 1000)][DefaultValue(25)] public int POW_PierceScaling { get; set; } = 25;
 
             [Header("DEX_Settings")]
             [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float DEX_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float DEX_FlatDamage { get; set; } = 0f;
             [Increment(0.01f)][DefaultValue(1f)] public float DEX_ArmorPen { get; set; } = 1f;
             [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float DEX_AmmoConservation { get; set; } = 0.5f;
 
@@ -475,6 +483,7 @@ namespace Stataria
 
             [Header("SPR_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float SPR_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float SPR_FlatDamage { get; set; } = 0f;
             [Range(1, 100)][DefaultValue(25)] public int SPR_MinionsPerX { get; set; } = 25;
             [Range(1, 100)][DefaultValue(50)] public int SPR_SentriesPerX { get; set; } = 50;
         }
@@ -490,6 +499,7 @@ namespace Stataria
 
             [Header("RGE_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float RGE_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float RGE_FlatDamage { get; set; } = 0f;
             [Range(0f, 10f)][DefaultValue(0.5f)] public float RGE_MaxStealthPerPoint { get; set; } = 0.5f;
             [Range(0f, 10f)][DefaultValue(1.5f)] public float RGE_Velocity { get; set; } = 1.5f;
             [Range(0f, 10f)][DefaultValue(0.5f)] public float RGE_AmmoConsumptionReduction { get; set; } = 0.5f;
@@ -507,6 +517,7 @@ namespace Stataria
 
             [Header("BRD_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float BRD_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float BRD_FlatDamage { get; set; } = 0f;
             [DefaultValue(5)] public int BRD_PointsPerMaxInspiration { get; set; } = 5;
             [DefaultValue(1f)] public float BRD_ArmorPen { get; set; } = 1f;
             [DefaultValue(true)] public bool BRD_EnableEmpowermentBoost { get; set; } = true;
@@ -514,29 +525,36 @@ namespace Stataria
 
             [Header("HLR_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float HLR_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float HLR_FlatDamage { get; set; } = 0f;
             [DefaultValue(1f)] public float HLR_HealingPower { get; set; } = 1f;
             [DefaultValue(5)][Range(1, 1000)] public int HLR_PointsPerEffectPoint { get; set; } = 5;
             [DefaultValue(1f)] public float HLR_ArmorPen { get; set; } = 1f;
 
             [Header("CLK_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float CLK_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float CLK_FlatDamage { get; set; } = 0f;
             [Range(0f, 10f)][DefaultValue(1f)] public float CLK_Radius { get; set; } = 1f;
             [Range(0f, 10f)][DefaultValue(2f)] public float CLK_EffectThreshold { get; set; } = 2f;
 
             [Header("BLH_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float BLH_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float BLH_FlatDamage { get; set; } = 0f;
 
             [Header("HNT_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float HNT_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float HNT_FlatDamage { get; set; } = 0f;
 
             [Header("GMB_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float GMB_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float GMB_FlatDamage { get; set; } = 0f;
 
             [Header("SHM_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float SHM_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float SHM_FlatDamage { get; set; } = 0f;
 
             [Header("THR_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float THR_Damage { get; set; } = 0.5f;
+            [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float THR_FlatDamage { get; set; } = 0f;
 
             [Header("PST_Settings")]
             [Range(0f, 100f)][DefaultValue(5f)] public float PST_MaxPosture { get; set; } = 5f;

@@ -2714,6 +2714,21 @@ namespace Stataria
             };
         }
 
+        public float GetGenericModFlatDamageBonus(string statName, StatariaConfig config)
+        {
+            int effectiveStat = GetEffectiveStat(statName);
+            
+            return statName switch
+            {
+                "BLH" => effectiveStat * config.modIntegration.BLH_FlatDamage,
+                "HNT" => effectiveStat * config.modIntegration.HNT_FlatDamage,
+                "GMB" => effectiveStat * config.modIntegration.GMB_FlatDamage,
+                "SHM" => effectiveStat * config.modIntegration.SHM_FlatDamage,
+                "THR" => effectiveStat * config.modIntegration.THR_FlatDamage,
+                _ => 0f
+            };
+        }
+
         public override void ModifyWeaponDamage(Item item, ref StatModifier damage)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -2725,6 +2740,8 @@ namespace Stataria
             int effectiveINT = GetEffectiveStat("INT");
 
             int effectiveDEX = GetEffectiveStat("DEX");
+
+            int effectiveSPR = GetEffectiveStat("SPR");
 
             int effectivePOW = GetEffectiveStat("POW");
 
@@ -2819,6 +2836,64 @@ namespace Stataria
                         bonus += GetArcaneSurgeDamageBonus() / 100f;
                     }
                 }
+            }
+
+            if (config.statSettings.EnableFlatDamageIncrease)
+            {
+                float flatBonus = 0f;
+
+                if (item.CountsAsClass(DamageClass.Melee))
+                {
+                    flatBonus += effectiveSTR * config.statSettings.STR_FlatDamage;
+                }
+                if (item.CountsAsClass(DamageClass.Magic))
+                {
+                    flatBonus += effectiveINT * config.statSettings.INT_FlatDamage;
+                }
+                if (item.CountsAsClass(DamageClass.Ranged))
+                {
+                    flatBonus += effectiveDEX * config.statSettings.DEX_FlatDamage;
+                }
+                if (item.CountsAsClass(DamageClass.Summon))
+                {
+                    flatBonus += effectiveSPR * config.statSettings.SPR_FlatDamage;
+                }
+
+                if (isRogueWeapon)
+                    flatBonus += effectiveRGE * config.modIntegration.RGE_FlatDamage;
+
+                if (isSymphonicWeapon)
+                    flatBonus += effectiveBRD * config.modIntegration.BRD_FlatDamage;
+
+                if (isRadiantWeapon)
+                    flatBonus += effectiveHLR * config.modIntegration.HLR_FlatDamage;
+
+                if (isClickerWeapon)
+                    flatBonus += effectiveCLK * config.modIntegration.CLK_FlatDamage;
+
+                if (isGenericModWeapon && genericModDef != null)
+                {
+                    flatBonus += GetGenericModFlatDamageBonus(genericModDef.StatName, config);
+                }
+
+                if (!item.CountsAsClass(DamageClass.Melee) &&
+                    !item.CountsAsClass(DamageClass.Ranged) &&
+                    !item.CountsAsClass(DamageClass.Magic) &&
+                    !item.CountsAsClass(DamageClass.Summon) &&
+                    !isRogueWeapon &&
+                    !isSymphonicWeapon &&
+                    !isRadiantWeapon &&
+                    !isClickerWeapon &&
+                    !isGenericModWeapon)
+                {
+                    flatBonus += effectivePOW * config.statSettings.POW_FlatDamage;
+                }
+                else
+                {
+                    flatBonus += effectivePOW * config.statSettings.POW_FlatDamage * 0.2f;
+                }
+
+                damage.Flat += flatBonus;
             }
 
             if (config.generalBalance.UseMultiplicativeDamage)
