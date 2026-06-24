@@ -14,7 +14,9 @@ namespace Stataria.Projectiles
 
         // ai[0]: Current HP of the clone
         // ai[1]: Creation (Max) HP of the clone
-        // ai[2]: Facing direction at spawn time (1 = right, -1 = left)
+        // ai[2]: Encodes both facing direction and ground state:
+        //         +1 = right / grounded,  -1 = left / grounded
+        //         +2 = right / airborne,  -2 = left / airborne
 
         public float CloneHP
         {
@@ -31,11 +33,23 @@ namespace Stataria.Projectiles
         /// <summary>The direction the owner was facing when the clone was summoned.</summary>
         public int SpawnDirection => Projectile.ai[2] < 0 ? -1 : 1;
 
+        /// <summary>True when the clone was summoned mid-air and should freeze in place.</summary>
+        public bool WasFrozenMidAir => Math.Abs(Projectile.ai[2]) > 1.5f;
+
         private int hitCooldownTimer = 0;
         private float cloneDefense = 0f;
         private float cloneDR = 0f;
         private bool initialized = false;
         private float lastKnownHP = -1f;
+
+        // Snapshot of the owner's animation state at the moment the clone was summoned
+        private Rectangle _frozenBodyFrame;
+        private Rectangle _frozenLegFrame;
+        private int   _frozenItemAnimation;
+        private float _frozenItemRotation;
+        private Player.CompositeArmData _frozenFrontArm;
+        private Player.CompositeArmData _frozenBackArm;
+        private bool _snapshotTaken = false;
 
         public override void SetStaticDefaults()
         {
@@ -78,19 +92,41 @@ namespace Stataria.Projectiles
             {
                 // Lock in stats from the owner player
                 cloneDefense = owner.statDefense;
-                
-                // Get the player's DR
-                cloneDR = owner.endurance;
-                
+                cloneDR      = owner.endurance;
+
                 // Set projectile's timeLeft based on config
                 Projectile.timeLeft = (int)(config.roleSettings.LivingFleshCloneDuration * 60f);
+
+                // Snapshot the owner's current animation pose so PreDraw can freeze it
+                _frozenBodyFrame    = owner.bodyFrame;
+                _frozenLegFrame     = owner.legFrame;
+                _frozenItemAnimation = owner.itemAnimation;
+                _frozenItemRotation  = owner.itemRotation;
+                _frozenFrontArm     = owner.compositeFrontArm;
+                _frozenBackArm      = owner.compositeBackArm;
+                _snapshotTaken      = true;
+
+                // Airborne clones float — disable tile collision so they hang in the air
+                if (WasFrozenMidAir)
+                {
+                    Projectile.tileCollide = false;
+                    Projectile.velocity    = Vector2.Zero;
+                }
+
                 initialized = true;
             }
 
-            // Fall with gravity
-            Projectile.velocity.Y += 0.4f;
-            if (Projectile.velocity.Y > 12f)
-                Projectile.velocity.Y = 12f;
+            // Grounded clones fall normally; airborne clones stay locked in place
+            if (!WasFrozenMidAir)
+            {
+                Projectile.velocity.Y += 0.4f;
+                if (Projectile.velocity.Y > 12f)
+                    Projectile.velocity.Y = 12f;
+            }
+            else
+            {
+                Projectile.velocity = Vector2.Zero; // Keep frozen each tick (prevents any drift)
+            }
 
             if (hitCooldownTimer > 0)
                 hitCooldownTimer--;
@@ -221,19 +257,27 @@ namespace Stataria.Projectiles
             owner.fullRotation  = 0f;
             owner.immuneTime    = 0; // Prevent hit-flash from bleeding onto the clone sprite
 
-            // Frame 0 = standing still
-            owner.bodyFrame = new Rectangle(0, 0, owner.bodyFrame.Width, owner.bodyFrame.Height);
-            owner.legFrame  = new Rectangle(0, 0, owner.legFrame.Width,  owner.legFrame.Height);
+            // Use the snapshotted pose if available; if not yet taken (first PreDraw frame,
+            // or a remote client that doesn't run AI locally) capture it now.
+            if (!_snapshotTaken)
+            {
+                _frozenBodyFrame     = owner.bodyFrame;
+                _frozenLegFrame      = owner.legFrame;
+                _frozenItemAnimation = owner.itemAnimation;
+                _frozenItemRotation  = owner.itemRotation;
+                _frozenFrontArm      = owner.compositeFrontArm;
+                _frozenBackArm       = owner.compositeBackArm;
+                _snapshotTaken       = true;
+            }
 
-            // Zero attack / swing animation so arms hang idle
-            owner.itemAnimation = 0;
-            owner.itemTime      = 0;
-            owner.itemRotation  = 0f;
-            owner.heldProj      = -1;
-
-            // Reset composite arms to the default idle stretch
-            owner.compositeFrontArm = new Player.CompositeArmData(false, Player.CompositeArmStretchAmount.None, 0f);
-            owner.compositeBackArm  = new Player.CompositeArmData(false, Player.CompositeArmStretchAmount.None, 0f);
+            owner.bodyFrame         = _frozenBodyFrame;
+            owner.legFrame          = _frozenLegFrame;
+            owner.itemAnimation     = _frozenItemAnimation;
+            owner.itemTime          = 0;           // Must be zero — non-zero can shift arm angles
+            owner.itemRotation      = _frozenItemRotation;
+            owner.heldProj          = -1;          // Detach any live projectile reference
+            owner.compositeFrontArm = _frozenFrontArm;
+            owner.compositeBackArm  = _frozenBackArm;
 
             // Zero velocity so the leg-frame animator picks the standing frame
             owner.velocity = Vector2.Zero;

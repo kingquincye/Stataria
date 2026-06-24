@@ -240,6 +240,11 @@ namespace Stataria
 
             if (Player.whoAmI == Main.myPlayer)
             {
+                // Encode both direction and ground state in ai[2]:
+                // magnitude 1 = grounded (falls with gravity), magnitude 2 = airborne (frozen in place)
+                bool isAirborne = Player.velocity.Y != 0f;
+                float spawnAI2  = Player.direction * (isAirborne ? 2f : 1f);
+
                 int projType = ModContent.ProjectileType<FleshCloneProjectile>();
                 Projectile.NewProjectile(
                     Player.GetSource_FromThis(),
@@ -249,9 +254,9 @@ namespace Stataria
                     0,
                     0f,
                     Player.whoAmI,
-                    hpSacrificed,        // ai[0] = current HP
-                    hpSacrificed,        // ai[1] = max HP
-                    Player.direction     // ai[2] = spawn-facing direction
+                    hpSacrificed,   // ai[0] = current HP
+                    hpSacrificed,   // ai[1] = max HP
+                    spawnAI2        // ai[2] = direction + ground state
                 );
 
                 CloneCooldownTimer = (int)(config.roleSettings.LivingFleshCloneCooldown * 60f);
