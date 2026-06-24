@@ -5,6 +5,7 @@
 [*] [b]Custom Config UI[/b]: Inspired by the "Quality of Terraria" mod, configuring Stataria is now easier and sleeker than ever!
 [*] [b]Hugo NPC[/b]: Hugo sells the Cores! Many people missed this in previous versions, so make sure to check his shop.
 [*] [b]GitHub Repository[/b]: The repository is now permanently public! Whether you want to help with [b]Localization[/b], fix bugs, or provide updates, you can find it here: [url=https://github.com/kingquincye/Stataria]GitHub[/url]
+[*] [b]Stataria Wiki[/b]: COMING SOON! The mod currently has an old Fandom Wiki (which I am not maintaining anymore), but soon there will be an official Wiki.GG for the mod and you guys can help me polish up and customize it to be as user-friendly and accurate as possible!
 [*] [b]Translations[/b]: Stataria now supports Russian and Simplified Chinese! Translations are currently automated—if you are a native speaker and see a weird translation, let me know on GitHub or the Workshop Comments!
 [/list]
 
