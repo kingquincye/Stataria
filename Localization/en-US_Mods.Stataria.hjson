@@ -2,11 +2,12 @@ Keybinds: {
 	"Toggle Stataria UI.DisplayName": Toggle Stataria UI
 	"AGI Teleport.DisplayName": Teleport
 	"Divine Intervention.DisplayName": Divine Intervention
-	"Soul Recall.DisplayName": Soul  Recall
+	"Soul Recall.DisplayName": Soul Recall
 	"Savage Roar.DisplayName": Savage Roar
 	"Elemental Discharge.DisplayName": Elemental Discharge
-	"Divine Resurrection.DisplayName": Divine  Resurrection
+	"Divine Resurrection.DisplayName": Divine Resurrection
 	"Mortal Draw.DisplayName": Mortal Draw
+	"Desperado Showdown.DisplayName": Desperado Showdown
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1483,6 +1484,7 @@ Configs: {
 			Spellweaver: Spellweaver
 			Angel: Angel
 			Shinobi: Shinobi
+			Desperado: Desperado
 		}
 
 		BaseSwitchCost: {
@@ -1578,6 +1580,81 @@ Configs: {
 		ShinobiMortalDrawRange: {
 			Label: Shinobi Mortal Draw Range
 			Tooltip: The range in pixels within which posture-broken enemies are executed.
+		}
+
+		DesperadoMaxTempoStacks: {
+			Label: Max Tempo Stacks
+			Tooltip: Maximum stacks of Tempo Trance that can be accumulated.
+		}
+
+		DesperadoTempoAttackSpeedPerStack: {
+			Label: Tempo Attack Speed Per Stack
+			Tooltip: Percentage ranged attack speed bonus gained per Tempo Trance stack.
+		}
+
+		DesperadoTempoVelocityPerStack: {
+			Label: Tempo Velocity Per Stack
+			Tooltip: Percentage ranged projectile velocity bonus gained per Tempo Trance stack.
+		}
+
+		DesperadoStacksPerExtraProjectile: {
+			Label: Stacks Per Extra Projectile
+			Tooltip: Number of Tempo Trance stacks required to fire an additional projectile.
+		}
+
+		DesperadoMaxExtraProjectiles: {
+			Label: Max Extra Projectiles
+			Tooltip: Maximum limit of additional projectiles that can be fired.
+		}
+
+		DesperadoExtraProjectileSpread: {
+			Label: Extra Projectile Spread Angle
+			Tooltip: The spread angle (in degrees) for the extra projectiles.
+		}
+
+		DesperadoExtraProjectileDamageMultiplier: {
+			Label: Extra Projectile Damage Multiplier
+			Tooltip: Damage multiplier for the extra projectiles fired by Tempo.
+		}
+
+		DesperadoRicochetBaseChance: {
+			Label: Ricochet Base Chance
+			Tooltip: Base percentage chance for ranged critical strikes to ricochet to nearby targets.
+		}
+
+		DesperadoRicochetDexScale: {
+			Label: Ricochet DEX Scaling
+			Tooltip: Additional percentage ricochet chance per point in DEX.
+		}
+
+		DesperadoRicochetMaxChance: {
+			Label: Ricochet Max Chance
+			Tooltip: The maximum limit for ricochet chance.
+		}
+
+		DesperadoRicochetDamageMultiplier: {
+			Label: Ricochet Damage Multiplier
+			Tooltip: Damage multiplier for ricocheting projectiles.
+		}
+
+		DesperadoShowdownCooldown: {
+			Label: Showdown Cooldown
+			Tooltip: Cooldown of the Showdown active skill in seconds.
+		}
+
+		DesperadoShowdownDuration: {
+			Label: Showdown Duration
+			Tooltip: Duration of the Showdown active skill in seconds.
+		}
+
+		DesperadoShowdownCritChance: {
+			Label: Showdown Crit Chance
+			Tooltip: Ranged critical strike chance bonus during Showdown.
+		}
+
+		DesperadoShowdownCritDamage: {
+			Label: Showdown Crit Damage
+			Tooltip: Ranged critical strike damage bonus (percentage) during Showdown.
 		}
 
 		BeastmasterDamagePerUniqueMinion: {
@@ -2412,6 +2489,18 @@ Buffs: {
 		DisplayName: Dark Focus Buff
 	}
 
+	DesperadoTempoBuff: {
+		DynamicName: Tempo Trance ({0}/{1})
+		DynamicTooltip: +{0}% Firing Rate, +{1}% Velocity, +{2} Extra Projectiles
+		Description: Your tempo is rising! Increased ranged speed, velocity, and projectile count.
+		DisplayName: Tempo Trance
+	}
+
+	ShowdownBuff: {
+		DisplayName: Showdown
+		Description: Your Tempo stacks are locked at maximum! Massive critical strike bonuses!
+	}
+
 	DivineInterventionBuff: {
 		DynamicName: Divine Intervention ({0}s)
 		DynamicTooltip: Protected from harmful debuffs by divine grace
@@ -2718,6 +2807,16 @@ RoleEffects: {
 		MortalDraw: • Mortal Draw: Swing parry sword to slash and execute all posture-broken enemies in range ({0}s cooldown)
 		MortalDrawRange: • Mortal Draw Range: {0} pixels
 	}
+
+	Desperado: {
+		AttackSpeedBonus: • Ranged attack speed is increased by +{0}% per Tempo Trance stack
+		VelocityBonus: • Ranged projectile velocity is increased by +{0}% per Tempo Trance stack
+		ExtraProjectiles: • Ranged weapons fire +1 extra projectile for every {0} Tempo Trance stacks (max +{1})
+		Ricochet: • Ranged critical strikes have a {0}% base chance (+{1}% per DEX, max {2}%) to ricochet to a nearby target (dealing {3}% damage)
+		Showdown: • Showdown: Instantly gain max Tempo stacks and lock them from decaying for {0}s. Ranged critical strike chance is increased by {1}% and ranged critical damage is increased by {2}% during this time ({3}s cooldown).
+		NoAGISpeed: • Ranged weapons do not benefit from AGI attack speed bonuses
+		NoPOWPierce: • Ranged weapons do not benefit from POW pierce bonuses
+	}
 }
 
 UI: {
@@ -3015,6 +3114,7 @@ AbilityName: {
 	DivineIntervention: Divine Intervention
 	DivineResurrection: Divine Resurrection
 	MortalDraw: Mortal Draw
+	Showdown: Showdown
 }
 
 RebirthAbilityName: {
@@ -3110,6 +3210,7 @@ RoleName: {
 	Spellweaver: Spellweaver
 	Angel: Angel
 	Shinobi: Shinobi
+	Desperado: Desperado
 }
 
 RoleDescription: {
@@ -3125,6 +3226,7 @@ RoleDescription: {
 	Spellweaver: An elemental combatant who channels spells to build massive combo discharges while shielding themselves with mana.
 	Angel: An ascended Cleric who gains wings and commands the boundary of life and death, reviving fallen teammates and shielding them in a powerful aura.
 	Shinobi: A swift shadow warrior from Sekiraria. Gains healing on executions, and can trigger the deadly Mortal Draw skill with a Parry Sword equipped.
+	Desperado: A high-octane gunslinger who builds intense Tempo through continuous ranged attacks, firing extra projectiles and gaining velocity at the cost of Agility use speed.
 }
 
 RoleFlavorText: {
@@ -3140,6 +3242,7 @@ RoleFlavorText: {
 	Spellweaver: Weave the elements, command the storm - let your mana shield your body, and let your discharge consume the battlefield.
 	Angel: Evolve beyond mortality - look down from on high with wings of grace, holding the anchor of your allies' souls.
 	Shinobi: Hesitation is defeat. Strike from the shadows, execute with precision, and consume their essence.
+	Desperado: Never stop firing, never look back. Let the rhythm of the trigger guide your path.
 }
 
 DeathMessage: {

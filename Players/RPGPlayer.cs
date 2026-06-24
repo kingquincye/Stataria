@@ -530,6 +530,14 @@ namespace Stataria
             );
             AvailableRoles["Spellweaver"] = spellweaver;
 
+            var desperado = new Role(
+                "Desperado",
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Desperado"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Desperado"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Desperado")
+            );
+            AvailableRoles["Desperado"] = desperado;
+
             if (config.modIntegration.EnableSekirariaIntegration && SekirariaSupportHelper.SekirariaLoaded)
             {
                 var shinobi = new Role(
@@ -783,6 +791,16 @@ namespace Stataria
                             CombatText.NewText(Player.Hitbox, Color.Red, Terraria.Localization.Language.GetTextValue("Mods.Stataria.Combat.RequiresParrySword"), true);
                         }
                     }
+                }
+            }
+            if (StatariaKeybinds.DesperadoActiveKey.JustPressed &&
+                !Terraria.GameInput.PlayerInput.WritingText &&
+                ActiveRole?.ID == "Desperado" && ActiveRole.Status == RoleStatus.Active)
+            {
+                var desperadoPlayer = Player.GetModPlayer<DesperadoPlayer>();
+                if (desperadoPlayer.ShowdownCooldownTimer <= 0)
+                {
+                    desperadoPlayer.ActivateShowdown();
                 }
             }
         }
@@ -1452,6 +1470,7 @@ namespace Stataria
         {
             ApplyCritGodEffects(item, ref modifiers);
             ApplyBlackKnightMeleeEffects(item, ref modifiers);
+            ApplyDesperadoShowdownEffects(item, ref modifiers);
         }
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
@@ -1461,6 +1480,39 @@ namespace Stataria
                 Item item = Player.HeldItem;
                 ApplyCritGodEffects(item, ref modifiers);
                 ApplyBlackKnightProjectileEffects(proj, ref modifiers);
+                ApplyDesperadoShowdownEffects(proj, ref modifiers);
+            }
+        }
+
+        private void ApplyDesperadoShowdownEffects(Item item, ref NPC.HitModifiers modifiers)
+        {
+            if (ActiveRole?.ID != "Desperado" || ActiveRole.Status != RoleStatus.Active)
+                return;
+
+            if (!item.CountsAsClass(DamageClass.Ranged))
+                return;
+
+            var desperadoPlayer = Player.GetModPlayer<DesperadoPlayer>();
+            if (desperadoPlayer.IsShowdownActive)
+            {
+                var config = ModContent.GetInstance<StatariaConfig>();
+                modifiers.CritDamage += config.roleSettings.DesperadoShowdownCritDamage / 100f;
+            }
+        }
+
+        private void ApplyDesperadoShowdownEffects(Projectile proj, ref NPC.HitModifiers modifiers)
+        {
+            if (ActiveRole?.ID != "Desperado" || ActiveRole.Status != RoleStatus.Active)
+                return;
+
+            if (!proj.CountsAsClass(DamageClass.Ranged))
+                return;
+
+            var desperadoPlayer = Player.GetModPlayer<DesperadoPlayer>();
+            if (desperadoPlayer.IsShowdownActive)
+            {
+                var config = ModContent.GetInstance<StatariaConfig>();
+                modifiers.CritDamage += config.roleSettings.DesperadoShowdownCritDamage / 100f;
             }
         }
 
@@ -1754,6 +1806,12 @@ namespace Stataria
             if (ActiveRole?.ID == "CritGod" && ActiveRole.Status == RoleStatus.Active)
             {
                 Player.GetCritChance(DamageClass.Generic) += config.roleSettings.CritGodCritChance;
+            }
+
+            if (ActiveRole?.ID == "Desperado" && ActiveRole.Status == RoleStatus.Active)
+            {
+                float agiAttackSpeedBonus = diminishedAGI * (config.statSettings.AGI_AttackSpeed / 100f);
+                Player.GetAttackSpeed(DamageClass.Ranged) -= agiAttackSpeedBonus;
             }
 
             int effectiveSPR = GetEffectiveStat("SPR");

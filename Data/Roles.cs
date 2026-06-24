@@ -290,6 +290,22 @@ namespace Stataria
                 return string.Join("\n", effects);
             }
 
+            if (ID == "Desperado")
+            {
+                var effects = new List<string>
+                {
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Desperado.AttackSpeedBonus", config.roleSettings.DesperadoTempoAttackSpeedPerStack.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Desperado.VelocityBonus", config.roleSettings.DesperadoTempoVelocityPerStack.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Desperado.ExtraProjectiles", config.roleSettings.DesperadoStacksPerExtraProjectile, config.roleSettings.DesperadoMaxExtraProjectiles),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Desperado.Ricochet", config.roleSettings.DesperadoRicochetBaseChance.ToString("0.##"), config.roleSettings.DesperadoRicochetDexScale.ToString("0.##"), config.roleSettings.DesperadoRicochetMaxChance.ToString("0.##"), (config.roleSettings.DesperadoRicochetDamageMultiplier * 100f).ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Desperado.Showdown", config.roleSettings.DesperadoShowdownDuration.ToString("0.##"), config.roleSettings.DesperadoShowdownCritChance.ToString("0.##"), config.roleSettings.DesperadoShowdownCritDamage.ToString("0.##"), config.roleSettings.DesperadoShowdownCooldown.ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Desperado.NoAGISpeed"),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Desperado.NoPOWPierce")
+                };
+
+                return string.Join("\n", effects);
+            }
+
             return Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.NoEffects");
         }
     }

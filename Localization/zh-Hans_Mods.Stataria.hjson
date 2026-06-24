@@ -7,6 +7,7 @@ Keybinds: {
 	"Elemental Discharge.DisplayName": 元素释放
 	"Divine Resurrection.DisplayName": 神圣复活
 	"Mortal Draw.DisplayName": 不死斩
+	"Desperado Showdown.DisplayName": 决斗时刻
 }
 
 ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
@@ -1483,6 +1484,7 @@ Configs: {
 			Spellweaver: 织法者
 			Angel: 天使
 			Shinobi: 忍者
+			Desperado: 亡命徒
 		}
 
 		BaseSwitchCost: {
@@ -1578,6 +1580,81 @@ Configs: {
 		ShinobiMortalDrawRange: {
 			Label: 忍者不死斩范围
 			Tooltip: 处决架势崩溃敌人的像素范围。
+		}
+
+		DesperadoMaxTempoStacks: {
+			Label: 最大节奏层数
+			Tooltip: 可以积累的最大节奏层数。
+		}
+
+		DesperadoTempoAttackSpeedPerStack: {
+			Label: 每层节奏射速
+			Tooltip: 每层节奏获得的百分比远程攻击速度加成。
+		}
+
+		DesperadoTempoVelocityPerStack: {
+			Label: 每层节奏弹速
+			Tooltip: 每层节奏获得的百分比远程弹幕速度加成。
+		}
+
+		DesperadoStacksPerExtraProjectile: {
+			Label: 额外弹幕所需层数
+			Tooltip: 发射额外弹幕所需的节奏层数。
+		}
+
+		DesperadoMaxExtraProjectiles: {
+			Label: 最大额外弹幕数量
+			Tooltip: 射击时发射额外弹幕的最大限制。
+		}
+
+		DesperadoExtraProjectileSpread: {
+			Label: 额外弹幕散角
+			Tooltip: 额外弹幕的扩散角度（度）。
+		}
+
+		DesperadoExtraProjectileDamageMultiplier: {
+			Label: 额外弹幕伤害倍率
+			Tooltip: 由节奏（Tempo）触发的额外弹幕的伤害倍率。
+		}
+
+		DesperadoRicochetBaseChance: {
+			Label: 基础弹射概率
+			Tooltip: 远程暴击时弹射至附近目标的百分比基础概率。
+		}
+
+		DesperadoRicochetDexScale: {
+			Label: 敏捷弹射加成
+			Tooltip: 每点敏捷提供的额外百分比弹射概率。
+		}
+
+		DesperadoRicochetMaxChance: {
+			Label: 最大弹射概率
+			Tooltip: 弹射概率的最大上限。
+		}
+
+		DesperadoRicochetDamageMultiplier: {
+			Label: 弹射伤害倍率
+			Tooltip: 弹射弹幕的伤害倍率。
+		}
+
+		DesperadoShowdownCooldown: {
+			Label: 决斗时刻冷却
+			Tooltip: 主动技能“决斗时刻”的冷却时间（秒）。
+		}
+
+		DesperadoShowdownDuration: {
+			Label: 决斗时刻持续时间
+			Tooltip: 主动技能“决斗时刻”的持续时间（秒）。
+		}
+
+		DesperadoShowdownCritChance: {
+			Label: 决斗时刻暴击加成
+			Tooltip: 决斗时刻期间获得的远程暴击率加成。
+		}
+
+		DesperadoShowdownCritDamage: {
+			Label: 决斗时刻爆伤加成
+			Tooltip: 决斗时刻期间获得的远程爆伤加成（百分比）。
 		}
 
 		BeastmasterDamagePerUniqueMinion: {
@@ -2412,6 +2489,18 @@ Buffs: {
 		DisplayName: 黑暗专注
 	}
 
+	DesperadoTempoBuff: {
+		DynamicName: 节奏狂热 ({0}/{1})
+		DynamicTooltip: +{0}% 射速, +{1}% 弹速, +{2} 额外弹幕
+		Description: 你的节奏正在攀升！远程射速、弹速和额外弹幕提升。
+		DisplayName: 节奏狂热
+	}
+
+	ShowdownBuff: {
+		DisplayName: 决斗时刻
+		Description: 你的节奏层数已被锁定为最大值！获得巨大的暴击与爆伤加成！
+	}
+
 	DivineInterventionBuff: {
 		DynamicName: 神圣干涉 ({0}秒)
 		DynamicTooltip: 受到神恩的保护，免疫有害减益
@@ -2718,6 +2807,16 @@ RoleEffects: {
 		MortalDraw: • 不死斩: 挥舞 Parry Sword 斩击并处决范围内所有架势值崩溃的敌人 ({0} 秒冷却时间)
 		MortalDrawRange: • 不死斩范围: {0} 像素
 	}
+
+	Desperado: {
+		AttackSpeedBonus: • 每层节奏使远程攻击速度提高 +{0}%
+		VelocityBonus: • 每层节奏使远程弹速提高 +{0}%
+		ExtraProjectiles: • 每达到 {0} 层节奏，远程武器发射 +1 额外弹幕（最大 +{1}）
+		Ricochet: • 远程暴击有 {0}% 基础概率（+{1}% 每点敏捷，上限 {2}%）弹射至附近敌人（造成 {3}% 伤害）
+		Showdown: • 决斗时刻: 立即获得最大节奏层数且在 {0} 秒内不再衰减。期间远程暴击率提高 {1}%，远程爆伤提高 {2}%（冷却 {3} 秒）。
+		NoAGISpeed: • 远程武器不再享受敏捷带来的攻击速度加成
+		NoPOWPierce: • 远程武器不再享受力量提供的穿透加成
+	}
 }
 
 UI: {
@@ -3015,6 +3114,7 @@ AbilityName: {
 	DivineIntervention: 神圣干涉
 	DivineResurrection: 神圣复活
 	MortalDraw: 不死斩
+	Showdown: 决斗时刻
 }
 
 RebirthAbilityName: {
@@ -3110,6 +3210,7 @@ RoleName: {
 	Spellweaver: 织法者
 	Angel: 天使
 	Shinobi: 忍者
+	Desperado: 亡命徒
 }
 
 RoleDescription: {
@@ -3125,6 +3226,7 @@ RoleDescription: {
 	Spellweaver: 元素战斗人员，通过引导法术积累庞大的组合释放，同时用法力保护自己。
 	Angel: 飞升的牧师，获得了双翼并掌控生死边界，能复活倒下的队友并在强大的光环中庇护他们。
 	Shinobi: 动作敏捷的 Sekiraria 影子武士。处决敌人时能获得治疗，并且在装备 Parry Sword 时可以触发致命的不死斩技能。
+	Desperado: 极速狂飙的的枪手，通过连续的远程攻击积累狂热的“节奏”层数，以牺牲敏捷带来的攻击速度加成为代价，发射额外弹幕并提高弹道速度。
 }
 
 RoleFlavorText: {
@@ -3140,6 +3242,7 @@ RoleFlavorText: {
 	Spellweaver: 编织元素，掌控风暴——让法力护卫你的身躯，让能量释放吞噬战场。
 	Angel: 超脱凡尘——从高空以优雅的双翼俯瞰，维系着盟友灵魂的锚点。
 	Shinobi: 犹豫，就会败北。于暗影中突袭，以精准之势处决，夺取其生命精华。
+	Desperado: 开火永不停歇，回头绝无可能。让扳机的律动指引你的道路。
 }
 
 DeathMessage: {

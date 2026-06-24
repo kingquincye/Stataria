@@ -32,6 +32,9 @@ namespace Stataria.Globals
             if (!config.statSettings.EnablePOWPierce)
                 return;
 
+            if (rpg.ActiveRole?.ID == "Desperado" && rpg.ActiveRole.Status == RoleStatus.Active && projectile.CountsAsClass(DamageClass.Ranged))
+                return;
+
             int effectivePOW = rpg.GetEffectiveStat("POW");
             int scaling = config.statSettings.POW_PierceScaling;
 

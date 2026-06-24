@@ -101,6 +101,18 @@ namespace Stataria.UI
                 ));
             }
 
+            // Desperado: Showdown
+            var desperado = player.GetModPlayer<DesperadoPlayer>();
+            if (desperado.IsDesperadoActive && desperado.ShowdownCooldownTimer > 0)
+            {
+                activeCooldowns.Add(new ActiveCooldown(
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.AbilityName.Showdown"), "S", 
+                    desperado.ShowdownCooldownTimer / 60f, 
+                    config.roleSettings.DesperadoShowdownCooldown, 
+                    Color.Orange
+                ));
+            }
+
 
             // Rebirth: Teleport
             if (rpg.teleportCooldownTimer > 0)

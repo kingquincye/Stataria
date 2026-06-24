@@ -329,6 +329,23 @@ namespace Stataria
             [DefaultValue(15f)][Range(0f, 100f)] public float ShinobiExecutionHealPercent { get; set; } = 15f;
             [DefaultValue(30f)][Range(1f, 300f)] public float ShinobiMortalDrawCooldown { get; set; } = 30f;
             [DefaultValue(1200f)][Range(100f, 5000f)] public float ShinobiMortalDrawRange { get; set; } = 1200f;
+
+            [Header("Desperado")]
+            [DefaultValue(30)][Range(1, 100)] public int DesperadoMaxTempoStacks { get; set; } = 30;
+            [DefaultValue(1.5f)][Range(0f, 10f)] public float DesperadoTempoAttackSpeedPerStack { get; set; } = 1.5f;
+            [DefaultValue(1f)][Range(0f, 10f)] public float DesperadoTempoVelocityPerStack { get; set; } = 1f;
+            [DefaultValue(10)][Range(1, 100)] public int DesperadoStacksPerExtraProjectile { get; set; } = 10;
+            [DefaultValue(3)][Range(0, 10)] public int DesperadoMaxExtraProjectiles { get; set; } = 3;
+            [DefaultValue(6f)][Range(0f, 45f)] public float DesperadoExtraProjectileSpread { get; set; } = 6f;
+            [DefaultValue(1f)][Range(0f, 5f)] public float DesperadoExtraProjectileDamageMultiplier { get; set; } = 1f;
+            [DefaultValue(20f)][Range(0f, 100f)] public float DesperadoRicochetBaseChance { get; set; } = 20f;
+            [DefaultValue(0.1f)][Range(0f, 10f)] public float DesperadoRicochetDexScale { get; set; } = 0.1f;
+            [DefaultValue(60f)][Range(0f, 100f)] public float DesperadoRicochetMaxChance { get; set; } = 60f;
+            [DefaultValue(0.75f)][Range(0f, 5f)] public float DesperadoRicochetDamageMultiplier { get; set; } = 0.75f;
+            [DefaultValue(30f)][Range(1f, 300f)] public float DesperadoShowdownCooldown { get; set; } = 30f;
+            [DefaultValue(6f)][Range(1f, 30f)] public float DesperadoShowdownDuration { get; set; } = 6f;
+            [DefaultValue(20f)][Range(0f, 100f)] public float DesperadoShowdownCritChance { get; set; } = 20f;
+            [DefaultValue(30f)][Range(0f, 200f)] public float DesperadoShowdownCritDamage { get; set; } = 30f;
         }
 
         public class MultiplayerSettings
