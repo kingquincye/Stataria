@@ -60,15 +60,18 @@ namespace Stataria.UI.Elements
             selectionButton.BackgroundColor = new Color(50, 30, 80);
             
             selectionButton.OnMouseOver += (evt, el) => {
+                if (CustomConfigUIState.DialogOpen) return;
                 selectionButton.BackgroundColor = new Color(100, 50, 150);
                 if (this.onHover != null) this.onHover(this.tooltipText, this.reloadRequired);
             };
             selectionButton.OnMouseOut += (evt, el) => {
+                if (CustomConfigUIState.DialogOpen) return;
                 selectionButton.BackgroundColor = new Color(50, 30, 80);
                 if (this.onHover != null) this.onHover("", false);
             };
             
             selectionButton.OnLeftClick += (evt, el) => {
+                if (CustomConfigUIState.DialogOpen) return;
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 currentIndex = (currentIndex + 1) % options.Length;
                 string newValue = options[currentIndex];
@@ -82,7 +85,7 @@ namespace Stataria.UI.Elements
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            if (IsMouseHovering && onHover != null)
+            if (!CustomConfigUIState.DialogOpen && IsMouseHovering && onHover != null)
             {
                 onHover(tooltipText, reloadRequired);
             }

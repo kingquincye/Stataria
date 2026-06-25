@@ -82,15 +82,15 @@ namespace Stataria.UI.Elements
             
             _hoveringPill = pillRect.Contains(Main.MouseScreen.ToPoint());
             
-            if (IsMouseHovering || _hoveringPill)
+            if (!CustomConfigUIState.DialogOpen && (IsMouseHovering || _hoveringPill))
             {
                 Main.LocalPlayer.mouseInterface = true;
                 _onHover?.Invoke(_tooltip, _reloadRequired);
             }
 
-            // Click Logic
+            // Click Logic — skip if a file dialog is open
             bool isMouseDown = Main.mouseLeft;
-            if (isMouseDown && !_wasMouseDown && _hoveringPill)
+            if (!CustomConfigUIState.DialogOpen && isMouseDown && !_wasMouseDown && _hoveringPill)
             {
                 Value = !Value;
                 SoundEngine.PlaySound(SoundID.MenuTick);

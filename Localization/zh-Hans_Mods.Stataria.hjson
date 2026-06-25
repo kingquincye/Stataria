@@ -2943,6 +2943,10 @@ UI: {
 	Uncategorized: 未分类
 	HoverTooltip: 将鼠标悬停在设置上可查看其说明。
 	ReloadRequired: 此设置需要重新加载才能生效。
+	SearchPlaceholder: 搜索设置...
+	SaveConfig: 保存配置
+	LoadConfig: 加载配置
+	SetDefaults: 恢复默认
 	SocketedCoresHeader: 已镶嵌核心:
 	CoreDamage: +{0}% 伤害
 	CoreKnockback: +{0}% 击退

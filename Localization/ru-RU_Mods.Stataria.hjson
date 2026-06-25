@@ -2943,6 +2943,10 @@ UI: {
 	Uncategorized: Без категории
 	HoverTooltip: Наведите курсор на настройку, чтобы увидеть её описание.
 	ReloadRequired: Для применения этой настройки требуется перезагрузка.
+	SearchPlaceholder: Поиск настроек...
+	SaveConfig: Сохранить настройки
+	LoadConfig: Загрузить настройки
+	SetDefaults: Сброс по умолчанию
 	SocketedCoresHeader: Вставленные Ядра:
 	CoreDamage: +{0}% к Урону
 	CoreKnockback: +{0}% к Отбрасыванию

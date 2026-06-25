@@ -2943,6 +2943,10 @@ UI: {
 	Uncategorized: Uncategorized
 	HoverTooltip: Hover over a setting to see its description.
 	ReloadRequired: A reload is required for this setting to take effect.
+	SearchPlaceholder: Search settings...
+	SaveConfig: Save Config
+	LoadConfig: Load Config
+	SetDefaults: Set Defaults
 	SocketedCoresHeader: Socketed Cores:
 	CoreDamage: +{0}% Damage
 	CoreKnockback: +{0}% Knockback

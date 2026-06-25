@@ -121,10 +121,17 @@ namespace Stataria.UI.Elements
                 deleteBtn.Height.Set(26, 0f);
                 deleteBtn.HAlign = 1f;
                 deleteBtn.VAlign = 0.5f;
-                deleteBtn.OnMouseOver += (evt, el) => deleteBtn.BackgroundColor = new Color(200, 70, 70);
-                deleteBtn.OnMouseOut += (evt, el) => deleteBtn.BackgroundColor = new Color(150, 50, 50);
+                deleteBtn.OnMouseOver += (evt, el) => {
+                    if (CustomConfigUIState.DialogOpen) return;
+                    deleteBtn.BackgroundColor = new Color(200, 70, 70);
+                };
+                deleteBtn.OnMouseOut += (evt, el) => {
+                    if (CustomConfigUIState.DialogOpen) return;
+                    deleteBtn.BackgroundColor = new Color(150, 50, 50);
+                };
                 deleteBtn.OnLeftClick += (evt, el) =>
                 {
+                    if (CustomConfigUIState.DialogOpen) return;
                     SoundEngine.PlaySound(SoundID.MenuTick);
                     GetList().RemoveAt(index);
                     if (_rootConfig != null) 
@@ -156,7 +163,7 @@ namespace Stataria.UI.Elements
             
             Rectangle toggleRect = new Rectangle((int)dimensions.X, (int)dimensions.Y, (int)dimensions.Width, 40);
 
-            if (IsMouseHovering)
+            if (!CustomConfigUIState.DialogOpen && IsMouseHovering)
             {
                 Main.LocalPlayer.mouseInterface = true;
                 _onHover?.Invoke(_tooltip, _reloadRequired);
@@ -164,8 +171,18 @@ namespace Stataria.UI.Elements
 
             bool isMouseDown = Main.mouseLeft;
 
+            if (CustomConfigUIState.DialogOpen)
+            {
+                if (_typingNewItem)
+                {
+                    _typingNewItem = false;
+                    if (Main.CurrentInputTextTakerOverride == this)
+                        Main.CurrentInputTextTakerOverride = null;
+                }
+            }
+
             // Expand Toggle Logic
-            if (isMouseDown && !_wasMouseDown && toggleRect.Contains(Main.MouseScreen.ToPoint()))
+            if (!CustomConfigUIState.DialogOpen && isMouseDown && !_wasMouseDown && toggleRect.Contains(Main.MouseScreen.ToPoint()))
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 ToggleExpand();
@@ -177,10 +194,10 @@ namespace Stataria.UI.Elements
                 Rectangle addInputRect = new Rectangle((int)dimensions.X + 10, (int)(dimensions.Y + dimensions.Height - 35), (int)dimensions.Width - 100, 26);
                 Rectangle addBtnRect = new Rectangle((int)addInputRect.Right + 10, (int)(dimensions.Y + dimensions.Height - 35), 70, 26);
 
-                spriteBatch.Draw(TextureAssets.MagicPixel.Value, addInputRect, _typingNewItem ? new Color(80, 40, 100) : new Color(40, 20, 50)); // Purple text box
+                spriteBatch.Draw(TextureAssets.MagicPixel.Value, addInputRect, (_typingNewItem && !CustomConfigUIState.DialogOpen) ? new Color(80, 40, 100) : new Color(40, 20, 50)); // Purple text box
                 
                 string displayVal = "Type string/int to add...";
-                if (_typingNewItem)
+                if (_typingNewItem && !CustomConfigUIState.DialogOpen)
                 {
                     displayVal = _typedNewItem;
                     if (Main.GameUpdateCount % 40 < 20)
@@ -195,12 +212,12 @@ namespace Stataria.UI.Elements
                 }
 
                 // Draw Add Button
-                bool hoverAdd = addBtnRect.Contains(Main.MouseScreen.ToPoint());
+                bool hoverAdd = !CustomConfigUIState.DialogOpen && addBtnRect.Contains(Main.MouseScreen.ToPoint());
                 spriteBatch.Draw(TextureAssets.MagicPixel.Value, addBtnRect, hoverAdd ? new Color(170, 50, 200) : new Color(120, 30, 150)); // Bright purple add button
                 Utils.DrawBorderString(spriteBatch, "Add", new Vector2(addBtnRect.X + 20, addBtnRect.Y + 5), Color.White, 0.9f);
 
                 // Input handling
-                if (isMouseDown && !_wasMouseDown)
+                if (!CustomConfigUIState.DialogOpen && isMouseDown && !_wasMouseDown)
                 {
                     if (addInputRect.Contains(Main.MouseScreen.ToPoint()))
                     {
@@ -218,7 +235,7 @@ namespace Stataria.UI.Elements
                     }
                 }
 
-                if (_typingNewItem)
+                if (_typingNewItem && !CustomConfigUIState.DialogOpen)
                 {
                     Terraria.GameInput.PlayerInput.WritingText = true;
                     Main.instance.HandleIME();

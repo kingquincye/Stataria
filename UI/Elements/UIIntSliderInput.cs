@@ -103,7 +103,7 @@ namespace Stataria.UI.Elements
             Vector2 valuePos = new Vector2(textInputRect.X + 5, textInputRect.Y + 5);
             Utils.DrawBorderString(spriteBatch, displayValue, valuePos, Color.White, 0.9f);
 
-            if (IsMouseHovering)
+            if (!CustomConfigUIState.DialogOpen && IsMouseHovering)
             {
                 Main.LocalPlayer.mouseInterface = true;
                 _onHover?.Invoke(_tooltip, _reloadRequired);
@@ -114,6 +114,19 @@ namespace Stataria.UI.Elements
 
         private void HandleMouseInput(Rectangle sliderRect, Rectangle textInputRect)
         {
+            // Block all input while a file dialog is open; also cancel any in-progress drag/type
+            if (CustomConfigUIState.DialogOpen)
+            {
+                _dragging = false;
+                if (_typing)
+                {
+                    _typing = false;
+                    if (Main.CurrentInputTextTakerOverride == this)
+                        Main.CurrentInputTextTakerOverride = null;
+                }
+                return;
+            }
+
             // Main.mouseLeftRelease is true the FIRST frame the mouse is clicked
             bool justPressed = Main.mouseLeft && Main.mouseLeftRelease;
 

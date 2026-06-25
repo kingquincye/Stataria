@@ -2,7 +2,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Stataria;
 using System;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Collections.Generic;
@@ -14,6 +16,7 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
+using Stataria.UI.Elements;
 
 namespace Stataria.UI
 {
@@ -37,7 +40,26 @@ namespace Stataria.UI
         public ModConfig CurrentConfig;
 
         private UITextPanel<Terraria.Localization.LocalizedText> closeButton;
+        private UITextPanel<Terraria.Localization.LocalizedText> saveButton;
+        private UITextPanel<Terraria.Localization.LocalizedText> loadButton;
+        private UITextPanel<Terraria.Localization.LocalizedText> defaultButton;
         private bool _oldEscapePressed;
+
+        private UITextInput searchInput;
+        private string _searchQuery = "";
+        private PropertyFieldWrapper _currentCategory;
+        private UIText _statusText;
+        private int _statusTimer;
+        private UIElement _buttonContainer;
+
+        // Background file dialog state
+        private volatile bool _dialogPending = false;
+        private string _pendingDialogPath = null;
+        private Action<string> _pendingDialogAction = null;
+        private UIPanel _dialogOverlay;
+
+        /// <summary>True while a file dialog is open — custom controls check this to skip input processing.</summary>
+        public static bool DialogOpen { get; private set; } = false;
 
         public override void OnActivate()
         {
@@ -68,19 +90,108 @@ namespace Stataria.UI
             mainPanel.BackgroundColor = new Color(40, 25, 60) * 0.95f; // Deep Purple
             Append(mainPanel);
 
+            // Button Container (Centers the group of buttons at the bottom)
+            _buttonContainer = new UIElement();
+            _buttonContainer.Width.Set(756f, 0f); // 4 buttons * 180px + 3 gaps * 12px = 756px
+            _buttonContainer.Height.Set(32f, 0f);
+            _buttonContainer.HAlign = 0.5f;
+            _buttonContainer.VAlign = 0.5f;
+            _buttonContainer.Top.Set(420f, 0f); // Positioned below the main config panel
+            Append(_buttonContainer);
+
+            float buttonWidth = 180f;
+            float buttonHeight = 32f;
+            float spacing = 12f;
+
+            // Set Defaults Button
+            defaultButton = new UITextPanel<Terraria.Localization.LocalizedText>(Terraria.Localization.Language.GetText("Mods.Stataria.UI.SetDefaults"), 0.8f);
+            defaultButton.Width.Set(buttonWidth, 0f);
+            defaultButton.Height.Set(buttonHeight, 0f);
+            defaultButton.HAlign = 0f;
+            defaultButton.VAlign = 0f;
+            defaultButton.Left.Set(0f, 0f);
+            defaultButton.BackgroundColor = new Color(120, 40, 120);
+            defaultButton.OnLeftClick += (evt, element) => {
+                if (DialogOpen) return;
+                SetDefaultsAction();
+            };
+            defaultButton.OnMouseOver += (evt, element) => {
+                if (DialogOpen) return;
+                defaultButton.BackgroundColor = new Color(150, 70, 150);
+            };
+            defaultButton.OnMouseOut += (evt, element) => {
+                if (DialogOpen) return;
+                defaultButton.BackgroundColor = new Color(120, 40, 120);
+            };
+            _buttonContainer.Append(defaultButton);
+
+            // Load Button
+            loadButton = new UITextPanel<Terraria.Localization.LocalizedText>(Terraria.Localization.Language.GetText("Mods.Stataria.UI.LoadConfig"), 0.8f);
+            loadButton.Width.Set(buttonWidth, 0f);
+            loadButton.Height.Set(buttonHeight, 0f);
+            loadButton.HAlign = 0f;
+            loadButton.VAlign = 0f;
+            loadButton.Left.Set(buttonWidth + spacing, 0f);
+            loadButton.BackgroundColor = new Color(120, 40, 120);
+            loadButton.OnLeftClick += (evt, element) => LoadConfigAction();
+            loadButton.OnMouseOver += (evt, element) => {
+                if (DialogOpen) return;
+                loadButton.BackgroundColor = new Color(150, 70, 150);
+            };
+            loadButton.OnMouseOut += (evt, element) => {
+                if (DialogOpen) return;
+                loadButton.BackgroundColor = new Color(120, 40, 120);
+            };
+            _buttonContainer.Append(loadButton);
+
+            // Save Button
+            saveButton = new UITextPanel<Terraria.Localization.LocalizedText>(Terraria.Localization.Language.GetText("Mods.Stataria.UI.SaveConfig"), 0.8f);
+            saveButton.Width.Set(buttonWidth, 0f);
+            saveButton.Height.Set(buttonHeight, 0f);
+            saveButton.HAlign = 0f;
+            saveButton.VAlign = 0f;
+            saveButton.Left.Set((buttonWidth + spacing) * 2f, 0f);
+            saveButton.BackgroundColor = new Color(120, 40, 120);
+            saveButton.OnLeftClick += (evt, element) => SaveConfigAction();
+            saveButton.OnMouseOver += (evt, element) => {
+                if (DialogOpen) return;
+                saveButton.BackgroundColor = new Color(150, 70, 150);
+            };
+            saveButton.OnMouseOut += (evt, element) => {
+                if (DialogOpen) return;
+                saveButton.BackgroundColor = new Color(120, 40, 120);
+            };
+            _buttonContainer.Append(saveButton);
+
             // Close Button
-            closeButton = new UITextPanel<Terraria.Localization.LocalizedText>(Terraria.Localization.Language.GetText("Mods.Stataria.UI.CloseCustomConfig"));
-            closeButton.HAlign = 0.5f;
-            closeButton.VAlign = 0.5f; // Center screen relative
-            closeButton.Top.Set(415, 0f); // 375 (half of 750) + 40 margin
-            closeButton.BackgroundColor = new Color(120, 40, 120); // Bright Purple
+            closeButton = new UITextPanel<Terraria.Localization.LocalizedText>(Terraria.Localization.Language.GetText("Mods.Stataria.UI.CloseCustomConfig"), 0.8f);
+            closeButton.Width.Set(buttonWidth, 0f);
+            closeButton.Height.Set(buttonHeight, 0f);
+            closeButton.HAlign = 0f;
+            closeButton.VAlign = 0f;
+            closeButton.Left.Set((buttonWidth + spacing) * 3f, 0f);
+            closeButton.BackgroundColor = new Color(120, 40, 120);
             closeButton.OnLeftClick += (evt, element) => {
+                if (DialogOpen) return;
                 SoundEngine.PlaySound(SoundID.MenuClose);
                 ConfigUISystem.Instance.HideMyUI();
             };
-            closeButton.OnMouseOver += (evt, element) => closeButton.BackgroundColor = new Color(150, 70, 150);
-            closeButton.OnMouseOut += (evt, element) => closeButton.BackgroundColor = new Color(120, 40, 120);
-            Append(closeButton);
+            closeButton.OnMouseOver += (evt, element) => {
+                if (DialogOpen) return;
+                closeButton.BackgroundColor = new Color(150, 70, 150);
+            };
+            closeButton.OnMouseOut += (evt, element) => {
+                if (DialogOpen) return;
+                closeButton.BackgroundColor = new Color(120, 40, 120);
+            };
+            _buttonContainer.Append(closeButton);
+
+            // Status Text - anchored above the button container so it never overlaps
+            _statusText = new UIText("", 0.8f);
+            _statusText.HAlign = 0.5f;
+            _statusText.VAlign = 0f;
+            _statusText.Top.Set(-20f, 0f);
+            _buttonContainer.Append(_statusText);
 
             // Config Tabs Header
             UIPanel configTabsContainer = new UIPanel();
@@ -93,6 +204,19 @@ namespace Stataria.UI
             configTabsList.Width.Set(0, 1f);
             configTabsList.Height.Set(0, 1f);
             configTabsContainer.Append(configTabsList);
+
+            // Search Box (Top Right of configTabsContainer)
+            searchInput = new UITextInput(
+                Terraria.Localization.Language.GetText("Mods.Stataria.UI.SearchPlaceholder"),
+                "",
+                DoSearch
+            );
+            searchInput.Width.Set(250f, 0f);
+            searchInput.Height.Set(34f, 0f);
+            searchInput.HAlign = 1f;
+            searchInput.VAlign = 0.5f;
+            searchInput.Left.Set(-10f, 0f); // 10px padding from the right edge
+            configTabsContainer.Append(searchInput);
 
             // Left Sidebar for Categories
             sidebarPanel = new UIPanel();
@@ -135,17 +259,20 @@ namespace Stataria.UI
             reloadWarningText.SetText("");
             tooltipPanel.Append(reloadWarningText);
 
-            // Setup Category List
+            // Setup Category List (Full height of Sidebar)
             categoryList = new UIList();
-            categoryList.Width.Set(0, 1f);
-            categoryList.Height.Set(0, 1f);
+            categoryList.Top.Set(5f, 0f);
+            categoryList.Left.Set(5f, 0f);
+            categoryList.Width.Set(-25f, 1f); // Shrink to make room for scrollbar
+            categoryList.Height.Set(-10f, 1f); // 5px top and bottom margin
             categoryList.ListPadding = 5f;
             categoryList.ManualSortMethod = (elements) => { }; // FIX: Bypass UIList's aggressive auto-sorting
             sidebarPanel.Append(categoryList);
 
             categoryScrollbar = new UIScrollbar();
             categoryScrollbar.SetView(100f, 1000f);
-            categoryScrollbar.Height.Set(0, 1f);
+            categoryScrollbar.Top.Set(5f, 0f);
+            categoryScrollbar.Height.Set(-10f, 1f);
             categoryScrollbar.HAlign = 1f;
             sidebarPanel.Append(categoryScrollbar);
             categoryList.SetScrollbar(categoryScrollbar);
@@ -176,11 +303,13 @@ namespace Stataria.UI
                 mainPanel.Width.Set(targetWidth, 0f);
                 mainPanel.Height.Set(targetHeight, 0f);
 
-                if (closeButton != null)
+                if (_buttonContainer != null)
                 {
-                    closeButton.VAlign = 0.5f;
-                    closeButton.Top.Set(targetHeight / 2f + 20f, 0f);
+                    _buttonContainer.VAlign = 0.5f;
+                    _buttonContainer.Top.Set(targetHeight / 2f + 40f, 0f);
                 }
+
+                // _statusText is a child of _buttonContainer, no separate positioning needed
             }
             base.Recalculate();
         }
@@ -193,7 +322,7 @@ namespace Stataria.UI
 
             // Keyboard Escape handling during Draw (since typing state is processed during Draw phase)
             bool escapePressed = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape);
-            if (escapePressed && !_oldEscapePressed)
+            if (!DialogOpen && escapePressed && !_oldEscapePressed)
             {
                 if (!Main.inputTextEscape)
                 {
@@ -206,13 +335,59 @@ namespace Stataria.UI
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
         {
             base.Update(gameTime);
-            
+
+            if (_statusTimer > 0)
+            {
+                _statusTimer--;
+                if (_statusTimer <= 0)
+                {
+                    _statusText?.SetText("");
+                }
+            }
+
+            // Process background file dialog result on the main thread
+            if (_dialogPending && _pendingDialogPath != null)
+            {
+                string path = _pendingDialogPath;
+                Action<string> action = _pendingDialogAction;
+                _pendingDialogPath = null;
+                _pendingDialogAction = null;
+                _dialogPending = false;
+                DialogOpen = false;
+                action?.Invoke(path);
+            }
+
+            // Handle overlay visibility based on DialogOpen
+            if (DialogOpen)
+            {
+                if (_dialogOverlay == null || _dialogOverlay.Parent == null)
+                {
+                    ShowDialogOverlay();
+                }
+                
+                // Dim all buttons
+                if (defaultButton != null) defaultButton.BackgroundColor = new Color(60, 20, 60);
+                if (loadButton != null) loadButton.BackgroundColor = new Color(60, 20, 60);
+                if (saveButton != null) saveButton.BackgroundColor = new Color(60, 20, 60);
+                if (closeButton != null) closeButton.BackgroundColor = new Color(60, 20, 60);
+            }
+            else
+            {
+                if (_dialogOverlay != null && _dialogOverlay.Parent != null)
+                {
+                    HideDialogOverlay();
+                }
+
+                // Restore all buttons background if not hovered
+                if (defaultButton != null && !defaultButton.IsMouseHovering) defaultButton.BackgroundColor = new Color(120, 40, 120);
+                if (loadButton != null && !loadButton.IsMouseHovering) loadButton.BackgroundColor = new Color(120, 40, 120);
+                if (saveButton != null && !saveButton.IsMouseHovering) saveButton.BackgroundColor = new Color(120, 40, 120);
+                if (closeButton != null && !closeButton.IsMouseHovering) closeButton.BackgroundColor = new Color(120, 40, 120);
+            }
+
             if (!Main.gameMenu)
             {
-                // Prevent the player from using items while interacting with the UI (Crucial for multiplayer safety!)
                 Main.LocalPlayer.mouseInterface = true;
-                
-                // Extra input bleed suppression mappings
                 Main.blockInput = true;
                 Main.LocalPlayer.delayUseItem = true;
             }
@@ -220,6 +395,12 @@ namespace Stataria.UI
 
         public void PopulateConfigsTabs()
         {
+            if (searchInput != null)
+            {
+                searchInput.Text = "";
+            }
+            _searchQuery = "";
+
             configTabsList.RemoveAllChildren();
             categoryList.Clear();
             configElementsList.Clear();
@@ -262,9 +443,16 @@ namespace Stataria.UI
 
             currentLeft += textWidth + 35f; // padding between tabs
             
-            tab.OnMouseOver += (evt, element) => { if (CurrentConfig != config) tab.BackgroundColor = new Color(100, 50, 150); };
-            tab.OnMouseOut += (evt, element) => { if (CurrentConfig != config) tab.BackgroundColor = new Color(50, 30, 80); };
+            tab.OnMouseOver += (evt, element) => {
+                if (DialogOpen) return;
+                if (CurrentConfig != config) tab.BackgroundColor = new Color(100, 50, 150);
+            };
+            tab.OnMouseOut += (evt, element) => {
+                if (DialogOpen) return;
+                if (CurrentConfig != config) tab.BackgroundColor = new Color(50, 30, 80);
+            };
             tab.OnLeftClick += (evt, element) => {
+                if (DialogOpen) return;
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 SelectConfig(config);
             };
@@ -367,11 +555,16 @@ namespace Stataria.UI
             UITextPanel<string> catTab = new UITextPanel<string>(name, 0.8f);
             catTab.Width.Set(-25, 1f); // Shrink to make room for scrollbar
             catTab.BackgroundColor = new Color(50, 30, 80); // Purple unselected
-            catTab.OnMouseOver += (evt, element) => catTab.BackgroundColor = new Color(100, 50, 150); // Hover bright purple
+            catTab.OnMouseOver += (evt, element) => {
+                if (DialogOpen) return;
+                catTab.BackgroundColor = new Color(100, 50, 150); // Hover bright purple
+            };
             catTab.OnMouseOut += (evt, element) => {
+                if (DialogOpen) return;
                 catTab.BackgroundColor = new Color(50, 30, 80);
             };
             catTab.OnLeftClick += (evt, element) => {
+                if (DialogOpen) return;
                 SoundEngine.PlaySound(SoundID.MenuTick);
                 OpenCategory(categoryProperty);
                 
@@ -387,16 +580,77 @@ namespace Stataria.UI
 
         private void OpenCategory(PropertyFieldWrapper categoryProperty)
         {
+            _currentCategory = categoryProperty;
+            UpdateConfigElementsList();
+
+            // Clear search query on category switch if desired, or keep it. Let's clear search query when selecting a category to make it intuitive.
+            if (searchInput != null && !string.IsNullOrEmpty(_searchQuery))
+            {
+                searchInput.Text = "";
+                _searchQuery = "";
+            }
+        }
+
+        public void DoSearch(string query)
+        {
+            _searchQuery = query;
+            UpdateConfigElementsList();
+
+            // If we are searching, we clear the active category highlighting to avoid confusion
+            if (!string.IsNullOrEmpty(_searchQuery))
+            {
+                foreach (UIElement el in categoryList)
+                {
+                    if (el is UITextPanel<string> p) p.BackgroundColor = new Color(50, 30, 80);
+                }
+            }
+        }
+
+        private bool MatchesSearch(string query, string label, string tooltip, string fieldName)
+        {
+            if (string.IsNullOrEmpty(query)) return true;
+
+            query = query.ToLowerInvariant();
+
+            if (label != null && label.ToLowerInvariant().Contains(query)) return true;
+            if (tooltip != null && tooltip.ToLowerInvariant().Contains(query)) return true;
+            if (fieldName != null && fieldName.ToLowerInvariant().Contains(query)) return true;
+
+            return false;
+        }
+
+        public void UpdateConfigElementsList()
+        {
             configElementsList.Clear();
 
-            object categoryInstance;
-            List<PropertyFieldWrapper> fieldsToDisplay = new List<PropertyFieldWrapper>();
-            
-            // Reset scrollbar position when switching categories
+            // Reset scrollbar position when switching categories or searching
             if (configElementsScrollbar != null)
             {
                 configElementsScrollbar.ViewPosition = 0f;
             }
+
+            if (CurrentConfig == null) return;
+
+            // Define tooltip action
+            Action<string, bool> onHover = (tt, r) => {
+                tooltipText.SetText(string.IsNullOrEmpty(tt) ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.HoverTooltip") : tt);
+                reloadWarningText.SetText(r ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.ReloadRequired") : "");
+            };
+
+            if (string.IsNullOrEmpty(_searchQuery))
+            {
+                PopulateCategoryElements(_currentCategory, onHover);
+            }
+            else
+            {
+                PopulateSearchElements(_searchQuery, onHover);
+            }
+        }
+
+        private void PopulateCategoryElements(PropertyFieldWrapper categoryProperty, Action<string, bool> onHover)
+        {
+            object categoryInstance;
+            List<PropertyFieldWrapper> fieldsToDisplay = new List<PropertyFieldWrapper>();
 
             if (categoryProperty == null)
             {
@@ -423,128 +677,416 @@ namespace Stataria.UI
                 fieldsToDisplay = Terraria.ModLoader.Config.ConfigManager.GetFieldsAndProperties(categoryInstance).ToList();
             }
 
-            // Define tooltip action
-            Action<string, bool> onHover = (tt, r) => {
-                tooltipText.SetText(string.IsNullOrEmpty(tt) ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.HoverTooltip") : tt);
-                reloadWarningText.SetText(r ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.ReloadRequired") : "");
-            };
-
             foreach (var field in fieldsToDisplay)
             {
-                string typeName = categoryInstance.GetType().Name;
+                AddConfigElement(field, categoryInstance, onHover);
+            }
+        }
+
+        private void PopulateSearchElements(string query, Action<string, bool> onHover)
+        {
+            var properties = Terraria.ModLoader.Config.ConfigManager.GetFieldsAndProperties(CurrentConfig).ToList();
+
+            // 1. Uncategorized (Root fields)
+            List<PropertyFieldWrapper> uncategorizedFields = new List<PropertyFieldWrapper>();
+            foreach (var prop in properties)
+            {
+                if (prop.MemberInfo.DeclaringType != CurrentConfig.GetType()) continue;
+                if (prop.Name == "Mode" || prop.Name == "OpenMenuButton") continue;
+
+                bool isCategory = prop.Type.IsClass && prop.Type != typeof(string) && !typeof(System.Collections.IEnumerable).IsAssignableFrom(prop.Type);
+                if (!isCategory)
+                {
+                    uncategorizedFields.Add(prop);
+                }
+            }
+
+            // Filter Uncategorized
+            List<PropertyFieldWrapper> matchingUncategorized = new List<PropertyFieldWrapper>();
+            foreach (var field in uncategorizedFields)
+            {
+                string typeName = CurrentConfig.GetType().Name;
                 string labelKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.{field.Name}.Label";
                 string tooltipKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.{field.Name}.Tooltip";
-                
+
                 string localizedLabel = Terraria.Localization.Language.GetTextValue(labelKey);
                 string localizedTooltip = Terraria.Localization.Language.GetTextValue(tooltipKey);
-                
+
                 string formattedFieldName = localizedLabel != labelKey ? localizedLabel : FormatCamelCase(field.Name);
                 string tooltipString = localizedTooltip != tooltipKey ? localizedTooltip : "";
 
-                var headerAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.HeaderAttribute>();
-                
-                if (headerAttr != null)
+                if (MatchesSearch(query, formattedFieldName, tooltipString, field.Name))
                 {
-                    string headerId = "";
-                    try 
-                    {
-                        var t = headerAttr.GetType();
-                        
-                        // Try known field names (turns out in 1.4.4 it is a private field named 'identifier' or 'key')
-                        string[] possibleFields = { "identifier", "key" };
-                        foreach (string f in possibleFields)
-                        {
-                            var fieldInfo = t.GetField(f, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                            if (fieldInfo != null && fieldInfo.FieldType == typeof(string))
-                            {
-                                headerId = (string)fieldInfo.GetValue(headerAttr);
-                                if (!string.IsNullOrEmpty(headerId)) break;
-                            }
-                        }
+                    matchingUncategorized.Add(field);
+                }
+            }
 
-                        if (string.IsNullOrEmpty(headerId))
-                        {
-                            // Try calling ToString() just in case it overrides it usefully
-                            string str = headerAttr.ToString();
-                            if (str != t.FullName) 
-                            {
-                                headerId = str;
-                            }
-                        }
-                    } 
-                    catch (Exception)
+            if (matchingUncategorized.Count > 0)
+            {
+                configElementsList.Add(new UI.Elements.UIHeader(Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.Uncategorized")));
+                foreach (var field in matchingUncategorized)
+                {
+                    AddConfigElement(field, CurrentConfig, onHover);
+                }
+            }
+
+            // 2. Categories
+            foreach (var prop in properties)
+            {
+                if (prop.MemberInfo.DeclaringType != CurrentConfig.GetType()) continue;
+                if (prop.Name == "Mode" || prop.Name == "OpenMenuButton") continue;
+
+                bool isCategory = prop.Type.IsClass && prop.Type != typeof(string) && !typeof(System.Collections.IEnumerable).IsAssignableFrom(prop.Type);
+                if (isCategory)
+                {
+                    object categoryInstance = prop.GetValue(CurrentConfig);
+                    if (categoryInstance == null) continue;
+
+                    string catLabelKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{CurrentConfig.Name}.{prop.Name}.Label";
+                    string catLocalized = Terraria.Localization.Language.GetTextValue(catLabelKey);
+                    string categoryName = catLocalized != catLabelKey ? catLocalized : FormatCamelCase(prop.Name);
+
+                    var catFields = Terraria.ModLoader.Config.ConfigManager.GetFieldsAndProperties(categoryInstance).ToList();
+                    List<PropertyFieldWrapper> matchingCatFields = new List<PropertyFieldWrapper>();
+
+                    foreach (var field in catFields)
                     {
+                        string typeName = categoryInstance.GetType().Name;
+                        string labelKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.{field.Name}.Label";
+                        string tooltipKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.{field.Name}.Tooltip";
+
+                        string localizedLabel = Terraria.Localization.Language.GetTextValue(labelKey);
+                        string localizedTooltip = Terraria.Localization.Language.GetTextValue(tooltipKey);
+
+                        string formattedFieldName = localizedLabel != labelKey ? localizedLabel : FormatCamelCase(field.Name);
+                        string tooltipString = localizedTooltip != tooltipKey ? localizedTooltip : "";
+
+                        if (MatchesSearch(query, formattedFieldName, tooltipString, field.Name))
+                        {
+                            matchingCatFields.Add(field);
+                        }
                     }
-                    
+
+                    if (matchingCatFields.Count > 0)
+                    {
+                        configElementsList.Add(new UI.Elements.UIHeader(categoryName));
+                        foreach (var field in matchingCatFields)
+                        {
+                            AddConfigElement(field, categoryInstance, onHover);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AddConfigElement(PropertyFieldWrapper field, object categoryInstance, Action<string, bool> onHover)
+        {
+            string typeName = categoryInstance.GetType().Name;
+            string labelKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.{field.Name}.Label";
+            string tooltipKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.{field.Name}.Tooltip";
+
+            string localizedLabel = Terraria.Localization.Language.GetTextValue(labelKey);
+            string localizedTooltip = Terraria.Localization.Language.GetTextValue(tooltipKey);
+
+            string formattedFieldName = localizedLabel != labelKey ? localizedLabel : FormatCamelCase(field.Name);
+            string tooltipString = localizedTooltip != tooltipKey ? localizedTooltip : "";
+
+            var headerAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.HeaderAttribute>();
+
+            if (headerAttr != null)
+            {
+                string headerId = "";
+                try
+                {
+                    var t = headerAttr.GetType();
+                    string[] possibleFields = { "identifier", "key" };
+                    foreach (string f in possibleFields)
+                    {
+                        var fieldInfo = t.GetField(f, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (fieldInfo != null && fieldInfo.FieldType == typeof(string))
+                        {
+                            headerId = (string)fieldInfo.GetValue(headerAttr);
+                            if (!string.IsNullOrEmpty(headerId)) break;
+                        }
+                    }
+
                     if (string.IsNullOrEmpty(headerId))
                     {
-                        // The user's field name represents the header text. We can just use the field name as a fallback!
-                        // e.g. "VIT_Settings" -> "VIT Settings"
-                        headerId = field.Name;
+                        string str = headerAttr.ToString();
+                        if (str != t.FullName)
+                        {
+                            headerId = str;
+                        }
                     }
-                    
-                    string headerKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.Headers.{headerId}";
-                    string localizedHeader = Terraria.Localization.Language.GetTextValue(headerKey);
-                    if (localizedHeader == headerKey)
-                    {
-                        localizedHeader = headerId;
-                    }
-                    
-                    configElementsList.Add(new UI.Elements.UIHeader(localizedHeader));
+                }
+                catch (Exception)
+                {
                 }
 
-                bool reloadRequired = field.MemberInfo.GetCustomAttribute<ReloadRequiredAttribute>() != null;
-
-                if (field.Type == typeof(bool))
+                if (string.IsNullOrEmpty(headerId))
                 {
-                    configElementsList.Add(new UI.Elements.UIToggle(formattedFieldName, field, categoryInstance, CurrentConfig, tooltipString, reloadRequired, onHover));
+                    headerId = field.Name;
                 }
-                else if (field.Type == typeof(float))
-                {
-                    // Default range mapping, or we could read the [Range] attribute
-                    float min = 0f; float max = 100f; float step = 0.01f;
-                    var rangeAttr = field.MemberInfo.GetCustomAttribute<System.ComponentModel.DataAnnotations.RangeAttribute>();
-                    if (rangeAttr != null)
-                    {
-                         min = Convert.ToSingle(rangeAttr.Minimum);
-                         max = Convert.ToSingle(rangeAttr.Maximum);
-                    }
-                    else
-                    {
-                         // Try to get tML Range attribute which might be used
-                         var tmlRangeAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.RangeAttribute>();
-                         if (tmlRangeAttr != null)
-                         {
-                             min = Convert.ToSingle(tmlRangeAttr.Min);
-                             max = Convert.ToSingle(tmlRangeAttr.Max);
-                         }
-                    }
 
-                    configElementsList.Add(new UI.Elements.UIFloatSliderInput(formattedFieldName, field, categoryInstance, min, max, step, CurrentConfig, tooltipString, reloadRequired, onHover));
-                }
-                else if (field.Type == typeof(int))
+                string headerKey = $"Mods.{CurrentConfig.Mod.Name}.Configs.{typeName}.Headers.{headerId}";
+                string localizedHeader = Terraria.Localization.Language.GetTextValue(headerKey);
+                if (localizedHeader == headerKey)
                 {
-                    int min = 0; int max = 100; int step = 1;
+                    localizedHeader = headerId;
+                }
+
+                configElementsList.Add(new UI.Elements.UIHeader(localizedHeader));
+            }
+
+            bool reloadRequired = field.MemberInfo.GetCustomAttribute<ReloadRequiredAttribute>() != null;
+
+            if (field.Type == typeof(bool))
+            {
+                configElementsList.Add(new UI.Elements.UIToggle(formattedFieldName, field, categoryInstance, CurrentConfig, tooltipString, reloadRequired, onHover));
+            }
+            else if (field.Type == typeof(float))
+            {
+                float min = 0f; float max = 100f; float step = 0.01f;
+                var rangeAttr = field.MemberInfo.GetCustomAttribute<System.ComponentModel.DataAnnotations.RangeAttribute>();
+                if (rangeAttr != null)
+                {
+                    min = Convert.ToSingle(rangeAttr.Minimum);
+                    max = Convert.ToSingle(rangeAttr.Maximum);
+                }
+                else
+                {
                     var tmlRangeAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.RangeAttribute>();
                     if (tmlRangeAttr != null)
                     {
-                        min = Convert.ToInt32(tmlRangeAttr.Min);
-                        max = Convert.ToInt32(tmlRangeAttr.Max);
+                        min = Convert.ToSingle(tmlRangeAttr.Min);
+                        max = Convert.ToSingle(tmlRangeAttr.Max);
                     }
-                    configElementsList.Add(new UI.Elements.UIIntSliderInput(formattedFieldName, field, categoryInstance, min, max, step, CurrentConfig, tooltipString, reloadRequired, onHover));
                 }
-                else if (field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof(System.Collections.Generic.List<>))
+
+                configElementsList.Add(new UI.Elements.UIFloatSliderInput(formattedFieldName, field, categoryInstance, min, max, step, CurrentConfig, tooltipString, reloadRequired, onHover));
+            }
+            else if (field.Type == typeof(int))
+            {
+                int min = 0; int max = 100; int step = 1;
+                var tmlRangeAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.RangeAttribute>();
+                if (tmlRangeAttr != null)
                 {
-                    configElementsList.Add(new UI.Elements.UIListEditor(formattedFieldName, field, categoryInstance, CurrentConfig, tooltipString, reloadRequired, onHover));
+                    min = Convert.ToInt32(tmlRangeAttr.Min);
+                    max = Convert.ToInt32(tmlRangeAttr.Max);
                 }
-                else if (field.Type == typeof(string))
+                configElementsList.Add(new UI.Elements.UIIntSliderInput(formattedFieldName, field, categoryInstance, min, max, step, CurrentConfig, tooltipString, reloadRequired, onHover));
+            }
+            else if (field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof(System.Collections.Generic.List<>))
+            {
+                configElementsList.Add(new UI.Elements.UIListEditor(formattedFieldName, field, categoryInstance, CurrentConfig, tooltipString, reloadRequired, onHover));
+            }
+            else if (field.Type == typeof(string))
+            {
+                var optionStringsAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.OptionStringsAttribute>();
+                if (optionStringsAttr != null)
                 {
-                    var optionStringsAttr = field.MemberInfo.GetCustomAttribute<Terraria.ModLoader.Config.OptionStringsAttribute>();
-                    if (optionStringsAttr != null)
+                    configElementsList.Add(new UI.Elements.UIStringSelector(formattedFieldName, field, categoryInstance, optionStringsAttr.OptionLabels, CurrentConfig, tooltipString, reloadRequired, onHover));
+                }
+            }
+        }
+
+        private void ShowWindowsFileDialogAsync(bool save, string title, string filter, Action<string> onResult)
+        {
+            if (_dialogPending)
+                return; // Already waiting on a dialog, ignore extra clicks
+
+            _dialogPending = true;
+            DialogOpen = true;
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
                     {
-                        configElementsList.Add(new UI.Elements.UIStringSelector(formattedFieldName, field, categoryInstance, optionStringsAttr.OptionLabels, CurrentConfig, tooltipString, reloadRequired, onHover));
+                        // Fallback path for non-Windows platforms
+                        _pendingDialogPath = Path.Combine(Main.SavePath, "ModConfigs", "Stataria_Custom_Profile.json");
+                        _pendingDialogAction = onResult;
+                        return;
+                    }
+
+                    string initialDir = Path.Combine(Main.SavePath, "ModConfigs");
+                    if (!Directory.Exists(initialDir))
+                        Directory.CreateDirectory(initialDir);
+
+                    string base64Path = Convert.ToBase64String(System.Text.Encoding.Unicode.GetBytes(initialDir));
+
+                    string command = $"[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms') | Out-Null; " +
+                                     $"$d = New-Object System.Windows.Forms.{(save ? "SaveFileDialog" : "OpenFileDialog")}; " +
+                                     $"$d.Filter = '{filter}'; " +
+                                     $"$d.Title = '{title}'; " +
+                                     $"$d.InitialDirectory = [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String('{base64Path}')); " +
+                                     // Use a transparent TopMost owner form so the dialog always appears above the game
+                                     $"$owner = New-Object System.Windows.Forms.Form; $owner.TopMost = $true; $owner.ShowInTaskbar = $false; $owner.Opacity = 0; $owner.Show(); " +
+                                     $"$r = $d.ShowDialog($owner); $owner.Dispose(); if ($r -eq 'OK') {{ Write-Output $d.FileName }}";
+
+                    var startInfo = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "powershell",
+                        Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{command}\"",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        CreateNoWindow = true
+                    };
+
+                    using (var process = System.Diagnostics.Process.Start(startInfo))
+                    {
+                        string output = process.StandardOutput.ReadToEnd();
+                        process.WaitForExit();
+                        // Signal the main thread to process the result next Update tick
+                        _pendingDialogPath = output.Trim();
+                        _pendingDialogAction = onResult;
                     }
                 }
+                catch (Exception ex)
+                {
+                    _pendingDialogPath = "";
+                    _pendingDialogAction = _ => ShowStatusMessage("Error opening file dialog: " + ex.Message, Color.Red);
+                }
+            });
+        }
+
+
+        private void ShowStatusMessage(string message, Color color)
+        {
+            if (_statusText != null)
+            {
+                _statusText.SetText(message);
+                _statusText.TextColor = color;
+                _statusTimer = 300; // Show for 5 seconds (60 ticks * 5)
+            }
+        }
+
+        private void ShowDialogOverlay()
+        {
+            if (_dialogOverlay == null)
+            {
+                _dialogOverlay = new UIPanel();
+                _dialogOverlay.BackgroundColor = new Color(15, 5, 25, 180);
+                _dialogOverlay.BorderColor = Color.Transparent;
+                _dialogOverlay.IgnoresMouseInteraction = false; // Block mouse events!
+
+                var overlayText = new UIText("File dialog is open...", 1.2f);
+                overlayText.HAlign = 0.5f;
+                overlayText.VAlign = 0.45f;
+                overlayText.TextColor = Color.LightGray;
+                _dialogOverlay.Append(overlayText);
+            }
+
+            _dialogOverlay.Left.Set(0f, 0f);
+            _dialogOverlay.Top.Set(0f, 0f);
+            _dialogOverlay.Width.Set(Main.screenWidth, 0f);
+            _dialogOverlay.Height.Set(Main.screenHeight, 0f);
+
+            Append(_dialogOverlay);
+            _dialogOverlay.Recalculate();
+        }
+
+        private void HideDialogOverlay()
+        {
+            if (_dialogOverlay != null && _dialogOverlay.Parent != null)
+            {
+                RemoveChild(_dialogOverlay);
+            }
+        }
+
+        private void SaveConfigAction()
+        {
+            if (CurrentConfig == null || _dialogPending) return;
+
+            ShowWindowsFileDialogAsync(true, "Save Config Preset", "JSON Files (*.json)|*.json", selectedPath =>
+            {
+                if (string.IsNullOrEmpty(selectedPath)) return;
+
+                try
+                {
+                    // Serialize config then inject our branded signature so only Stataria can load it back
+                    var jObject = Newtonsoft.Json.Linq.JObject.FromObject(CurrentConfig);
+                    jObject["$statariaConfig"] = CurrentConfig.GetType().Name;
+                    string json = jObject.ToString(Newtonsoft.Json.Formatting.Indented);
+                    File.WriteAllText(selectedPath, json);
+                    SoundEngine.PlaySound(SoundID.MenuOpen);
+                    ShowStatusMessage($"Successfully saved to {Path.GetFileName(selectedPath)}!", Color.LimeGreen);
+                }
+                catch (Exception ex)
+                {
+                    ShowStatusMessage("Failed to save: " + ex.Message, Color.Red);
+                }
+            });
+        }
+
+        private void LoadConfigAction()
+        {
+            if (CurrentConfig == null || _dialogPending) return;
+
+            ShowWindowsFileDialogAsync(false, "Load Config Preset", "JSON Files (*.json)|*.json", selectedPath =>
+            {
+                if (string.IsNullOrEmpty(selectedPath) || !File.Exists(selectedPath)) return;
+
+                try
+                {
+                    string json = File.ReadAllText(selectedPath);
+                    var jObject = Newtonsoft.Json.Linq.JObject.Parse(json);
+
+                    // Check for Stataria's branded signature key
+                    if (!jObject.ContainsKey("$statariaConfig"))
+                    {
+                        ShowStatusMessage("Not a Stataria config file!", Color.Red);
+                        return;
+                    }
+
+                    // Check that the signature matches the currently active config tab
+                    string savedConfigType = jObject["$statariaConfig"].ToString();
+                    string currentConfigType = CurrentConfig.GetType().Name;
+                    if (savedConfigType != currentConfigType)
+                    {
+                        ShowStatusMessage($"Wrong config type! This file is for '{savedConfigType}'.", Color.Red);
+                        return;
+                    }
+
+                    // Remove the signature key before populating so it doesn't cause issues
+                    jObject.Remove("$statariaConfig");
+                    Newtonsoft.Json.JsonConvert.PopulateObject(jObject.ToString(), CurrentConfig);
+
+                    var saveMethod = typeof(Terraria.ModLoader.Config.ConfigManager).GetMethod("Save", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+                    if (saveMethod != null) saveMethod.Invoke(null, new object[] { CurrentConfig });
+
+                    SoundEngine.PlaySound(SoundID.MenuOpen);
+                    UpdateConfigElementsList();
+                    ShowStatusMessage($"Successfully loaded from {Path.GetFileName(selectedPath)}!", Color.LimeGreen);
+                }
+                catch (Exception ex)
+                {
+                    ShowStatusMessage("Failed to load: " + ex.Message, Color.Red);
+                }
+            });
+        }
+
+        private void SetDefaultsAction()
+        {
+            if (CurrentConfig == null || DialogOpen) return;
+
+            try
+            {
+                object defaultInstance = Activator.CreateInstance(CurrentConfig.GetType());
+                string defaultJson = Newtonsoft.Json.JsonConvert.SerializeObject(defaultInstance);
+                Newtonsoft.Json.JsonConvert.PopulateObject(defaultJson, CurrentConfig);
+
+                var saveMethod = typeof(Terraria.ModLoader.Config.ConfigManager).GetMethod("Save", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+                if (saveMethod != null) saveMethod.Invoke(null, new object[] { CurrentConfig });
+
+                SoundEngine.PlaySound(SoundID.MenuOpen);
+                UpdateConfigElementsList();
+                ShowStatusMessage("Successfully restored default settings!", Color.LimeGreen);
+            }
+            catch (Exception ex)
+            {
+                ShowStatusMessage("Failed to reset defaults: " + ex.Message, Color.Red);
             }
         }
     }
