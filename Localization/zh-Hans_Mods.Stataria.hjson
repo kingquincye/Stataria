@@ -1639,6 +1639,31 @@ Configs: {
 			Tooltip: 弹射弹幕的伤害倍率。
 		}
 
+		DesperadoRicochetRange: {
+			Label: 弹射范围
+			Tooltip: 弹射寻找目标的最大范围（像素）。
+		}
+
+		DesperadoBouncesBase: {
+			Label: 弹射基础次数
+			Tooltip: 弹射弹幕的基础最大弹射次数。
+		}
+
+		DesperadoBouncesDexScale: {
+			Label: 敏捷弹射次数加成
+			Tooltip: 获得额外 +1 次弹射所需的敏捷（DEX）点数。设为 0 禁用。
+		}
+
+		DesperadoEnableBounceCap: {
+			Label: 启用弹射次数上限
+			Tooltip: 启用时，防止弹射次数超过设定的硬性上限。
+		}
+
+		DesperadoHardBounceCap: {
+			Label: 弹射硬性次数上限
+			Tooltip: 弹射弹幕可以进行弹射的绝对最大次数。
+		}
+
 		DesperadoShowdownCooldown: {
 			Label: 决斗时刻冷却
 			Tooltip: 主动技能“决斗时刻”的冷却时间（秒）。
@@ -2944,8 +2969,8 @@ UI: {
 	HoverTooltip: 将鼠标悬停在设置上可查看其说明。
 	ReloadRequired: 此设置需要重新加载才能生效。
 	SearchPlaceholder: 搜索设置...
-	SaveConfig: 保存配置
-	LoadConfig: 加载配置
+	SaveConfig: 保存配置文件
+	LoadConfig: 加载配置文件
 	SetDefaults: 恢复默认
 	SocketedCoresHeader: 已镶嵌核心:
 	CoreDamage: +{0}% 伤害
@@ -3104,6 +3129,8 @@ UI: {
 		VIT_HpSec: +{0} HP/秒 (+{1} 每点)
 		VIT_LifeRegen: +{0} 生命恢复速度 (+0.5 每点)
 		VIT_Healing: +{0}% 治疗量提升 (+{1}% 每点)
+		LivingFleshLockout: 活肉: 锁定 (已禁用，返回 0)
+		VIT_LivingFleshRegen: 活肉: 击杀敌人提供 +{0} 生命恢复速度 (+{1} 每点)
 		STR_MeleeDamage: +{0}% 近战伤害 (+{1}% 每点)
 		STR_MeleeFlatDamage: +{0} 近战固定伤害 (+{1} 每点)
 		STR_MeleeKnockback: +{0}% 近战击退 (+{1}% 每点)
@@ -3113,6 +3140,7 @@ UI: {
 		AGI_AttackSpeed: +{0} 攻击速度 (+{1} 每点, 收益递减)
 		AGI_WingTime: +{0} 翅膀飞行时间 (+{1} 每点)
 		AGI_ImprovedJump: 提升跳跃高度与速度
+		AGI_DesperadoNoSpeed: 亡命徒: 远程武器无法获得敏捷攻速加成
 		INT_MaxMana: +{0} 最大法力值 (+{1} 每点)
 		INT_ManaRegen: +{0} 法力恢复速度 (+0.5 每点)
 		INT_MagicDamage: +{0}% 魔法伤害 (+{1}% 每点)
@@ -3120,6 +3148,7 @@ UI: {
 		INT_ManaCost: -{0} 法力消耗 (收益递减)
 		INT_MagicArmorPen: +{0} 魔法护甲穿透 (+{1} 每点)
 		INT_BlackKnight: 黑骑士: +{0}% 近战伤害 (+{1}% 每点)
+		INT_SpellweaverDischargeCharge: 织法者: +{0} 元素释放充能上限 (+{1} 每点)
 		LUC_Crit: +{0}% 暴击率 (+{1}% 每点)
 		LUC_Luck: +{0} 幸运 (+{1} 每点)
 		LUC_Fishing: +{0} 渔力 (+{1} 每点)
@@ -3143,6 +3172,8 @@ UI: {
 		DEX_RangedFlatDamage: +{0} 远程固定伤害 (+{1} 每点)
 		DEX_RangedArmorPen: +{0} 远程护甲穿透 (+{1} 每点)
 		DEX_AmmoSave: +{0}% 弹药节约几率 (+{1}% 每点)
+		DEX_DesperadoRicochet: 亡命徒: 远程暴击有 {0}% 基础几率 (+{1}% 每点DEX，最高 {2}%) 弹射至附近目标
+		DEX_DesperadoBounces: 亡命徒: +{0} 弹射弹跳次数 (+1 每 {1} 点DEX)
 		SPR_SummonDamage: +{0}% 召唤伤害 (+{1}% 每点)
 		SPR_SummonFlatDamage: +{0} 召唤固定伤害 (+{1} 每点)
 		SPR_MinionSlots: +{0} 个仆从栏位 (每 {2} 点提供 1 个)
@@ -3150,6 +3181,10 @@ UI: {
 		SPR_BeastmasterSlots: 兽王: +{0} 个栏位 (每拥有 {2} 个基础栏位)
 		SPR_BeastmasterDamage: 兽王: +{0}% 伤害 (每有一种独特的仆从)
 		SPR_ApexSummonerDamage: 巅峰召唤师: +{0}% 伤害 (每有一个闲置栏位，仅限单一种类仆从)
+		SPR_NecromancerSoulReserve: 魂术师: 灵魂上限为 {0} (每 {1} 点 +1)
+		SPR_NecromancerSoulDuration: 魂术师: 灵魂基础存活时间 +{0}秒 (+{1}秒 每点)
+		SPR_NecromancerThrallsLimit: 魂术师: 召唤物最高上限 {0} 只 (每 {1} 点 +1)
+		SPR_NecromancerThrallDamage: 魂术师: 召唤物 +{0}% 额外伤害 (+{1}% 每点)
 		TCH_MiningSpeed: +{0}% 挖矿速度 (+{1}% 每点)
 		TCH_BuildSpeed: +{0}% 建造速度 (+{1}% 每点)
 		TCH_TilesReach: +{0} 格方块触及范围 (+{1} 每点)

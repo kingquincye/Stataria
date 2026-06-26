@@ -342,6 +342,11 @@ namespace Stataria
             [DefaultValue(0.1f)][Range(0f, 10f)] public float DesperadoRicochetDexScale { get; set; } = 0.1f;
             [DefaultValue(60f)][Range(0f, 100f)] public float DesperadoRicochetMaxChance { get; set; } = 60f;
             [DefaultValue(0.75f)][Range(0f, 5f)] public float DesperadoRicochetDamageMultiplier { get; set; } = 0.75f;
+            [DefaultValue(400f)][Range(100f, 5000f)] public float DesperadoRicochetRange { get; set; } = 400f;
+            [DefaultValue(1)][Range(0, 100)] public int DesperadoBouncesBase { get; set; } = 1;
+            [DefaultValue(25)][Range(0, 500)] public int DesperadoBouncesDexScale { get; set; } = 25;
+            [DefaultValue(true)] public bool DesperadoEnableBounceCap { get; set; } = true;
+            [DefaultValue(50)][Range(1, 1000)] public int DesperadoHardBounceCap { get; set; } = 50;
             [DefaultValue(30f)][Range(1f, 300f)] public float DesperadoShowdownCooldown { get; set; } = 30f;
             [DefaultValue(6f)][Range(1f, 30f)] public float DesperadoShowdownDuration { get; set; } = 6f;
             [DefaultValue(20f)][Range(0f, 100f)] public float DesperadoShowdownCritChance { get; set; } = 20f;

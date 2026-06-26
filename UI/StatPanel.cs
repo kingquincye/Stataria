@@ -96,8 +96,16 @@ namespace Stataria
 
                     bool isCleric = rpg.ActiveRole?.ID == "Cleric" && rpg.ActiveRole.Status == RoleStatus.Active;
                     bool isGuardian = rpg.ActiveRole?.ID == "Guardian" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    bool isLivingFlesh = rpg.ActiveRole?.ID == "LivingFlesh" && rpg.ActiveRole.Status == RoleStatus.Active;
 
-                    if (isCleric && cfg.roleSettings.ClericDisableVitRegen)
+                    if (isLivingFlesh)
+                    {
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.VIT_RegenDisabled"));
+                        float vitRegenScale = cfg.roleSettings.LivingFleshKillRegenVitScale;
+                        float totalKillRegen = cfg.roleSettings.LivingFleshKillRegenBase + (effectiveVIT * vitRegenScale);
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.VIT_LivingFleshRegen", totalKillRegen.ToString("0.#"), vitRegenScale.ToString("0.#")));
+                    }
+                    else if (isCleric && cfg.roleSettings.ClericDisableVitRegen)
                     {
                         tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.VIT_RegenDisabled"));
                     }
@@ -179,11 +187,22 @@ namespace Stataria
                     var rpg = player.GetModPlayer<RPGPlayer>();
                     int effectiveAGI = rpg.GetEffectiveStat("AGI");
                     float diminishedAGI = effectiveAGI <= 50 ? effectiveAGI : 50 + (effectiveAGI - 50) * 0.5f;
-                    return "[c/FFFFFF:Agility (AGI)]\n" +
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_MoveSpeed", (diminishedAGI * (cfg.statSettings.AGI_MoveSpeed / 100f)).ToString("P1"), (cfg.statSettings.AGI_MoveSpeed / 100f).ToString("P1")) + "\n" +
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_AttackSpeed", (diminishedAGI * (cfg.statSettings.AGI_AttackSpeed / 100f)).ToString("P1"), (cfg.statSettings.AGI_AttackSpeed / 100f).ToString("P1")) + "\n" +
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_WingTime", effectiveAGI * cfg.statSettings.AGI_WingTime, cfg.statSettings.AGI_WingTime) + "\n" +
-                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_ImprovedJump");
+                    var tooltips = new List<string>
+                    {
+                        "[c/FFFFFF:Agility (AGI)]",
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_MoveSpeed", (diminishedAGI * (cfg.statSettings.AGI_MoveSpeed / 100f)).ToString("P1"), (cfg.statSettings.AGI_MoveSpeed / 100f).ToString("P1")),
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_AttackSpeed", (diminishedAGI * (cfg.statSettings.AGI_AttackSpeed / 100f)).ToString("P1"), (cfg.statSettings.AGI_AttackSpeed / 100f).ToString("P1")),
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_WingTime", effectiveAGI * cfg.statSettings.AGI_WingTime, cfg.statSettings.AGI_WingTime),
+                        Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_ImprovedJump")
+                    };
+
+                    bool isDesperado = rpg.ActiveRole?.ID == "Desperado" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    if (isDesperado)
+                    {
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.AGI_DesperadoNoSpeed"));
+                    }
+
+                    return string.Join("\n", tooltips);
                 }
             });
 
@@ -217,6 +236,15 @@ namespace Stataria
                     if (isBlackKnight)
                     {
                         tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_BlackKnight", (effectiveINT * cfg.roleSettings.BlackKnightINTToMeleeDamage).ToString("0.#"), cfg.roleSettings.BlackKnightINTToMeleeDamage.ToString("0.#")));
+                    }
+
+                    bool isSpellweaver = rpg.ActiveRole?.ID == "Spellweaver" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    if (isSpellweaver)
+                    {
+                        float baseCapacity = cfg.roleSettings.SpellweaverMaxElementalCharge;
+                        float intScale = cfg.roleSettings.SpellweaverElementalDischargeINTScale;
+                        float totalCapacity = baseCapacity + effectiveINT * intScale;
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.INT_SpellweaverDischargeCharge", totalCapacity.ToString("0.#"), intScale.ToString("0.#")));
                     }
 
                     return string.Join("\n", tooltips);
@@ -359,6 +387,30 @@ namespace Stataria
                     }
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_RangedArmorPen", effectiveDEX * cfg.statSettings.DEX_ArmorPen, cfg.statSettings.DEX_ArmorPen));
                     tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_AmmoSave", (effectiveDEX * cfg.statSettings.DEX_AmmoConservation).ToString("0.#"), cfg.statSettings.DEX_AmmoConservation.ToString("0.#")));
+
+                    bool isDesperado = rpg.ActiveRole?.ID == "Desperado" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    if (isDesperado)
+                    {
+                        float baseChance = cfg.roleSettings.DesperadoRicochetBaseChance;
+                        float dexScale = cfg.roleSettings.DesperadoRicochetDexScale;
+                        float maxChance = cfg.roleSettings.DesperadoRicochetMaxChance;
+                        float finalChance = Math.Min(baseChance + (effectiveDEX * dexScale), maxChance);
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_DesperadoRicochet", finalChance.ToString("0.#"), dexScale.ToString("0.##"), maxChance.ToString("0.#")));
+
+                        int baseBounces = cfg.roleSettings.DesperadoBouncesBase;
+                        int bouncesDexScale = cfg.roleSettings.DesperadoBouncesDexScale;
+                        int maxBounces = baseBounces;
+                        if (bouncesDexScale > 0)
+                        {
+                            maxBounces += effectiveDEX / bouncesDexScale;
+                        }
+                        if (cfg.roleSettings.DesperadoEnableBounceCap)
+                        {
+                            maxBounces = Math.Min(maxBounces, cfg.roleSettings.DesperadoHardBounceCap);
+                        }
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.DEX_DesperadoBounces", maxBounces, bouncesDexScale));
+                    }
+
                     return string.Join("\n", tooltips);
                 }
             });
@@ -399,6 +451,33 @@ namespace Stataria
                     if (isApexSummoner)
                     {
                         tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_ApexSummonerDamage", cfg.roleSettings.ApexSummonerDamagePerUnusedSlot.ToString("0.#")));
+                    }
+
+                    bool isNecromancer = rpg.ActiveRole?.ID == "Necromancer" && rpg.ActiveRole.Status == RoleStatus.Active;
+                    if (isNecromancer)
+                    {
+                        int soulCapacity = cfg.roleSettings.NecromancerBaseSoulCapacity;
+                        int sprPerSoul = cfg.roleSettings.NecromancerSPRPerSoul;
+                        int totalSoulCapacity = soulCapacity + (sprPerSoul > 0 ? (effectiveSPR / sprPerSoul) : 0);
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_NecromancerSoulReserve", totalSoulCapacity, sprPerSoul));
+
+                        float baseSoulDuration = cfg.roleSettings.NecromancerBaseSoulDuration;
+                        float soulDurationPerSPR = cfg.roleSettings.NecromancerSoulDurationPerSPR;
+                        float totalSoulDuration = baseSoulDuration + effectiveSPR * soulDurationPerSPR;
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_NecromancerSoulDuration", totalSoulDuration.ToString("0.#"), soulDurationPerSPR.ToString("0.##")));
+
+                        int baseThralls = cfg.roleSettings.NecromancerBaseThralls;
+                        int sprPerThrall = cfg.roleSettings.NecromancerSPRPerThrall;
+                        int totalThralls = baseThralls + (sprPerThrall > 0 ? (effectiveSPR / sprPerThrall) : 0);
+                        if (cfg.roleSettings.NecromancerLimitZombieThralls)
+                        {
+                            totalThralls = Math.Min(totalThralls, cfg.roleSettings.NecromancerActiveThrallsLimit);
+                        }
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_NecromancerThrallsLimit", totalThralls, sprPerThrall));
+
+                        float thrallScale = cfg.roleSettings.NecromancerThrallSPRScale;
+                        float thrallDamageBonus = effectiveSPR * thrallScale;
+                        tooltips.Add(Language.GetTextValue("Mods.Stataria.UI.StatPanel.SPR_NecromancerThrallDamage", thrallDamageBonus.ToString("0.#"), thrallScale.ToString("0.##")));
                     }
 
                     return string.Join("\n", tooltips);
@@ -1361,7 +1440,20 @@ namespace Stataria
 
             var stat = activeStats[statIndex];
 
-            return stat.GetTooltip(config);
+            string tooltip = stat.GetTooltip(config);
+
+            if (stat.Name != "VIT")
+            {
+                var player = Main.LocalPlayer;
+                var rpg = player.GetModPlayer<RPGPlayer>();
+                bool isLivingFlesh = rpg.ActiveRole?.ID == "LivingFlesh" && rpg.ActiveRole.Status == RoleStatus.Active && !config.roleSettings.LivingFleshAllowOtherStats;
+                if (isLivingFlesh)
+                {
+                    tooltip += "\n" + Language.GetTextValue("Mods.Stataria.UI.StatPanel.LivingFleshLockout");
+                }
+            }
+
+            return tooltip;
         }
 
         private string GetXPSystemTooltip()

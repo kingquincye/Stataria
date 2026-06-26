@@ -1639,6 +1639,31 @@ Configs: {
 			Tooltip: Damage multiplier for ricocheting projectiles.
 		}
 
+		DesperadoRicochetRange: {
+			Label: Ricochet Range
+			Tooltip: The maximum range in pixels to search for nearby ricochet targets.
+		}
+
+		DesperadoBouncesBase: {
+			Label: Ricochet Base Bounces
+			Tooltip: The base maximum number of bounces for a ricocheting projectile.
+		}
+
+		DesperadoBouncesDexScale: {
+			Label: Ricochet DEX Scaling Bounces
+			Tooltip: The amount of DEX required to gain +1 additional bounce. Set to 0 to disable.
+		}
+
+		DesperadoEnableBounceCap: {
+			Label: Enable Ricochet Bounce Cap
+			Tooltip: When enabled, prevents ricochet bounces from exceeding the hard cap.
+		}
+
+		DesperadoHardBounceCap: {
+			Label: Ricochet Hard Bounce Cap
+			Tooltip: The absolute maximum number of bounces a ricocheting projectile can perform.
+		}
+
 		DesperadoShowdownCooldown: {
 			Label: Showdown Cooldown
 			Tooltip: Cooldown of the Showdown active skill in seconds.
@@ -2944,8 +2969,8 @@ UI: {
 	HoverTooltip: Hover over a setting to see its description.
 	ReloadRequired: A reload is required for this setting to take effect.
 	SearchPlaceholder: Search settings...
-	SaveConfig: Save Config
-	LoadConfig: Load Config
+	SaveConfig: Save Config File
+	LoadConfig: Load Config File
 	SetDefaults: Set Defaults
 	SocketedCoresHeader: Socketed Cores:
 	CoreDamage: +{0}% Damage
@@ -3104,6 +3129,8 @@ UI: {
 		VIT_HpSec: +{0} HP/sec (+{1} per point)
 		VIT_LifeRegen: +{0} Life Regen (+0.5 per point)
 		VIT_Healing: +{0}% Healing (+{1}% per point)
+		LivingFleshLockout: Living Flesh: Lockout (Disabled, returns 0)
+		VIT_LivingFleshRegen: Living Flesh: +{0} HP Regen on kill (+{1} per point)
 		STR_MeleeDamage: +{0}% Melee Damage (+{1}% per point)
 		STR_MeleeFlatDamage: +{0} Melee Flat Damage (+{1} per point)
 		STR_MeleeKnockback: +{0}% Melee Knockback (+{1}% per point)
@@ -3113,6 +3140,7 @@ UI: {
 		AGI_AttackSpeed: +{0} Attack Speed (+{1} per point, diminished)
 		AGI_WingTime: +{0} Wing Time (+{1} per point)
 		AGI_ImprovedJump: Improved Jump Height & Speed
+		AGI_DesperadoNoSpeed: Desperado: Ranged attack speed bonus disabled
 		INT_MaxMana: +{0} Max Mana (+{1} per point)
 		INT_ManaRegen: +{0} Mana Regen (+0.5 per point)
 		INT_MagicDamage: +{0}% Magic Damage (+{1}% per point)
@@ -3120,6 +3148,7 @@ UI: {
 		INT_ManaCost: -{0} Mana Cost (Diminishing)
 		INT_MagicArmorPen: +{0} Magic Armor Pen. (+{1} per point)
 		INT_BlackKnight: Black Knight: +{0}% Melee Damage (+{1}% per point)
+		INT_SpellweaverDischargeCharge: Spellweaver: +{0} Elemental Discharge Capacity (+{1} per point)
 		LUC_Crit: +{0}% Critical Chance (+{1}% per point)
 		LUC_Luck: +{0} Luck (+{1} per point)
 		LUC_Fishing: +{0} Fishing Power (+{1} per point)
@@ -3143,6 +3172,8 @@ UI: {
 		DEX_RangedFlatDamage: +{0} Ranged Flat Damage (+{1} per point)
 		DEX_RangedArmorPen: +{0} Ranged Armor Pen. (+{1} per point)
 		DEX_AmmoSave: +{0}% Ammo Save Chance (+{1}% per point)
+		DEX_DesperadoRicochet: Desperado: +{0}% Ricochet Chance (+{1}% per point, max {2}%)
+		DEX_DesperadoBounces: Desperado: +{0} Ricochet Bounces (+1 per {1} points)
 		SPR_SummonDamage: +{0}% Summon Damage (+{1}% per point)
 		SPR_SummonFlatDamage: +{0} Summon Flat Damage (+{1} per point)
 		SPR_MinionSlots: +{0} Minion Slot{1} (+1 per {2} points)
@@ -3150,6 +3181,10 @@ UI: {
 		SPR_BeastmasterSlots: Beastmaster: +{0} slot{1} per {2} total slots
 		SPR_BeastmasterDamage: Beastmaster: +{0}% damage per unique minion type
 		SPR_ApexSummonerDamage: Apex Summoner: +{0}% damage per unused slot (single minion type only)
+		SPR_NecromancerSoulReserve: Necromancer: {0} Soul Capacity (+1 per {1} points)
+		SPR_NecromancerSoulDuration: Necromancer: +{0}s Soul Duration (+{1}s per point)
+		SPR_NecromancerThrallsLimit: Necromancer: Max {0} Active Thralls (+1 per {1} points)
+		SPR_NecromancerThrallDamage: Necromancer: +{0}% Thrall Damage (+{1}% per point)
 		TCH_MiningSpeed: +{0}% Mining Speed (+{1}% per point)
 		TCH_BuildSpeed: +{0}% Build Speed (+{1}% per point)
 		TCH_TilesReach: +{0} Tiles Reach (+{1} per point)
