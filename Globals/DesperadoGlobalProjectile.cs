@@ -1,16 +1,110 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using System;
 
 namespace Stataria.Globals
 {
+    public class DesperadoExtraSource : IEntitySource
+    {
+        public string Context => "DesperadoExtra";
+    }
+
     public class DesperadoGlobalProjectile : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
 
         public bool isRicochet = false;
+
+        public override void OnSpawn(Projectile projectile, IEntitySource source)
+        {
+            if (!projectile.friendly || projectile.hostile || projectile.trap || projectile.minion || projectile.sentry)
+                return;
+
+            if (projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
+                return;
+
+            Player player = Main.player[projectile.owner];
+            if (player == null || !player.active || player.dead)
+                return;
+
+            var desperadoPlayer = player.GetModPlayer<DesperadoPlayer>();
+            if (desperadoPlayer == null || !desperadoPlayer.IsDesperadoActive)
+                return;
+
+            // Prevent recursion: do not duplicate our own extra projectiles
+            if (source is DesperadoExtraSource)
+                return;
+
+            // Only duplicate ranged projectiles that deal damage
+            if (projectile.damage <= 0 || !projectile.CountsAsClass(DamageClass.Ranged))
+                return;
+
+            // Ensure the source is from weapon usage or parent projectile (holdouts/splits)
+            bool isValidSource = false;
+            if (source is EntitySource_ItemUse || source is EntitySource_ItemUse_WithAmmo)
+            {
+                isValidSource = true;
+            }
+            else if (source is EntitySource_Parent parentSource && parentSource.Entity is Projectile parentProj)
+            {
+                // Trace parent to see if it is a holdout or spawned by the player
+                if (parentProj.owner == player.whoAmI && parentProj.friendly)
+                {
+                    isValidSource = true;
+                }
+            }
+
+            if (!isValidSource)
+                return;
+
+            int stacks = desperadoPlayer.GetTempoStacks();
+            var config = ModContent.GetInstance<StatariaConfig>();
+            int extraProjCount = 0;
+            if (config.roleSettings.DesperadoStacksPerExtraProjectile > 0)
+            {
+                extraProjCount = stacks / config.roleSettings.DesperadoStacksPerExtraProjectile;
+                extraProjCount = Math.Min(extraProjCount, config.roleSettings.DesperadoMaxExtraProjectiles);
+            }
+
+            if (extraProjCount > 0)
+            {
+                int extraProjDamage = (int)(projectile.damage * config.roleSettings.DesperadoExtraProjectileDamageMultiplier);
+                if (extraProjDamage < 1) extraProjDamage = 1;
+
+                float ai0 = projectile.ai[0];
+                float ai1 = projectile.ai[1];
+                float ai2 = projectile.ai[2];
+
+                if (source is EntitySource_OnHit onHit && onHit.Victim is NPC npc)
+                {
+                    if (projectile.aiStyle == (int)ProjAIStyleID.MagicMissile)
+                    {
+                        ai0 = -1f;
+                        ai1 = npc.whoAmI;
+                    }
+                }
+
+                for (int i = 0; i < extraProjCount; i++)
+                {
+                    Vector2 perturbedSpeed = projectile.velocity.RotatedByRandom(MathHelper.ToRadians(config.roleSettings.DesperadoExtraProjectileSpread));
+                    Projectile.NewProjectile(
+                        new DesperadoExtraSource(),
+                        projectile.Center,
+                        perturbedSpeed,
+                        projectile.type,
+                        extraProjDamage,
+                        projectile.knockBack,
+                        player.whoAmI,
+                        ai0,
+                        ai1,
+                        ai2
+                    );
+                }
+            }
+        }
 
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {

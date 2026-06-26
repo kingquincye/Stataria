@@ -167,33 +167,5 @@ namespace Stataria
                 }
             }
         }
-
-        public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-            if (IsDesperadoActive && item.CountsAsClass(DamageClass.Ranged))
-            {
-                int stacks = GetTempoStacks();
-                var config = ModContent.GetInstance<StatariaConfig>();
-                int extraProjCount = 0;
-                if (config.roleSettings.DesperadoStacksPerExtraProjectile > 0)
-                {
-                    extraProjCount = stacks / config.roleSettings.DesperadoStacksPerExtraProjectile;
-                    extraProjCount = Math.Min(extraProjCount, config.roleSettings.DesperadoMaxExtraProjectiles);
-                }
-
-                if (extraProjCount > 0)
-                {
-                    int extraProjDamage = (int)(damage * config.roleSettings.DesperadoExtraProjectileDamageMultiplier);
-                    if (extraProjDamage < 1) extraProjDamage = 1;
-
-                    for (int i = 0; i < extraProjCount; i++)
-                    {
-                        Vector2 perturbedSpeed = velocity.RotatedByRandom(MathHelper.ToRadians(config.roleSettings.DesperadoExtraProjectileSpread));
-                        Projectile.NewProjectile(source, position, perturbedSpeed, type, extraProjDamage, knockback, Player.whoAmI);
-                    }
-                }
-            }
-            return true;
-        }
     }
 }
