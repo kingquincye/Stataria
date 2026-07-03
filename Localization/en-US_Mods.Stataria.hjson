@@ -1,3 +1,262 @@
+UI: {
+	ConfigCenter: Config Center
+	CloseCustomConfig: Close Custom Config
+	Uncategorized: Uncategorized
+	HoverTooltip: Hover over a setting to see its description.
+	ReloadRequired: A reload is required for this setting to take effect.
+	SearchPlaceholder: Search settings...
+	SaveConfig: Save Config File
+	LoadConfig: Load Config File
+	SetDefaults: Set Defaults
+	AddHeldButton: Add Held
+	AddHeldTooltip: Add the weapon currently held in your hand to this blacklist.
+	AddHeldTooltipMenu: You must be in-game and holding a weapon to use this.
+	AddHeldTooltipEmpty: Holding nothing. Hold a weapon to add it.
+	AddHeldTooltipClick: Click to add held weapon: {0}
+	TypeListPrompt: Type string/int to add...
+	SocketedCoresHeader: Socketed Cores:
+	CoreDamage: +{0}% Damage
+	CoreKnockback: +{0}% Knockback
+	CoreCrit: +{0}% Crit
+	CoreDefense: +{0} Defense
+	CoreVitality: +{0} Max Health
+	CoreEvasion: +{0}% Evade Chance
+	EnemyLevel: Lv.{0}
+	CooldownHUDDragInstruction: Hold Left Control or Left Alt to drag the Cooldown HUD
+	NecromancerHUDDragInstruction: Hold Left Control or Left Alt to drag the Necromancer HUD
+	CooldownHUDPlaceholder: HUD
+	CooldownHUDDragLabel: Cooldown HUD (Drag)
+	NecromancerHUDReserve: Reserve
+	NecromancerHUDStats: DMG: {0}  •  Thralls: {1}/{2}
+
+	XPVerification: {
+		Title: Suspicious XP Gain Detected
+		Accept: Accept
+		Reject: Reject
+		AcceptAll: Accept All
+		RejectAll: Reject All
+		XPAmount: XP Amount: {0:N0}
+		Source: Source: {0}
+		PendingGains: "{0} suspicious XP gains pending"
+	}
+
+	TabBar: {
+		Stats: Stats
+		Abilities: Abilities
+		Roles: Roles
+		Socketing: Socketing
+	}
+
+	PlayerDisplay: {
+		Level: Lv.
+		RebirthPrefix: R
+		RebirthTitle: Rebirth {0}
+		LevelIndicator: Lv.{0}
+	}
+
+	SkillTree: {
+		Title: Rebirth Abilities
+		RebirthPoints: Rebirth Points: {0}
+		ResetButton: RESET
+		ShowHidden: Show Hidden
+		Cost: Cost: {0} RP
+		Hide: Hide
+		Upgrade: Upgrade
+		Unlocked: Unlocked
+		Unlock: Unlock
+		ToggleOn: On
+		ToggleOff: Off
+		RefundedRP: +{0} RP Refunded!
+		ResetAbilitiesTooltip: Reset all rebirth abilities and refund your Rebirth Points
+		ShowHiddenTooltip: Toggle visibility of hidden abilities
+		HideTooltip: Hide this ability from the list (can be shown again via Show Hidden)
+	}
+
+	BulkAllocation: {
+		Header: Allocation Amount:
+		HeaderTooltip: The number of stat points allocated per click
+		ButtonTooltip: Set allocation amount to {0}
+	}
+
+	RoleSelection: {
+		Title: ROLE SELECTION
+		RebirthPoints: Rebirth Points: {0}
+		ActiveRole: Active Role: {0}
+		ActiveRoleDeactivated: Active Role: {0} (Deactivated)
+		ActiveRoleNone: Active Role: None
+		IndicatorActive: ● ACTIVE
+		IndicatorDeactivated: ● DEACTIVATED
+		EffectsHeader: Effects:
+		DeactivateButton: DEACTIVATE
+		ReactivateButton: REACTIVATE
+		LockedRole: LOCKED - Requires Rebirth 2
+		SwitchCostButton: SWITCH - Cost: {0} RP
+		SelectFreeButton: SELECT (Free)
+		AscendButton: ASCEND
+		AscendRequirements: Requires Rebirth {0} & {1} RP
+		AscendReady: Ready to Ascend! Click to evolve into the Angel.
+		ConfirmSwitch: CONFIRM?
+		ConfirmAscend: CONFIRM?
+	}
+
+	Socketing: {
+		Title: Socketing System
+		RebirthPoints: Your RP: {0}
+		ItemNone: Item: ---
+		SlotsNone: Slots: - / -
+		CompatibleCoresTitle: Compatible Cores
+		AttachedCoresTitle: Attached Cores:
+		ExpandSlotButton: Expand Slot
+		ConfirmExpand: Confirm?
+		CostNone: Cost: --- RP
+		AttachCoreButton: Attach Core
+		ExtractCoreButton: Extract Core
+		ItemPrefix: "Item: "
+		PlaceholderCores:
+			'''
+			(Place an item to see
+			 compatible cores)
+			'''
+		ItemDisplay: Item: {0}
+		SlotsDisplay: Slots: {0} / {1}
+		CostRP: Cost: {0} RP
+		CoreCountDisplay: "{0}: x{1}"
+		EmptyDash: ---
+		AttachedCoreDisplay: > {0} (x{1})
+	}
+
+	StatPanel: {
+		LevelText: Level: {0}
+		PointsText: Points: {0}
+		XPText: XP: {0} / {1}
+		RPText: RP: {0}
+		StatLabel: "{0}: {1}"
+		StatLabelGhost: "{0}: {1} (+{2})"
+		ResetStats: Reset Stats
+		Rebirth: Rebirth
+		Auto: Auto
+		ResetStatsTooltip: Reset all stats for free
+		RebirthReqLevel: Requires Level {0}
+		RebirthXPBonusDesc: +{0}% permanent XP bonus per rebirth level
+		RebirthResetsStats: Resets your level and stat points
+		RebirthKeepsStats: Resets your level but keeps allocated stat points
+		RebirthResetsBosses: Resets boss kill flags for XP rewards
+		AutoTooltip: Toggle automatic point allocation to checked stats
+		AutoAllocateTooltip: Check to auto-allocate points to this stat
+		RequireLevelPrompt: Requires level {0}!
+		ConfirmRebirthPrompt: Are you sure you want to Rebirth?
+		ConfirmRebirth: Confirm Rebirth
+		ConfirmReset: Confirm Reset
+		UnknownStat: Unknown Stat
+		XPInfoTitle: XP System Info:
+		StatPointsPerLevelBonus: Stat Points per Level: {0} + {1} (Rebirth Bonus) = {2}
+		StatPointsPerLevel: Stat Points per Level: {0}
+		DamageXP: Damage XP: {0}x damage dealt
+		KillXP: Kill XP: {0}x enemy max health
+		BossXPTitle: Boss XP:
+		BossXPFlat: "{0} flat XP"
+		BossXPPercent: "{0}% of next level"
+		RebirthXPBonus: Rebirth XP Bonus: +{0} ({1} × {2})
+		LevelCapNone: Level Cap: None (or very high)
+		DynamicLevelCap: Dynamic Level Cap (Current Cycle): {0}
+		LevelCap: Level Cap: {0}
+		StatCapsProgressive: Stat Caps: Base × {0} (Progressive)
+		StatCapsBase: Stat Caps: Base values
+		XPSplit: XP is split evenly among all eligible players
+		XPProximity: Players must be within {0} pixels of enemies to get XP
+		VIT_MaxHealth: +{0} Max Health (+{1} per point)
+		VIT_RegenDisabled: VIT regeneration effects disabled
+		VIT_HpSecReduced: +{0} HP/sec (+{1} per point, Guardian reduced)
+		VIT_LifeRegenReduced: +{0} Life Regen (+{1} per point, Guardian reduced)
+		VIT_HpSec: +{0} HP/sec (+{1} per point)
+		VIT_LifeRegen: +{0} Life Regen (+0.5 per point)
+		VIT_Healing: +{0}% Healing (+{1}% per point)
+		LivingFleshLockout: Living Flesh: Lockout (Disabled, returns 0)
+		VIT_LivingFleshRegen: Living Flesh: +{0} HP Regen on kill (+{1} per point)
+		STR_MeleeDamage: +{0}% Melee Damage (+{1}% per point)
+		STR_MeleeFlatDamage: +{0} Melee Flat Damage (+{1} per point)
+		STR_MeleeKnockback: +{0}% Melee Knockback (+{1}% per point)
+		STR_MeleeArmorPen: +{0} Melee Armor Pen. (+{1} per point)
+		STR_BlackKnight: Black Knight: +{0}% Magic Damage (+{1}% per point)
+		AGI_MoveSpeed: +{0} Movement Speed (+{1} per point, diminished)
+		AGI_AttackSpeed: +{0} Attack Speed (+{1} per point, diminished)
+		AGI_WingTime: +{0} Wing Time (+{1} per point)
+		AGI_ImprovedJump: Improved Jump Height & Speed
+		AGI_DesperadoNoSpeed: Desperado: Ranged attack speed bonus disabled
+		INT_MaxMana: +{0} Max Mana (+{1} per point)
+		INT_ManaRegen: +{0} Mana Regen (+0.5 per point)
+		INT_MagicDamage: +{0}% Magic Damage (+{1}% per point)
+		INT_MagicFlatDamage: +{0} Magic Flat Damage (+{1} per point)
+		INT_ManaCost: -{0} Mana Cost (Diminishing)
+		INT_MagicArmorPen: +{0} Magic Armor Pen. (+{1} per point)
+		INT_BlackKnight: Black Knight: +{0}% Melee Damage (+{1}% per point)
+		INT_SpellweaverDischargeCharge: Spellweaver: +{0} Elemental Discharge Capacity (+{1} per point)
+		LUC_Crit: +{0}% Critical Chance (+{1}% per point)
+		LUC_Luck: +{0} Luck (+{1} per point)
+		LUC_Fishing: +{0} Fishing Power (+{1} per point)
+		LUC_Aggro: -{0} Aggro (-{1} per point)
+		END_Defense: +{0} Defense (+{1} per point)
+		END_ImmuneKnockback: Immune to knockback (Guardian)
+		END_KnockbackResist: +{0}% Knockback Resist (+{1}% per point)
+		END_DamageReductionDisabled: END damage reduction disabled (Guardian)
+		END_DamageReduction: -{0}% Damage Taken (Diminishing)
+		END_KnocksBackNonBosses: Knocks Back Non-Bosses
+		END_Aggro: +{0} Aggro (+{1} per point)
+		POW_GeneralDamage: +{0}% General Damage (+{1}% per point)
+		POW_GeneralFlatDamage: +{0} General Flat Damage (+{1} per point)
+		POW_PierceBonus: +{0} Target Pierce (every {1} POW)
+		POW_OtherDamage: +{0}% Other Damage Types (+0.1% per point)
+		POW_OtherFlatDamage: +{0} Other Flat Damage (+{1}/point)
+		POW_RageDamage: +{0}% Rage Damage (+{1}% per point)
+		POW_RageDuration: +{0}s Rage Duration (+{1}s per point, max {2}s)
+		POW_AdrenalineDuration: +{0}s Adrenaline Duration (+{1}s per point)
+		DEX_RangedDamage: +{0}% Ranged Damage (+{1}% per point)
+		DEX_RangedFlatDamage: +{0} Ranged Flat Damage (+{1} per point)
+		DEX_RangedArmorPen: +{0} Ranged Armor Pen. (+{1} per point)
+		DEX_AmmoSave: +{0}% Ammo Save Chance (+{1}% per point)
+		DEX_DesperadoRicochet: Desperado: +{0}% Ricochet Chance (+{1}% per point, max {2}%)
+		DEX_DesperadoBounces: Desperado: +{0} Ricochet Bounces (+1 per {1} points)
+		SPR_SummonDamage: +{0}% Summon Damage (+{1}% per point)
+		SPR_SummonFlatDamage: +{0} Summon Flat Damage (+{1} per point)
+		SPR_MinionSlots: +{0} Minion Slot{1} (+1 per {2} points)
+		SPR_SentrySlots: +{0} Sentry Slot{1} (+1 per {2} points)
+		SPR_BeastmasterSlots: Beastmaster: +{0} slot{1} per {2} total slots
+		SPR_BeastmasterDamage: Beastmaster: +{0}% damage per unique minion type
+		SPR_ApexSummonerDamage: Apex Summoner: +{0}% damage per unused slot (single minion type only)
+		SPR_NecromancerSoulReserve: Necromancer: {0} Soul Capacity (+1 per {1} points)
+		SPR_NecromancerSoulDuration: Necromancer: +{0}s Soul Duration (+{1}s per point)
+		SPR_NecromancerThrallsLimit: Necromancer: Max {0} Active Thralls (+1 per {1} points)
+		SPR_NecromancerThrallDamage: Necromancer: +{0}% Thrall Damage (+{1}% per point)
+		TCH_MiningSpeed: +{0}% Mining Speed (+{1}% per point)
+		TCH_BuildSpeed: +{0}% Build Speed (+{1}% per point)
+		TCH_TilesReach: +{0} Tiles Reach (+{1} per point)
+		TCH_NoEffects: No active TCH effects.
+		RGE_RogueDamage: +{0}% Rogue Damage (+{1}% per point)
+		RGE_MaxStealth: +{0} Max Stealth (+{1} per point)
+		RGE_Velocity: +{0}% Rogue Velocity (+{1}% per point)
+		RGE_AmmoCost: -{0}% Rogue Ammo Cost (-{1}% per point)
+		RGE_StealthRegen: +{0}% Rogue Stealth Regeneration (+{1}% per point)
+		RGE_Stealth50: Stealth Strikes cost 50%
+		RGE_Stealth75: Stealth Strikes cost 75%
+		RGE_Stealth90: Stealth Strikes cost 90%
+		BRD_SymphonicDamage: +{0}% Symphonic Damage (+{1}% per point)
+		BRD_SymphonicArmorPen: +{0} Symphonic Armor Pen. (+{1} per point)
+		BRD_MaxInspiration: Max Inspiration: +1 per {0} points (Thorium total caps at 30)
+		BRD_EmpowermentDuration: +{0}s Empowerment Duration (+{1}s per point)
+		HLR_RadiantDamage: +{0}% Radiant Damage (+{1}% per point)
+		HLR_RadiantArmorPen: +{0} Radiant Armor Pen. (+{1} per point)
+		HLR_HealingPower: +{0} Healing Power (+{1} per {2} points)
+		HLR_ImprovedLifeRecovery: Improved Life Recovery
+		CLK_ClickDamage: +{0}% Click Damage (+{1}% per point)
+		CLK_ClickRadius: +{0} Click Radius Units (+{1} units per point)
+		CLK_EffectsDiminishing: -{0}% Clicks for Effects (Diminishing)
+		PST_MaxPosture: +{0} Max Posture (+{1} per point)
+		PST_PostureDamage: +{0} Posture Damage Flat Bonus (+{1} per point)
+		PST_BlockDamageReduction: +{0}% Block Damage Reduction (diminishing)
+		Generic_Damage: +{0}% {1} Damage (+{2}% per point)
+	}
+}
+
 Keybinds: {
 	"Toggle Stataria UI.DisplayName": Toggle Stataria UI
 	"AGI Teleport.DisplayName": Teleport
@@ -1713,6 +1972,16 @@ Configs: {
 			Tooltip: Ranged critical strike damage bonus (percentage) during Showdown.
 		}
 
+		DesperadoRicochetBlacklist: {
+			Label: Desperado Ricochet Blacklist
+			Tooltip: Weapons or Projectiles in this list will be prevented from ricocheting on critical strikes.
+		}
+
+		DesperadoExtraProjectileBlacklist: {
+			Label: Desperado Extra Projectile Blacklist
+			Tooltip: Weapons or Projectiles in this list will be prevented from spawning extra projectiles (Tempo).
+		}
+
 		BeastmasterDamagePerUniqueMinion: {
 			Label: Damage Per Unique Minion
 			Tooltip: Percentage summon damage bonus gained per unique active minion type.
@@ -2988,259 +3257,6 @@ RoleEffects: {
 		KillRegen: • Kill Regen: Killing enemies grants a steady +{0} health regen +{1} per VIT
 		PassiveRegen: • Constant Regen: Regenerate {0}% Max HP every {1}s (unaffected by damage delay)
 		FleshClone: • Flesh Clone: Sacrifice {0}% current HP to summon a decoy clone. Deals {1}x sacrificed HP as explosion damage on death ({2}s duration, {3}s cooldown)
-	}
-}
-
-UI: {
-	ConfigCenter: Config Center
-	CloseCustomConfig: Close Custom Config
-	Uncategorized: Uncategorized
-	HoverTooltip: Hover over a setting to see its description.
-	ReloadRequired: A reload is required for this setting to take effect.
-	SearchPlaceholder: Search settings...
-	SaveConfig: Save Config File
-	LoadConfig: Load Config File
-	SetDefaults: Set Defaults
-	SocketedCoresHeader: Socketed Cores:
-	CoreDamage: +{0}% Damage
-	CoreKnockback: +{0}% Knockback
-	CoreCrit: +{0}% Crit
-	CoreDefense: +{0} Defense
-	CoreVitality: +{0} Max Health
-	CoreEvasion: +{0}% Evade Chance
-	EnemyLevel: Lv.{0}
-	CooldownHUDDragInstruction: Hold Left Control or Left Alt to drag the Cooldown HUD
-	NecromancerHUDDragInstruction: Hold Left Control or Left Alt to drag the Necromancer HUD
-	CooldownHUDPlaceholder: HUD
-	CooldownHUDDragLabel: Cooldown HUD (Drag)
-	NecromancerHUDReserve: Reserve
-	NecromancerHUDStats: DMG: {0}  •  Thralls: {1}/{2}
-
-	XPVerification: {
-		Title: Suspicious XP Gain Detected
-		Accept: Accept
-		Reject: Reject
-		AcceptAll: Accept All
-		RejectAll: Reject All
-		XPAmount: XP Amount: {0:N0}
-		Source: Source: {0}
-		PendingGains: "{0} suspicious XP gains pending"
-	}
-
-	TabBar: {
-		Stats: Stats
-		Abilities: Abilities
-		Roles: Roles
-		Socketing: Socketing
-	}
-
-	PlayerDisplay: {
-		Level: Lv.
-		RebirthPrefix: R
-		RebirthTitle: Rebirth {0}
-		LevelIndicator: Lv.{0}
-	}
-
-	SkillTree: {
-		Title: Rebirth Abilities
-		RebirthPoints: Rebirth Points: {0}
-		ResetButton: RESET
-		ShowHidden: Show Hidden
-		Cost: Cost: {0} RP
-		Hide: Hide
-		Upgrade: Upgrade
-		Unlocked: Unlocked
-		Unlock: Unlock
-		ToggleOn: On
-		ToggleOff: Off
-		RefundedRP: +{0} RP Refunded!
-		ResetAbilitiesTooltip: Reset all rebirth abilities and refund your Rebirth Points
-		ShowHiddenTooltip: Toggle visibility of hidden abilities
-		HideTooltip: Hide this ability from the list (can be shown again via Show Hidden)
-	}
-
-	BulkAllocation: {
-		Header: Allocation Amount:
-		HeaderTooltip: The number of stat points allocated per click
-		ButtonTooltip: Set allocation amount to {0}
-	}
-
-	RoleSelection: {
-		Title: ROLE SELECTION
-		RebirthPoints: Rebirth Points: {0}
-		ActiveRole: Active Role: {0}
-		ActiveRoleDeactivated: Active Role: {0} (Deactivated)
-		ActiveRoleNone: Active Role: None
-		IndicatorActive: ● ACTIVE
-		IndicatorDeactivated: ● DEACTIVATED
-		EffectsHeader: Effects:
-		DeactivateButton: DEACTIVATE
-		ReactivateButton: REACTIVATE
-		LockedRole: LOCKED - Requires Rebirth 2
-		SwitchCostButton: SWITCH - Cost: {0} RP
-		SelectFreeButton: SELECT (Free)
-		AscendButton: ASCEND
-		AscendRequirements: Requires Rebirth {0} & {1} RP
-		AscendReady: Ready to Ascend! Click to evolve into the Angel.
-		ConfirmSwitch: CONFIRM?
-		ConfirmAscend: CONFIRM?
-	}
-
-	Socketing: {
-		Title: Socketing System
-		RebirthPoints: Your RP: {0}
-		ItemNone: Item: ---
-		SlotsNone: Slots: - / -
-		CompatibleCoresTitle: Compatible Cores
-		AttachedCoresTitle: Attached Cores:
-		ExpandSlotButton: Expand Slot
-		ConfirmExpand: Confirm?
-		CostNone: Cost: --- RP
-		AttachCoreButton: Attach Core
-		ExtractCoreButton: Extract Core
-		ItemPrefix: "Item: "
-		PlaceholderCores:
-			'''
-			(Place an item to see
-			 compatible cores)
-			'''
-		ItemDisplay: Item: {0}
-		SlotsDisplay: Slots: {0} / {1}
-		CostRP: Cost: {0} RP
-		CoreCountDisplay: "{0}: x{1}"
-		EmptyDash: ---
-		AttachedCoreDisplay: > {0} (x{1})
-	}
-
-	StatPanel: {
-		LevelText: Level: {0}
-		PointsText: Points: {0}
-		XPText: XP: {0} / {1}
-		RPText: RP: {0}
-		StatLabel: "{0}: {1}"
-		StatLabelGhost: "{0}: {1} (+{2})"
-		ResetStats: Reset Stats
-		Rebirth: Rebirth
-		Auto: Auto
-		ResetStatsTooltip: Reset all stats for free
-		RebirthReqLevel: Requires Level {0}
-		RebirthXPBonusDesc: +{0}% permanent XP bonus per rebirth level
-		RebirthResetsStats: Resets your level and stat points
-		RebirthKeepsStats: Resets your level but keeps allocated stat points
-		RebirthResetsBosses: Resets boss kill flags for XP rewards
-		AutoTooltip: Toggle automatic point allocation to checked stats
-		AutoAllocateTooltip: Check to auto-allocate points to this stat
-		RequireLevelPrompt: Requires level {0}!
-		ConfirmRebirthPrompt: Are you sure you want to Rebirth?
-		ConfirmRebirth: Confirm Rebirth
-		ConfirmReset: Confirm Reset
-		UnknownStat: Unknown Stat
-		XPInfoTitle: XP System Info:
-		StatPointsPerLevelBonus: Stat Points per Level: {0} + {1} (Rebirth Bonus) = {2}
-		StatPointsPerLevel: Stat Points per Level: {0}
-		DamageXP: Damage XP: {0}x damage dealt
-		KillXP: Kill XP: {0}x enemy max health
-		BossXPTitle: Boss XP:
-		BossXPFlat: "{0} flat XP"
-		BossXPPercent: "{0}% of next level"
-		RebirthXPBonus: Rebirth XP Bonus: +{0} ({1} × {2})
-		LevelCapNone: Level Cap: None (or very high)
-		DynamicLevelCap: Dynamic Level Cap (Current Cycle): {0}
-		LevelCap: Level Cap: {0}
-		StatCapsProgressive: Stat Caps: Base × {0} (Progressive)
-		StatCapsBase: Stat Caps: Base values
-		XPSplit: XP is split evenly among all eligible players
-		XPProximity: Players must be within {0} pixels of enemies to get XP
-		VIT_MaxHealth: +{0} Max Health (+{1} per point)
-		VIT_RegenDisabled: VIT regeneration effects disabled
-		VIT_HpSecReduced: +{0} HP/sec (+{1} per point, Guardian reduced)
-		VIT_LifeRegenReduced: +{0} Life Regen (+{1} per point, Guardian reduced)
-		VIT_HpSec: +{0} HP/sec (+{1} per point)
-		VIT_LifeRegen: +{0} Life Regen (+0.5 per point)
-		VIT_Healing: +{0}% Healing (+{1}% per point)
-		LivingFleshLockout: Living Flesh: Lockout (Disabled, returns 0)
-		VIT_LivingFleshRegen: Living Flesh: +{0} HP Regen on kill (+{1} per point)
-		STR_MeleeDamage: +{0}% Melee Damage (+{1}% per point)
-		STR_MeleeFlatDamage: +{0} Melee Flat Damage (+{1} per point)
-		STR_MeleeKnockback: +{0}% Melee Knockback (+{1}% per point)
-		STR_MeleeArmorPen: +{0} Melee Armor Pen. (+{1} per point)
-		STR_BlackKnight: Black Knight: +{0}% Magic Damage (+{1}% per point)
-		AGI_MoveSpeed: +{0} Movement Speed (+{1} per point, diminished)
-		AGI_AttackSpeed: +{0} Attack Speed (+{1} per point, diminished)
-		AGI_WingTime: +{0} Wing Time (+{1} per point)
-		AGI_ImprovedJump: Improved Jump Height & Speed
-		AGI_DesperadoNoSpeed: Desperado: Ranged attack speed bonus disabled
-		INT_MaxMana: +{0} Max Mana (+{1} per point)
-		INT_ManaRegen: +{0} Mana Regen (+0.5 per point)
-		INT_MagicDamage: +{0}% Magic Damage (+{1}% per point)
-		INT_MagicFlatDamage: +{0} Magic Flat Damage (+{1} per point)
-		INT_ManaCost: -{0} Mana Cost (Diminishing)
-		INT_MagicArmorPen: +{0} Magic Armor Pen. (+{1} per point)
-		INT_BlackKnight: Black Knight: +{0}% Melee Damage (+{1}% per point)
-		INT_SpellweaverDischargeCharge: Spellweaver: +{0} Elemental Discharge Capacity (+{1} per point)
-		LUC_Crit: +{0}% Critical Chance (+{1}% per point)
-		LUC_Luck: +{0} Luck (+{1} per point)
-		LUC_Fishing: +{0} Fishing Power (+{1} per point)
-		LUC_Aggro: -{0} Aggro (-{1} per point)
-		END_Defense: +{0} Defense (+{1} per point)
-		END_ImmuneKnockback: Immune to knockback (Guardian)
-		END_KnockbackResist: +{0}% Knockback Resist (+{1}% per point)
-		END_DamageReductionDisabled: END damage reduction disabled (Guardian)
-		END_DamageReduction: -{0}% Damage Taken (Diminishing)
-		END_KnocksBackNonBosses: Knocks Back Non-Bosses
-		END_Aggro: +{0} Aggro (+{1} per point)
-		POW_GeneralDamage: +{0}% General Damage (+{1}% per point)
-		POW_GeneralFlatDamage: +{0} General Flat Damage (+{1} per point)
-		POW_PierceBonus: +{0} Target Pierce (every {1} POW)
-		POW_OtherDamage: +{0}% Other Damage Types (+0.1% per point)
-		POW_OtherFlatDamage: +{0} Other Flat Damage (+{1}/point)
-		POW_RageDamage: +{0}% Rage Damage (+{1}% per point)
-		POW_RageDuration: +{0}s Rage Duration (+{1}s per point, max {2}s)
-		POW_AdrenalineDuration: +{0}s Adrenaline Duration (+{1}s per point)
-		DEX_RangedDamage: +{0}% Ranged Damage (+{1}% per point)
-		DEX_RangedFlatDamage: +{0} Ranged Flat Damage (+{1} per point)
-		DEX_RangedArmorPen: +{0} Ranged Armor Pen. (+{1} per point)
-		DEX_AmmoSave: +{0}% Ammo Save Chance (+{1}% per point)
-		DEX_DesperadoRicochet: Desperado: +{0}% Ricochet Chance (+{1}% per point, max {2}%)
-		DEX_DesperadoBounces: Desperado: +{0} Ricochet Bounces (+1 per {1} points)
-		SPR_SummonDamage: +{0}% Summon Damage (+{1}% per point)
-		SPR_SummonFlatDamage: +{0} Summon Flat Damage (+{1} per point)
-		SPR_MinionSlots: +{0} Minion Slot{1} (+1 per {2} points)
-		SPR_SentrySlots: +{0} Sentry Slot{1} (+1 per {2} points)
-		SPR_BeastmasterSlots: Beastmaster: +{0} slot{1} per {2} total slots
-		SPR_BeastmasterDamage: Beastmaster: +{0}% damage per unique minion type
-		SPR_ApexSummonerDamage: Apex Summoner: +{0}% damage per unused slot (single minion type only)
-		SPR_NecromancerSoulReserve: Necromancer: {0} Soul Capacity (+1 per {1} points)
-		SPR_NecromancerSoulDuration: Necromancer: +{0}s Soul Duration (+{1}s per point)
-		SPR_NecromancerThrallsLimit: Necromancer: Max {0} Active Thralls (+1 per {1} points)
-		SPR_NecromancerThrallDamage: Necromancer: +{0}% Thrall Damage (+{1}% per point)
-		TCH_MiningSpeed: +{0}% Mining Speed (+{1}% per point)
-		TCH_BuildSpeed: +{0}% Build Speed (+{1}% per point)
-		TCH_TilesReach: +{0} Tiles Reach (+{1} per point)
-		TCH_NoEffects: No active TCH effects.
-		RGE_RogueDamage: +{0}% Rogue Damage (+{1}% per point)
-		RGE_MaxStealth: +{0} Max Stealth (+{1} per point)
-		RGE_Velocity: +{0}% Rogue Velocity (+{1}% per point)
-		RGE_AmmoCost: -{0}% Rogue Ammo Cost (-{1}% per point)
-		RGE_StealthRegen: +{0}% Rogue Stealth Regeneration (+{1}% per point)
-		RGE_Stealth50: Stealth Strikes cost 50%
-		RGE_Stealth75: Stealth Strikes cost 75%
-		RGE_Stealth90: Stealth Strikes cost 90%
-		BRD_SymphonicDamage: +{0}% Symphonic Damage (+{1}% per point)
-		BRD_SymphonicArmorPen: +{0} Symphonic Armor Pen. (+{1} per point)
-		BRD_MaxInspiration: Max Inspiration: +1 per {0} points (Thorium total caps at 30)
-		BRD_EmpowermentDuration: +{0}s Empowerment Duration (+{1}s per point)
-		HLR_RadiantDamage: +{0}% Radiant Damage (+{1}% per point)
-		HLR_RadiantArmorPen: +{0} Radiant Armor Pen. (+{1} per point)
-		HLR_HealingPower: +{0} Healing Power (+{1} per {2} points)
-		HLR_ImprovedLifeRecovery: Improved Life Recovery
-		CLK_ClickDamage: +{0}% Click Damage (+{1}% per point)
-		CLK_ClickRadius: +{0} Click Radius Units (+{1} units per point)
-		CLK_EffectsDiminishing: -{0}% Clicks for Effects (Diminishing)
-		PST_MaxPosture: +{0} Max Posture (+{1} per point)
-		PST_PostureDamage: +{0} Posture Damage Flat Bonus (+{1} per point)
-		PST_BlockDamageReduction: +{0}% Block Damage Reduction (diminishing)
-		Generic_Damage: +{0}% {1} Damage (+{2}% per point)
 	}
 }
 

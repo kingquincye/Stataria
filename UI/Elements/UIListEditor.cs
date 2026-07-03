@@ -12,6 +12,7 @@ using Terraria.ID;
 using Terraria.UI;
 using Terraria.ModLoader.Config;
 using Terraria.ModLoader.Config.UI;
+using Terraria.Localization;
 using Stataria;
 
 namespace Stataria.UI.Elements
@@ -31,11 +32,12 @@ namespace Stataria.UI.Elements
         private bool _isExpanded = false;
         private bool _wasMouseDown;
         private Terraria.ModLoader.Config.ModConfig _rootConfig;
+        private bool _showAddHeld;
         private string _tooltip;
         private bool _reloadRequired;
         private Action<string, bool> _onHover;
 
-        public UIListEditor(string label, PropertyFieldWrapper property, object configInstance, Terraria.ModLoader.Config.ModConfig rootConfig, string tooltip, bool reloadRequired, System.Action<string, bool> onHoverUpdate)
+        public UIListEditor(string label, PropertyFieldWrapper property, object configInstance, Terraria.ModLoader.Config.ModConfig rootConfig, string tooltip, bool reloadRequired, bool showAddHeld, System.Action<string, bool> onHoverUpdate)
         {
             _label = label;
             _property = property;
@@ -43,6 +45,7 @@ namespace Stataria.UI.Elements
             _rootConfig = rootConfig;
             _tooltip = tooltip;
             _reloadRequired = reloadRequired;
+            _showAddHeld = showAddHeld;
             _onHover = onHoverUpdate;
 
             Width.Set(0, 1f);
@@ -191,12 +194,26 @@ namespace Stataria.UI.Elements
             if (_isExpanded)
             {
                 // Draw "Add New Item" Textbox area at the bottom
-                Rectangle addInputRect = new Rectangle((int)dimensions.X + 10, (int)(dimensions.Y + dimensions.Height - 35), (int)dimensions.Width - 100, 26);
-                Rectangle addBtnRect = new Rectangle((int)addInputRect.Right + 10, (int)(dimensions.Y + dimensions.Height - 35), 70, 26);
+                int buttonY = (int)(dimensions.Y + dimensions.Height - 35);
+                Rectangle addInputRect;
+                Rectangle addBtnRect;
+                Rectangle addHeldBtnRect = Rectangle.Empty;
+
+                if (_showAddHeld)
+                {
+                    addInputRect = new Rectangle((int)dimensions.X + 10, buttonY, (int)dimensions.Width - 220, 26);
+                    addBtnRect = new Rectangle((int)addInputRect.Right + 10, buttonY, 70, 26);
+                    addHeldBtnRect = new Rectangle((int)addBtnRect.Right + 10, buttonY, 110, 26);
+                }
+                else
+                {
+                    addInputRect = new Rectangle((int)dimensions.X + 10, buttonY, (int)dimensions.Width - 100, 26);
+                    addBtnRect = new Rectangle((int)addInputRect.Right + 10, buttonY, 70, 26);
+                }
 
                 spriteBatch.Draw(TextureAssets.MagicPixel.Value, addInputRect, (_typingNewItem && !CustomConfigUIState.DialogOpen) ? new Color(80, 40, 100) : new Color(40, 20, 50)); // Purple text box
                 
-                string displayVal = "Type string/int to add...";
+                string displayVal = Language.GetTextValue("Mods.Stataria.UI.TypeListPrompt");
                 if (_typingNewItem && !CustomConfigUIState.DialogOpen)
                 {
                     displayVal = _typedNewItem;
@@ -216,12 +233,39 @@ namespace Stataria.UI.Elements
                 spriteBatch.Draw(TextureAssets.MagicPixel.Value, addBtnRect, hoverAdd ? new Color(170, 50, 200) : new Color(120, 30, 150)); // Bright purple add button
                 Utils.DrawBorderString(spriteBatch, "Add", new Vector2(addBtnRect.X + 20, addBtnRect.Y + 5), Color.White, 0.9f);
 
+                // Draw Add Held Button
+                if (_showAddHeld)
+                {
+                    bool hoverHeld = !CustomConfigUIState.DialogOpen && addHeldBtnRect.Contains(Main.MouseScreen.ToPoint());
+                    spriteBatch.Draw(TextureAssets.MagicPixel.Value, addHeldBtnRect, hoverHeld ? new Color(170, 50, 200) : new Color(120, 30, 150));
+                    Utils.DrawBorderString(spriteBatch, Language.GetTextValue("Mods.Stataria.UI.AddHeldButton"), new Vector2(addHeldBtnRect.X + 15, addHeldBtnRect.Y + 5), Color.White, 0.9f);
+
+                    if (hoverHeld)
+                    {
+                        string helpText = Language.GetTextValue("Mods.Stataria.UI.AddHeldTooltip");
+                        if (Main.gameMenu)
+                        {
+                            helpText = Language.GetTextValue("Mods.Stataria.UI.AddHeldTooltipMenu");
+                        }
+                        else if (Main.LocalPlayer == null || Main.LocalPlayer.HeldItem == null || Main.LocalPlayer.HeldItem.IsAir)
+                        {
+                            helpText = Language.GetTextValue("Mods.Stataria.UI.AddHeldTooltipEmpty");
+                        }
+                        else
+                        {
+                            helpText = Language.GetTextValue("Mods.Stataria.UI.AddHeldTooltipClick", Main.LocalPlayer.HeldItem.Name);
+                        }
+                        _onHover?.Invoke(helpText, false);
+                    }
+                }
+
                 // Input handling
                 if (!CustomConfigUIState.DialogOpen && isMouseDown && !_wasMouseDown)
                 {
                     if (addInputRect.Contains(Main.MouseScreen.ToPoint()))
                     {
                         _typingNewItem = true;
+                        Main.CurrentInputTextTakerOverride = this;
                         Main.clrInput();
                     }
                     else if (addBtnRect.Contains(Main.MouseScreen.ToPoint()))
@@ -229,9 +273,16 @@ namespace Stataria.UI.Elements
                         SoundEngine.PlaySound(SoundID.MenuTick);
                         AddNewItem();
                     }
+                    else if (_showAddHeld && addHeldBtnRect.Contains(Main.MouseScreen.ToPoint()))
+                    {
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                        AddHeldItem();
+                    }
                     else if (!toggleRect.Contains(Main.MouseScreen.ToPoint())) // Don't cancel typing if clicking toggle
                     {
                         _typingNewItem = false;
+                        if (Main.CurrentInputTextTakerOverride == this)
+                            Main.CurrentInputTextTakerOverride = null;
                     }
                 }
 
@@ -244,6 +295,8 @@ namespace Stataria.UI.Elements
                     if (Main.inputTextEscape)
                     {
                         _typingNewItem = false;
+                        if (Main.CurrentInputTextTakerOverride == this)
+                            Main.CurrentInputTextTakerOverride = null;
                     }
                     else if (Main.inputTextEnter)
                     {
@@ -254,6 +307,11 @@ namespace Stataria.UI.Elements
                         _typedNewItem = newText;
                     }
                 }
+            }
+
+            if (!_typingNewItem && Main.CurrentInputTextTakerOverride == this)
+            {
+                Main.CurrentInputTextTakerOverride = null;
             }
 
             _wasMouseDown = isMouseDown;
@@ -282,6 +340,8 @@ namespace Stataria.UI.Elements
 
                 _typedNewItem = "";
                 _typingNewItem = false;
+                if (Main.CurrentInputTextTakerOverride == this)
+                    Main.CurrentInputTextTakerOverride = null;
                 if (_rootConfig != null) 
                 {
                     var saveMethod = typeof(Terraria.ModLoader.Config.ConfigManager).GetMethod("Save", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
@@ -290,6 +350,49 @@ namespace Stataria.UI.Elements
                 RebuildList();
             }
             catch { }
+        }
+
+        private void AddHeldItem()
+        {
+            if (Main.gameMenu) return;
+
+            Player player = Main.LocalPlayer;
+            if (player == null || player.HeldItem == null || player.HeldItem.IsAir)
+                return;
+
+            _typingNewItem = false;
+            if (Main.CurrentInputTextTakerOverride == this)
+                Main.CurrentInputTextTakerOverride = null;
+
+            Item item = player.HeldItem;
+            string itemName = "";
+
+            if (item.ModItem != null)
+            {
+                itemName = item.ModItem.Mod.Name + "/" + item.ModItem.Name;
+            }
+            else
+            {
+                if (ItemID.Search.ContainsId(item.type))
+                {
+                    itemName = ItemID.Search.GetName(item.type);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(itemName))
+            {
+                IList list = GetList();
+                if (list != null && !list.Contains(itemName))
+                {
+                    list.Add(itemName);
+                    if (_rootConfig != null) 
+                    {
+                        var saveMethod = typeof(Terraria.ModLoader.Config.ConfigManager).GetMethod("Save", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+                        if (saveMethod != null) saveMethod.Invoke(null, new object[] { _rootConfig });
+                    }
+                    RebuildList();
+                }
+            }
         }
     }
 }

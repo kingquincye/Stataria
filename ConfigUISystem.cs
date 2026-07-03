@@ -157,6 +157,13 @@ namespace Stataria
             if (Main.MenuUI.CurrentState != CustomConfigUI && Main.InGameUI.CurrentState != CustomConfigUI)
                 return;
 
+            if (Main.CurrentInputTextTakerOverride != null)
+            {
+                Main.CurrentInputTextTakerOverride = null;
+            }
+            Terraria.GameInput.PlayerInput.WritingText = false;
+            Main.blockInput = false;
+
             Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.MenuClose);
 
             if (Main.gameMenu)

@@ -1,3 +1,262 @@
+UI: {
+	ConfigCenter: 配置中心
+	CloseCustomConfig: 关闭自定义配置
+	Uncategorized: 未分类
+	HoverTooltip: 将鼠标悬停在设置上可查看其说明。
+	ReloadRequired: 此设置需要重新加载才能生效。
+	SearchPlaceholder: 搜索设置...
+	SaveConfig: 保存配置文件
+	LoadConfig: 加载配置文件
+	SetDefaults: 恢复默认
+	AddHeldButton: 添加手持
+	AddHeldTooltip: 将您当前手持的武器添加到该黑名单中。
+	AddHeldTooltipMenu: 您必须在游戏内且手持武器才能使用此功能。
+	AddHeldTooltipEmpty: 手持为空。请手持一件武器以进行添加。
+	AddHeldTooltipClick: 点击以添加手持武器: {0}
+	TypeListPrompt: 输入文本/数字进行添加...
+	SocketedCoresHeader: 已镶嵌核心:
+	CoreDamage: +{0}% 伤害
+	CoreKnockback: +{0}% 击退
+	CoreCrit: +{0}% 暴击
+	CoreDefense: +{0} 防御
+	CoreVitality: +{0} 最大生命值
+	CoreEvasion: +{0}% 闪避几率
+	EnemyLevel: Lv.{0}
+	CooldownHUDDragInstruction: 按住左 Ctrl 或左 Alt 键以拖动冷却 HUD
+	NecromancerHUDDragInstruction: 按住左 Ctrl 或左 Alt 键以拖动死灵法师 HUD
+	CooldownHUDPlaceholder: HUD
+	CooldownHUDDragLabel: 冷却 HUD (拖动)
+	NecromancerHUDReserve: 储备
+	NecromancerHUDStats: 伤害: {0}  •  奴仆: {1}/{2}
+
+	XPVerification: {
+		Title: 检测到可疑的经验获取
+		Accept: 接受
+		Reject: 拒绝
+		AcceptAll: 全部接受
+		RejectAll: 全部拒绝
+		XPAmount: 经验量: {0:N0}
+		Source: 来源: {0}
+		PendingGains: "{0} 个可疑的经验获取等待处理"
+	}
+
+	TabBar: {
+		Stats: 属性
+		Abilities: 能力
+		Roles: 职业
+		Socketing: 镶嵌
+	}
+
+	PlayerDisplay: {
+		Level: Lv.
+		RebirthPrefix: R
+		RebirthTitle: 转生 {0}
+		LevelIndicator: Lv.{0}
+	}
+
+	SkillTree: {
+		Title: 转生能力
+		RebirthPoints: 转生点数: {0}
+		ResetButton: 重置
+		ShowHidden: 显示隐藏
+		Cost: 消耗: {0} RP
+		Hide: 隐藏
+		Upgrade: 升级
+		Unlocked: 已解锁
+		Unlock: 解锁
+		ToggleOn: 开启
+		ToggleOff: 关闭
+		RefundedRP: 已返还 +{0} RP！
+		ResetAbilitiesTooltip: 重置所有转生能力并退还您的转生点数
+		ShowHiddenTooltip: 切换隐藏能力的可见性
+		HideTooltip: 从列表中隐藏此能力 (可以通过显示隐藏重新查看)
+	}
+
+	BulkAllocation: {
+		Header: 批量分配数量:
+		HeaderTooltip: 每次点击分配的属性点数量
+		ButtonTooltip: 将分配数量设置为 {0}
+	}
+
+	RoleSelection: {
+		Title: 选择职业
+		RebirthPoints: 转生点数: {0}
+		ActiveRole: 当前职业: {0}
+		ActiveRoleDeactivated: 当前职业: {0} (已禁用)
+		ActiveRoleNone: 当前职业: 无
+		IndicatorActive: ● 激活中
+		IndicatorDeactivated: ● 已禁用
+		EffectsHeader: 职业效果:
+		DeactivateButton: 禁用职业
+		ReactivateButton: 重新激活
+		LockedRole: 未解锁 - 需要转生 2 次
+		SwitchCostButton: 切换职业 - 消耗: {0} RP
+		SelectFreeButton: 选择职业 (免费)
+		AscendButton: 飞升
+		AscendRequirements: 需要转生 {0} 且拥有 {1} RP
+		AscendReady: 准备好飞升了！点击进化为天使。
+		ConfirmSwitch: 确认切换？
+		ConfirmAscend: 确认飞升？
+	}
+
+	Socketing: {
+		Title: 镶嵌系统
+		RebirthPoints: 您的 RP: {0}
+		ItemNone: 物品: ---
+		SlotsNone: 孔位: - / -
+		CompatibleCoresTitle: 兼容的核心
+		AttachedCoresTitle: 已附着核心:
+		ExpandSlotButton: 扩充孔位
+		ConfirmExpand: 确认扩充？
+		CostNone: 消耗: --- RP
+		AttachCoreButton: 镶嵌核心
+		ExtractCoreButton: 提取核心
+		ItemPrefix: "物品: "
+		PlaceholderCores:
+			'''
+			(放入物品以查看
+			 可兼容的核心)
+			'''
+		ItemDisplay: 物品: {0}
+		SlotsDisplay: 孔位: {0} / {1}
+		CostRP: 消耗: {0} RP
+		CoreCountDisplay: "{0}: x{1}"
+		EmptyDash: ---
+		AttachedCoreDisplay: > {0} (x{1})
+	}
+
+	StatPanel: {
+		LevelText: 等级: {0}
+		PointsText: 属性点: {0}
+		XPText: XP: {0} / {1}
+		RPText: RP: {0}
+		StatLabel: "{0}: {1}"
+		StatLabelGhost: "{0}: {1} (+{2})"
+		ResetStats: 洗点
+		Rebirth: 进行转生
+		Auto: 自动
+		ResetStatsTooltip: 免费重置所有分配的属性点
+		RebirthReqLevel: 需要等级 {0}
+		RebirthXPBonusDesc: +{0}% 每个转生等级的永久经验加成
+		RebirthResetsStats: 重置您的等级与属性点
+		RebirthKeepsStats: 重置您的等级但保留已分配的属性点
+		RebirthResetsBosses: 重置首领击杀记录以重新获得经验奖励
+		AutoTooltip: 切换是否自动将获取的点数分配到已勾选的属性上
+		AutoAllocateTooltip: 勾选以自动将点数分配至该属性
+		RequireLevelPrompt: 需要达到等级 {0}！
+		ConfirmRebirthPrompt: 您确定要进行转生吗？
+		ConfirmRebirth: 确认转生
+		ConfirmReset: 确认重置？
+		UnknownStat: 未知属性
+		XPInfoTitle: 经验系统信息:
+		StatPointsPerLevelBonus: 每级属性点: {0} + {1} (转生加成) = {2}
+		StatPointsPerLevel: 每级属性点: {0}
+		DamageXP: 伤害经验: {0}x 造成的伤害
+		KillXP: 击杀经验: {0}x 敌人的最大生命值
+		BossXPTitle: 首领经验加成:
+		BossXPFlat: "{0} 固定 XP"
+		BossXPPercent: "{0}% (升至下级的经验百分比)"
+		RebirthXPBonus: 转生经验加成: +{0} ({1} × {2})
+		LevelCapNone: 等级上限: 无 (或极高)
+		DynamicLevelCap: 动态等级上限 (当前周期): {0}
+		LevelCap: 等级上限: {0}
+		StatCapsProgressive: 属性上限: 基础值 × {0} (随转生递增)
+		StatCapsBase: 属性上限: 基础值
+		XPSplit: 经验在所有符合条件的玩家间平分
+		XPProximity: 玩家必须在距离敌人 {0} 像素的范围内才能获取经验
+		VIT_MaxHealth: +{0} 最大生命值 (+{1} 每点)
+		VIT_RegenDisabled: VIT 生命恢复效果已禁用
+		VIT_HpSecReduced: +{0} HP/秒 (+{1} 每点, 守护者效果已削弱)
+		VIT_LifeRegenReduced: +{0} 生命恢复速度 (+{1} 每点, 守护者效果已削弱)
+		VIT_HpSec: +{0} HP/秒 (+{1} 每点)
+		VIT_LifeRegen: +{0} 生命恢复速度 (+0.5 每点)
+		VIT_Healing: +{0}% 治疗量提升 (+{1}% 每点)
+		LivingFleshLockout: 活肉: 锁定 (已禁用，返回 0)
+		VIT_LivingFleshRegen: 活肉: 击杀敌人提供 +{0} 生命恢复速度 (+{1} 每点)
+		STR_MeleeDamage: +{0}% 近战伤害 (+{1}% 每点)
+		STR_MeleeFlatDamage: +{0} 近战固定伤害 (+{1} 每点)
+		STR_MeleeKnockback: +{0}% 近战击退 (+{1}% 每点)
+		STR_MeleeArmorPen: +{0} 近战护甲穿透 (+{1} 每点)
+		STR_BlackKnight: 黑骑士: +{0}% 魔法伤害 (+{1}% 每点)
+		AGI_MoveSpeed: +{0} 移动速度 (+{1} 每点, 收益递减)
+		AGI_AttackSpeed: +{0} 攻击速度 (+{1} 每点, 收益递减)
+		AGI_WingTime: +{0} 翅膀飞行时间 (+{1} 每点)
+		AGI_ImprovedJump: 提升跳跃高度与速度
+		AGI_DesperadoNoSpeed: 亡命徒: 远程武器无法获得敏捷攻速加成
+		INT_MaxMana: +{0} 最大法力值 (+{1} 每点)
+		INT_ManaRegen: +{0} 法力恢复速度 (+0.5 每点)
+		INT_MagicDamage: +{0}% 魔法伤害 (+{1}% 每点)
+		INT_MagicFlatDamage: +{0} 魔法固定伤害 (+{1} 每点)
+		INT_ManaCost: -{0} 法力消耗 (收益递减)
+		INT_MagicArmorPen: +{0} 魔法护甲穿透 (+{1} 每点)
+		INT_BlackKnight: 黑骑士: +{0}% 近战伤害 (+{1}% 每点)
+		INT_SpellweaverDischargeCharge: 织法者: +{0} 元素释放充能上限 (+{1} 每点)
+		LUC_Crit: +{0}% 暴击率 (+{1}% 每点)
+		LUC_Luck: +{0} 幸运 (+{1} 每点)
+		LUC_Fishing: +{0} 渔力 (+{1} 每点)
+		LUC_Aggro: -{0} 仇恨值 (-{1} 每点)
+		END_Defense: +{0} 防御力 (+{1} 每点)
+		END_ImmuneKnockback: 免疫击退 (守护者)
+		END_KnockbackResist: +{0}% 击退抗性 (+{1}% 每点)
+		END_DamageReductionDisabled: END 伤害减免已禁用 (守护者)
+		END_DamageReduction: -{0}% 受到的伤害 (收益递减)
+		END_KnocksBackNonBosses: 受击时反弹击退非首领敌人
+		END_Aggro: +{0} 仇恨值 (+{1} 每点)
+		POW_GeneralDamage: +{0}% 通用伤害 (+{1}% 每点)
+		POW_GeneralFlatDamage: +{0} 通用固定伤害 (+{1} 每点)
+		POW_PierceBonus: +{0} 目标穿透 (每 {1} 点力量)
+		POW_OtherDamage: +{0}% 其他类型伤害 (+0.1% 每点)
+		POW_OtherFlatDamage: +{0} 其他固定伤害 (+{1}/每点)
+		POW_RageDamage: +{0}% 暴怒伤害 (+{1}% 每点)
+		POW_RageDuration: +{0}秒 暴怒持续时间 (+{1}秒 每点, 最高 {2}秒)
+		POW_AdrenalineDuration: +{0}秒 肾上腺素持续时间 (+{1}秒 每点)
+		DEX_RangedDamage: +{0}% 远程伤害 (+{1}% 每点)
+		DEX_RangedFlatDamage: +{0} 远程固定伤害 (+{1} 每点)
+		DEX_RangedArmorPen: +{0} 远程护甲穿透 (+{1} 每点)
+		DEX_AmmoSave: +{0}% 弹药节约几率 (+{1}% 每点)
+		DEX_DesperadoRicochet: 亡命徒: 远程暴击有 {0}% 基础几率 (+{1}% 每点DEX，最高 {2}%) 弹射至附近目标
+		DEX_DesperadoBounces: 亡命徒: +{0} 弹射弹跳次数 (+1 每 {1} 点DEX)
+		SPR_SummonDamage: +{0}% 召唤伤害 (+{1}% 每点)
+		SPR_SummonFlatDamage: +{0} 召唤固定伤害 (+{1} 每点)
+		SPR_MinionSlots: +{0} 个仆从栏位 (每 {2} 点提供 1 个)
+		SPR_SentrySlots: +{0} 个哨兵栏位 (每 {2} 点提供 1 个)
+		SPR_BeastmasterSlots: 兽王: +{0} 个栏位 (每拥有 {2} 个基础栏位)
+		SPR_BeastmasterDamage: 兽王: +{0}% 伤害 (每有一种独特的仆从)
+		SPR_ApexSummonerDamage: 巅峰召唤师: +{0}% 伤害 (每有一个闲置栏位，仅限单一种类仆从)
+		SPR_NecromancerSoulReserve: 魂术师: 灵魂上限为 {0} (每 {1} 点 +1)
+		SPR_NecromancerSoulDuration: 魂术师: 灵魂基础存活时间 +{0}秒 (+{1}秒 每点)
+		SPR_NecromancerThrallsLimit: 魂术师: 召唤物最高上限 {0} 只 (每 {1} 点 +1)
+		SPR_NecromancerThrallDamage: 魂术师: 召唤物 +{0}% 额外伤害 (+{1}% 每点)
+		TCH_MiningSpeed: +{0}% 挖矿速度 (+{1}% 每点)
+		TCH_BuildSpeed: +{0}% 建造速度 (+{1}% 每点)
+		TCH_TilesReach: +{0} 格方块触及范围 (+{1} 每点)
+		TCH_NoEffects: 没有激活的 TCH 效果。
+		RGE_RogueDamage: +{0}% 盗贼伤害 (+{1}% 每点)
+		RGE_MaxStealth: +{0} 最大潜行值 (+{1} 每点)
+		RGE_Velocity: +{0}% 盗贼弹幕速度 (+{1}% 每点)
+		RGE_AmmoCost: -{0}% 盗贼弹药消耗 (-{1}% 每点)
+		RGE_StealthRegen: +{0}% 盗贼潜行恢复速度 (+{1}% 每点)
+		RGE_Stealth50: 潜行打击只消耗 50% 潜行值
+		RGE_Stealth75: 潜行打击只消耗 75% 潜行值
+		RGE_Stealth90: 潜行打击只消耗 90% 潜行值
+		BRD_SymphonicDamage: +{0}% 交响伤害 (+{1}% 每点)
+		BRD_SymphonicArmorPen: +{0} 交响护甲穿透 (+{1} 每点)
+		BRD_MaxInspiration: 最大灵感值: 每 {0} 点 +1 (瑟银总上限为 30)
+		BRD_EmpowermentDuration: +{0}秒 赋能持续时间 (+{1}秒 每点)
+		HLR_RadiantDamage: +{0}% 光辉伤害 (+{1}% 每点)
+		HLR_RadiantArmorPen: +{0} 光辉护甲穿透 (+{1} 每点)
+		HLR_HealingPower: +{0} 治疗强度 (每 {2} 点提升 {1})
+		HLR_ImprovedLifeRecovery: 强化的生命恢复效果
+		CLK_ClickDamage: +{0}% 点击伤害 (+{1}% 每点)
+		CLK_ClickRadius: +{0} 点击半径单位 (+{1} 单位 每点)
+		CLK_EffectsDiminishing: -{0}% 触发效果所需点击数 (收益递减)
+		PST_MaxPosture: +{0} 最大架势 (+{1} 每点)
+		PST_PostureDamage: +{0} 固定架势伤害加成 (+{1} 每点)
+		PST_BlockDamageReduction: +{0}% 格挡伤害减免 (收益递减)
+		Generic_Damage: +{0}% {1}伤害 (+{2}% 每点)
+	}
+}
+
 Keybinds: {
 	"Toggle Stataria UI.DisplayName": 切换 Stataria 界面
 	"AGI Teleport.DisplayName": 传送
@@ -1713,6 +1972,16 @@ Configs: {
 			Tooltip: 决斗时刻期间获得的远程爆伤加成（百分比）。
 		}
 
+		DesperadoRicochetBlacklist: {
+			Label: 亡命徒弹射黑名单
+			Tooltip: 此列表中的武器或弹药将无法触发暴击弹射。
+		}
+
+		DesperadoExtraProjectileBlacklist: {
+			Label: 亡命徒额外弹射黑名单
+			Tooltip: 此列表中的武器或弹药将无法通过节拍（Tempo）叠层产生额外弹药。
+		}
+
 		BeastmasterDamagePerUniqueMinion: {
 			Label: 单个独特仆从加成伤害
 			Tooltip: 每个不同类型的当前存活仆从，提供的召唤伤害加成百分比。
@@ -2988,259 +3257,6 @@ RoleEffects: {
 		KillRegen: • 击杀恢复：击杀敌人会获得持续生命回复 +{0}（每点 VIT 额外 +{1}）
 		PassiveRegen: • 持续回复：持续回复 {0}% 最大生命值，间隔为 {1} 秒（不受受伤打断影响）
 		FleshClone: • 血肉克隆体：牺牲 {0}% 当前生命值召唤一个诱饵克隆体。死亡时产生爆炸，造成 {1} 倍于牺牲生命值的伤害（持续 {2} 秒，冷却时间 {3} 秒）
-	}
-}
-
-UI: {
-	ConfigCenter: 配置中心
-	CloseCustomConfig: 关闭自定义配置
-	Uncategorized: 未分类
-	HoverTooltip: 将鼠标悬停在设置上可查看其说明。
-	ReloadRequired: 此设置需要重新加载才能生效。
-	SearchPlaceholder: 搜索设置...
-	SaveConfig: 保存配置文件
-	LoadConfig: 加载配置文件
-	SetDefaults: 恢复默认
-	SocketedCoresHeader: 已镶嵌核心:
-	CoreDamage: +{0}% 伤害
-	CoreKnockback: +{0}% 击退
-	CoreCrit: +{0}% 暴击
-	CoreDefense: +{0} 防御
-	CoreVitality: +{0} 最大生命值
-	CoreEvasion: +{0}% 闪避几率
-	EnemyLevel: Lv.{0}
-	CooldownHUDDragInstruction: 按住左 Ctrl 或左 Alt 键以拖动冷却 HUD
-	NecromancerHUDDragInstruction: 按住左 Ctrl 或左 Alt 键以拖动死灵法师 HUD
-	CooldownHUDPlaceholder: HUD
-	CooldownHUDDragLabel: 冷却 HUD (拖动)
-	NecromancerHUDReserve: 储备
-	NecromancerHUDStats: 伤害: {0}  •  奴仆: {1}/{2}
-
-	XPVerification: {
-		Title: 检测到可疑的经验获取
-		Accept: 接受
-		Reject: 拒绝
-		AcceptAll: 全部接受
-		RejectAll: 全部拒绝
-		XPAmount: 经验量: {0:N0}
-		Source: 来源: {0}
-		PendingGains: "{0} 个可疑的经验获取等待处理"
-	}
-
-	TabBar: {
-		Stats: 属性
-		Abilities: 能力
-		Roles: 职业
-		Socketing: 镶嵌
-	}
-
-	PlayerDisplay: {
-		Level: Lv.
-		RebirthPrefix: R
-		RebirthTitle: 转生 {0}
-		LevelIndicator: Lv.{0}
-	}
-
-	SkillTree: {
-		Title: 转生能力
-		RebirthPoints: 转生点数: {0}
-		ResetButton: 重置
-		ShowHidden: 显示隐藏
-		Cost: 消耗: {0} RP
-		Hide: 隐藏
-		Upgrade: 升级
-		Unlocked: 已解锁
-		Unlock: 解锁
-		ToggleOn: 开启
-		ToggleOff: 关闭
-		RefundedRP: 已返还 +{0} RP！
-		ResetAbilitiesTooltip: 重置所有转生能力并退还您的转生点数
-		ShowHiddenTooltip: 切换隐藏能力的可见性
-		HideTooltip: 从列表中隐藏此能力 (可以通过显示隐藏重新查看)
-	}
-
-	BulkAllocation: {
-		Header: 批量分配数量:
-		HeaderTooltip: 每次点击分配的属性点数量
-		ButtonTooltip: 将分配数量设置为 {0}
-	}
-
-	RoleSelection: {
-		Title: 选择职业
-		RebirthPoints: 转生点数: {0}
-		ActiveRole: 当前职业: {0}
-		ActiveRoleDeactivated: 当前职业: {0} (已禁用)
-		ActiveRoleNone: 当前职业: 无
-		IndicatorActive: ● 激活中
-		IndicatorDeactivated: ● 已禁用
-		EffectsHeader: 职业效果:
-		DeactivateButton: 禁用职业
-		ReactivateButton: 重新激活
-		LockedRole: 未解锁 - 需要转生 2 次
-		SwitchCostButton: 切换职业 - 消耗: {0} RP
-		SelectFreeButton: 选择职业 (免费)
-		AscendButton: 飞升
-		AscendRequirements: 需要转生 {0} 且拥有 {1} RP
-		AscendReady: 准备好飞升了！点击进化为天使。
-		ConfirmSwitch: 确认切换？
-		ConfirmAscend: 确认飞升？
-	}
-
-	Socketing: {
-		Title: 镶嵌系统
-		RebirthPoints: 您的 RP: {0}
-		ItemNone: 物品: ---
-		SlotsNone: 孔位: - / -
-		CompatibleCoresTitle: 兼容的核心
-		AttachedCoresTitle: 已附着核心:
-		ExpandSlotButton: 扩充孔位
-		ConfirmExpand: 确认扩充？
-		CostNone: 消耗: --- RP
-		AttachCoreButton: 镶嵌核心
-		ExtractCoreButton: 提取核心
-		ItemPrefix: "物品: "
-		PlaceholderCores:
-			'''
-			(放入物品以查看
-			 可兼容的核心)
-			'''
-		ItemDisplay: 物品: {0}
-		SlotsDisplay: 孔位: {0} / {1}
-		CostRP: 消耗: {0} RP
-		CoreCountDisplay: "{0}: x{1}"
-		EmptyDash: ---
-		AttachedCoreDisplay: > {0} (x{1})
-	}
-
-	StatPanel: {
-		LevelText: 等级: {0}
-		PointsText: 属性点: {0}
-		XPText: XP: {0} / {1}
-		RPText: RP: {0}
-		StatLabel: "{0}: {1}"
-		StatLabelGhost: "{0}: {1} (+{2})"
-		ResetStats: 洗点
-		Rebirth: 进行转生
-		Auto: 自动
-		ResetStatsTooltip: 免费重置所有分配的属性点
-		RebirthReqLevel: 需要等级 {0}
-		RebirthXPBonusDesc: +{0}% 每个转生等级的永久经验加成
-		RebirthResetsStats: 重置您的等级与属性点
-		RebirthKeepsStats: 重置您的等级但保留已分配的属性点
-		RebirthResetsBosses: 重置首领击杀记录以重新获得经验奖励
-		AutoTooltip: 切换是否自动将获取的点数分配到已勾选的属性上
-		AutoAllocateTooltip: 勾选以自动将点数分配至该属性
-		RequireLevelPrompt: 需要达到等级 {0}！
-		ConfirmRebirthPrompt: 您确定要进行转生吗？
-		ConfirmRebirth: 确认转生
-		ConfirmReset: 确认重置？
-		UnknownStat: 未知属性
-		XPInfoTitle: 经验系统信息:
-		StatPointsPerLevelBonus: 每级属性点: {0} + {1} (转生加成) = {2}
-		StatPointsPerLevel: 每级属性点: {0}
-		DamageXP: 伤害经验: {0}x 造成的伤害
-		KillXP: 击杀经验: {0}x 敌人的最大生命值
-		BossXPTitle: 首领经验加成:
-		BossXPFlat: "{0} 固定 XP"
-		BossXPPercent: "{0}% (升至下级的经验百分比)"
-		RebirthXPBonus: 转生经验加成: +{0} ({1} × {2})
-		LevelCapNone: 等级上限: 无 (或极高)
-		DynamicLevelCap: 动态等级上限 (当前周期): {0}
-		LevelCap: 等级上限: {0}
-		StatCapsProgressive: 属性上限: 基础值 × {0} (随转生递增)
-		StatCapsBase: 属性上限: 基础值
-		XPSplit: 经验在所有符合条件的玩家间平分
-		XPProximity: 玩家必须在距离敌人 {0} 像素的范围内才能获取经验
-		VIT_MaxHealth: +{0} 最大生命值 (+{1} 每点)
-		VIT_RegenDisabled: VIT 生命恢复效果已禁用
-		VIT_HpSecReduced: +{0} HP/秒 (+{1} 每点, 守护者效果已削弱)
-		VIT_LifeRegenReduced: +{0} 生命恢复速度 (+{1} 每点, 守护者效果已削弱)
-		VIT_HpSec: +{0} HP/秒 (+{1} 每点)
-		VIT_LifeRegen: +{0} 生命恢复速度 (+0.5 每点)
-		VIT_Healing: +{0}% 治疗量提升 (+{1}% 每点)
-		LivingFleshLockout: 活肉: 锁定 (已禁用，返回 0)
-		VIT_LivingFleshRegen: 活肉: 击杀敌人提供 +{0} 生命恢复速度 (+{1} 每点)
-		STR_MeleeDamage: +{0}% 近战伤害 (+{1}% 每点)
-		STR_MeleeFlatDamage: +{0} 近战固定伤害 (+{1} 每点)
-		STR_MeleeKnockback: +{0}% 近战击退 (+{1}% 每点)
-		STR_MeleeArmorPen: +{0} 近战护甲穿透 (+{1} 每点)
-		STR_BlackKnight: 黑骑士: +{0}% 魔法伤害 (+{1}% 每点)
-		AGI_MoveSpeed: +{0} 移动速度 (+{1} 每点, 收益递减)
-		AGI_AttackSpeed: +{0} 攻击速度 (+{1} 每点, 收益递减)
-		AGI_WingTime: +{0} 翅膀飞行时间 (+{1} 每点)
-		AGI_ImprovedJump: 提升跳跃高度与速度
-		AGI_DesperadoNoSpeed: 亡命徒: 远程武器无法获得敏捷攻速加成
-		INT_MaxMana: +{0} 最大法力值 (+{1} 每点)
-		INT_ManaRegen: +{0} 法力恢复速度 (+0.5 每点)
-		INT_MagicDamage: +{0}% 魔法伤害 (+{1}% 每点)
-		INT_MagicFlatDamage: +{0} 魔法固定伤害 (+{1} 每点)
-		INT_ManaCost: -{0} 法力消耗 (收益递减)
-		INT_MagicArmorPen: +{0} 魔法护甲穿透 (+{1} 每点)
-		INT_BlackKnight: 黑骑士: +{0}% 近战伤害 (+{1}% 每点)
-		INT_SpellweaverDischargeCharge: 织法者: +{0} 元素释放充能上限 (+{1} 每点)
-		LUC_Crit: +{0}% 暴击率 (+{1}% 每点)
-		LUC_Luck: +{0} 幸运 (+{1} 每点)
-		LUC_Fishing: +{0} 渔力 (+{1} 每点)
-		LUC_Aggro: -{0} 仇恨值 (-{1} 每点)
-		END_Defense: +{0} 防御力 (+{1} 每点)
-		END_ImmuneKnockback: 免疫击退 (守护者)
-		END_KnockbackResist: +{0}% 击退抗性 (+{1}% 每点)
-		END_DamageReductionDisabled: END 伤害减免已禁用 (守护者)
-		END_DamageReduction: -{0}% 受到的伤害 (收益递减)
-		END_KnocksBackNonBosses: 受击时反弹击退非首领敌人
-		END_Aggro: +{0} 仇恨值 (+{1} 每点)
-		POW_GeneralDamage: +{0}% 通用伤害 (+{1}% 每点)
-		POW_GeneralFlatDamage: +{0} 通用固定伤害 (+{1} 每点)
-		POW_PierceBonus: +{0} 目标穿透 (每 {1} 点力量)
-		POW_OtherDamage: +{0}% 其他类型伤害 (+0.1% 每点)
-		POW_OtherFlatDamage: +{0} 其他固定伤害 (+{1}/每点)
-		POW_RageDamage: +{0}% 暴怒伤害 (+{1}% 每点)
-		POW_RageDuration: +{0}秒 暴怒持续时间 (+{1}秒 每点, 最高 {2}秒)
-		POW_AdrenalineDuration: +{0}秒 肾上腺素持续时间 (+{1}秒 每点)
-		DEX_RangedDamage: +{0}% 远程伤害 (+{1}% 每点)
-		DEX_RangedFlatDamage: +{0} 远程固定伤害 (+{1} 每点)
-		DEX_RangedArmorPen: +{0} 远程护甲穿透 (+{1} 每点)
-		DEX_AmmoSave: +{0}% 弹药节约几率 (+{1}% 每点)
-		DEX_DesperadoRicochet: 亡命徒: 远程暴击有 {0}% 基础几率 (+{1}% 每点DEX，最高 {2}%) 弹射至附近目标
-		DEX_DesperadoBounces: 亡命徒: +{0} 弹射弹跳次数 (+1 每 {1} 点DEX)
-		SPR_SummonDamage: +{0}% 召唤伤害 (+{1}% 每点)
-		SPR_SummonFlatDamage: +{0} 召唤固定伤害 (+{1} 每点)
-		SPR_MinionSlots: +{0} 个仆从栏位 (每 {2} 点提供 1 个)
-		SPR_SentrySlots: +{0} 个哨兵栏位 (每 {2} 点提供 1 个)
-		SPR_BeastmasterSlots: 兽王: +{0} 个栏位 (每拥有 {2} 个基础栏位)
-		SPR_BeastmasterDamage: 兽王: +{0}% 伤害 (每有一种独特的仆从)
-		SPR_ApexSummonerDamage: 巅峰召唤师: +{0}% 伤害 (每有一个闲置栏位，仅限单一种类仆从)
-		SPR_NecromancerSoulReserve: 魂术师: 灵魂上限为 {0} (每 {1} 点 +1)
-		SPR_NecromancerSoulDuration: 魂术师: 灵魂基础存活时间 +{0}秒 (+{1}秒 每点)
-		SPR_NecromancerThrallsLimit: 魂术师: 召唤物最高上限 {0} 只 (每 {1} 点 +1)
-		SPR_NecromancerThrallDamage: 魂术师: 召唤物 +{0}% 额外伤害 (+{1}% 每点)
-		TCH_MiningSpeed: +{0}% 挖矿速度 (+{1}% 每点)
-		TCH_BuildSpeed: +{0}% 建造速度 (+{1}% 每点)
-		TCH_TilesReach: +{0} 格方块触及范围 (+{1} 每点)
-		TCH_NoEffects: 没有激活的 TCH 效果。
-		RGE_RogueDamage: +{0}% 盗贼伤害 (+{1}% 每点)
-		RGE_MaxStealth: +{0} 最大潜行值 (+{1} 每点)
-		RGE_Velocity: +{0}% 盗贼弹幕速度 (+{1}% 每点)
-		RGE_AmmoCost: -{0}% 盗贼弹药消耗 (-{1}% 每点)
-		RGE_StealthRegen: +{0}% 盗贼潜行恢复速度 (+{1}% 每点)
-		RGE_Stealth50: 潜行打击只消耗 50% 潜行值
-		RGE_Stealth75: 潜行打击只消耗 75% 潜行值
-		RGE_Stealth90: 潜行打击只消耗 90% 潜行值
-		BRD_SymphonicDamage: +{0}% 交响伤害 (+{1}% 每点)
-		BRD_SymphonicArmorPen: +{0} 交响护甲穿透 (+{1} 每点)
-		BRD_MaxInspiration: 最大灵感值: 每 {0} 点 +1 (瑟银总上限为 30)
-		BRD_EmpowermentDuration: +{0}秒 赋能持续时间 (+{1}秒 每点)
-		HLR_RadiantDamage: +{0}% 光辉伤害 (+{1}% 每点)
-		HLR_RadiantArmorPen: +{0} 光辉护甲穿透 (+{1} 每点)
-		HLR_HealingPower: +{0} 治疗强度 (每 {2} 点提升 {1})
-		HLR_ImprovedLifeRecovery: 强化的生命恢复效果
-		CLK_ClickDamage: +{0}% 点击伤害 (+{1}% 每点)
-		CLK_ClickRadius: +{0} 点击半径单位 (+{1} 单位 每点)
-		CLK_EffectsDiminishing: -{0}% 触发效果所需点击数 (收益递减)
-		PST_MaxPosture: +{0} 最大架势 (+{1} 每点)
-		PST_PostureDamage: +{0} 固定架势伤害加成 (+{1} 每点)
-		PST_BlockDamageReduction: +{0}% 格挡伤害减免 (收益递减)
-		Generic_Damage: +{0}% {1}伤害 (+{2}% 每点)
 	}
 }
 

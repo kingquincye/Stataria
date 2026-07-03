@@ -352,6 +352,9 @@ namespace Stataria
             [DefaultValue(20f)][Range(0f, 100f)] public float DesperadoShowdownCritChance { get; set; } = 20f;
             [DefaultValue(30f)][Range(0f, 200f)] public float DesperadoShowdownCritDamage { get; set; } = 30f;
 
+            public List<string> DesperadoRicochetBlacklist { get; set; } = new List<string> { };
+            public List<string> DesperadoExtraProjectileBlacklist { get; set; } = new List<string> { };
+
             [Header("Living_Flesh")]
             [DefaultValue(1.5f)][Range(0.1f, 10f)] public float LivingFleshMaxDamageMultiplier { get; set; } = 1.5f;
             [DefaultValue(0.05f)][Range(0f, 1f)] public float LivingFleshMinDamageMultiplier { get; set; } = 0.05f;

@@ -69,6 +69,12 @@ namespace Stataria.UI
 
         public override void OnDeactivate()
         {
+            if (Main.CurrentInputTextTakerOverride != null)
+            {
+                Main.CurrentInputTextTakerOverride = null;
+            }
+            Terraria.GameInput.PlayerInput.WritingText = false;
+            Main.blockInput = false;
             base.OnDeactivate();
         }
 
@@ -891,7 +897,8 @@ namespace Stataria.UI
             }
             else if (field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof(System.Collections.Generic.List<>))
             {
-                configElementsList.Add(new UI.Elements.UIListEditor(formattedFieldName, field, categoryInstance, CurrentConfig, tooltipString, reloadRequired, onHover));
+                bool showAddHeld = field.Name == "DesperadoRicochetBlacklist" || field.Name == "DesperadoExtraProjectileBlacklist";
+                configElementsList.Add(new UI.Elements.UIListEditor(formattedFieldName, field, categoryInstance, CurrentConfig, tooltipString, reloadRequired, showAddHeld, onHover));
             }
             else if (field.Type == typeof(string))
             {

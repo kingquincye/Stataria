@@ -4,12 +4,18 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Stataria.Globals
 {
     public class DesperadoExtraSource : IEntitySource
     {
         public string Context => "DesperadoExtra";
+        public int SourceItemType { get; }
+        public DesperadoExtraSource(int sourceItemType)
+        {
+            SourceItemType = sourceItemType;
+        }
     }
 
     public class DesperadoRicochetSource : IEntitySource
@@ -19,13 +25,15 @@ namespace Stataria.Globals
         public int BounceCount { get; }
         public int CritChance { get; }
         public System.Collections.Generic.List<int> HitHistory { get; }
+        public int SourceItemType { get; }
 
-        public DesperadoRicochetSource(int ignoreNPCIndex, int bounceCount, int critChance, System.Collections.Generic.List<int> hitHistory)
+        public DesperadoRicochetSource(int ignoreNPCIndex, int bounceCount, int critChance, System.Collections.Generic.List<int> hitHistory, int sourceItemType)
         {
             IgnoreNPCIndex = ignoreNPCIndex;
             BounceCount = bounceCount;
             CritChance = critChance;
             HitHistory = hitHistory != null ? new System.Collections.Generic.List<int>(hitHistory) : new System.Collections.Generic.List<int>();
+            SourceItemType = sourceItemType;
         }
     }
 
@@ -37,9 +45,31 @@ namespace Stataria.Globals
         public int ricochetTargetIgnoreIndex = -1;
         public int ricochetBounceCount = 0;
         public System.Collections.Generic.List<int> recentHitNPCs = new System.Collections.Generic.List<int>();
+        public int sourceItemType = -1;
 
         public override void OnSpawn(Projectile projectile, IEntitySource source)
         {
+            // Propagate source item type
+            if (source is EntitySource_ItemUse itemUse)
+            {
+                sourceItemType = itemUse.Item.type;
+            }
+            else if (source is EntitySource_ItemUse_WithAmmo itemUseAmmo)
+            {
+                sourceItemType = itemUseAmmo.Item.type;
+            }
+            else if (source is EntitySource_Parent parentSource)
+            {
+                if (parentSource.Entity is Projectile parentProj && parentProj.TryGetGlobalProjectile(out DesperadoGlobalProjectile parentGlobal))
+                {
+                    sourceItemType = parentGlobal.sourceItemType;
+                }
+            }
+            else if (source is DesperadoExtraSource extraSource)
+            {
+                sourceItemType = extraSource.SourceItemType;
+            }
+
             if (source is DesperadoRicochetSource ricochetSource)
             {
                 isRicochet = true;
@@ -52,6 +82,7 @@ namespace Stataria.Globals
                     recentHitNPCs.Add(ricochetSource.IgnoreNPCIndex);
                 }
                 projectile.penetrate = 1;
+                sourceItemType = ricochetSource.SourceItemType;
                 return;
             }
 
@@ -98,6 +129,9 @@ namespace Stataria.Globals
             if (!isValidSource)
                 return;
 
+            if (IsBlacklistedForExtraProjectiles(projectile))
+                return;
+
             int stacks = desperadoPlayer.GetTempoStacks();
             var config = ModContent.GetInstance<StatariaConfig>();
             int extraProjCount = 0;
@@ -129,7 +163,7 @@ namespace Stataria.Globals
                 {
                     Vector2 perturbedSpeed = projectile.velocity.RotatedByRandom(MathHelper.ToRadians(config.roleSettings.DesperadoExtraProjectileSpread));
                     int extraProj = Projectile.NewProjectile(
-                        new DesperadoExtraSource(),
+                        new DesperadoExtraSource(sourceItemType),
                         projectile.Center,
                         perturbedSpeed,
                         projectile.type,
@@ -173,6 +207,9 @@ namespace Stataria.Globals
                 return;
 
             if (!projectile.CountsAsClass(DamageClass.Ranged) || !hit.Crit)
+                return;
+
+            if (IsBlacklistedForRicochet(projectile))
                 return;
 
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -234,7 +271,7 @@ namespace Stataria.Globals
                         }
 
                         Projectile.NewProjectile(
-                            new DesperadoRicochetSource(target.whoAmI, ricochetBounceCount + 1, projectile.CritChance, nextHistory),
+                            new DesperadoRicochetSource(target.whoAmI, ricochetBounceCount + 1, projectile.CritChance, nextHistory, sourceItemType),
                             target.Center,
                             newVelocity,
                             projectile.type,
@@ -265,6 +302,7 @@ namespace Stataria.Globals
             binaryWriter.Write(ricochetTargetIgnoreIndex);
             binaryWriter.Write(ricochetBounceCount);
             binaryWriter.Write(projectile.CritChance);
+            binaryWriter.Write(sourceItemType);
 
             binaryWriter.Write(recentHitNPCs.Count);
             foreach (int index in recentHitNPCs)
@@ -279,6 +317,7 @@ namespace Stataria.Globals
             ricochetTargetIgnoreIndex = binaryReader.ReadInt32();
             ricochetBounceCount = binaryReader.ReadInt32();
             projectile.CritChance = binaryReader.ReadInt32();
+            sourceItemType = binaryReader.ReadInt32();
 
             int count = binaryReader.ReadInt32();
             recentHitNPCs.Clear();
@@ -291,6 +330,71 @@ namespace Stataria.Globals
             {
                 projectile.penetrate = 1;
             }
+        }
+
+        private bool IsBlacklistedForRicochet(Projectile projectile)
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config.roleSettings.DesperadoRicochetBlacklist == null)
+                return false;
+
+            return IsProjectileInList(projectile, config.roleSettings.DesperadoRicochetBlacklist);
+        }
+
+        private bool IsBlacklistedForExtraProjectiles(Projectile projectile)
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config.roleSettings.DesperadoExtraProjectileBlacklist == null)
+                return false;
+
+            return IsProjectileInList(projectile, config.roleSettings.DesperadoExtraProjectileBlacklist);
+        }
+
+        private bool IsProjectileInList(Projectile projectile, System.Collections.Generic.List<string> list)
+        {
+            if (list == null || list.Count == 0)
+                return false;
+
+            // 1. Check Projectile type (numeric ID)
+            if (list.Contains(projectile.type.ToString()))
+                return true;
+
+            // 2. Check Projectile Name
+            if (projectile.ModProjectile != null)
+            {
+                if (list.Contains(projectile.ModProjectile.Mod.Name + "/" + projectile.ModProjectile.Name) ||
+                    list.Contains(projectile.ModProjectile.Name))
+                    return true;
+            }
+            else if (ProjectileID.Search.ContainsId(projectile.type))
+            {
+                if (list.Contains(ProjectileID.Search.GetName(projectile.type)))
+                    return true;
+            }
+
+            // 3. Check Source Weapon (numeric ID)
+            if (sourceItemType > ItemID.None && ContentSamples.ItemsByType.TryGetValue(sourceItemType, out Item weaponItem))
+            {
+                if (weaponItem != null)
+                {
+                    if (list.Contains(sourceItemType.ToString()))
+                        return true;
+
+                    if (weaponItem.ModItem != null)
+                    {
+                        if (list.Contains(weaponItem.ModItem.Mod.Name + "/" + weaponItem.ModItem.Name) ||
+                            list.Contains(weaponItem.ModItem.Name))
+                            return true;
+                    }
+                    else if (ItemID.Search.ContainsId(sourceItemType))
+                    {
+                        if (list.Contains(ItemID.Search.GetName(sourceItemType)))
+                            return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private NPC FindNearestNPCTarget(NPC currentTarget, float maxRange)
