@@ -625,6 +625,16 @@ namespace Stataria
             {
                 "Target Dummy", "Scarecrow Dummy", "Super Dummy"
             };
+
+            [Header("Custom_Limit_Toggles")]
+            [DefaultValue(false)]
+            public bool EnableCustomPlayerHP { get; set; } = false;
+
+            [DefaultValue(false)]
+            public bool EnableCustomPlayerDamage { get; set; } = false;
+
+            [DefaultValue(true)]
+            public bool EnableCustomMobHP { get; set; } = true;
         }
     }
 

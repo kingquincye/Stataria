@@ -79,6 +79,48 @@ namespace Stataria
         public int VIT = 0, STR = 0, AGI = 0, INT = 0, LUC = 0, END = 0, POW = 0, DEX = 0, SPR = 0, RGE = 0, TCH = 0, BRD = 0, HLR = 0, CLK = 0, BLH = 0, HNT = 0, GMB = 0, SHM = 0, THR = 0, PST = 0;
         public HashSet<int> rewardedBosses = new();
 
+        public double CustomLifeMax { get; set; } = -1;
+        public double CustomLife { get; set; } = -1;
+        public bool UsesCustomHP => CustomLifeMax > 1000000000 && ModContent.GetInstance<StatariaConfig>().advanced.EnableCustomPlayerHP;
+
+        public double CustomManaMax { get; set; } = -1;
+        public double CustomMana { get; set; } = -1;
+        public bool UsesCustomMana => CustomManaMax > 1000000000 && ModContent.GetInstance<StatariaConfig>().advanced.EnableCustomPlayerHP;
+
+        private int lastExpectedLife = -1;
+        private int lastExpectedMana = -1;
+
+        public static string FormatBigDamage(double damage)
+        {
+            if (damage >= 1e18) return $"{damage / 1e18:F2} Qi";
+            if (damage >= 1e15) return $"{damage / 1e15:F2} Qa";
+            if (damage >= 1e12) return $"{damage / 1e12:F2} T";
+            if (damage >= 1e9) return $"{damage / 1e9:F2} B";
+            if (damage >= 1e6) return $"{damage / 1e6:F2} M";
+            return damage.ToString("N0");
+        }
+
+        public double GetTrueWeaponDamage(Item item)
+        {
+            StatModifier mod = Player.GetDamage(item.DamageType);
+            double baseDamage = item.damage;
+            double mult = (double)mod.Additive * (double)mod.Multiplicative;
+            return (baseDamage + mod.Base) * mult + mod.Flat;
+        }
+
+        public double GetTrueProjDamage(Projectile proj)
+        {
+            Item heldItem = Player.HeldItem;
+            if (heldItem != null && !heldItem.IsAir && heldItem.damage > 0)
+            {
+                double ratio = heldItem.damage > 0 ? (double)proj.damage / heldItem.damage : 1.0;
+                return GetTrueWeaponDamage(heldItem) * ratio;
+            }
+            StatModifier mod = Player.GetDamage(proj.DamageType);
+            double mult = (double)mod.Additive * (double)mod.Multiplicative;
+            return (proj.damage + mod.Base) * mult + mod.Flat;
+        }
+
         public bool AutoAllocateEnabled { get; set; } = false;
         public HashSet<string> AutoAllocateStats { get; private set; } = new HashSet<string>();
         public Dictionary<string, int> GhostStats { get; private set; } = new Dictionary<string, int>();
@@ -92,6 +134,12 @@ namespace Stataria
             StatPoints = 0;
             VIT = STR = AGI = INT = LUC = END = POW = DEX = SPR = RGE = TCH = BRD = HLR = CLK = BLH = HNT = GMB = SHM = THR = PST = 0;
             GhostStats = new Dictionary<string, int>();
+            CustomLifeMax = -1;
+            CustomLife = -1;
+            CustomManaMax = -1;
+            CustomMana = -1;
+            lastExpectedLife = -1;
+            lastExpectedMana = -1;
             rewardedBosses.Clear();
             lastStandCooldownTimer = 0;
             lastStandImmunityTimer = 0;
@@ -1457,6 +1505,29 @@ namespace Stataria
 
             HandleBlackKnightMechanics(item, target, hit, damageDone);
 
+            if (target.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scalingNPC) && scalingNPC.UsesCustomHP && config.advanced.EnableCustomPlayerDamage)
+            {
+                double trueDamage = GetTrueWeaponDamage(item);
+                if (hit.Crit) trueDamage *= 2.0;
+
+                if (trueDamage > damageDone)
+                {
+                    double excess = trueDamage - damageDone;
+                    scalingNPC.CustomLife -= excess;
+
+                    if (scalingNPC.CustomLife <= 0)
+                    {
+                        target.life = 0;
+                        target.checkDead();
+                    }
+
+                    if (trueDamage > 2000000000.0 && Main.netMode != NetmodeID.Server)
+                    {
+                        CombatText.NewText(target.Hitbox, Color.OrangeRed, FormatBigDamage(trueDamage), true, true);
+                    }
+                }
+            }
+
             if (config.advanced.XPBlacklistedNPCs.Any(entry =>
                 entry.Equals(Lang.GetNPCNameValue(target.type), StringComparison.OrdinalIgnoreCase) ||
                 entry.Equals(target.TypeName, StringComparison.OrdinalIgnoreCase) ||
@@ -1482,6 +1553,29 @@ namespace Stataria
             Item heldItem = Player.HeldItem;
             HandleBlackKnightMechanics(heldItem, target, hit, damageDone, proj);
 
+            if (target.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scalingNPC) && scalingNPC.UsesCustomHP && config.advanced.EnableCustomPlayerDamage)
+            {
+                double trueDamage = GetTrueProjDamage(proj);
+                if (hit.Crit) trueDamage *= 2.0;
+
+                if (trueDamage > damageDone)
+                {
+                    double excess = trueDamage - damageDone;
+                    scalingNPC.CustomLife -= excess;
+
+                    if (scalingNPC.CustomLife <= 0)
+                    {
+                        target.life = 0;
+                        target.checkDead();
+                    }
+
+                    if (trueDamage > 2000000000.0 && Main.netMode != NetmodeID.Server)
+                    {
+                        CombatText.NewText(target.Hitbox, Color.OrangeRed, FormatBigDamage(trueDamage), true, true);
+                    }
+                }
+            }
+
             if (config.advanced.XPBlacklistedNPCs.Any(entry =>
                 entry.Equals(Lang.GetNPCNameValue(target.type), StringComparison.OrdinalIgnoreCase) ||
                 entry.Equals(target.TypeName, StringComparison.OrdinalIgnoreCase) ||
@@ -1498,6 +1592,16 @@ namespace Stataria
             ApplyCritGodEffects(item, ref modifiers);
             ApplyBlackKnightMeleeEffects(item, ref modifiers);
             ApplyDesperadoShowdownEffects(item, ref modifiers);
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config.advanced.EnableCustomPlayerDamage)
+            {
+                double trueDamage = GetTrueWeaponDamage(item);
+                if (trueDamage > 2000000000.0)
+                {
+                    modifiers.HideCombatText();
+                }
+            }
         }
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
@@ -1508,6 +1612,16 @@ namespace Stataria
                 ApplyCritGodEffects(item, ref modifiers);
                 ApplyBlackKnightProjectileEffects(proj, ref modifiers);
                 ApplyDesperadoShowdownEffects(proj, ref modifiers);
+
+                var config = ModContent.GetInstance<StatariaConfig>();
+                if (config.advanced.EnableCustomPlayerDamage)
+                {
+                    double trueDamage = GetTrueProjDamage(proj);
+                    if (trueDamage > 2000000000.0)
+                    {
+                        modifiers.HideCombatText();
+                    }
+                }
             }
         }
 
@@ -1772,8 +1886,8 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
 
             int effectiveVIT = GetEffectiveStat("VIT");
-
-            Player.statLifeMax2 += (int)(effectiveVIT * config.statSettings.VIT_HP);
+            long hpBoost = (long)effectiveVIT * (int)config.statSettings.VIT_HP;
+            Player.statLifeMax2 += (int)Math.Min(hpBoost, 2000000000L);
 
             int effectiveSTR = GetEffectiveStat("STR");
 
@@ -1789,8 +1903,8 @@ namespace Stataria
             Player.GetKnockback(DamageClass.Melee) += effectiveSTR * (config.statSettings.STR_Knockback / 100f);
 
             int effectiveINT = GetEffectiveStat("INT");
-
-            Player.statManaMax2 += (int)(effectiveINT * config.statSettings.INT_MP);
+            long mpBoost = (long)effectiveINT * (int)config.statSettings.INT_MP;
+            Player.statManaMax2 += (int)Math.Min(mpBoost, 2000000000L);
             float rawReduction = effectiveINT * config.statSettings.INT_ManaCostReduction / 100f;
             float diminishingReduction = 1f - (1f / (1f + rawReduction));
             Player.manaCost -= diminishingReduction;
@@ -1808,7 +1922,8 @@ namespace Stataria
 
             if (config.statSettings.END_Defense > 0f)
             {
-                Player.statDefense += (int)(effectiveEND * config.statSettings.END_Defense);
+                long defBoost = (long)effectiveEND * (int)config.statSettings.END_Defense;
+                Player.statDefense += (int)Math.Min(defBoost, 2000000000L);
             }
             Player.aggro += (int)(effectiveEND * config.statSettings.END_Aggro);
 
@@ -1873,7 +1988,10 @@ namespace Stataria
             int effectiveTCH = GetEffectiveStat("TCH");
 
             if (config.statSettings.TCH_EnableMiningSpeed)
-                Player.pickSpeed -= effectiveTCH * config.statSettings.TCH_MiningSpeed * 0.01f;
+            {
+                float pickSpeedReduction = effectiveTCH * config.statSettings.TCH_MiningSpeed * 0.01f;
+                Player.pickSpeed = Math.Max(0.05f, Player.pickSpeed - pickSpeedReduction);
+            }
 
             if (config.statSettings.TCH_EnableBuildSpeed)
             {
@@ -2313,6 +2431,55 @@ namespace Stataria
                     SekirariaSupportHelper.SyncPlayerPostureMax(Player);
                 }
             }
+
+            // HP and Mana Clamping for players with values > 1,000,000,000
+            if (Player.statLifeMax2 > 1000000000 && config.advanced.EnableCustomPlayerHP)
+            {
+                if (CustomLifeMax <= 1000000000)
+                {
+                    CustomLifeMax = Player.statLifeMax2;
+                    CustomLife = CustomLifeMax;
+                }
+                else
+                {
+                    double ratio = CustomLifeMax > 0 ? CustomLife / CustomLifeMax : 1.0;
+                    CustomLifeMax = Player.statLifeMax2;
+                    CustomLife = CustomLifeMax * ratio;
+                }
+                Player.statLifeMax2 = 1000000000;
+                Player.statLife = (int)Math.Max(1, Math.Round(1000000000 * (CustomLife / CustomLifeMax)));
+                lastExpectedLife = Player.statLife;
+            }
+            else
+            {
+                CustomLifeMax = -1;
+                CustomLife = -1;
+                lastExpectedLife = -1;
+            }
+
+            if (Player.statManaMax2 > 1000000000 && config.advanced.EnableCustomPlayerHP)
+            {
+                if (CustomManaMax <= 1000000000)
+                {
+                    CustomManaMax = Player.statManaMax2;
+                    CustomMana = CustomManaMax;
+                }
+                else
+                {
+                    double ratio = CustomManaMax > 0 ? CustomMana / CustomManaMax : 1.0;
+                    CustomManaMax = Player.statManaMax2;
+                    CustomMana = CustomManaMax * ratio;
+                }
+                Player.statManaMax2 = 1000000000;
+                Player.statMana = (int)Math.Max(0, Math.Round(1000000000 * (CustomMana / CustomManaMax)));
+                lastExpectedMana = Player.statMana;
+            }
+            else
+            {
+                CustomManaMax = -1;
+                CustomMana = -1;
+                lastExpectedMana = -1;
+            }
         }
 
         public override void PostUpdate()
@@ -2324,6 +2491,31 @@ namespace Stataria
 
             if (levelCapMessageTimer > 0)
                 levelCapMessageTimer--;
+
+            if (UsesCustomHP && lastExpectedLife != -1 && Player.statLife != lastExpectedLife)
+            {
+                int diff = Player.statLife - lastExpectedLife;
+                double scaledDiff = diff * (CustomLifeMax / 1000000000.0);
+                CustomLife = Math.Clamp(CustomLife + scaledDiff, 0, CustomLifeMax);
+
+                Player.statLife = (int)Math.Max(1, Math.Round(1000000000 * (CustomLife / CustomLifeMax)));
+                lastExpectedLife = Player.statLife;
+
+                if (CustomLife <= 0)
+                {
+                    Player.statLife = 0;
+                }
+            }
+
+            if (UsesCustomMana && lastExpectedMana != -1 && Player.statMana != lastExpectedMana)
+            {
+                int diff = Player.statMana - lastExpectedMana;
+                double scaledDiff = diff * (CustomManaMax / 1000000000.0);
+                CustomMana = Math.Clamp(CustomMana + scaledDiff, 0, CustomManaMax);
+
+                Player.statMana = (int)Math.Max(0, Math.Round(1000000000 * (CustomMana / CustomManaMax)));
+                lastExpectedMana = Player.statMana;
+            }
 
             if (lastStandCooldownTimer > 0)
                 lastStandCooldownTimer--;

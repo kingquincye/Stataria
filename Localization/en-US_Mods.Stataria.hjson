@@ -1411,9 +1411,38 @@ Configs: {
 			Label: Scaling Blacklisted NPCs
 		}
 
+		EnableCustomPlayerHP: {
+			Label: Enable Custom Player HP/Mana (Double Precision)
+			Tooltip:
+				'''
+				Allows player max HP and Mana to exceed 2.14 Billion using a custom double-precision layer.
+				When enabled, your maximum survivable single-frame hit is raised to 1 Billion damage.
+				WARNING: This does not disable vanilla hearts/stars HUD. However, because each heart will represent 50,000,000 HP, the vanilla HUD will appear frozen/static. Additionally, if a lot of mana stars are drawn, the game will become extremely laggy, causing freezes and severe CPU performance drops. I highly recommend using a custom resource bar HUD.
+				'''
+		}
+
+		EnableCustomPlayerDamage: {
+			Label: Enable Custom Player Damage (Double Precision)
+			Tooltip:
+				'''
+				Allows player damage to exceed 2.14 Billion when striking mobs using custom double-precision HP.
+				NOTE: Hides standard combat text for hits over 2 Billion, replacing it with formatted custom popups.
+				'''
+		}
+
+		EnableCustomMobHP: {
+			Label: Enable Custom Mob HP (Double Precision)
+			Tooltip:
+				'''
+				Allows mobs and bosses to exceed 2.14 Billion HP. Clamps their vanilla health to 1.5 Billion (MAX_SAFE_HEALTH) to prevent overflow deletions.
+				WARNING: Any hit dealing over 1.5 Billion damage in a single frame will instantly delete the mob (bypassing custom HP), though player hits normally never reach this high.
+				'''
+		}
+
 		Headers: {
 			XP_Blacklist: XP Blacklist
 			Scaling_Blacklist: Scaling Blacklist
+			Custom_Limit_Toggles: Custom Limit Toggles (Double Precision)
 		}
 
 		Tooltip: ""

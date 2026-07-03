@@ -316,7 +316,11 @@ namespace Stataria.UI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            tooltipText?.SetText(Terraria.Localization.Language.GetText("Mods.Stataria.UI.HoverTooltip"));
+            if (tooltipText != null)
+            {
+                tooltipText.VAlign = 0.4f;
+                tooltipText.SetText(Terraria.Localization.Language.GetText("Mods.Stataria.UI.HoverTooltip"), 0.95f, false);
+            }
             reloadWarningText?.SetText("");
             base.Draw(spriteBatch);
 
@@ -633,8 +637,17 @@ namespace Stataria.UI
 
             // Define tooltip action
             Action<string, bool> onHover = (tt, r) => {
-                tooltipText.SetText(string.IsNullOrEmpty(tt) ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.HoverTooltip") : tt);
+                string text = string.IsNullOrEmpty(tt) ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.HoverTooltip") : tt;
+                float scale = 0.95f;
+                if (!string.IsNullOrEmpty(tt) && tt.Length > 100)
+                {
+                    scale = Math.Max(0.55f, 0.95f - (tt.Length - 100) * 0.001f);
+                }
+                tooltipText.VAlign = (tt != null && tt.Length > 150) ? (r ? 0.02f : 0.08f) : 0.4f;
+                tooltipText.SetText(text, scale, false);
                 reloadWarningText.SetText(r ? Terraria.Localization.Language.GetTextValue("Mods.Stataria.UI.ReloadRequired") : "");
+                tooltipText.Recalculate();
+                tooltipPanel.Recalculate();
             };
 
             if (string.IsNullOrEmpty(_searchQuery))
@@ -1051,6 +1064,7 @@ namespace Stataria.UI
 
                     // Remove the signature key before populating so it doesn't cause issues
                     jObject.Remove("$statariaConfig");
+                    ClearConfigCollections(CurrentConfig);
                     Newtonsoft.Json.JsonConvert.PopulateObject(jObject.ToString(), CurrentConfig);
 
                     var saveMethod = typeof(Terraria.ModLoader.Config.ConfigManager).GetMethod("Save", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
@@ -1075,6 +1089,7 @@ namespace Stataria.UI
             {
                 object defaultInstance = Activator.CreateInstance(CurrentConfig.GetType());
                 string defaultJson = Newtonsoft.Json.JsonConvert.SerializeObject(defaultInstance);
+                ClearConfigCollections(CurrentConfig);
                 Newtonsoft.Json.JsonConvert.PopulateObject(defaultJson, CurrentConfig);
 
                 var saveMethod = typeof(Terraria.ModLoader.Config.ConfigManager).GetMethod("Save", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
@@ -1087,6 +1102,64 @@ namespace Stataria.UI
             catch (Exception ex)
             {
                 ShowStatusMessage("Failed to reset defaults: " + ex.Message, Color.Red);
+            }
+        }
+
+        private void ClearConfigCollections(object obj)
+        {
+            if (obj == null) return;
+            var type = obj.GetType();
+
+            if (obj is System.Collections.IList list)
+            {
+                list.Clear();
+                return;
+            }
+
+            var assembly = typeof(CustomConfigUIState).Assembly;
+
+            // Properties
+            foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (!prop.CanRead) continue;
+
+                if (typeof(System.Collections.IList).IsAssignableFrom(prop.PropertyType))
+                {
+                    var val = prop.GetValue(obj) as System.Collections.IList;
+                    if (val != null)
+                    {
+                        val.Clear();
+                    }
+                }
+                else if (prop.PropertyType.IsClass && prop.PropertyType.Assembly == assembly)
+                {
+                    var val = prop.GetValue(obj);
+                    if (val != null)
+                    {
+                        ClearConfigCollections(val);
+                    }
+                }
+            }
+
+            // Fields
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (typeof(System.Collections.IList).IsAssignableFrom(field.FieldType))
+                {
+                    var val = field.GetValue(obj) as System.Collections.IList;
+                    if (val != null)
+                    {
+                        val.Clear();
+                    }
+                }
+                else if (field.FieldType.IsClass && field.FieldType.Assembly == assembly)
+                {
+                    var val = field.GetValue(obj);
+                    if (val != null)
+                    {
+                        ClearConfigCollections(val);
+                    }
+                }
             }
         }
     }

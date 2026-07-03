@@ -122,9 +122,10 @@ namespace Stataria
                 case "setlevel":
                     if (!IsAdmin(caller)) return;
 
-                    if (args.Length >= 2 && int.TryParse(args[1], out int level))
+                    if (args.Length >= 2 && long.TryParse(args[1], out long levelLong))
                     {
-                        rpg.Level = Math.Max(1, level);
+                        int level = (int)Math.Clamp(levelLong, 1, int.MaxValue);
+                        rpg.Level = level;
                         rpg.XP = 0L;
                         rpg.XPToNext = (long)(100L * Math.Pow(rpg.Level, cfg.generalBalance.LevelScalingFactor));
 
@@ -158,9 +159,10 @@ namespace Stataria
                 case "setrebirth":
                     if (!IsAdmin(caller)) return;
 
-                    if (args.Length >= 2 && int.TryParse(args[1], out int rebirthVal))
+                    if (args.Length >= 2 && long.TryParse(args[1], out long rebirthValLong))
                     {
-                        rpg.RebirthCount = Math.Max(0, rebirthVal);
+                        int rebirthVal = (int)Math.Clamp(rebirthValLong, 0, int.MaxValue);
+                        rpg.RebirthCount = rebirthVal;
 
                         if (Main.netMode != NetmodeID.SinglePlayer)
                         {
@@ -179,8 +181,9 @@ namespace Stataria
                     {
                         if (args[1].ToLower() == "rp")
                         {
-                            if (args.Length >= 3 && int.TryParse(args[2], out int rebirthPts))
+                            if (args.Length >= 3 && long.TryParse(args[2], out long rebirthPtsLong))
                             {
+                                int rebirthPts = (int)Math.Clamp(rebirthPtsLong, 0, int.MaxValue);
                                 rpg.RebirthPoints = rebirthPts;
 
                                 if (Main.netMode != NetmodeID.SinglePlayer)
@@ -192,8 +195,9 @@ namespace Stataria
                             }
                             else caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.SetPointsRPUsage"), Color.Red);
                         }
-                        else if (int.TryParse(args[1], out int statPts))
+                        else if (long.TryParse(args[1], out long statPtsLong))
                         {
+                            int statPts = (int)Math.Clamp(statPtsLong, 0, int.MaxValue);
                             rpg.StatPoints = statPts;
 
                             if (Main.netMode != NetmodeID.SinglePlayer)
@@ -214,8 +218,9 @@ namespace Stataria
                 case "setstat":
                     if (!IsAdmin(caller)) return;
 
-                    if (args.Length >= 3 && int.TryParse(args[2], out int val))
+                    if (args.Length >= 3 && long.TryParse(args[2], out long valLong))
                     {
+                        int val = (int)Math.Clamp(valLong, 0, int.MaxValue);
                         bool success = SetStatByName(rpg, args[1], val);
                         if (success)
                         {

@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Stataria.Projectiles;
+using Stataria.Buffs;
 
 namespace Stataria
 {
@@ -148,7 +149,9 @@ namespace Stataria
                 if (dmgTaken > 0)
                 {
                     int storedRally = (int)(dmgTaken * (config.roleSettings.LivingFleshRallyStorePercent / 100f));
-                    RallyableHealth = Math.Min(Player.statLifeMax2 - Player.statLife, RallyableHealth + storedRally);
+                    // Calculate missing health *after* the damage is applied
+                    int potentialMissingHP = Player.statLifeMax2 - (Player.statLife - dmgTaken);
+                    RallyableHealth = Math.Min(potentialMissingHP, RallyableHealth + storedRally);
                     RallyTimer = (int)(config.roleSettings.LivingFleshRallyDuration * 60f);
                 }
             };

@@ -25,7 +25,7 @@ namespace Stataria
         public bool hasBeenScaled = false;
         public double CustomLifeMax { get; set; } = -1;
         public double CustomLife { get; set; } = -1;
-        public bool UsesCustomHP => CustomLifeMax > 0;
+        public bool UsesCustomHP => CustomLifeMax > 0 && ModContent.GetInstance<StatariaConfig>().advanced.EnableCustomMobHP;
         private int lastLife = -1;
         private Vector2 _customGrabbedBarPos;
         private bool _drawCustomBarThisFrame;
@@ -578,7 +578,7 @@ namespace Stataria
             double targetMaxHealth = (double)npc.lifeMax * healthMult + additionalFlatHealth;
 
             const int MAX_SAFE_HEALTH = 1500000000;
-            bool useCustomHP = Main.netMode == NetmodeID.MultiplayerClient ? (CustomLifeMax > MAX_SAFE_HEALTH) : (targetMaxHealth > MAX_SAFE_HEALTH);
+            bool useCustomHP = config.advanced.EnableCustomMobHP && (Main.netMode == NetmodeID.MultiplayerClient ? (CustomLifeMax > MAX_SAFE_HEALTH) : (targetMaxHealth > MAX_SAFE_HEALTH));
 
             if (useCustomHP)
             {

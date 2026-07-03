@@ -88,5 +88,35 @@ namespace Stataria
             }
             return null;
         }
+
+        public override void ModifyTooltips(Item item, System.Collections.Generic.List<TooltipLine> tooltips)
+        {
+            var player = Main.LocalPlayer;
+            if (player == null || !player.active)
+                return;
+
+            var rpg = player.GetModPlayer<RPGPlayer>();
+
+            if (item.damage > 0)
+            {
+                TooltipLine damageLine = tooltips.Find(x => x.Name == "Damage" && x.Mod == "Terraria");
+                if (damageLine != null)
+                {
+                    double trueDamage = rpg.GetTrueWeaponDamage(item);
+                    if (trueDamage > 1000000.0)
+                    {
+                        var config = ModContent.GetInstance<StatariaConfig>();
+                        if (trueDamage < 2000000000.0 || config.advanced.EnableCustomPlayerDamage)
+                        {
+                            string[] parts = damageLine.Text.Split(' ', 2);
+                            if (parts.Length > 1)
+                            {
+                                damageLine.Text = $"{RPGPlayer.FormatBigDamage(trueDamage)} {parts[1]}";
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

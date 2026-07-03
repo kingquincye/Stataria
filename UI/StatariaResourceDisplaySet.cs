@@ -146,7 +146,8 @@ namespace Stataria
 
                 if (rallyFillWidth > 0)
                 {
-                    Color rallyColor = Color.Red * 0.4f; // Faded red, not orange!
+                    float pulse = 0.5f + 0.3f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10f);
+                    Color rallyColor = new Color(255, 120, 120) * pulse; // Dynamic, highly visible pulsing coral/blood color
                     spriteBatch.Draw(
                         pixelTexture,
                         new Rectangle((int)healthBarPosition.X + healthFillWidth, (int)healthBarPosition.Y, rallyFillWidth, barHeight),
@@ -157,8 +158,9 @@ namespace Stataria
 
             DrawBarBorders(spriteBatch, healthBarPosition, barWidth, barHeight);
 
-            int displayHealth = Math.Min(player.statLife, player.statLifeMax2);
-            string healthText = $"{displayHealth}/{player.statLifeMax2}";
+            string healthText = rpgPlayer.UsesCustomHP
+                ? $"{RPGPlayer.FormatBigDamage(rpgPlayer.CustomLife)}/{RPGPlayer.FormatBigDamage(rpgPlayer.CustomLifeMax)}"
+                : $"{Math.Min(player.statLife, player.statLifeMax2)}/{player.statLifeMax2}";
             DynamicSpriteFont font = FontAssets.ItemStack.Value;
             Vector2 textSize = font.MeasureString(healthText) * textScale;
             Vector2 textPosition = new Vector2(
@@ -194,8 +196,9 @@ namespace Stataria
 
             DrawBarBorders(spriteBatch, manaBarPosition, barWidth, barHeight);
 
-            int displayMana = Math.Min(player.statMana, player.statManaMax2);
-            string manaText = $"{displayMana}/{player.statManaMax2}";
+            string manaText = rpgPlayer.UsesCustomMana
+                ? $"{RPGPlayer.FormatBigDamage(rpgPlayer.CustomMana)}/{RPGPlayer.FormatBigDamage(rpgPlayer.CustomManaMax)}"
+                : $"{Math.Min(player.statMana, player.statManaMax2)}/{player.statManaMax2}";
             DynamicSpriteFont font = FontAssets.ItemStack.Value;
             Vector2 textSize = font.MeasureString(manaText) * textScale;
             Vector2 textPosition = new Vector2(

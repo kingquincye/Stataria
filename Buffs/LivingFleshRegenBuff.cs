@@ -1,12 +1,10 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Stataria
+namespace Stataria.Buffs
 {
     public class LivingFleshRegenBuff : ModBuff
     {
-        public override string Texture => "Stataria/icon";
-
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;

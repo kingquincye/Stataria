@@ -55,9 +55,6 @@ namespace Stataria.Globals
                 return;
             }
 
-            if (!projectile.friendly || projectile.hostile || projectile.trap || projectile.minion || projectile.sentry)
-                return;
-
             if (projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
                 return;
 
@@ -67,6 +64,9 @@ namespace Stataria.Globals
 
             var desperadoPlayer = player.GetModPlayer<DesperadoPlayer>();
             if (desperadoPlayer == null || !desperadoPlayer.IsDesperadoActive)
+                return;
+
+            if (!projectile.friendly || projectile.hostile || projectile.trap || projectile.minion || projectile.sentry)
                 return;
 
             // Prevent recursion: do not duplicate our own extra projectiles
@@ -83,10 +83,13 @@ namespace Stataria.Globals
             {
                 isValidSource = true;
             }
-            else if (source is EntitySource_Parent parentSource && parentSource.Entity is Projectile parentProj)
+            else if (source is EntitySource_Parent parentSource)
             {
-                // Trace parent to see if it is a holdout or spawned by the player
-                if (parentProj.owner == player.whoAmI && parentProj.friendly)
+                if (parentSource.Entity is Player parentPlayer && parentPlayer.whoAmI == player.whoAmI)
+                {
+                    isValidSource = true;
+                }
+                else if (parentSource.Entity is Projectile parentProj && parentProj.owner == player.whoAmI && parentProj.friendly)
                 {
                     isValidSource = true;
                 }
@@ -140,7 +143,17 @@ namespace Stataria.Globals
 
                     if (extraProj >= 0 && extraProj < Main.maxProjectiles)
                     {
-                        Main.projectile[extraProj].CritChance = projectile.CritChance;
+                        Projectile extra = Main.projectile[extraProj];
+                        extra.CritChance = projectile.CritChance;
+
+                        // Ensure extra projectiles can hit independently by forcing local immunity
+                        if (!extra.usesLocalNPCImmunity)
+                        {
+                            extra.usesIDStaticNPCImmunity = false;
+                            extra.usesLocalNPCImmunity = true;
+                            // Set a local hit cooldown. If the original had static cooldown, use it; otherwise default to 10
+                            extra.localNPCHitCooldown = projectile.usesIDStaticNPCImmunity ? projectile.idStaticNPCHitCooldown : 10;
+                        }
                     }
                 }
             }

@@ -65,7 +65,7 @@ namespace Stataria.UI
             // 2. Rallyable Health segment (translucent Red)
             if (lfPlayer.RallyableHealth > 0 && lfPlayer.RallyTimer > 0)
             {
-                float rallyPercent = player.statLifeMax2 > 0 ? Math.Clamp((float)lfPlayer.RallyableHealth / player.statLifeMax2, 0f, 1f) : 0f;
+                float rallyPercent = player.statLifeMax2 > 0 ? MathHelper.Clamp((float)lfPlayer.RallyableHealth / player.statLifeMax2, 0f, 1f) : 0f;
                 int rallyWidth = (int)(width * rallyPercent);
 
                 if (hpWidth + rallyWidth > width)
@@ -75,7 +75,8 @@ namespace Stataria.UI
 
                 if (rallyWidth > 0)
                 {
-                    Color rallyColor = Color.Red * 0.4f; // Translucent red
+                    float pulse = 0.5f + 0.3f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10f);
+                    Color rallyColor = new Color(255, 120, 120) * pulse; // Dynamic, highly visible pulsing coral/blood color
                     Main.spriteBatch.Draw(pixel, new Rectangle(bgRect.X + hpWidth, bgRect.Y, rallyWidth, (int)height), rallyColor);
                 }
             }

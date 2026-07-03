@@ -189,5 +189,107 @@ namespace Stataria
                 }
             }
         }
+
+        private Vector2[] originalPositions = new Vector2[256];
+        private Vector2[] originalOldPositions = new Vector2[256];
+        private Vector2[] originalVelocities = new Vector2[256];
+        private bool[] isSpoofed = new bool[256];
+        private Rectangle[] originalTargetRects = new Rectangle[200];
+        private bool[] spoofedTargetRect = new bool[200];
+
+        private Projectile FindPlayerClone(int playerOwner)
+        {
+            int cloneType = ModContent.ProjectileType<global::Stataria.Projectiles.FleshCloneProjectile>();
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile proj = Main.projectile[i];
+                if (proj.active && proj.type == cloneType && proj.owner == playerOwner)
+                {
+                    return proj;
+                }
+            }
+            return null;
+        }
+
+        public override void PreUpdateNPCs()
+        {
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config == null || !config.roleSettings.EnableRoleSystem) return;
+
+            // 1. Spoof player physics for ALL active players that have a decoy clone
+            for (int i = 0; i < Main.maxPlayers; i++)
+            {
+                Player player = Main.player[i];
+                if (player.active && !player.dead)
+                {
+                    var lfPlayer = player.GetModPlayer<LivingFleshPlayer>();
+                    if (lfPlayer != null && lfPlayer.IsLivingFleshActive)
+                    {
+                        Projectile clone = FindPlayerClone(player.whoAmI);
+                        if (clone != null)
+                        {
+                            originalPositions[i] = player.position;
+                            originalOldPositions[i] = player.oldPosition;
+                            originalVelocities[i] = player.velocity;
+                            isSpoofed[i] = true;
+
+                            player.position = clone.position;
+                            player.oldPosition = clone.position;
+                            player.velocity = clone.velocity;
+                        }
+                    }
+                }
+            }
+
+            // 2. Spoof npc.targetRect for any NPC targeting a spoofed player
+            for (int n = 0; n < Main.maxNPCs; n++)
+            {
+                NPC npc = Main.npc[n];
+                if (npc.active && npc.target >= 0 && npc.target < 256 && isSpoofed[npc.target])
+                {
+                    originalTargetRects[n] = npc.targetRect;
+                    spoofedTargetRect[n] = true;
+                    
+                    Projectile clone = FindPlayerClone(npc.target);
+                    if (clone != null)
+                    {
+                        npc.targetRect = clone.Hitbox;
+                    }
+                }
+            }
+        }
+
+        public override void PostUpdateNPCs()
+        {
+            // Restore player physical states
+            for (int i = 0; i < 256; i++)
+            {
+                if (isSpoofed[i])
+                {
+                    Player player = Main.player[i];
+                    if (player.active)
+                    {
+                        player.position = originalPositions[i];
+                        player.oldPosition = originalOldPositions[i];
+                        player.velocity = originalVelocities[i];
+                    }
+                    isSpoofed[i] = false;
+                }
+            }
+
+            // Restore NPC target rects
+            for (int n = 0; n < 200; n++)
+            {
+                if (spoofedTargetRect[n])
+                {
+                    NPC npc = Main.npc[n];
+                    if (npc.active)
+                    {
+                        npc.targetRect = originalTargetRects[n];
+                    }
+                    spoofedTargetRect[n] = false;
+                }
+            }
+        }
     }
 }
