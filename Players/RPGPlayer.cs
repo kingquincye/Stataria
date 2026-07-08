@@ -1886,7 +1886,7 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
 
             int effectiveVIT = GetEffectiveStat("VIT");
-            long hpBoost = (long)effectiveVIT * (int)config.statSettings.VIT_HP;
+            long hpBoost = (long)(effectiveVIT * config.statSettings.VIT_HP);
             Player.statLifeMax2 += (int)Math.Min(hpBoost, 2000000000L);
 
             int effectiveSTR = GetEffectiveStat("STR");
@@ -1903,7 +1903,7 @@ namespace Stataria
             Player.GetKnockback(DamageClass.Melee) += effectiveSTR * (config.statSettings.STR_Knockback / 100f);
 
             int effectiveINT = GetEffectiveStat("INT");
-            long mpBoost = (long)effectiveINT * (int)config.statSettings.INT_MP;
+            long mpBoost = (long)(effectiveINT * config.statSettings.INT_MP);
             Player.statManaMax2 += (int)Math.Min(mpBoost, 2000000000L);
             float rawReduction = effectiveINT * config.statSettings.INT_ManaCostReduction / 100f;
             float diminishingReduction = 1f - (1f / (1f + rawReduction));
@@ -1922,7 +1922,7 @@ namespace Stataria
 
             if (config.statSettings.END_Defense > 0f)
             {
-                long defBoost = (long)effectiveEND * (int)config.statSettings.END_Defense;
+                long defBoost = (long)(effectiveEND * config.statSettings.END_Defense);
                 Player.statDefense += (int)Math.Min(defBoost, 2000000000L);
             }
             Player.aggro += (int)(effectiveEND * config.statSettings.END_Aggro);
