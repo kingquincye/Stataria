@@ -1969,6 +1969,17 @@ namespace Stataria
                     Player.GetDamage(DamageClass.Summon) += summonBonus;
             }
 
+            if (config.statSettings.EnableFlatDamageIncrease)
+            {
+                int effectivePOW = GetEffectiveStat("POW");
+                float summonFlat = effectiveSPR * config.statSettings.SPR_FlatDamage;
+                summonFlat += effectivePOW * config.statSettings.POW_FlatDamage * 0.2f;
+                if (summonFlat > 0f)
+                {
+                    Player.GetDamage(DamageClass.Summon).Flat += summonFlat;
+                }
+            }
+
             if (ActiveRole?.ID == "Beastmaster" && ActiveRole.Status == RoleStatus.Active)
             {
                 Player.maxMinions += beastmasterBonusSlots;
@@ -3132,10 +3143,7 @@ namespace Stataria
                 {
                     flatBonus += effectiveDEX * config.statSettings.DEX_FlatDamage;
                 }
-                if (item.CountsAsClass(DamageClass.Summon))
-                {
-                    flatBonus += effectiveSPR * config.statSettings.SPR_FlatDamage;
-                }
+                // Summon flat damage is handled globally via Player.GetDamage(DamageClass.Summon).Flat in ResetEffects to support summon projectiles
 
                 if (isRogueWeapon)
                     flatBonus += effectiveRGE * config.modIntegration.RGE_FlatDamage;
@@ -3154,21 +3162,23 @@ namespace Stataria
                     flatBonus += GetGenericModFlatDamageBonus(genericModDef.StatName, config);
                 }
 
-                if (!item.CountsAsClass(DamageClass.Melee) &&
-                    !item.CountsAsClass(DamageClass.Ranged) &&
-                    !item.CountsAsClass(DamageClass.Magic) &&
-                    !item.CountsAsClass(DamageClass.Summon) &&
-                    !isRogueWeapon &&
-                    !isSymphonicWeapon &&
-                    !isRadiantWeapon &&
-                    !isClickerWeapon &&
-                    !isGenericModWeapon)
+                if (!item.CountsAsClass(DamageClass.Summon))
                 {
-                    flatBonus += effectivePOW * config.statSettings.POW_FlatDamage;
-                }
-                else
-                {
-                    flatBonus += effectivePOW * config.statSettings.POW_FlatDamage * 0.2f;
+                    if (!item.CountsAsClass(DamageClass.Melee) &&
+                        !item.CountsAsClass(DamageClass.Ranged) &&
+                        !item.CountsAsClass(DamageClass.Magic) &&
+                        !isRogueWeapon &&
+                        !isSymphonicWeapon &&
+                        !isRadiantWeapon &&
+                        !isClickerWeapon &&
+                        !isGenericModWeapon)
+                    {
+                        flatBonus += effectivePOW * config.statSettings.POW_FlatDamage;
+                    }
+                    else
+                    {
+                        flatBonus += effectivePOW * config.statSettings.POW_FlatDamage * 0.2f;
+                    }
                 }
 
                 damage.Flat += flatBonus;
