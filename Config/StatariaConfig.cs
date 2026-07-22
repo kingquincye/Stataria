@@ -375,6 +375,33 @@ namespace Stataria
             [DefaultValue(2.5f)][Range(0.5f, 10f)] public float LivingFleshCloneDamageMultiplier { get; set; } = 2.5f;
             [DefaultValue(1200f)][Range(200f, 5000f)] public float LivingFleshCloneAggroRange { get; set; } = 1200f;
             [DefaultValue(false)] public bool LivingFleshAllowOtherStats { get; set; } = false;
+
+            [Header("Adaptor")]
+            [DefaultValue(true)] public bool AdaptorEnableCheatDeath { get; set; } = true;
+            [DefaultValue(60)][Range(10, 300)] public int AdaptorCheatDeathCooldownSeconds { get; set; } = 60;
+            [DefaultValue(3.0f)][Range(0.5f, 30.0f)][Increment(0.5f)] public float AdaptorCheatDeathInvincibilitySeconds { get; set; } = 3.0f;
+            [DefaultValue(1.0f)][Range(0.1f, 1000.0f)][Increment(0.1f)] public float AdaptorGlobalExpMultiplier { get; set; } = 1.0f;
+            [DefaultValue(100)][Range(1, 10000)] public int AdaptorMaxLevel { get; set; } = 100;
+            [DefaultValue(100f)][Range(10f, 100000f)] public float AdaptorBaseExpMob { get; set; } = 100f;
+            [DefaultValue(750f)][Range(50f, 200000f)] public float AdaptorBaseExpBoss { get; set; } = 750f;
+            [DefaultValue(80f)][Range(10f, 50000f)] public float AdaptorBaseExpDebuff { get; set; } = 80f;
+            [DefaultValue(150f)][Range(10f, 50000f)] public float AdaptorBaseExpEnvironment { get; set; } = 150f;
+            [DefaultValue(2000f)][Range(100f, 500000f)] public float AdaptorBaseExpDeath { get; set; } = 2000f;
+            [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpDarkness { get; set; } = 20f;
+            [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpFallDamage { get; set; } = 20f;
+            [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpDrowning { get; set; } = 20f;
+            [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpLava { get; set; } = 20f;
+            [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpKnockback { get; set; } = 20f;
+            [DefaultValue(300f)][Range(1f, 50000f)] public float AdaptorDeathExpGain { get; set; } = 300f;
+            [DefaultValue(1.5f)][Range(0.01f, 50.0f)] public float AdaptorExpHurtMultiplier { get; set; } = 1.5f;
+            [DefaultValue(0.5f)][Range(0.01f, 50.0f)] public float AdaptorExpHitMultiplier { get; set; } = 0.5f;
+            [DefaultValue(0.5f)][Range(0.01f, 500.0f)] public float AdaptorExpDebuffTickGain { get; set; } = 0.5f;
+            [DefaultValue(0.008f)][Range(0.0001f, 0.1f)] public float AdaptorDefensiveDamageReductionPerLevel { get; set; } = 0.008f;
+            [DefaultValue(true)] public bool AdaptorMaxLevelDamageImmunity { get; set; } = true;
+            [DefaultValue(0.015f)][Range(0.0001f, 0.5f)] public float AdaptorOffensiveDamageBonusPerLevel { get; set; } = 0.015f;
+            [DefaultValue(true)] public bool AdaptorMaxLevelOffensiveLethal { get; set; } = true;
+            public List<string> AdaptorDebuffBlacklist { get; set; } = new List<string>{"86", "350", "321", "25", "146", "215", "147", "Boss Effects", "Rage Mode", "Quiet Grounds", "158", "157", "89","199", "87"};
+            public List<string> AdaptorDebuffWhitelist { get; set; } = new List<string>();
         }
 
         public class MultiplayerSettings
@@ -690,5 +717,12 @@ namespace Stataria
 
         [Header("LivingFleshClient")]
         [DefaultValue(true)] public bool EnableVanillaHUDFloatingRallyBar { get; set; } = true;
+
+        [Header("AdaptorClient")]
+        [DefaultValue(1.0f)][Range(0.0f, 1.0f)] public float HaloOpacity { get; set; } = 1.0f;
+        [DefaultValue(true)] public bool ShowAdaptationNotifications { get; set; } = true;
+        [DefaultValue(0.01f)][Range(0f, 0.95f)][Slider][SliderColor(100, 200, 255)] public float NotificationPositionXPercent { get; set; } = 0.01f;
+        [DefaultValue(0.95f)][Range(0f, 0.95f)][Slider][SliderColor(100, 200, 255)] public float NotificationPositionYPercent { get; set; } = 0.95f;
+        [DefaultValue(5)][Range(1, 20)] public int MaxAdaptationNotifications { get; set; } = 5;
     }
 }

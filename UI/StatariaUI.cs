@@ -24,6 +24,8 @@ namespace Stataria
         internal static TabBarUI TabBarPanel;
         internal static UserInterface SocketingUI;
         internal static SocketingUI SocketingPanel;
+        internal static UserInterface AdaptationNotificationUserInterface;
+        internal static AdaptationNotificationUI AdaptationNotificationPanel;
 
         public override void Load()
         {
@@ -46,6 +48,11 @@ namespace Stataria
             SocketingPanel = new SocketingUI();
             SocketingPanel.Activate();
 
+            AdaptationNotificationUserInterface = new UserInterface();
+            AdaptationNotificationPanel = new AdaptationNotificationUI();
+            AdaptationNotificationPanel.Activate();
+            AdaptationNotificationUserInterface.SetState(AdaptationNotificationPanel);
+
             Main.OnResolutionChanged += OnResolutionChanged;
         }
 
@@ -67,6 +74,8 @@ namespace Stataria
             TabBarPanel = null;
             SocketingUI = null;
             SocketingPanel = null;
+            AdaptationNotificationUserInterface = null;
+            AdaptationNotificationPanel = null;
         }
 
         private static void OnResolutionChanged(Vector2 size)
@@ -77,6 +86,7 @@ namespace Stataria
             RoleSelectionUI?.Recalculate();
             SocketingUI?.Recalculate();
             TabBarInterface?.Recalculate();
+            AdaptationNotificationUserInterface?.Recalculate();
         }
 
         public override void UpdateUI(GameTime gameTime)
@@ -103,6 +113,10 @@ namespace Stataria
             if (SocketingUI?.CurrentState != null)
             {
                 SocketingUI.Update(gameTime);
+            }
+            if (AdaptationNotificationUserInterface?.CurrentState != null)
+            {
+                AdaptationNotificationUserInterface.Update(gameTime);
             }
             if (TabBarInterface?.CurrentState != null)
             {
@@ -273,6 +287,19 @@ namespace Stataria
                     delegate
                     {
                         RoleCooldownUI.Draw(Main.spriteBatch);
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Adaptation Notifications",
+                    delegate
+                    {
+                        if (AdaptationNotificationUserInterface?.CurrentState != null)
+                        {
+                            AdaptationNotificationUserInterface.Draw(Main.spriteBatch, new GameTime());
+                        }
                         return true;
                     },
                     InterfaceScaleType.UI)

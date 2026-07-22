@@ -7,6 +7,7 @@ using System;
 using Steamworks;
 using System.Linq;
 using System.Collections.Generic;
+using Stataria.Players;
 
 namespace Stataria
 {
@@ -317,6 +318,11 @@ namespace Stataria
                                     thorIntegrationOk ? Color.Green : Color.Red);
                         StatariaLogger.Info(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.DiagnoseThorStatus", thorIntegrationOk ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusWorking") : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.StatusErrorsDetected")));
                     }
+                    break;
+
+                case "adaptation":
+                    if (!IsAdmin(caller)) return;
+                    HandleAdaptationCommand(caller, args);
                     break;
 
                 case "weapondebug":
@@ -663,6 +669,39 @@ namespace Stataria
                 case "pst": rpg.PST = value; return true;
                 default: return false;
             }
+        }
+
+        private static void HandleAdaptationCommand(CommandCaller caller, string[] args)
+        {
+            var adaptorPlayer = caller.Player.GetModPlayer<AdaptationPlayer>();
+            if (adaptorPlayer == null) return;
+
+            if (args.Length >= 2)
+            {
+                string sub = args[1].ToLowerInvariant();
+                if (sub == "reset")
+                {
+                    adaptorPlayer.ResetAllAdaptations();
+                    caller.Reply("[Stataria] All adaptation levels have been reset!", Color.Orange);
+                    return;
+                }
+                else if (sub == "instant" || sub == "max")
+                {
+                    adaptorPlayer.InstantAdaptationMode = !adaptorPlayer.InstantAdaptationMode;
+                    string status = adaptorPlayer.InstantAdaptationMode ? "ENABLED (Hits and attacks will instantly grant Max Adaptation!)" : "DISABLED";
+                    Color col = adaptorPlayer.InstantAdaptationMode ? Color.LightGreen : Color.Red;
+                    caller.Reply($"[Stataria] Instant Adaptation Mode: {status}", col);
+                    return;
+                }
+                else if (sub == "maxall")
+                {
+                    adaptorPlayer.MaxOutAllAdaptations();
+                    caller.Reply("[Stataria] All active adaptations have been maxed out to Max Level!", Color.LightGreen);
+                    return;
+                }
+            }
+
+            caller.Reply("Usage: /stataria adaptation <reset | instant | maxall>", Color.Red);
         }
     }
 }

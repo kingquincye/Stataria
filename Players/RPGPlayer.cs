@@ -595,6 +595,14 @@ namespace Stataria
             );
             AvailableRoles["LivingFlesh"] = livingFlesh;
 
+            var adaptor = new Role(
+                "Adaptor",
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Adaptor"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Adaptor"),
+                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Adaptor")
+            );
+            AvailableRoles["Adaptor"] = adaptor;
+
             if (config.modIntegration.EnableSekirariaIntegration && SekirariaSupportHelper.SekirariaLoaded)
             {
                 var shinobi = new Role(

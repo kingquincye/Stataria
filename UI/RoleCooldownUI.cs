@@ -8,6 +8,8 @@ using Terraria.ModLoader;
 using ReLogic.Graphics;
 using Terraria.UI;
 using Terraria.ID;
+using Stataria.Players;
+using Stataria.Core;
 
 namespace Stataria.UI
 {
@@ -123,6 +125,24 @@ namespace Stataria.UI
                     livingFlesh.CloneCooldownTimer / 60f,
                     config.roleSettings.LivingFleshCloneCooldown,
                     new Color(180, 60, 60)
+                ));
+            }
+
+            // Adaptor: Cheat Death
+            var adaptor = player.GetModPlayer<AdaptationPlayer>();
+            if (adaptor.IsAdaptorActive && adaptor.CheatDeathCooldownTimer > 0)
+            {
+                int maxLevel = AdaptationData.GetMaxLevel();
+                AdaptationKey deathKey = new AdaptationKey(AdaptationCategory.Death, "Death", "Death", isOffensive: false);
+                int deathLvl = adaptor.GetAdaptation(deathKey).Level;
+                int baseCdSeconds = config.roleSettings.AdaptorCheatDeathCooldownSeconds;
+                float effectiveCdSeconds = Math.Max(5f, baseCdSeconds * (1.0f - deathLvl * (0.9f / maxLevel)));
+
+                activeCooldowns.Add(new ActiveCooldown(
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.AbilityName.CheatDeath"), "CD",
+                    adaptor.CheatDeathCooldownTimer / 60f,
+                    effectiveCdSeconds,
+                    new Color(220, 200, 255)
                 ));
             }
 

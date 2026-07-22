@@ -322,6 +322,30 @@ namespace Stataria
                 return string.Join("\n", effects);
             }
 
+            if (ID == "Adaptor")
+            {
+                var effects = new List<string>
+                {
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Adaptor.AdaptationScaling", config.roleSettings.AdaptorMaxLevel),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Adaptor.DamageReduction", (config.roleSettings.AdaptorDefensiveDamageReductionPerLevel * 100f).ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Adaptor.OffensiveBonus", (config.roleSettings.AdaptorOffensiveDamageBonusPerLevel * 100f).ToString("0.##")),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Adaptor.CheatDeath", config.roleSettings.AdaptorCheatDeathCooldownSeconds),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Adaptor.DarknessAdaptation")
+                };
+
+                if (config.roleSettings.AdaptorMaxLevelDamageImmunity)
+                {
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Adaptor.MaxLevelImmunity"));
+                }
+
+                if (config.roleSettings.AdaptorMaxLevelOffensiveLethal)
+                {
+                    effects.Add(Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.Adaptor.MaxLevelLethal"));
+                }
+
+                return string.Join("\n", effects);
+            }
+
             return Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.NoEffects");
         }
     }

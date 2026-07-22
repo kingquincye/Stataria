@@ -1775,6 +1775,7 @@ Configs: {
 			Shinobi: Shinobi
 			Desperado: Desperado
 			Living_Flesh: Living Flesh
+			Adaptor: Adaptor
 		}
 
 		BaseSwitchCost: {
@@ -2500,6 +2501,131 @@ Configs: {
 			Label: Living Flesh Allow Other Stats
 			Tooltip: When enabled, the Living Flesh role still receives damage scaling, custom VIT regen/potion boosts, and Endurance DR from other stats.
 		}
+
+		AdaptorEnableCheatDeath: {
+			Label: Enable Cheat Death
+			Tooltip: Allows the Adaptor to cheat death upon receiving fatal damage, granting temporary invincibility and full recovery.
+		}
+
+		AdaptorCheatDeathCooldownSeconds: {
+			Label: Cheat Death Cooldown (Seconds)
+			Tooltip: Cooldown duration in seconds before Cheat Death can trigger again.
+		}
+
+		AdaptorCheatDeathInvincibilitySeconds: {
+			Label: Cheat Death Invincibility Duration (Seconds)
+			Tooltip: Duration in seconds of invincibility granted upon triggering Cheat Death.
+		}
+
+		AdaptorGlobalExpMultiplier: {
+			Label: Global EXP Multiplier
+			Tooltip: Multiplier applied to all earned Adaptation experience.
+		}
+
+		AdaptorMaxLevel: {
+			Label: Max Adaptation Level
+			Tooltip: Maximum level cap for individual adaptations (default 100, max 10000).
+		}
+
+		AdaptorBaseExpMob: {
+			Label: Base EXP Required (Mob)
+			Tooltip: Base experience required per level for mob adaptations.
+		}
+
+		AdaptorBaseExpBoss: {
+			Label: Base EXP Required (Boss)
+			Tooltip: Base experience required per level for boss adaptations.
+		}
+
+		AdaptorBaseExpDebuff: {
+			Label: Base EXP Required (Debuff)
+			Tooltip: Base experience required per level for debuff adaptations.
+		}
+
+		AdaptorBaseExpEnvironment: {
+			Label: Base EXP Required (Environment)
+			Tooltip: Base experience required per level for environmental adaptations (Fall, Lava, Drowning).
+		}
+
+		AdaptorBaseExpDeath: {
+			Label: Base EXP Required (Death)
+			Tooltip: Base experience required per level for Cheat Death adaptation.
+		}
+
+		AdaptorBaseExpDarkness: {
+			Label: Base EXP Required (Darkness)
+			Tooltip: Base experience required per level for Darkness adaptation.
+		}
+
+		AdaptorBaseExpFallDamage: {
+			Label: Base EXP Required (Fall Damage)
+			Tooltip: Base experience required per level for Fall Damage adaptation.
+		}
+
+		AdaptorBaseExpDrowning: {
+			Label: Base EXP Required (Drowning)
+			Tooltip: Base experience required per level for Drowning adaptation.
+		}
+
+		AdaptorBaseExpLava: {
+			Label: Base EXP Required (Lava)
+			Tooltip: Base experience required per level for Lava adaptation.
+		}
+
+		AdaptorBaseExpKnockback: {
+			Label: Base EXP Required (Knockback)
+			Tooltip: Base experience required per level for Knockback adaptation.
+		}
+
+		AdaptorDeathExpGain: {
+			Label: Death EXP Gain
+			Tooltip: Experience gained towards Death Adaptation each time Cheat Death is triggered.
+		}
+
+		AdaptorExpHurtMultiplier: {
+			Label: Hurt EXP Multiplier
+			Tooltip: Multiplier applied to damage taken when calculating defensive Adaptation EXP.
+		}
+
+		AdaptorExpHitMultiplier: {
+			Label: Hit EXP Multiplier
+			Tooltip: Multiplier applied to damage dealt when calculating offensive Adaptation EXP.
+		}
+
+		AdaptorExpDebuffTickGain: {
+			Label: Debuff Tick EXP Gain
+			Tooltip: Experience gained per tick while suffering from active debuffs.
+		}
+
+		AdaptorDefensiveDamageReductionPerLevel: {
+			Label: Defensive DR Per Level
+			Tooltip: Percentage damage reduction granted per level of defensive adaptation.
+		}
+
+		AdaptorMaxLevelDamageImmunity: {
+			Label: Max Level Damage Immunity
+			Tooltip: When enabled, reaching maximum adaptation level against an entity grants 100% damage immunity.
+		}
+
+		AdaptorOffensiveDamageBonusPerLevel: {
+			Label: Offensive Bonus Per Level
+			Tooltip: Percentage bonus damage dealt per level of offensive adaptation.
+		}
+
+		AdaptorMaxLevelOffensiveLethal: {
+			Label: Max Level Offensive Lethal Strike
+			Tooltip: When enabled, reaching maximum offensive adaptation level grants guaranteed instant-kill armor penetration.
+		}
+
+		AdaptorDebuffBlacklist: {
+			Label: Debuff Blacklist
+			Tooltip: List of debuffs (by ID or internal name) that cannot be adapted to.
+		}
+
+		AdaptorDebuffWhitelist: {
+			Label: Debuff Whitelist
+			Tooltip: List of additional buffs/debuffs to adapt to. Positive buffs added here can be adapted to, and entries take priority over the blacklist.
+		}
 	}
 
 	SocketingSystem: {
@@ -2693,6 +2819,7 @@ Configs: {
 			SocketingSystem: Socketing System
 			General: General
 			LivingFleshClient: Living Flesh Settings
+			AdaptorClient: Adaptor
 		}
 
 		ShowSocketedCoresInTooltip: {
@@ -2865,6 +2992,31 @@ Configs: {
 		EnableVanillaHUDFloatingRallyBar: {
 			Label: Enable Vanilla HUD Floating Rally Bar
 			Tooltip: Draws a floating health bar showing potential Rally healing above the player when using the vanilla HUD.
+		}
+
+		HaloOpacity: {
+			Label: Halo Opacity
+			Tooltip: Controls the visual transparency of the spinning Adaptor halo wheel.
+		}
+
+		ShowAdaptationNotifications: {
+			Label: Show Adaptation Notifications
+			Tooltip: Toggles the on-screen level up and EXP gain notification cards.
+		}
+
+		NotificationPositionXPercent: {
+			Label: Notification Position X (%)
+			Tooltip: Horizontal screen position percentage for adaptation notifications (0% left to 100% right).
+		}
+
+		NotificationPositionYPercent: {
+			Label: Notification Position Y (%)
+			Tooltip: Vertical screen position percentage for adaptation notifications (0% top to 100% bottom).
+		}
+
+		MaxAdaptationNotifications: {
+			Label: Max Adaptation Notifications
+			Tooltip: Limits the maximum number of adaptation notification bars visible on screen at once (1 to 20, default 5).
 		}
 	}
 }
@@ -3258,6 +3410,33 @@ RoleEffects: {
 		PassiveRegen: • Constant Regen: Regenerate {0}% Max HP every {1}s (unaffected by damage delay)
 		FleshClone: • Flesh Clone: Sacrifice {0}% current HP to summon a decoy clone. Deals {1}x sacrificed HP as explosion damage on death ({2}s duration, {3}s cooldown)
 	}
+
+	Adaptor: {
+		AdaptationScaling: • Max adaptation level per target/hazard: {0}
+		DamageReduction: • Defensive adaptation: +{0}% damage reduction per level against adapted targets
+		OffensiveBonus: • Offensive adaptation: +{0}% damage bonus per level against adapted targets
+		CheatDeath: • Cheat Death: Fatal damage is prevented and restores health ({0}s cooldown)
+		DarknessAdaptation: • Passive - Darkness Adaptation: Enduring darkness grants Night Vision and ambient illumination in dark places
+		MaxLevelImmunity: • Max Level Defense: Grants total 100% damage immunity to fully adapted targets and hazards
+		MaxLevelLethal: • Max Level Offense: Grants 1-shot lethal execution against fully adapted targets
+	}
+}
+
+Adaptation: {
+	FallDamage: Fall Damage
+	Drowning: Drowning
+	Lava: Lava
+	Knockback: Knockback
+	Death: Death
+	Darkness: Darkness
+}
+
+AdaptationUI: {
+	OffensePrefix: "[OFFENSE] "
+	DefensePrefix: "[DEFENSE] "
+	LevelUp: LEVEL UP! ({0})
+	MaxLevel: LVL {0} MAX
+	LevelProgress: Lvl {0}/{1}
 }
 
 Logger: {
@@ -3318,6 +3497,7 @@ AbilityName: {
 	MortalDraw: Mortal Draw
 	Showdown: Showdown
 	FleshClone: Flesh Clone
+	CheatDeath: Cheat Death
 }
 
 RebirthAbilityName: {
@@ -3415,6 +3595,7 @@ RoleName: {
 	Shinobi: Shinobi
 	Desperado: Desperado
 	LivingFlesh: Living Flesh
+	Adaptor: The Adaptor
 }
 
 RoleDescription: {
@@ -3432,6 +3613,7 @@ RoleDescription: {
 	Shinobi: A swift shadow warrior from Sekiraria. Gains healing on executions, and can trigger the deadly Mortal Draw skill with a Parry Sword equipped.
 	Desperado: A high-octane gunslinger who builds intense Tempo through continuous ranged attacks, firing extra projectiles and gaining velocity at the cost of Agility use speed.
 	LivingFlesh: An HP-focused role that trades defense for massive health and damage reduction. Deals more damage the higher your HP percentage.
+	Adaptor: A master of evolution who adapts to all damage, debuffs, hazards, and darkness. As you endure attacks and battle enemies, your halo wheel turns, granting mounting resistance, offensive lethal power, and cheat-death immortality.
 }
 
 RoleFlavorText: {
@@ -3449,6 +3631,7 @@ RoleFlavorText: {
 	Shinobi: Hesitation is defeat. Strike from the shadows, execute with precision, and consume their essence.
 	Desperado: Never stop firing, never look back. Let the rhythm of the trigger guide your path.
 	LivingFlesh: Let your own flesh be your shield and weapon.
+	Adaptor: Adapt to everything. Endure, evolve, and transcend all limits.
 }
 
 DeathMessage: {
