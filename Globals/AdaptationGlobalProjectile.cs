@@ -22,8 +22,9 @@ namespace Stataria.Globals
             {
                 if (parent.Entity is NPC npcParent && npcParent.active)
                 {
-                    SourceNPCIsBoss = npcParent.boss;
-                    AdaptationPlayer.GetNPCTargetIdAndName(npcParent, out string tId, out string tName);
+                    NPC primary = AdaptationPlayer.GetPrimaryNPC(npcParent);
+                    SourceNPCIsBoss = AdaptationPlayer.IsBossNPC(primary);
+                    AdaptationPlayer.GetNPCTargetIdAndName(primary, out string tId, out string tName);
                     SourceNPCTargetId = tId;
                     SourceNPCName = tName;
                     return;

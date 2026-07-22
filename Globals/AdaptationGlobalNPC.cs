@@ -52,7 +52,7 @@ namespace Stataria.Globals
             if (config == null)
                 return;
 
-            AdaptationCategory cat = target.boss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
+            AdaptationCategory cat = AdaptationPlayer.IsBossNPC(target) ? AdaptationCategory.Boss : AdaptationCategory.Mob;
             AdaptationPlayer.GetNPCTargetIdAndName(target, out string targetId, out string name);
 
             AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: true);
@@ -89,7 +89,8 @@ namespace Stataria.Globals
             if (config == null)
                 return;
 
-            AdaptationCategory cat = target.boss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
+            bool isBoss = AdaptationPlayer.IsBossNPC(target);
+            AdaptationCategory cat = isBoss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
             AdaptationPlayer.GetNPCTargetIdAndName(target, out string targetId, out string name);
 
             AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: true);
@@ -98,7 +99,7 @@ namespace Stataria.Globals
             float hitMult = config != null ? config.roleSettings.AdaptorExpHitMultiplier : 0.5f;
             float expGain = Math.Max(25f, baseDamage * hitMult);
 
-            if (target.boss)
+            if (isBoss)
             {
                 expGain = Math.Max(40f, baseDamage * hitMult * 0.5f);
             }

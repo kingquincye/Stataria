@@ -164,14 +164,139 @@ namespace Stataria.Players
 
         #region Combat Hooks
 
-        public static void GetNPCTargetIdAndName(NPC npc, out string targetId, out string name)
+        public static NPC GetPrimaryNPC(NPC npc)
         {
-            if (npc == null)
+            if (npc == null || !npc.active)
+                return npc;
+
+            if (npc.realLife >= 0 && npc.realLife < Main.maxNPCs && npc.realLife != npc.whoAmI)
+            {
+                NPC parent = Main.npc[npc.realLife];
+                if (parent != null && parent.active)
+                    return parent;
+            }
+
+            if (IsSplittingWormSegment(npc))
+            {
+                NPC head = FindSplittingWormHead(npc);
+                if (head != null && head.active && head.whoAmI != npc.whoAmI)
+                    return head;
+            }
+
+            if (npc.ModNPC != null)
+            {
+                NPC wormHead = FindModdedWormHead(npc);
+                if (wormHead != null && wormHead.active && wormHead.whoAmI != npc.whoAmI)
+                    return wormHead;
+            }
+
+            return npc;
+        }
+
+        private static bool IsSplittingWormSegment(NPC npc)
+        {
+            return (npc.aiStyle == NPCAIStyleID.Worm || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail) &&
+                   npc.ai[0] >= 0 && npc.ai[0] < Main.maxNPCs &&
+                   npc.ai[1] >= 0 && npc.ai[1] < Main.maxNPCs;
+        }
+
+        private static NPC FindSplittingWormHead(NPC segment)
+        {
+            NPC current = segment;
+            int segmentsChecked = 0;
+            while (current != null && current.active && segmentsChecked < 100)
+            {
+                int prevIndex = (int)current.ai[1];
+                if (prevIndex >= 0 && prevIndex < Main.maxNPCs)
+                {
+                    NPC prevSegment = Main.npc[prevIndex];
+                    if (prevSegment.active && prevSegment.ai[0] == current.whoAmI)
+                    {
+                        current = prevSegment;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+                segmentsChecked++;
+            }
+            return current;
+        }
+
+        private static NPC FindModdedWormHead(NPC segment)
+        {
+            if (segment.ModNPC == null) return null;
+
+            string segmentName = segment.ModNPC.Name;
+            string baseName = segmentName;
+            if (segmentName.EndsWith("Body")) baseName = segmentName.Substring(0, segmentName.Length - 4);
+            else if (segmentName.EndsWith("Tail")) baseName = segmentName.Substring(0, segmentName.Length - 4);
+            else if (segmentName.Contains("Body")) baseName = segmentName.Substring(0, segmentName.IndexOf("Body"));
+            else if (segmentName.Contains("Tail")) baseName = segmentName.Substring(0, segmentName.IndexOf("Tail"));
+
+            NPC closestHead = null;
+            float closestDist = float.MaxValue;
+
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC other = Main.npc[i];
+                if (other.active && other.ModNPC != null)
+                {
+                    string otherName = other.ModNPC.Name;
+                    if (otherName.StartsWith(baseName) && (otherName.EndsWith("Head") || (!otherName.Contains("Body") && !otherName.Contains("Tail"))))
+                    {
+                        float dist = Vector2.Distance(segment.Center, other.Center);
+                        if (dist < closestDist)
+                        {
+                            closestDist = dist;
+                            closestHead = other;
+                        }
+                    }
+                }
+            }
+            return closestHead;
+        }
+
+        public static bool IsBossNPC(NPC npc)
+        {
+            if (npc == null || !npc.active)
+                return false;
+
+            NPC primary = GetPrimaryNPC(npc);
+
+            if (primary.boss && !primary.friendly)
+                return true;
+
+            if (NPCID.Sets.ShouldBeCountedAsBoss[primary.type])
+                return true;
+
+            if (NPCID.Sets.BossHeadTextures[primary.type] >= 0)
+                return true;
+
+            if (primary.BossBar != null)
+                return true;
+
+            if (StatariaBossBarStyle.TreatAsBoss.Contains(primary.type))
+                return true;
+
+            return false;
+        }
+
+        public static void GetNPCTargetIdAndName(NPC rawNpc, out string targetId, out string name)
+        {
+            if (rawNpc == null)
             {
                 targetId = "";
                 name = "";
                 return;
             }
+
+            NPC npc = GetPrimaryNPC(rawNpc);
 
             int bannerId = Item.NPCtoBanner(npc.type);
             if (bannerId > 0)
@@ -198,7 +323,7 @@ namespace Stataria.Players
             if (IsAdaptorActive && npc != null && npc.active)
             {
                 var config = ModContent.GetInstance<StatariaConfig>();
-                AdaptationCategory cat = npc.boss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
+                AdaptationCategory cat = IsBossNPC(npc) ? AdaptationCategory.Boss : AdaptationCategory.Mob;
                 GetNPCTargetIdAndName(npc, out string targetId, out string name);
 
                 AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: false);
@@ -283,7 +408,7 @@ namespace Stataria.Players
             {
                 if (causingEntity is NPC attackerNPC && attackerNPC.active)
                 {
-                    AdaptationCategory cat = attackerNPC.boss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
+                    AdaptationCategory cat = IsBossNPC(attackerNPC) ? AdaptationCategory.Boss : AdaptationCategory.Mob;
                     GetNPCTargetIdAndName(attackerNPC, out string targetId, out string name);
 
                     AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: false);
@@ -408,7 +533,7 @@ namespace Stataria.Players
             {
                 if (causingEntity is NPC attackerNPC && attackerNPC.active)
                 {
-                    AdaptationCategory cat = attackerNPC.boss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
+                    AdaptationCategory cat = IsBossNPC(attackerNPC) ? AdaptationCategory.Boss : AdaptationCategory.Mob;
                     GetNPCTargetIdAndName(attackerNPC, out string targetId, out string name);
 
                     AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: false);
