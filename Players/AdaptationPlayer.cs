@@ -233,33 +233,96 @@ namespace Stataria.Players
             if (segment.ModNPC == null) return null;
 
             string segmentName = segment.ModNPC.Name;
-            string baseName = segmentName;
-            if (segmentName.EndsWith("Body")) baseName = segmentName.Substring(0, segmentName.Length - 4);
-            else if (segmentName.EndsWith("Tail")) baseName = segmentName.Substring(0, segmentName.Length - 4);
-            else if (segmentName.Contains("Body")) baseName = segmentName.Substring(0, segmentName.IndexOf("Body"));
-            else if (segmentName.Contains("Tail")) baseName = segmentName.Substring(0, segmentName.IndexOf("Tail"));
+            string modName = segment.ModNPC.Mod.Name;
 
+            // 1. Multi-part suffix stripping to extract base boss name
+            string[] suffixes = new string[]
+            {
+                "Arms", "Limb", "Legs", "Hand", "Head", "Claw", "Body", "Part", "Core", "Turret",
+                "Cannon", "Fist", "Wing", "Eye", "Jaw", "Charge", "Piece", "Segment", "Tail", "Body1", "Body2", "1", "2", "3"
+            };
+
+            string baseName = segmentName;
+            foreach (string suffix in suffixes)
+            {
+                if (baseName.EndsWith(suffix))
+                {
+                    baseName = baseName.Substring(0, baseName.Length - suffix.Length);
+                    break;
+                }
+                else if (baseName.Contains(suffix))
+                {
+                    int idx = baseName.IndexOf(suffix);
+                    if (idx > 0)
+                    {
+                        baseName = baseName.Substring(0, idx);
+                        break;
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(baseName))
+                baseName = segmentName;
+
+            NPC closestBoss = null;
             NPC closestHead = null;
-            float closestDist = float.MaxValue;
+            float closestBossDist = float.MaxValue;
+            float closestHeadDist = float.MaxValue;
 
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC other = Main.npc[i];
-                if (other.active && other.ModNPC != null)
+                if (other.active && other.whoAmI != segment.whoAmI && other.ModNPC != null && other.ModNPC.Mod.Name == modName)
                 {
                     string otherName = other.ModNPC.Name;
-                    if (otherName.StartsWith(baseName) && (otherName.EndsWith("Head") || (!otherName.Contains("Body") && !otherName.Contains("Tail"))))
+                    if (otherName.StartsWith(baseName) || baseName.StartsWith(otherName))
                     {
                         float dist = Vector2.Distance(segment.Center, other.Center);
-                        if (dist < closestDist)
+
+                        // Highest priority: The main Boss entity (e.g. TrojanSquirrel body, Ravager body, Thanatos head)
+                        if (other.boss || NPCID.Sets.BossHeadTextures[other.type] >= 0 || other.BossBar != null)
                         {
-                            closestDist = dist;
-                            closestHead = other;
+                            if (dist < closestBossDist)
+                            {
+                                closestBossDist = dist;
+                                closestBoss = other;
+                            }
+                        }
+                        // Secondary priority: A head/core segment
+                        else if (otherName.EndsWith("Head") || otherName == baseName)
+                        {
+                            if (dist < closestHeadDist)
+                            {
+                                closestHeadDist = dist;
+                                closestHead = other;
+                            }
                         }
                     }
                 }
             }
-            return closestHead;
+
+            if (closestBoss != null)
+                return closestBoss;
+
+            if (closestHead != null)
+                return closestHead;
+
+            // 2. Fallback: Check if ai[0] or ai[1] points to an active NPC from the same mod matching baseName
+            for (int a = 0; a <= 1; a++)
+            {
+                int parentIdx = (int)segment.ai[a];
+                if (parentIdx >= 0 && parentIdx < Main.maxNPCs)
+                {
+                    NPC candidate = Main.npc[parentIdx];
+                    if (candidate.active && candidate.whoAmI != segment.whoAmI && candidate.ModNPC != null && candidate.ModNPC.Mod.Name == modName)
+                    {
+                        if (candidate.ModNPC.Name.StartsWith(baseName) || baseName.StartsWith(candidate.ModNPC.Name))
+                            return candidate;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public static bool IsBossNPC(NPC npc)
@@ -297,29 +360,63 @@ namespace Stataria.Players
             }
 
             NPC npc = GetPrimaryNPC(rawNpc);
+            int netId = npc.netID;
 
-            int bannerId = Item.NPCtoBanner(npc.type);
+            string specificName = Lang.GetNPCName(netId).Value;
+            if (string.IsNullOrWhiteSpace(specificName))
+            {
+                specificName = npc.TypeName;
+            }
+            if (string.IsNullOrWhiteSpace(specificName))
+            {
+                specificName = "Enemy";
+            }
+
+            int bannerId = Item.NPCtoBanner(npc.BannerID());
             if (bannerId > 0)
             {
                 int mainNpcType = Item.BannerToNPC(bannerId);
-                if (mainNpcType > 0)
+                string mainBannerName = mainNpcType > 0 ? Lang.GetNPCName(mainNpcType).Value : "";
+                if (string.IsNullOrWhiteSpace(mainBannerName))
                 {
-                    targetId = "Banner_" + bannerId;
-                    name = Lang.GetNPCName(mainNpcType).Value;
-                    if (string.IsNullOrWhiteSpace(name))
-                    {
-                        name = npc.TypeName;
-                    }
+                    mainBannerName = npc.TypeName;
+                }
+
+                // If the specific NPC name matches or is a sub-variant of the main banner name (e.g., Zombie, Female Zombie, Bald Zombie),
+                // group them under a clean, readable banner key like "Banner_Zombie".
+                // Otherwise (e.g. Green Slime vs Blue Slime), treat it as a distinct species variant.
+                if (!string.IsNullOrWhiteSpace(mainBannerName) &&
+                    (specificName.Equals(mainBannerName, StringComparison.OrdinalIgnoreCase) ||
+                     specificName.Contains(mainBannerName, StringComparison.OrdinalIgnoreCase) ||
+                     mainBannerName.Contains(specificName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    string cleanBannerName = mainBannerName.Replace(" ", "");
+                    targetId = "Banner_" + cleanBannerName;
+                    name = mainBannerName;
                     return;
                 }
             }
 
-            targetId = npc.ModNPC != null ? npc.ModNPC.FullName : npc.type.ToString();
-            name = npc.TypeName;
+            // For distinct variants (e.g. Green Slime, Red Slime) or non-banner entities
+            if (npc.ModNPC != null)
+            {
+                targetId = npc.ModNPC.FullName;
+            }
+            else
+            {
+                string cleanSpecificName = specificName.Replace(" ", "");
+                targetId = "NPC_" + cleanSpecificName;
+            }
+            name = specificName;
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
         {
+            if (IsAdaptorActive && CheatDeathInvincibilityTimer > 0)
+            {
+                return false; // Absolute contact immunity during Cheat Death invincibility!
+            }
+
             if (IsAdaptorActive && npc != null && npc.active)
             {
                 var config = ModContent.GetInstance<StatariaConfig>();
@@ -340,6 +437,11 @@ namespace Stataria.Players
 
         public override bool CanBeHitByProjectile(Projectile proj)
         {
+            if (IsAdaptorActive && CheatDeathInvincibilityTimer > 0)
+            {
+                return false; // Absolute projectile immunity during Cheat Death invincibility!
+            }
+
             if (IsAdaptorActive && proj != null && proj.active && proj.hostile)
             {
                 var config = ModContent.GetInstance<StatariaConfig>();
@@ -394,10 +496,25 @@ namespace Stataria.Players
             return base.CanBeHitByProjectile(proj);
         }
 
+        public override bool FreeDodge(Player.HurtInfo info)
+        {
+            if (IsAdaptorActive && CheatDeathInvincibilityTimer > 0)
+            {
+                return true; // Absolute dodge during Cheat Death invincibility!
+            }
+            return base.FreeDodge(info);
+        }
+
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
             if (!IsAdaptorActive)
                 return;
+
+            if (CheatDeathInvincibilityTimer > 0)
+            {
+                modifiers.FinalDamage *= 0f;
+                return;
+            }
 
             var config = ModContent.GetInstance<StatariaConfig>();
             float reductionPerLevel = config != null ? config.roleSettings.AdaptorDefensiveDamageReductionPerLevel : 0.08f;
