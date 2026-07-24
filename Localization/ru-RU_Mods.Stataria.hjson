@@ -2562,7 +2562,7 @@ Configs: {
 			Tooltip: Базовое количество опыта для адаптации к урону от падения.
 		}
 
-		AdaptorBaseExpDrowning: {
+		AdaptorBaseExpBreathlessness: {
 			Label: Базовый опыт (Удушье)
 			Tooltip: Базовое количество опыта для адаптации к удушью.
 		}
@@ -3424,7 +3424,7 @@ RoleEffects: {
 
 Adaptation: {
 	FallDamage: Урон от падения
-	Drowning: Утопление
+	Breathlessness: Одышка
 	Lava: Лава
 	Knockback: Отбрасывание
 	Death: Смерть

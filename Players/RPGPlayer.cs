@@ -14,6 +14,7 @@ using System.Reflection;
 using Terraria.GameInput;
 using Stataria.Buffs;
 using Stataria.Projectiles;
+using Stataria.Globals;
 
 namespace Stataria
 {
@@ -1544,7 +1545,8 @@ namespace Stataria
                 return;
             }
 
-            GainXP((long)(damageDone * config.generalBalance.DamageXP), "Melee");
+            long meleeXpDamage = AdaptationGlobalNPC.GetXpEligibleDamage(Player, target, damageDone);
+            GainXP((long)(meleeXpDamage * config.generalBalance.DamageXP), "Melee");
         }
 
         public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
@@ -1592,7 +1594,8 @@ namespace Stataria
                 return;
             }
 
-            GainXP((long)(damageDone * config.generalBalance.DamageXP), "Projectile");
+            long projXpDamage = AdaptationGlobalNPC.GetXpEligibleDamage(Player, target, damageDone);
+            GainXP((long)(projXpDamage * config.generalBalance.DamageXP), "Projectile");
         }
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)

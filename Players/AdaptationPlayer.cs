@@ -21,6 +21,7 @@ namespace Stataria.Players
         public int CheatDeathInvincibilityTimer { get; set; }
         public float HaloRotation { get; set; }
         public int HaloSpinTimer { get; set; }
+        public int LevelUpFlashTimer { get; set; }
         public AdaptationCategory ActiveCategory { get; set; } = AdaptationCategory.Mob;
         public bool InstantAdaptationMode { get; set; }
         public bool PendingFullHeal { get; set; }
@@ -51,9 +52,16 @@ namespace Stataria.Players
             {
                 CheatDeathInvincibilityTimer--;
                 Player.immune = true;
+                Player.immuneNoBlink = true;
                 Player.immuneTime = Math.Max(Player.immuneTime, 2);
                 Player.lavaImmune = true;
                 Player.lavaTime = Player.lavaMax;
+                Player.breath = Math.Max(Player.breath, Player.breathMax);
+                Player.lifeRegen = Math.Max(Player.lifeRegen, 0);
+                if (Player.statLife < 1)
+                {
+                    Player.statLife = 1;
+                }
             }
 
             if (HaloSpinTimer > 0)
@@ -64,6 +72,34 @@ namespace Stataria.Players
             else
             {
                 HaloRotation += 0.02f; // Idle spin
+            }
+
+            if (LevelUpFlashTimer > 0)
+            {
+                LevelUpFlashTimer--;
+            }
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            Stataria.SyncAdaptationState(Player.whoAmI, toWho, fromWho);
+        }
+
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            var clone = (AdaptationPlayer)targetCopy;
+            clone.ActiveCategory = ActiveCategory;
+            clone.HaloRotation = HaloRotation;
+            clone.HaloSpinTimer = HaloSpinTimer;
+            clone.LevelUpFlashTimer = LevelUpFlashTimer;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            var clone = (AdaptationPlayer)clientPlayer;
+            if (clone.ActiveCategory != ActiveCategory || Math.Abs(clone.HaloRotation - HaloRotation) > 0.15f || clone.HaloSpinTimer != HaloSpinTimer || clone.LevelUpFlashTimer != LevelUpFlashTimer)
+            {
+                Stataria.SyncAdaptationState(Player.whoAmI);
             }
         }
 
@@ -136,6 +172,7 @@ namespace Stataria.Players
                 Player.statMana = Player.statManaMax2;
 
                 HaloSpinTimer = 120;
+                LevelUpFlashTimer = 120;
                 AuraFlash.TriggerLevelUpEffect(Player, key.Category);
 
                 AdaptationNotificationUI.AddNotification(new AdaptationNotification(
@@ -516,6 +553,12 @@ namespace Stataria.Players
                 return;
             }
 
+            if (CheatDeathInvincibilityTimer > 0)
+            {
+                modifiers.FinalDamage *= 0f;
+                return;
+            }
+
             var config = ModContent.GetInstance<StatariaConfig>();
             float reductionPerLevel = config != null ? config.roleSettings.AdaptorDefensiveDamageReductionPerLevel : 0.08f;
             int maxLevel = AdaptationData.GetMaxLevel();
@@ -592,10 +635,10 @@ namespace Stataria.Players
                 }
             }
 
-            // Drowning damage adaptation (SourceOtherIndex == 1 or 3)
+            // Breathlessness damage adaptation (SourceOtherIndex == 1 or 3)
             if (modifiers.DamageSource.SourceOtherIndex == 1 || modifiers.DamageSource.SourceOtherIndex == 3)
             {
-                AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Drowning");
+                AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Breathlessness");
                 AdaptationData breathData = GetAdaptation(breathKey);
 
                 if (breathData.Level >= maxLevel)
@@ -645,6 +688,7 @@ namespace Stataria.Players
 
             var config = ModContent.GetInstance<StatariaConfig>();
             float hurtMult = config != null ? config.roleSettings.AdaptorExpHurtMultiplier : 1.5f;
+            float rawDamage = Math.Max((float)info.SourceDamage, (float)info.Damage);
 
             if (info.DamageSource.TryGetCausingEntity(out Entity causingEntity))
             {
@@ -654,7 +698,7 @@ namespace Stataria.Players
                     GetNPCTargetIdAndName(attackerNPC, out string targetId, out string name);
 
                     AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: false);
-                    GainExp(key, Math.Max(25f, info.Damage * hurtMult));
+                    GainExp(key, Math.Max(25f, rawDamage * hurtMult));
                 }
                 else if (causingEntity is Projectile proj && proj.active)
                 {
@@ -662,7 +706,7 @@ namespace Stataria.Players
                     {
                         AdaptationCategory cat = globalProj.SourceNPCIsBoss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
                         AdaptationKey npcKey = new AdaptationKey(cat, globalProj.SourceNPCTargetId, globalProj.SourceNPCName, isOffensive: false);
-                        GainExp(npcKey, Math.Max(25f, info.Damage * hurtMult));
+                        GainExp(npcKey, Math.Max(25f, rawDamage * hurtMult));
                     }
 
                     string projIdName = ProjectileID.Search.GetName(proj.type);
@@ -678,31 +722,31 @@ namespace Stataria.Players
                     bool isBoss = globalProj != null && globalProj.SourceNPCIsBoss;
                     AdaptationCategory projCat = isBoss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
                     AdaptationKey projKey = new AdaptationKey(projCat, "Proj_" + projIdName, projName, isOffensive: false);
-                    GainExp(projKey, Math.Max(25f, info.Damage * hurtMult));
+                    GainExp(projKey, Math.Max(25f, rawDamage * hurtMult));
                 }
             }
 
             if (info.DamageSource.SourceOtherIndex == 0)
             {
                 AdaptationKey fallKey = GetEnvironmentKey("FallDamage", "Mods.Stataria.Adaptation.FallDamage");
-                GainExp(fallKey, Math.Max(25f, info.Damage * hurtMult * 1.33f));
+                GainExp(fallKey, Math.Max(25f, rawDamage * hurtMult * 1.33f));
             }
             else if (info.DamageSource.SourceOtherIndex == 1 || info.DamageSource.SourceOtherIndex == 3)
             {
-                AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Drowning");
-                GainExp(breathKey, Math.Max(25f, info.Damage * hurtMult * 1.33f));
+                AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Breathlessness");
+                GainExp(breathKey, Math.Max(25f, rawDamage * hurtMult * 1.33f));
             }
             else if (info.DamageSource.SourceOtherIndex == 2)
             {
                 AdaptationKey lavaKey = GetEnvironmentKey("Lava", "Mods.Stataria.Adaptation.Lava");
-                GainExp(lavaKey, Math.Max(25f, info.Damage * hurtMult * 1.33f));
+                GainExp(lavaKey, Math.Max(25f, rawDamage * hurtMult * 1.33f));
             }
 
             // Gain Knockback EXP (only when actually receiving knockback and not from fall damage)
             if (info.DamageSource.SourceOtherIndex != 0 && info.Knockback > 0f)
             {
                 AdaptationKey kbKey = GetEnvironmentKey("Knockback", "Mods.Stataria.Adaptation.Knockback");
-                float kbExp = Math.Max(25f, info.Damage * 0.8f + info.Knockback * 10f);
+                float kbExp = Math.Max(25f, rawDamage * 0.8f + info.Knockback * 10f);
                 GainExp(kbKey, kbExp);
             }
         }
@@ -711,6 +755,15 @@ namespace Stataria.Players
         {
             if (!IsAdaptorActive)
                 return true;
+
+            // Absolute immortality during Cheat Death invincibility frames!
+            if (CheatDeathInvincibilityTimer > 0)
+            {
+                Player.statLife = Math.Max(1, Player.statLife);
+                playSound = false;
+                genDust = false;
+                return false;
+            }
 
             var config = ModContent.GetInstance<StatariaConfig>();
             bool enableCheatDeath = config == null || config.roleSettings.AdaptorEnableCheatDeath;
@@ -731,6 +784,7 @@ namespace Stataria.Players
                 float invincibilitySeconds = config != null ? config.roleSettings.AdaptorCheatDeathInvincibilitySeconds : 3.0f;
                 int invincibilityTicks = Math.Max(10, (int)(invincibilitySeconds * 60f));
                 Player.immune = true;
+                Player.immuneNoBlink = true;
                 Player.immuneTime = invincibilityTicks;
                 CheatDeathInvincibilityTimer = invincibilityTicks;
                 Player.lavaTime = Player.lavaMax;
@@ -752,6 +806,12 @@ namespace Stataria.Players
 
                 AuraFlash.TriggerCheatDeathEffect(Player);
 
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    NetMessage.SendData(MessageID.PlayerLifeMana, -1, -1, null, Player.whoAmI);
+                    Stataria.SyncAdaptationState(Player.whoAmI);
+                }
+
                 playSound = false;
                 genDust = false;
                 return false; // Cancel death!
@@ -764,9 +824,11 @@ namespace Stataria.Players
 
         #region Environmental & Buff/Debuff Update Hooks
 
-        private static AdaptationKey GetEnvironmentKey(string targetId, string locKey)
+        private static AdaptationKey GetEnvironmentKey(string targetId, string locKey, string fallbackName = null)
         {
             string displayName = Terraria.Localization.Language.GetTextValue(locKey);
+            if ((string.IsNullOrEmpty(displayName) || displayName == locKey) && !string.IsNullOrEmpty(fallbackName))
+                displayName = fallbackName;
             return new AdaptationKey(AdaptationCategory.Environment, targetId, displayName, isOffensive: false);
         }
 
@@ -803,6 +865,8 @@ namespace Stataria.Players
                 if (string.IsNullOrWhiteSpace(displayName))
                     displayName = buffIdName;
 
+                bool nurseCannotRemove = IsNurseCannotRemove(buffType);
+
                 if (config != null)
                 {
                     bool isWhitelisted = MatchesBuffList(config.roleSettings.AdaptorDebuffWhitelist, buffIdName, displayName, buffType);
@@ -814,7 +878,7 @@ namespace Stataria.Players
                     }
                     else
                     {
-                        if (isBlacklisted)
+                        if (isBlacklisted || nurseCannotRemove)
                             continue;
 
                         if (Main.lightPet[buffType] || Main.vanityPet[buffType] || !Main.debuff[buffType])
@@ -823,7 +887,7 @@ namespace Stataria.Players
                 }
                 else
                 {
-                    if (Main.lightPet[buffType] || Main.vanityPet[buffType] || !Main.debuff[buffType])
+                    if (nurseCannotRemove || Main.lightPet[buffType] || Main.vanityPet[buffType] || !Main.debuff[buffType])
                         continue;
                 }
 
@@ -854,9 +918,16 @@ namespace Stataria.Players
 
             if (Player.breath < Player.breathMax)
             {
-                AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Drowning");
+                AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Breathlessness");
                 GainExp(breathKey, 0.8f);
             }
+        }
+
+        private static bool IsNurseCannotRemove(int buffType)
+        {
+            return buffType > 0
+                && buffType < BuffID.Sets.NurseCannotRemoveDebuff.Length
+                && BuffID.Sets.NurseCannotRemoveDebuff[buffType];
         }
 
         private static bool MatchesBuffList(List<string> list, string buffName, string displayName, int buffType)
@@ -888,23 +959,12 @@ namespace Stataria.Players
 
             int maxLevel = AdaptationData.GetMaxLevel();
 
-            // Handle Drowning breath retention
-            AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Drowning");
+            // Lock breath at max level of Breathlessness adaptation
+            AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Breathlessness");
             AdaptationData breathData = GetAdaptation(breathKey);
-
             if (breathData.Level >= maxLevel)
             {
                 Player.breath = Player.breathMax;
-            }
-            else if (breathData.Level > 0 && Player.breath < Player.breathMax)
-            {
-                float breathLevelRatio = (float)(breathData.Level - 1) / Math.Max(1, maxLevel - 1);
-                int breathInterval = Math.Max(1, (int)Math.Round(10f * (1.0f - breathLevelRatio) + 1f * breathLevelRatio));
-                if (Main.GameUpdateCount % breathInterval == 0)
-                {
-                    // Restore breath up to breathMax - 1 while underwater to prevent breath UI flickering
-                    Player.breath = Math.Min(Player.breathMax - 1, Player.breath + 1);
-                }
             }
 
             // Darkness Adaptation logic:
@@ -936,9 +996,18 @@ namespace Stataria.Players
                 haloLightContrib = (haloVec.X + haloVec.Y + haloVec.Z) / 3f;
             }
 
-            float netBrightness = Math.Max(0f, rawBrightness - selfLightContrib - haloLightContrib);
+            // Subtract level up flash light contribution so level up visual effect light doesn't affect darkness adaptation gain
+            float levelUpLightContrib = 0f;
+            if (LevelUpFlashTimer > 0)
+            {
+                float flashIntensity = LevelUpFlashTimer / 120f;
+                levelUpLightContrib = 2.5f * flashIntensity;
+            }
 
-            float darkThreshold = 0.20f;
+            float netBrightness = Math.Max(0f, rawBrightness - selfLightContrib - haloLightContrib - levelUpLightContrib);
+
+            bool isDaytimeSurface = Main.dayTime && (Player.Center.Y < Main.worldSurface * 16f);
+            float darkThreshold = isDaytimeSurface ? 0.05f : 0.20f;
             if (netBrightness < darkThreshold)
             {
                 float darkExp = (darkThreshold - netBrightness) * 25.0f;
@@ -954,6 +1023,60 @@ namespace Stataria.Players
                 Vector3 lightColor = new Vector3(0.4f, 0.6f, 0.9f) * lightIntensity * 1.5f;
                 Lighting.AddLight(Player.Center, lightColor);
             }
+
+            // Calamity Environmental Adaptations (Sulphurous Water & Abyss Darkness)
+            if (CalamitySupportHelper.CalamityLoaded)
+            {
+                // 1. Sulphurous Water Adaptation
+                AdaptationKey sulphWaterKey = GetEnvironmentKey("SulphurousWater", "Mods.Stataria.Adaptation.SulphurousWater", "Sulphurous Water");
+                AdaptationData sulphWaterData = GetAdaptation(sulphWaterKey);
+                float currentPoison = CalamitySupportHelper.GetSulphWaterPoisoningLevel(Player);
+
+                if (currentPoison > 0f || (CalamitySupportHelper.GetInZone(Player, "sulfur") && Player.wet && !Player.lavaWet && !Player.honeyWet))
+                {
+                    GainExp(sulphWaterKey, 0.8f);
+                }
+
+                if (sulphWaterData.Level > 0)
+                {
+                    if (sulphWaterData.Level >= maxLevel)
+                    {
+                        CalamitySupportHelper.SetSulphWaterPoisoningLevel(Player, 0f);
+                    }
+                    else if (currentPoison > 0f && Player.wet && !Player.lavaWet && !Player.honeyWet)
+                    {
+                        float adaptRatio = (float)sulphWaterData.Level / maxLevel;
+                        // Calamity adds ~1/360f to SulphWaterPoisoningLevel per frame.
+                        // We subtract adaptRatio fraction of that frame increment so the bar fills up slower!
+                        float frameIncrement = 1f / 360f;
+                        float newPoison = Math.Max(0f, currentPoison - (frameIncrement * adaptRatio));
+                        CalamitySupportHelper.SetSulphWaterPoisoningLevel(Player, newPoison);
+                    }
+                }
+
+                // 2. Abyss Darkness Adaptation
+                AdaptationKey abyssDarkKey = GetEnvironmentKey("AbyssDarkness", "Mods.Stataria.Adaptation.AbyssDarkness", "Abyss Darkness");
+                AdaptationData abyssDarkData = GetAdaptation(abyssDarkKey);
+
+                if (CalamitySupportHelper.GetInZone(Player, "abyss"))
+                {
+                    GainExp(abyssDarkKey, 1.0f);
+                    if (abyssDarkData.Level > 0)
+                    {
+                        float adaptRatio = (float)abyssDarkData.Level / maxLevel;
+
+                        // Directly reduce Calamity's darknessIntensity shader opacity
+                        float currentDarkness = CalamitySupportHelper.GetDarknessIntensity(Player);
+                        if (currentDarkness > 0f)
+                        {
+                            float newDarkness = currentDarkness * (1.0f - adaptRatio);
+                            CalamitySupportHelper.SetDarknessIntensity(Player, newDarkness);
+                        }
+
+                        CalamitySupportHelper.AddAbyssLightStrength(Player, adaptRatio * 5.0f);
+                    }
+                }
+            }
         }
 
         public override void PostUpdateEquips()
@@ -961,11 +1084,25 @@ namespace Stataria.Players
             if (!IsAdaptorActive)
                 return;
 
+            if (CheatDeathInvincibilityTimer > 0)
+            {
+                Player.lifeRegen = Math.Max(Player.lifeRegen, 0);
+                if (Player.statLife < 1)
+                {
+                    Player.statLife = 1;
+                }
+            }
+
             if (PendingFullHeal)
             {
                 Player.statLife = Player.statLifeMax2;
                 Player.statMana = Player.statManaMax2;
                 PendingFullHeal = false;
+
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    NetMessage.SendData(MessageID.PlayerLifeMana, -1, -1, null, Player.whoAmI);
+                }
             }
 
             int maxLevel = AdaptationData.GetMaxLevel();
@@ -1012,15 +1149,27 @@ namespace Stataria.Players
             {
                 Player.lavaImmune = true;
             }
-            else
+            else if (Player.lavaWet)
             {
-                if (lavaData.Level > 0)
+                GainExp(lavaKey, 1.2f);
+            }
+
+            // 3. Abyss Pressure Adaptation (Defense Loss Refund)
+            if (CalamitySupportHelper.CalamityLoaded && CalamitySupportHelper.GetInZone(Player, "abyss"))
+            {
+                AdaptationKey abyssPressKey = GetEnvironmentKey("AbyssPressure", "Mods.Stataria.Adaptation.AbyssPressure", "Abyss Pressure");
+                AdaptationData abyssPressData = GetAdaptation(abyssPressKey);
+                int defenseLoss = CalamitySupportHelper.GetAbyssDefenseLoss(Player);
+
+                if (defenseLoss > 0)
                 {
-                    Player.lavaMax += lavaData.Level * 60;
+                    GainExp(abyssPressKey, 0.5f);
                 }
-                if (Player.lavaWet)
+
+                if (abyssPressData.Level > 0 && defenseLoss > 0)
                 {
-                    GainExp(lavaKey, 1.2f);
+                    int refundedDefense = (int)(defenseLoss * ((float)abyssPressData.Level / maxLevel));
+                    Player.statDefense += refundedDefense;
                 }
             }
         }

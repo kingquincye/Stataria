@@ -389,7 +389,7 @@ namespace Stataria
             [DefaultValue(2000f)][Range(100f, 500000f)] public float AdaptorBaseExpDeath { get; set; } = 2000f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpDarkness { get; set; } = 20f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpFallDamage { get; set; } = 20f;
-            [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpDrowning { get; set; } = 20f;
+            [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpBreathlessness { get; set; } = 20f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpLava { get; set; } = 20f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpKnockback { get; set; } = 20f;
             [DefaultValue(300f)][Range(1f, 50000f)] public float AdaptorDeathExpGain { get; set; } = 300f;
@@ -400,8 +400,8 @@ namespace Stataria
             [DefaultValue(true)] public bool AdaptorMaxLevelDamageImmunity { get; set; } = true;
             [DefaultValue(0.015f)][Range(0.0001f, 0.5f)] public float AdaptorOffensiveDamageBonusPerLevel { get; set; } = 0.015f;
             [DefaultValue(true)] public bool AdaptorMaxLevelOffensiveLethal { get; set; } = true;
-            public List<string> AdaptorDebuffBlacklist { get; set; } = new List<string>{"86", "350", "321", "25", "146", "215", "147", "Boss Effects", "Rage Mode", "Quiet Grounds", "158", "157", "89","199", "87"};
-            public List<string> AdaptorDebuffWhitelist { get; set; } = new List<string>();
+            public List<string> AdaptorDebuffBlacklist { get; set; } = new List<string>{"25", "321", "Boss Effects", "Rage Mode", "Quiet Grounds", "Revived"};
+            public List<string> AdaptorDebuffWhitelist { get; set; } = new List<string>{"332", "333", "334", "21"};
         }
 
         public class MultiplayerSettings

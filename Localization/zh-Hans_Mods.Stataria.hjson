@@ -2562,7 +2562,7 @@ Configs: {
 			Tooltip: 坠落伤害适应每级所需的基础经验值。
 		}
 
-		AdaptorBaseExpDrowning: {
+		AdaptorBaseExpBreathlessness: {
 			Label: 窒息基础经验需求
 			Tooltip: 窒息适应每级所需的基础经验值。
 		}
@@ -3424,7 +3424,7 @@ RoleEffects: {
 
 Adaptation: {
 	FallDamage: 坠落伤害
-	Drowning: 溺水
+	Breathlessness: 呼吸停滞
 	Lava: 岩浆
 	Knockback: 击退
 	Death: 死亡

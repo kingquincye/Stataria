@@ -25,6 +25,24 @@ namespace Stataria
         {
         }
 
+        public override void PostSetupContent()
+        {
+            if (BuffID.Sets.NurseCannotRemoveDebuff != null)
+            {
+                var nurseBlockedList = new List<string>();
+                for (int i = 1; i < BuffID.Sets.NurseCannotRemoveDebuff.Length; i++)
+                {
+                    if (BuffID.Sets.NurseCannotRemoveDebuff[i])
+                    {
+                        string name = BuffID.Search.GetName(i);
+                        string displayName = Lang.GetBuffName(i);
+                        nurseBlockedList.Add($"{i} ({name} / '{displayName}')");
+                    }
+                }
+                StatariaLogger.Info($"[Adaptor Debug] BuffID.Sets.NurseCannotRemoveDebuff contains {nurseBlockedList.Count} debuffs: {string.Join(", ", nurseBlockedList)}");
+            }
+        }
+
         public static void SyncGlobalBosses(int toWho = -1, int fromWho = -1)
         {
             if (Main.netMode == NetmodeID.SinglePlayer)

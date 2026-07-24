@@ -713,5 +713,102 @@ namespace Stataria
             InfiniteAdrenalineEnabled = !InfiniteAdrenalineEnabled;
         }
         #endregion
+
+        #region Abyss & Sulphur Depths Support
+        public static float GetSulphWaterPoisoningLevel(Player player)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return 0f;
+
+            return GetFieldValue<float>(player, "SulphWaterPoisoningLevel");
+        }
+
+        public static bool SetSulphWaterPoisoningLevel(Player player, float value)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return false;
+
+            return SetFieldValue(player, "SulphWaterPoisoningLevel", value);
+        }
+
+        public static float GetDarknessIntensity(Player player)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return 0f;
+
+            return GetFieldValue<float>(player, "darknessIntensity");
+        }
+
+        public static bool SetDarknessIntensity(Player player, float value)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return false;
+
+            return SetFieldValue(player, "darknessIntensity", value);
+        }
+
+        public static void AddAbyssLightStrength(Player player, float amount)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded || calamityMod == null || amount <= 0f)
+                return;
+
+            try
+            {
+                calamityMod.Call("AddAbyssLightStrength", player, amount);
+            }
+            catch
+            {
+                // Fallback to direct field modification if ModCall isn't available
+                float currentDarkness = GetFieldValue<float>(player, "abyssDarkness");
+                SetFieldValue(player, "abyssDarkness", Math.Max(0f, currentDarkness - amount));
+            }
+        }
+
+        public static int GetAbyssDefenseLoss(Player player)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return 0;
+
+            return GetFieldValue<int>(player, "abyssDefenseLossStat");
+        }
+
+        public static bool GetInZone(Player player, string zone)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded || calamityMod == null || string.IsNullOrWhiteSpace(zone))
+                return false;
+
+            try
+            {
+                object result = calamityMod.Call("GetInZone", player, zone);
+                if (result is bool inZone)
+                    return inZone;
+            }
+            catch
+            {
+            }
+            return false;
+        }
+        #endregion
     }
 }

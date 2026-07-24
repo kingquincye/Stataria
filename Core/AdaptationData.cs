@@ -44,7 +44,7 @@ namespace Stataria.Core
                 {
                     "Darkness" => rSettings.AdaptorBaseExpDarkness,
                     "FallDamage" => rSettings.AdaptorBaseExpFallDamage,
-                    "Breath" => rSettings.AdaptorBaseExpDrowning,
+                    "Breath" => rSettings.AdaptorBaseExpBreathlessness,
                     "Lava" => rSettings.AdaptorBaseExpLava,
                     "Knockback" => rSettings.AdaptorBaseExpKnockback,
                     _ => rSettings.AdaptorBaseExpEnvironment

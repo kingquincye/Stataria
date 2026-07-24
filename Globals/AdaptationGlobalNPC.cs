@@ -13,33 +13,47 @@ namespace Stataria.Globals
             ApplyOffensiveAdaptation(npc, player, ref modifiers);
         }
 
-        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
-        {
-            if (projectile.owner >= 0 && projectile.owner < Main.maxPlayers)
-            {
-                Player player = Main.player[projectile.owner];
-                if (player != null && player.active)
-                {
-                    ApplyOffensiveAdaptation(npc, player, ref modifiers);
-                }
-            }
-        }
-
         public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
             ApplyOffensiveExpGain(npc, player, hit, damageDone);
         }
 
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            if (IsPlayerAttackProjectile(projectile, out Player player))
+            {
+                ApplyOffensiveAdaptation(npc, player, ref modifiers);
+            }
+        }
+
         public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            if (projectile.owner >= 0 && projectile.owner < Main.maxPlayers)
+            if (IsPlayerAttackProjectile(projectile, out Player player))
             {
-                Player player = Main.player[projectile.owner];
-                if (player != null && player.active)
-                {
-                    ApplyOffensiveExpGain(npc, player, hit, damageDone);
-                }
+                ApplyOffensiveExpGain(npc, player, hit, damageDone);
             }
+        }
+
+        private static bool IsPlayerAttackProjectile(Projectile projectile, out Player player)
+        {
+            player = null;
+            if (projectile == null || !projectile.active)
+                return false;
+
+            if (projectile.owner < 0 || projectile.owner >= Main.maxPlayers)
+                return false;
+
+            player = Main.player[projectile.owner];
+            if (player == null || !player.active)
+                return false;
+
+            if (!projectile.friendly || projectile.hostile || projectile.trap)
+                return false;
+
+            if (projectile.TryGetGlobalProjectile<AdaptationGlobalProjectile>(out var globalProj) && globalProj.HasNPCSource)
+                return false;
+
+            return true;
         }
 
         private static void ApplyOffensiveAdaptation(NPC target, Player player, ref NPC.HitModifiers modifiers)
@@ -70,7 +84,15 @@ namespace Stataria.Globals
                 // Max level Offensive Adaptation = Lethal strike! Total armor penetration!
                 modifiers.ArmorPenetration += 999999f;
                 modifiers.Defense.Flat *= 0f;
-                modifiers.FlatBonusDamage += target.lifeMax * 10 + 999999;
+
+                double realLifeMax = target.lifeMax;
+                if (target.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scaling) && scaling != null && scaling.UsesCustomHP && scaling.CustomLifeMax > 0)
+                {
+                    realLifeMax = scaling.CustomLifeMax;
+                }
+                if (realLifeMax >= 1500000000.0) realLifeMax = target.life > 0 ? target.life : 1000.0;
+
+                modifiers.FlatBonusDamage += (float)Math.Min(1500000000.0, realLifeMax * 10.0 + 999999.0);
             }
             else if (data.Level > 0)
             {
@@ -115,6 +137,52 @@ namespace Stataria.Globals
                 target.HitEffect(0, 9999.0);
                 target.checkDead();
             }
+        }
+
+        public static long GetXpEligibleDamage(Player player, NPC target, int damageDone)
+        {
+            if (player == null || target == null)
+                return damageDone;
+
+            var adaptorPlayer = player.GetModPlayer<AdaptationPlayer>();
+            if (adaptorPlayer == null || !adaptorPlayer.IsAdaptorActive)
+                return damageDone;
+
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config == null || !config.roleSettings.AdaptorMaxLevelOffensiveLethal)
+                return damageDone;
+
+            AdaptationCategory cat = AdaptationPlayer.IsBossNPC(target) ? AdaptationCategory.Boss : AdaptationCategory.Mob;
+            AdaptationPlayer.GetNPCTargetIdAndName(target, out string targetId, out string name);
+            AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: true);
+            AdaptationData data = adaptorPlayer.GetAdaptation(key);
+            int maxLevel = AdaptationData.GetMaxLevel();
+
+            if (data.Level >= maxLevel)
+            {
+                double realLifeMax = target.lifeMax;
+                if (target.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scaling) && scaling != null && scaling.UsesCustomHP && scaling.CustomLifeMax > 0)
+                {
+                    realLifeMax = scaling.CustomLifeMax;
+                }
+                if (realLifeMax >= 1500000000.0) realLifeMax = target.life > 0 ? target.life : 1000.0;
+
+                long flatBonus = (long)Math.Min(1500000000.0, realLifeMax * 10.0 + 999999.0);
+                long adjustedDamage = damageDone - flatBonus;
+
+                float bonusPerLevel = config.roleSettings.AdaptorOffensiveDamageBonusPerLevel;
+                float maxAdaptationMult = 1.0f + (maxLevel * bonusPerLevel);
+
+                if (adjustedDamage <= 0)
+                {
+                    adjustedDamage = (long)Math.Max(1f, realLifeMax * maxAdaptationMult);
+                }
+
+                long maxAllowedXpDamage = (long)Math.Max(50.0, realLifeMax * maxAdaptationMult);
+                return Math.Clamp(adjustedDamage, 1L, maxAllowedXpDamage);
+            }
+
+            return damageDone;
         }
     }
 }

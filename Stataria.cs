@@ -26,7 +26,8 @@ namespace Stataria
         AngelResurrect,
         SyncAngelState,
         NecromancerHarvestSoulOnKill,
-        SyncShinobiState
+        SyncShinobiState,
+        SyncAdaptationState
     }
 
     public class Stataria : Mod
@@ -117,6 +118,29 @@ namespace Stataria
             packet.Write(scalingData.IsElite);
             packet.Write(scalingData.Level);
             packet.Write(scalingData.CustomLifeMax);
+            packet.Send(toWho, fromWho);
+        }
+
+        public static void SyncAdaptationState(int playerIndex, int toWho = -1, int fromWho = -1)
+        {
+            if (playerIndex < 0 || playerIndex >= Main.maxPlayers)
+                return;
+
+            Player player = Main.player[playerIndex];
+            if (player == null || !player.active)
+                return;
+
+            var adaptor = player.GetModPlayer<Players.AdaptationPlayer>();
+            if (adaptor == null)
+                return;
+
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
+            packet.Write((byte)StatariaMessageType.SyncAdaptationState);
+            packet.Write(playerIndex);
+            packet.Write((byte)adaptor.ActiveCategory);
+            packet.Write(adaptor.HaloRotation);
+            packet.Write(adaptor.HaloSpinTimer);
+            packet.Write(adaptor.LevelUpFlashTimer);
             packet.Send(toWho, fromWho);
         }
 
@@ -227,6 +251,35 @@ namespace Stataria
                 for (int i = 0; i < bossCount; i++)
                 {
                     StatariaSystem.killedBossesGlobal.Add(reader.ReadInt32());
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncAdaptationState)
+            {
+                int playerIndex = reader.ReadInt32();
+                byte activeCat = reader.ReadByte();
+                float haloRot = reader.ReadSingle();
+                int haloSpin = reader.ReadInt32();
+                int flashTimer = reader.ReadInt32();
+
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    Player targetPlayer = Main.player[playerIndex];
+                    if (targetPlayer != null && targetPlayer.active)
+                    {
+                        var adaptor = targetPlayer.GetModPlayer<Players.AdaptationPlayer>();
+                        if (adaptor != null)
+                        {
+                            adaptor.ActiveCategory = (Core.AdaptationCategory)activeCat;
+                            adaptor.HaloRotation = haloRot;
+                            adaptor.HaloSpinTimer = haloSpin;
+                            adaptor.LevelUpFlashTimer = flashTimer;
+
+                            if (Main.netMode == NetmodeID.Server)
+                            {
+                                SyncAdaptationState(playerIndex, -1, whoAmI);
+                            }
+                        }
+                    }
                 }
             }
             else if (msgType == StatariaMessageType.BossXP)

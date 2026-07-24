@@ -2544,7 +2544,7 @@ Configs: {
 
 		AdaptorBaseExpEnvironment: {
 			Label: Base EXP Required (Environment)
-			Tooltip: Base experience required per level for environmental adaptations (Fall, Lava, Drowning).
+			Tooltip: Base experience required per level for environmental adaptations (Fall, Lava, Breathlessness).
 		}
 
 		AdaptorBaseExpDeath: {
@@ -2562,9 +2562,9 @@ Configs: {
 			Tooltip: Base experience required per level for Fall Damage adaptation.
 		}
 
-		AdaptorBaseExpDrowning: {
-			Label: Base EXP Required (Drowning)
-			Tooltip: Base experience required per level for Drowning adaptation.
+		AdaptorBaseExpBreathlessness: {
+			Label: Base EXP Required (Breathlessness)
+			Tooltip: Base experience required per level for Breathlessness adaptation.
 		}
 
 		AdaptorBaseExpLava: {
@@ -3424,7 +3424,7 @@ RoleEffects: {
 
 Adaptation: {
 	FallDamage: Fall Damage
-	Drowning: Drowning
+	Breathlessness: Breathlessness
 	Lava: Lava
 	Knockback: Knockback
 	Death: Death
