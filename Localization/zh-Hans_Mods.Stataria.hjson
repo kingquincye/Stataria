@@ -274,11 +274,20 @@ ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
 
 Commands: {
 	StatariaCommands: {
-		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | adaptation <reset | instant | maxall | kill | erase> | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
 		Description: Stataria 模组控制台命令
 		NoPermission: 您没有权限使用此命令。
 		SteamNotAvailable: Steam 不可用。无法验证管理员身份。
 		UsagePrefix: 用法: {0}
+		AdaptationUsage: 用法: /stataria adaptation <reset | instant | maxall | kill | erase>
+		AdaptationResetSuccess: "[Stataria] 所有适应等级已重置！"
+		AdaptationInstantToggle: "[Stataria] 瞬间适应模式: {0}"
+		AdaptationStatusEnabled: 已开启 (受击与攻击将直接获得最大适应等级！)
+		AdaptationStatusDisabled: 已关闭
+		AdaptationMaxAllSuccess: "[Stataria] 所有当前适应已提升至最大等级！"
+		AdaptationKillTest: "[Stataria] 已执行直接 Player.dead = true 测试！"
+		AdaptationEraseWotG: "[Stataria] 已触发 WotG PlayerWasDeleted 测试标记！"
+		AdaptationEraseSimulated: "[Stataria] 已触发模拟抹除事件！"
 		ResetSuccess: Stataria 已重置！
 		SetLevelSuccess: 等级已设置为 {0}
 		SetLevelUsage: 用法: /stataria setlevel <数字>
@@ -3429,6 +3438,7 @@ Adaptation: {
 	Knockback: 击退
 	Death: 死亡
 	Darkness: 黑暗
+	Erasure: 抹除
 }
 
 AdaptationUI: {

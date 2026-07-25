@@ -682,26 +682,58 @@ namespace Stataria
                 if (sub == "reset")
                 {
                     adaptorPlayer.ResetAllAdaptations();
-                    caller.Reply("[Stataria] All adaptation levels have been reset!", Color.Orange);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationResetSuccess"), Color.Orange);
                     return;
                 }
                 else if (sub == "instant" || sub == "max")
                 {
                     adaptorPlayer.InstantAdaptationMode = !adaptorPlayer.InstantAdaptationMode;
-                    string status = adaptorPlayer.InstantAdaptationMode ? "ENABLED (Hits and attacks will instantly grant Max Adaptation!)" : "DISABLED";
+                    string statusStr = adaptorPlayer.InstantAdaptationMode
+                        ? Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationStatusEnabled")
+                        : Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationStatusDisabled");
                     Color col = adaptorPlayer.InstantAdaptationMode ? Color.LightGreen : Color.Red;
-                    caller.Reply($"[Stataria] Instant Adaptation Mode: {status}", col);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationInstantToggle", statusStr), col);
                     return;
                 }
                 else if (sub == "maxall")
                 {
                     adaptorPlayer.MaxOutAllAdaptations();
-                    caller.Reply("[Stataria] All active adaptations have been maxed out to Max Level!", Color.LightGreen);
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationMaxAllSuccess"), Color.LightGreen);
+                    return;
+                }
+                else if (sub == "kill")
+                {
+                    caller.Player.dead = true;
+                    caller.Player.statLife = 0;
+                    caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationKillTest"), Color.Yellow);
+                    return;
+                }
+                else if (sub == "erase")
+                {
+                    if (WrathOfTheGodsSupportHelper.WotGLoaded)
+                    {
+                        try
+                        {
+                            var sysType = ModLoader.GetMod("NoxusBoss").Code.GetType("NoxusBoss.Core.Graphics.SpecificEffectManagers.EmptinessSprayPlayerDeletionSystem");
+                            sysType?.GetProperty("PlayerWasDeleted", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)?.SetValue(null, true);
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationEraseWotG"), Color.Purple);
+                        }
+                        catch
+                        {
+                            caller.Player.dead = true;
+                            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationEraseSimulated"), Color.Purple);
+                        }
+                    }
+                    else
+                    {
+                        caller.Player.dead = true;
+                        caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationEraseSimulated"), Color.Purple);
+                    }
                     return;
                 }
             }
 
-            caller.Reply("Usage: /stataria adaptation <reset | instant | maxall>", Color.Red);
+            caller.Reply(Language.GetTextValue("Mods.Stataria.Commands.StatariaCommands.AdaptationUsage"), Color.Red);
         }
     }
 }

@@ -41,8 +41,36 @@ namespace Stataria.Players
             }
         }
 
+        private Vector2 lastValidPosition;
+        public Vector2 LastValidPosition => lastValidPosition;
+
+        public bool IsDeathAdapted(int maxLevel)
+        {
+            AdaptationKey deathKey = GetDeathKey();
+            return GetAdaptation(deathKey).Level >= maxLevel;
+        }
+
+        public bool IsErasureAdapted(int maxLevel)
+        {
+            AdaptationKey erasureKey = GetErasureKey();
+            return GetAdaptation(erasureKey).Level >= maxLevel;
+        }
+
+        public override void PreUpdate()
+        {
+            if (IsAdaptorActive && !Player.dead && Player.statLife > 0)
+            {
+                lastValidPosition = Player.position;
+            }
+        }
+
         public override void ResetEffects()
         {
+            if (IsAdaptorActive)
+            {
+                CheckAndHandleErasureAdaptation(AdaptationData.GetMaxLevel());
+            }
+
             if (CheatDeathCooldownTimer > 0)
             {
                 CheatDeathCooldownTimer--;
@@ -838,6 +866,14 @@ namespace Stataria.Players
             return new AdaptationKey(AdaptationCategory.Death, "Death", displayName, isOffensive: false);
         }
 
+        private static AdaptationKey GetErasureKey()
+        {
+            string displayName = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Adaptation.Erasure");
+            if (string.IsNullOrEmpty(displayName) || displayName == "Mods.Stataria.Adaptation.Erasure")
+                displayName = "Erasure";
+            return new AdaptationKey(AdaptationCategory.Death, "Erasure", displayName, isOffensive: false);
+        }
+
         public override void PreUpdateBuffs()
         {
             if (!IsAdaptorActive)
@@ -952,12 +988,80 @@ namespace Stataria.Players
             return false;
         }
 
+        public void CheckAndHandleErasureAdaptation(int maxLevel)
+        {
+            AdaptationKey erasureKey = GetErasureKey();
+            AdaptationData erasureData = GetAdaptation(erasureKey);
+
+            bool wotgErasureActive = WrathOfTheGodsSupportHelper.IsPlayerWasDeletedActive();
+            if (wotgErasureActive)
+            {
+                WrathOfTheGodsSupportHelper.ClearErasureState();
+            }
+
+            if (wotgErasureActive || (erasureData.Level >= maxLevel && Player.dead))
+            {
+                if (erasureData.Level < maxLevel)
+                {
+                    // Instantly adapt to Erasure at MAX level!
+                    erasureData.Level = maxLevel;
+                    erasureData.CurrentExp = 0f;
+
+                    AuraFlash.TriggerLevelUpEffect(Player, AdaptationCategory.Death);
+
+                    AdaptationNotificationUI.AddNotification(new AdaptationNotification(
+                        erasureKey.DisplayName,
+                        AdaptationCategory.Death,
+                        maxLevel,
+                        1.0f,
+                        isOffensive: false,
+                        isLevelUp: true
+                    ));
+                }
+
+                // Restore Player
+                bool wasDead = Player.dead;
+                Player.dead = false;
+                Player.respawnTimer = 0;
+                Player.immuneAlpha = 0;
+                Player.statLife = Player.statLifeMax2;
+                Player.statMana = Player.statManaMax2;
+
+                if (wasDead && lastValidPosition != Vector2.Zero)
+                {
+                    Player.position = lastValidPosition;
+                    Player.velocity = Vector2.Zero;
+                }
+            }
+
+            // Universal 0.1% edge case safety: If standard Death Adaptation is maxed, intercept direct player.dead force-assignments
+            AdaptationKey deathKey = GetDeathKey();
+            AdaptationData deathData = GetAdaptation(deathKey);
+            if (deathData.Level >= maxLevel && Player.dead)
+            {
+                bool wasDead = Player.dead;
+                Player.dead = false;
+                Player.respawnTimer = 0;
+                Player.immuneAlpha = 0;
+                Player.statLife = Player.statLifeMax2;
+                Player.statMana = Player.statManaMax2;
+
+                if (wasDead && lastValidPosition != Vector2.Zero)
+                {
+                    Player.position = lastValidPosition;
+                    Player.velocity = Vector2.Zero;
+                }
+            }
+        }
+
         public override void PostUpdate()
         {
             if (!IsAdaptorActive)
                 return;
 
             int maxLevel = AdaptationData.GetMaxLevel();
+
+            CheckAndHandleErasureAdaptation(maxLevel);
 
             // Lock breath at max level of Breathlessness adaptation
             AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Breathlessness");

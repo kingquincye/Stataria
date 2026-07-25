@@ -274,11 +274,20 @@ ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
 
 Commands: {
 	StatariaCommands: {
-		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | adaptation <reset | instant | maxall | kill | erase> | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
 		Description: Commands for Stataria mod
 		NoPermission: You do not have permission to use this command.
 		SteamNotAvailable: Steam not available. Cannot verify admin identity.
 		UsagePrefix: Usage: {0}
+		AdaptationUsage: Usage: /stataria adaptation <reset | instant | maxall | kill | erase>
+		AdaptationResetSuccess: "[Stataria] All adaptation levels have been reset!"
+		AdaptationInstantToggle: "[Stataria] Instant Adaptation Mode: {0}"
+		AdaptationStatusEnabled: ENABLED (Hits and attacks will instantly grant Max Adaptation!)
+		AdaptationStatusDisabled: DISABLED
+		AdaptationMaxAllSuccess: "[Stataria] All active adaptations have been maxed out to Max Level!"
+		AdaptationKillTest: "[Stataria] Executed direct Player.dead = true test!"
+		AdaptationEraseWotG: "[Stataria] Triggered WotG PlayerWasDeleted test flag!"
+		AdaptationEraseSimulated: "[Stataria] Triggered simulated Erasure event!"
 		ResetSuccess: Stataria reset!
 		SetLevelSuccess: Level set to {0}
 		SetLevelUsage: Usage: /stataria setlevel <number>
@@ -3429,6 +3438,7 @@ Adaptation: {
 	Knockback: Knockback
 	Death: Death
 	Darkness: Darkness
+	Erasure: Erasure
 }
 
 AdaptationUI: {

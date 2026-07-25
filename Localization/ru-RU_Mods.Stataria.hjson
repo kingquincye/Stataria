@@ -274,11 +274,20 @@ ResourceDisplaySets.StatariaResourceDisplaySet.DisplayName: Stataria
 
 Commands: {
 	StatariaCommands: {
-		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
+		Usage: /stataria <reset | selfreset | setlevel x | setxp x | setpoints [rp] x | setrebirth x | setstat name x | clearbosses | syncbosses | debug | diagnose | weapondebug | adaptation <reset | instant | maxall | kill | erase> | testxpui [amount] [total_count] [current_index] [source] | cal <fillrage | filladrenaline | infrage | infadren>>
 		Description: Команды для мода Stataria
 		NoPermission: У вас нет прав на использование этой команды.
 		SteamNotAvailable: Steam недоступен. Невозможно проверить права администратора.
 		UsagePrefix: Использование: {0}
+		AdaptationUsage: Использование: /stataria adaptation <reset | instant | maxall | kill | erase>
+		AdaptationResetSuccess: "[Stataria] Все уровни адаптации сброшены!"
+		AdaptationInstantToggle: "[Stataria] Режим мгновенной адаптации: {0}"
+		AdaptationStatusEnabled: ВКЛЮЧЕН (Получение урона и атаки мгновенно дают максимальную адаптацию!)
+		AdaptationStatusDisabled: ВЫКЛЮЧЕН
+		AdaptationMaxAllSuccess: "[Stataria] Все активные адаптации улучшены до максимального уровня!"
+		AdaptationKillTest: "[Stataria] Выполнен тест прямого присвоения Player.dead = true!"
+		AdaptationEraseWotG: "[Stataria] Активирован тестовый флаг WotG PlayerWasDeleted!"
+		AdaptationEraseSimulated: "[Stataria] Активировано симулированное событие Стирания!"
 		ResetSuccess: Stataria сброшена!
 		SetLevelSuccess: Уровень установлен на {0}
 		SetLevelUsage: Использование: /stataria setlevel <число>
@@ -3429,6 +3438,7 @@ Adaptation: {
 	Knockback: Отбрасывание
 	Death: Смерть
 	Darkness: Тьма
+	Erasure: Стирание
 }
 
 AdaptationUI: {
