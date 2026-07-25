@@ -2,14 +2,12 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent.UI.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.Audio;
 using Terraria.ID;
-using Terraria.GameContent;
 using Terraria.Localization;
 using Stataria.Core;
 using Stataria.Players;
@@ -43,6 +41,18 @@ namespace Stataria.UI
 
         private bool dragging = false;
         private Vector2 offset;
+
+        // Virtualization & Caching fields
+        private List<KeyValuePair<AdaptationKey, AdaptationData>> cachedMatchingEntries = new List<KeyValuePair<AdaptationKey, AdaptationData>>();
+        private readonly List<UIAdaptationRow> rowPool = new List<UIAdaptationRow>();
+        private UIElement topSpacer;
+        private UIElement bottomSpacer;
+        private const float RowStep = 64f; // 58f row height + 6f ListPadding
+        private const int MaxVisibleRows = 14;
+        private int lastFirstIndex = -1;
+        private float lastScrollPosition = -1f;
+        private int lastKnownAdaptationCount = -1;
+        private int updateTimer = 0;
 
         public override void OnInitialize()
         {
@@ -131,6 +141,7 @@ namespace Stataria.UI
             adaptationList.Top.Set(136f, 0f);
             adaptationList.Left.Set(5f, 0f);
             adaptationList.ListPadding = 6f;
+            adaptationList.ManualSortMethod = (elements) => { }; // Bypass UIList's automatic sorting
             mainPanel.Append(adaptationList);
 
             scrollbar = new UIScrollbar();
@@ -142,8 +153,6 @@ namespace Stataria.UI
 
             RefreshAdaptationList();
         }
-
-        private int updateTimer = 0;
 
         private void CreateFilterButtons()
         {
@@ -203,6 +212,8 @@ namespace Stataria.UI
         {
             float prevScroll = (preserveScroll && scrollbar != null) ? scrollbar.ViewPosition : 0f;
             adaptationList?.Clear();
+            rowPool.Clear();
+            lastFirstIndex = -1;
 
             Player player = Main.LocalPlayer;
             if (player == null || !player.active)
@@ -211,6 +222,8 @@ namespace Stataria.UI
             var adaptor = player.GetModPlayer<AdaptationPlayer>();
             if (adaptor == null || adaptor.Adaptations == null)
                 return;
+
+            lastKnownAdaptationCount = adaptor.Adaptations.Count;
 
             int totalAcquired = adaptor.Adaptations.Values.Count(v => v.Level > 0 || v.CurrentExp > 0f || v.Disabled);
             int totalDisabled = adaptor.Adaptations.Values.Count(v => v.Disabled);
@@ -227,12 +240,13 @@ namespace Stataria.UI
                 emptyNotice.BackgroundColor = new Color(30, 40, 65, 180);
                 emptyNotice.BorderColor = new Color(70, 90, 130, 200);
                 adaptationList.Add(emptyNotice);
+                cachedMatchingEntries.Clear();
                 return;
             }
 
             string cleanSearch = searchText.Trim().ToLowerInvariant();
 
-            var matchingEntries = adaptor.Adaptations.Where(kvp =>
+            cachedMatchingEntries = adaptor.Adaptations.Where(kvp =>
             {
                 var key = kvp.Key;
                 var data = kvp.Value;
@@ -281,7 +295,7 @@ namespace Stataria.UI
               .ThenBy(kvp => kvp.Key.DisplayName)
               .ToList();
 
-            if (matchingEntries.Count == 0)
+            if (cachedMatchingEntries.Count == 0)
             {
                 var noMatches = new UITextPanel<string>("No adaptations match the current filter or search criteria.", 0.85f, false);
                 noMatches.Width.Set(0, 0.95f);
@@ -294,13 +308,37 @@ namespace Stataria.UI
                 return;
             }
 
+            int poolSize = Math.Min(MaxVisibleRows, cachedMatchingEntries.Count);
             int maxLevel = AdaptationData.GetMaxLevel();
 
-            foreach (var kvp in matchingEntries)
+            topSpacer = new UIElement();
+            topSpacer.Width.Set(0, 1f);
+            topSpacer.Height.Set(0, 0f);
+            adaptationList.Add(topSpacer);
+
+            for (int i = 0; i < poolSize; i++)
             {
-                var entryPanel = CreateAdaptationRow(kvp.Key, kvp.Value, adaptor, maxLevel);
-                adaptationList.Add(entryPanel);
+                var kvp = cachedMatchingEntries[i];
+                var row = new UIAdaptationRow(kvp.Key, kvp.Value, maxLevel, (targetKey) =>
+                {
+                    if (adaptor.Adaptations.TryGetValue(targetKey, out var latestData))
+                    {
+                        bool newDisabledState = !latestData.Disabled;
+                        adaptor.SetAdaptationDisabled(targetKey, newDisabledState);
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                        RefreshAdaptationList(preserveScroll: true);
+                    }
+                });
+                rowPool.Add(row);
+                adaptationList.Add(row);
             }
+
+            bottomSpacer = new UIElement();
+            bottomSpacer.Width.Set(0, 1f);
+            bottomSpacer.Height.Set(0, 0f);
+            adaptationList.Add(bottomSpacer);
+
+            UpdateVirtualScroll(force: true);
 
             if (preserveScroll && scrollbar != null)
             {
@@ -308,114 +346,60 @@ namespace Stataria.UI
             }
         }
 
-        private UIPanel CreateAdaptationRow(AdaptationKey key, AdaptationData data, AdaptationPlayer adaptor, int maxLevel)
+        private void UpdateVirtualScroll(bool force = false)
         {
-            var row = new UIPanel();
-            row.Width.Set(0, 1f);
-            row.Height.Set(58f, 0f);
-            row.SetPadding(6f);
+            if (cachedMatchingEntries == null || cachedMatchingEntries.Count == 0 || rowPool.Count == 0)
+                return;
 
-            bool isDisabled = data.Disabled;
-            Color catColor = key.Category.GetCategoryColor();
+            float currentScroll = scrollbar != null ? scrollbar.ViewPosition : 0f;
+            int totalCount = cachedMatchingEntries.Count;
+            int visibleCount = rowPool.Count;
+            int maxFirstIndex = Math.Max(0, totalCount - visibleCount);
+            int firstIndex = Math.Max(0, Math.Min(maxFirstIndex, (int)Math.Floor(currentScroll / RowStep)));
 
-            if (isDisabled)
+            if (force || firstIndex != lastFirstIndex)
             {
-                row.BackgroundColor = new Color(45, 25, 30, 220);
-                row.BorderColor = new Color(180, 70, 70, 230);
-            }
-            else
-            {
-                row.BackgroundColor = new Color(28, 38, 60, 210);
-                row.BorderColor = catColor * 0.85f;
-            }
+                lastFirstIndex = firstIndex;
 
-            // Left: Category tag badge
-            string categoryTag = $"[{key.Category.ToString().ToUpper()}]";
-            var catBadge = new UIText(categoryTag, 0.8f);
-            catBadge.Left.Set(4f, 0f);
-            catBadge.Top.Set(4f, 0f);
-            catBadge.TextColor = catColor;
-            row.Append(catBadge);
+                float topH = firstIndex * RowStep;
+                float bottomH = Math.Max(0f, (totalCount - firstIndex - visibleCount) * RowStep);
 
-            float catBadgeWidth = FontAssets.MouseText.Value.MeasureString(categoryTag).X * 0.8f;
+                if (topSpacer != null)
+                    topSpacer.Height.Set(topH, 0f);
+                if (bottomSpacer != null)
+                    bottomSpacer.Height.Set(bottomH, 0f);
 
-            // Offensive / Defensive tag badge
-            string typeTag = key.IsOffensive ? "[OFFENSE]" : "[DEFENSE]";
-            var typeBadge = new UIText(typeTag, 0.75f);
-            typeBadge.Left.Set(4f + catBadgeWidth + 10f, 0f);
-            typeBadge.Top.Set(4f, 0f);
-            typeBadge.TextColor = key.IsOffensive ? new Color(255, 215, 100) : new Color(140, 210, 255);
-            row.Append(typeBadge);
-
-            // Display Name
-            string nameStr = key.DisplayName;
-            var nameText = new UIText(nameStr, 1f);
-            nameText.Left.Set(4f, 0f);
-            nameText.Top.Set(24f, 0f);
-            nameText.TextColor = isDisabled ? new Color(170, 140, 140) : Color.White;
-            row.Append(nameText);
-
-            // Target ID subtext (if different from display name)
-            if (!string.IsNullOrEmpty(key.TargetId) && !key.TargetId.Equals(key.DisplayName, StringComparison.OrdinalIgnoreCase))
-            {
-                var subText = new UIText($"({key.TargetId})", 0.7f);
-                subText.Left.Set(nameText.Left.Pixels + FontAssets.MouseText.Value.MeasureString(nameStr).X * 1f + 8f, 0f);
-                subText.Top.Set(26f, 0f);
-                subText.TextColor = new Color(140, 150, 170);
-                row.Append(subText);
+                adaptationList?.Recalculate();
             }
 
-            // Right side: Level indicator
-            bool isMaxed = data.Level >= maxLevel;
-            string levelStr = isMaxed ? $"LVL {data.Level} (MAX)" : $"LVL {data.Level}/{maxLevel}";
-            var levelText = new UIText(levelStr, 0.95f);
-            levelText.Left.Set(-250f, 1f);
-            levelText.Top.Set(4f, 0f);
-            levelText.TextColor = isMaxed ? new Color(255, 215, 100) : new Color(200, 220, 255);
-            row.Append(levelText);
+            lastScrollPosition = currentScroll;
 
-            // Progress percentage bar (if not maxed)
-            float pct = data.GetProgressPercentage(key.Category, key.TargetId);
-            string pctStr = isMaxed ? "100%" : $"{(pct * 100f):0.#}%";
-            var pctText = new UIText(pctStr, 0.75f);
-            pctText.Left.Set(-250f, 1f);
-            pctText.Top.Set(26f, 0f);
-            pctText.TextColor = isMaxed ? new Color(120, 255, 120) : new Color(180, 200, 230);
-            row.Append(pctText);
+            Player player = Main.LocalPlayer;
+            if (player == null || !player.active)
+                return;
 
-            // Toggle Button (Enabled vs Disabled)
-            string buttonText = isDisabled ? "DISABLED" : "ENABLED";
-            var toggleBtn = new UITextPanel<string>(buttonText, 0.8f, false);
-            toggleBtn.Width.Set(90f, 0f);
-            toggleBtn.Height.Set(32f, 0f);
-            toggleBtn.Left.Set(-100f, 1f);
-            toggleBtn.Top.Set(8f, 0f);
-            toggleBtn.SetPadding(4f);
+            var adaptor = player.GetModPlayer<AdaptationPlayer>();
+            if (adaptor == null || adaptor.Adaptations == null)
+                return;
 
-            if (isDisabled)
+            int totalAcquired = adaptor.Adaptations.Values.Count(v => v.Level > 0 || v.CurrentExp > 0f || v.Disabled);
+            int totalDisabled = adaptor.Adaptations.Values.Count(v => v.Disabled);
+            subtitleText?.SetText($"Acquired: {totalAcquired}  |  Disabled: {totalDisabled}");
+
+            int maxLevel = AdaptationData.GetMaxLevel();
+
+            for (int i = 0; i < visibleCount; i++)
             {
-                toggleBtn.BackgroundColor = new Color(140, 40, 45, 230);
-                toggleBtn.BorderColor = new Color(220, 80, 80, 255);
-                toggleBtn.TextColor = Color.White;
+                int dataIndex = firstIndex + i;
+                if (dataIndex < totalCount)
+                {
+                    var key = cachedMatchingEntries[dataIndex].Key;
+                    if (adaptor.Adaptations.TryGetValue(key, out var data))
+                    {
+                        rowPool[i].Bind(key, data, maxLevel);
+                    }
+                }
             }
-            else
-            {
-                toggleBtn.BackgroundColor = new Color(40, 120, 50, 230);
-                toggleBtn.BorderColor = new Color(80, 200, 90, 255);
-                toggleBtn.TextColor = Color.White;
-            }
-
-            toggleBtn.OnLeftClick += (evt, el) =>
-            {
-                bool newDisabledState = !data.Disabled;
-                adaptor.SetAdaptationDisabled(key, newDisabledState);
-                SoundEngine.PlaySound(SoundID.MenuTick);
-                RefreshAdaptationList(preserveScroll: true);
-            };
-
-            row.Append(toggleBtn);
-
-            return row;
         }
 
         public override void Update(GameTime gameTime)
@@ -434,14 +418,31 @@ namespace Stataria.UI
                 mainPanel.Recalculate();
             }
 
+            Player player = Main.LocalPlayer;
+            if (player != null && player.active)
+            {
+                var adaptor = player.GetModPlayer<AdaptationPlayer>();
+                if (adaptor != null && adaptor.Adaptations != null)
+                {
+                    if (lastKnownAdaptationCount != adaptor.Adaptations.Count)
+                    {
+                        RefreshAdaptationList(preserveScroll: true);
+                        return;
+                    }
+                }
+            }
+
+            float currentScroll = scrollbar != null ? scrollbar.ViewPosition : 0f;
+            if (Math.Abs(currentScroll - lastScrollPosition) > 0.01f)
+            {
+                UpdateVirtualScroll();
+            }
+
             updateTimer++;
             if (updateTimer >= 15)
             {
                 updateTimer = 0;
-                if (searchInput == null || !searchInput.Focused)
-                {
-                    RefreshAdaptationList(preserveScroll: true);
-                }
+                UpdateVirtualScroll();
             }
         }
 
