@@ -27,7 +27,9 @@ namespace Stataria
         SyncAngelState,
         NecromancerHarvestSoulOnKill,
         SyncShinobiState,
-        SyncAdaptationState
+        SyncAdaptationState,
+        SyncAdaptationToggle,
+        SyncAllAdaptations
     }
 
     public class Stataria : Mod
@@ -141,6 +143,52 @@ namespace Stataria
             packet.Write(adaptor.HaloRotation);
             packet.Write(adaptor.HaloSpinTimer);
             packet.Write(adaptor.LevelUpFlashTimer);
+            packet.Send(toWho, fromWho);
+        }
+
+        public static void SyncAdaptationToggle(int playerIndex, Core.AdaptationKey key, bool disabled, int toWho = -1, int fromWho = -1)
+        {
+            if (playerIndex < 0 || playerIndex >= Main.maxPlayers)
+                return;
+
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
+            packet.Write((byte)StatariaMessageType.SyncAdaptationToggle);
+            packet.Write(playerIndex);
+            packet.Write((byte)key.Category);
+            packet.Write(key.TargetId ?? "");
+            packet.Write(key.DisplayName ?? "");
+            packet.Write(key.IsOffensive);
+            packet.Write(disabled);
+            packet.Send(toWho, fromWho);
+        }
+
+        public static void SyncAllAdaptations(int playerIndex, int toWho = -1, int fromWho = -1)
+        {
+            if (playerIndex < 0 || playerIndex >= Main.maxPlayers)
+                return;
+
+            Player player = Main.player[playerIndex];
+            if (player == null || !player.active)
+                return;
+
+            var adaptor = player.GetModPlayer<Players.AdaptationPlayer>();
+            if (adaptor == null || adaptor.Adaptations == null)
+                return;
+
+            var packet = ModContent.GetInstance<Stataria>().GetPacket();
+            packet.Write((byte)StatariaMessageType.SyncAllAdaptations);
+            packet.Write(playerIndex);
+            packet.Write(adaptor.Adaptations.Count);
+            foreach (var kvp in adaptor.Adaptations)
+            {
+                packet.Write((byte)kvp.Key.Category);
+                packet.Write(kvp.Key.TargetId ?? "");
+                packet.Write(kvp.Key.DisplayName ?? "");
+                packet.Write(kvp.Key.IsOffensive);
+                packet.Write(kvp.Value.Level);
+                packet.Write(kvp.Value.CurrentExp);
+                packet.Write(kvp.Value.Disabled);
+            }
             packet.Send(toWho, fromWho);
         }
 
@@ -277,6 +325,73 @@ namespace Stataria
                             if (Main.netMode == NetmodeID.Server)
                             {
                                 SyncAdaptationState(playerIndex, -1, whoAmI);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncAdaptationToggle)
+            {
+                int playerIndex = reader.ReadInt32();
+                byte categoryByte = reader.ReadByte();
+                string targetId = reader.ReadString();
+                string displayName = reader.ReadString();
+                bool isOffensive = reader.ReadBoolean();
+                bool disabled = reader.ReadBoolean();
+
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    Player targetPlayer = Main.player[playerIndex];
+                    if (targetPlayer != null && targetPlayer.active)
+                    {
+                        var adaptor = targetPlayer.GetModPlayer<Players.AdaptationPlayer>();
+                        if (adaptor != null)
+                        {
+                            var key = new Core.AdaptationKey((Core.AdaptationCategory)categoryByte, targetId, displayName, isOffensive);
+                            var data = adaptor.GetAdaptation(key);
+                            data.Disabled = disabled;
+
+                            if (Main.netMode == NetmodeID.Server)
+                            {
+                                SyncAdaptationToggle(playerIndex, key, disabled, -1, whoAmI);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.SyncAllAdaptations)
+            {
+                int playerIndex = reader.ReadInt32();
+                int count = reader.ReadInt32();
+
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    Player targetPlayer = Main.player[playerIndex];
+                    if (targetPlayer != null && targetPlayer.active)
+                    {
+                        var adaptor = targetPlayer.GetModPlayer<Players.AdaptationPlayer>();
+                        if (adaptor != null)
+                        {
+                            for (int i = 0; i < count; i++)
+                            {
+                                byte catByte = reader.ReadByte();
+                                string targetId = reader.ReadString();
+                                string displayName = reader.ReadString();
+                                bool isOffensive = reader.ReadBoolean();
+                                int level = reader.ReadInt32();
+                                float exp = reader.ReadSingle();
+                                bool disabled = reader.ReadBoolean();
+
+                                var key = new Core.AdaptationKey((Core.AdaptationCategory)catByte, targetId, displayName, isOffensive);
+                                var data = adaptor.GetAdaptation(key);
+                                data.Level = level;
+                                data.CurrentExp = exp;
+                                data.Disabled = disabled;
+                            }
+
+                            if (Main.netMode == NetmodeID.Server)
+                            {
+                                SyncAllAdaptations(playerIndex, -1, whoAmI);
                             }
                         }
                     }

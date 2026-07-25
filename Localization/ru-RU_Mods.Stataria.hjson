@@ -99,6 +99,11 @@ UI: {
 		ConfirmAscend: ПОДТВЕРДИТЬ?
 	}
 
+	Adaptation: {
+		Title: МАТРИЦА АДАПТАЦИИ
+		SearchPlaceholder: Поиск адаптаций...
+	}
+
 	Socketing: {
 		Title: Система Гнезд
 		RebirthPoints: Ваши ОП: {0}
@@ -259,6 +264,7 @@ UI: {
 
 Keybinds: {
 	"Toggle Stataria UI.DisplayName": Переключить интерфейс Stataria
+	"Toggle Adaptations UI.DisplayName": Переключить матрицу адаптаций
 	"AGI Teleport.DisplayName": Телепорт
 	"Divine Intervention.DisplayName": Божественное вмешательство
 	"Soul Recall.DisplayName": Отзыв души
@@ -2511,6 +2517,11 @@ Configs: {
 			Tooltip: Если включено, Живая Плоть по-прежнему будет получать бонусы к урону от других характеристик, эффекты регенерации VIT и снижение урона от END.
 		}
 
+		EnableAdaptorRole: {
+			Label: Включить роль Адаптора
+			Tooltip: Если отключено, роль Адаптора нельзя выбрать или использовать. Игроки с активной ролью Адаптора немедленно потеряют её.
+		}
+
 		AdaptorEnableCheatDeath: {
 			Label: Включить Спасение от смерти
 			Tooltip: Позволяет Адаптору избежать смертельного урона, даруя временную неуязвимость и полное восстановление.
@@ -3686,3 +3697,5 @@ Projectiles: {
 	ElementalDischargeProjectile.DisplayName: Элементальный разряд
 	FleshCloneProjectile.DisplayName: Клон Плоти
 }
+
+Tooltip.AdaptorEmptinessSprayer: '''[Адаптор] "Стирает низших существ"... Что произойдет, когда абсолютное стирание встретит абсолютную адаптацию?'''

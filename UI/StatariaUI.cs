@@ -26,6 +26,8 @@ namespace Stataria
         internal static SocketingUI SocketingPanel;
         internal static UserInterface AdaptationNotificationUserInterface;
         internal static AdaptationNotificationUI AdaptationNotificationPanel;
+        internal static UserInterface AdaptationUI;
+        internal static AdaptationUI AdaptationPanel;
 
         public override void Load()
         {
@@ -47,6 +49,10 @@ namespace Stataria
             SocketingUI = new UserInterface();
             SocketingPanel = new SocketingUI();
             SocketingPanel.Activate();
+
+            AdaptationUI = new UserInterface();
+            AdaptationPanel = new AdaptationUI();
+            AdaptationPanel.Activate();
 
             AdaptationNotificationUserInterface = new UserInterface();
             AdaptationNotificationPanel = new AdaptationNotificationUI();
@@ -74,6 +80,8 @@ namespace Stataria
             TabBarPanel = null;
             SocketingUI = null;
             SocketingPanel = null;
+            AdaptationUI = null;
+            AdaptationPanel = null;
             AdaptationNotificationUserInterface = null;
             AdaptationNotificationPanel = null;
         }
@@ -85,6 +93,7 @@ namespace Stataria
             XPVerificationUI?.Recalculate();
             RoleSelectionUI?.Recalculate();
             SocketingUI?.Recalculate();
+            AdaptationUI?.Recalculate();
             TabBarInterface?.Recalculate();
             AdaptationNotificationUserInterface?.Recalculate();
         }
@@ -113,6 +122,10 @@ namespace Stataria
             if (SocketingUI?.CurrentState != null)
             {
                 SocketingUI.Update(gameTime);
+            }
+            if (AdaptationUI?.CurrentState != null)
+            {
+                AdaptationUI.Update(gameTime);
             }
             if (AdaptationNotificationUserInterface?.CurrentState != null)
             {
@@ -147,6 +160,19 @@ namespace Stataria
                         if (StatUI?.CurrentState != null)
                         {
                             StatUI.Draw(Main.spriteBatch, new GameTime());
+                        }
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+
+                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
+                    "Stataria: Adaptations",
+                    delegate
+                    {
+                        if (AdaptationUI?.CurrentState != null)
+                        {
+                            AdaptationUI.Draw(Main.spriteBatch, new GameTime());
                         }
                         return true;
                     },
@@ -314,6 +340,30 @@ namespace Stataria
                     },
                     InterfaceScaleType.Game)
                 );
+            }
+        }
+
+        public static void ToggleAdaptationUI()
+        {
+            if (AdaptationUI == null || AdaptationPanel == null)
+                return;
+
+            if (AdaptationUI.CurrentState != null)
+            {
+                AdaptationUI.SetState(null);
+                Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.MenuClose);
+            }
+            else
+            {
+                StatUI?.SetState(null);
+                SkillTreeUI?.SetState(null);
+                RoleSelectionUI?.SetState(null);
+                SocketingUI?.SetState(null);
+                TabBarInterface?.SetState(null);
+
+                AdaptationPanel.RefreshAdaptationList();
+                AdaptationUI.SetState(AdaptationPanel);
+                Terraria.Audio.SoundEngine.PlaySound(Terraria.ID.SoundID.MenuOpen);
             }
         }
 

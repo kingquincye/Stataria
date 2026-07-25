@@ -37,7 +37,8 @@ namespace Stataria.Players
                        rpgPlayer.ActiveRole.ID == "Adaptor" &&
                        rpgPlayer.ActiveRole.Status == RoleStatus.Active &&
                        config != null &&
-                       config.roleSettings.EnableRoleSystem;
+                       config.roleSettings.EnableRoleSystem &&
+                       config.roleSettings.EnableAdaptorRole;
             }
         }
 
@@ -111,6 +112,7 @@ namespace Stataria.Players
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
         {
             Stataria.SyncAdaptationState(Player.whoAmI, toWho, fromWho);
+            Stataria.SyncAllAdaptations(Player.whoAmI, toWho, fromWho);
         }
 
         public override void CopyClientState(ModPlayer targetCopy)
@@ -148,7 +150,39 @@ namespace Stataria.Players
             }
         }
 
+        public Dictionary<AdaptationKey, AdaptationData> Adaptations => adaptations;
+
+        public void SetAdaptationDisabled(AdaptationKey key, bool disabled)
+        {
+            var data = GetOrCreateAdaptation(key);
+            if (data.Disabled != disabled)
+            {
+                data.Disabled = disabled;
+                if (Main.netMode == NetmodeID.MultiplayerClient && Player.whoAmI == Main.myPlayer)
+                {
+                    Stataria.SyncAdaptationToggle(Player.whoAmI, key, disabled);
+                }
+            }
+        }
+
+        public override void ProcessTriggers(Terraria.GameInput.TriggersSet triggersSet)
+        {
+            if (StatariaKeybinds.ToggleAdaptationUI != null && StatariaKeybinds.ToggleAdaptationUI.JustPressed && !Terraria.GameInput.PlayerInput.WritingText)
+            {
+                StatariaUI.ToggleAdaptationUI();
+            }
+        }
+
         public AdaptationData GetAdaptation(AdaptationKey key)
+        {
+            if (adaptations.TryGetValue(key, out var data))
+            {
+                return data;
+            }
+            return new AdaptationData(0, 0f);
+        }
+
+        public AdaptationData GetOrCreateAdaptation(AdaptationKey key)
         {
             if (!adaptations.TryGetValue(key, out var data))
             {
@@ -163,6 +197,10 @@ namespace Stataria.Players
             if (!IsAdaptorActive)
                 return;
 
+            var data = GetOrCreateAdaptation(key);
+            if (data.Disabled)
+                return;
+
             var config = ModContent.GetInstance<StatariaConfig>();
             float mult = config != null ? config.roleSettings.AdaptorGlobalExpMultiplier : 1.0f;
             float expToAdd = amount * mult;
@@ -171,7 +209,6 @@ namespace Stataria.Players
                 return;
 
             ActiveCategory = key.Category;
-            var data = GetAdaptation(key);
             int maxLevel = AdaptationData.GetMaxLevel();
 
             if (data.Level >= maxLevel)
@@ -492,7 +529,7 @@ namespace Stataria.Players
                 AdaptationData data = GetAdaptation(key);
                 int maxLevel = AdaptationData.GetMaxLevel();
 
-                if (data.Level >= maxLevel && (config == null || config.roleSettings.AdaptorMaxLevelDamageImmunity))
+                if (!data.Disabled && data.Level >= maxLevel && (config == null || config.roleSettings.AdaptorMaxLevelDamageImmunity))
                 {
                     return false; // Complete hit cancellation at max level!
                 }
@@ -524,7 +561,8 @@ namespace Stataria.Players
                         GainExp(npcKey, 999999f);
                     }
 
-                    if (GetAdaptation(npcKey).Level >= maxLevel && immunityAllowed)
+                    var npcData = GetAdaptation(npcKey);
+                    if (!npcData.Disabled && npcData.Level >= maxLevel && immunityAllowed)
                     {
                         return false; // Immune to the shooter!
                     }
@@ -553,7 +591,8 @@ namespace Stataria.Players
                     GainExp(projKey, 999999f);
                 }
 
-                if (GetAdaptation(projKey).Level >= maxLevel && immunityAllowed)
+                var projData = GetAdaptation(projKey);
+                if (!projData.Disabled && projData.Level >= maxLevel && immunityAllowed)
                 {
                     return false; // Immune to this specific projectile type!
                 }
@@ -581,12 +620,6 @@ namespace Stataria.Players
                 return;
             }
 
-            if (CheatDeathInvincibilityTimer > 0)
-            {
-                modifiers.FinalDamage *= 0f;
-                return;
-            }
-
             var config = ModContent.GetInstance<StatariaConfig>();
             float reductionPerLevel = config != null ? config.roleSettings.AdaptorDefensiveDamageReductionPerLevel : 0.08f;
             int maxLevel = AdaptationData.GetMaxLevel();
@@ -602,11 +635,11 @@ namespace Stataria.Players
                     AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: false);
                     AdaptationData data = GetAdaptation(key);
 
-                    if (data.Level >= maxLevel && config.roleSettings.AdaptorMaxLevelDamageImmunity)
+                    if (!data.Disabled && data.Level >= maxLevel && config.roleSettings.AdaptorMaxLevelDamageImmunity)
                     {
                         modifiers.FinalDamage *= 0f;
                     }
-                    else if (data.Level > 0)
+                    else if (!data.Disabled && data.Level > 0)
                     {
                         float reductionPct = data.Level * reductionPerLevel;
                         modifiers.FinalDamage *= Math.Max(0f, 1.0f - reductionPct);
@@ -620,9 +653,13 @@ namespace Stataria.Players
                     {
                         AdaptationCategory cat = globalProj.SourceNPCIsBoss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
                         AdaptationKey npcKey = new AdaptationKey(cat, globalProj.SourceNPCTargetId, globalProj.SourceNPCName, isOffensive: false);
-                        int npcLevel = GetAdaptation(npcKey).Level;
-                        if (npcLevel >= maxLevel && config.roleSettings.AdaptorMaxLevelDamageImmunity) bestReduction = 1.0f;
-                        else if (npcLevel > 0) bestReduction = Math.Max(bestReduction, npcLevel * reductionPerLevel);
+                        var npcData = GetAdaptation(npcKey);
+                        if (!npcData.Disabled)
+                        {
+                            int npcLevel = npcData.Level;
+                            if (npcLevel >= maxLevel && config.roleSettings.AdaptorMaxLevelDamageImmunity) bestReduction = 1.0f;
+                            else if (npcLevel > 0) bestReduction = Math.Max(bestReduction, npcLevel * reductionPerLevel);
+                        }
                     }
 
                     string projIdName = ProjectileID.Search.GetName(proj.type);
@@ -638,10 +675,13 @@ namespace Stataria.Players
                     bool isBoss = globalProj != null && globalProj.SourceNPCIsBoss;
                     AdaptationCategory projCat = isBoss ? AdaptationCategory.Boss : AdaptationCategory.Mob;
                     AdaptationKey projKey = new AdaptationKey(projCat, "Proj_" + projIdName, projName, isOffensive: false);
-                    int projLevel = GetAdaptation(projKey).Level;
-
-                    if (projLevel >= maxLevel && config.roleSettings.AdaptorMaxLevelDamageImmunity) bestReduction = 1.0f;
-                    else if (projLevel > 0) bestReduction = Math.Max(bestReduction, projLevel * reductionPerLevel);
+                    var projData = GetAdaptation(projKey);
+                    if (!projData.Disabled)
+                    {
+                        int projLevel = projData.Level;
+                        if (projLevel >= maxLevel && config.roleSettings.AdaptorMaxLevelDamageImmunity) bestReduction = 1.0f;
+                        else if (projLevel > 0) bestReduction = Math.Max(bestReduction, projLevel * reductionPerLevel);
+                    }
 
                     modifiers.FinalDamage *= Math.Max(0f, 1.0f - bestReduction);
                 }
@@ -653,11 +693,11 @@ namespace Stataria.Players
                 AdaptationKey fallKey = GetEnvironmentKey("FallDamage", "Mods.Stataria.Adaptation.FallDamage");
                 AdaptationData fallData = GetAdaptation(fallKey);
 
-                if (fallData.Level >= maxLevel)
+                if (!fallData.Disabled && fallData.Level >= maxLevel)
                 {
                     modifiers.FinalDamage *= 0f;
                 }
-                else if (fallData.Level > 0)
+                else if (!fallData.Disabled && fallData.Level > 0)
                 {
                     modifiers.FinalDamage *= Math.Max(0f, 1.0f - fallData.Level * (1.0f / maxLevel));
                 }
@@ -669,11 +709,11 @@ namespace Stataria.Players
                 AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Breathlessness");
                 AdaptationData breathData = GetAdaptation(breathKey);
 
-                if (breathData.Level >= maxLevel)
+                if (!breathData.Disabled && breathData.Level >= maxLevel)
                 {
                     modifiers.FinalDamage *= 0f;
                 }
-                else if (breathData.Level > 0)
+                else if (!breathData.Disabled && breathData.Level > 0)
                 {
                     modifiers.FinalDamage *= Math.Max(0f, 1.0f - breathData.Level * (1.0f / maxLevel));
                 }
@@ -685,11 +725,11 @@ namespace Stataria.Players
                 AdaptationKey lavaKey = GetEnvironmentKey("Lava", "Mods.Stataria.Adaptation.Lava");
                 AdaptationData lavaData = GetAdaptation(lavaKey);
 
-                if (lavaData.Level >= maxLevel)
+                if (!lavaData.Disabled && lavaData.Level >= maxLevel)
                 {
                     modifiers.FinalDamage *= 0f;
                 }
-                else if (lavaData.Level > 0)
+                else if (!lavaData.Disabled && lavaData.Level > 0)
                 {
                     modifiers.FinalDamage *= Math.Max(0f, 1.0f - lavaData.Level * (1.0f / maxLevel));
                 }
@@ -698,11 +738,11 @@ namespace Stataria.Players
             // Knockback adaptation scaling
             AdaptationKey kbKey = GetEnvironmentKey("Knockback", "Mods.Stataria.Adaptation.Knockback");
             AdaptationData kbData = GetAdaptation(kbKey);
-            if (kbData.Level >= maxLevel)
+            if (!kbData.Disabled && kbData.Level >= maxLevel)
             {
                 modifiers.Knockback *= 0f;
             }
-            else if (kbData.Level > 0)
+            else if (!kbData.Disabled && kbData.Level > 0)
             {
                 float kbReductionPct = Math.Clamp(kbData.Level * (1.0f / maxLevel), 0f, 1.0f);
                 modifiers.Knockback *= (1.0f - kbReductionPct);
@@ -800,7 +840,7 @@ namespace Stataria.Players
             AdaptationKey deathKey = GetDeathKey();
             AdaptationData deathData = GetAdaptation(deathKey);
 
-            if (enableCheatDeath && (deathData.Level >= maxLevel || CheatDeathCooldownTimer <= 0))
+            if (!deathData.Disabled && enableCheatDeath && (deathData.Level >= maxLevel || CheatDeathCooldownTimer <= 0))
             {
                 // Prevent death!
                 float healPct = deathData.Level >= maxLevel ? 1.0f : Math.Max(0.15f, 0.15f + deathData.Level * (0.85f / maxLevel));
@@ -930,6 +970,9 @@ namespace Stataria.Players
                 AdaptationKey key = new AdaptationKey(AdaptationCategory.Debuff, buffIdName, displayName, isOffensive: false);
                 AdaptationData data = GetAdaptation(key);
 
+                if (data.Disabled)
+                    continue;
+
                 bool isTileAura = Main.buffNoTimeDisplay[buffType] || buffTime <= 10;
 
                 if (data.Level >= maxLevel)
@@ -990,22 +1033,25 @@ namespace Stataria.Players
 
         public void CheckAndHandleErasureAdaptation(int maxLevel)
         {
-            AdaptationKey erasureKey = GetErasureKey();
-            AdaptationData erasureData = GetAdaptation(erasureKey);
-
-            bool wotgErasureActive = WrathOfTheGodsSupportHelper.IsPlayerWasDeletedActive();
-            if (wotgErasureActive)
+            if (WrathOfTheGodsSupportHelper.WotGLoaded)
             {
-                WrathOfTheGodsSupportHelper.ClearErasureState();
-            }
+                AdaptationKey erasureKey = GetErasureKey();
+                AdaptationData erasureData = GetAdaptation(erasureKey);
 
-            if (wotgErasureActive || (erasureData.Level >= maxLevel && Player.dead))
-            {
-                if (erasureData.Level < maxLevel)
+                bool wotgErasureActive = WrathOfTheGodsSupportHelper.IsPlayerWasDeletedActive();
+                if (wotgErasureActive)
                 {
-                    // Instantly adapt to Erasure at MAX level!
-                    erasureData.Level = maxLevel;
-                    erasureData.CurrentExp = 0f;
+                    WrathOfTheGodsSupportHelper.ClearErasureState();
+                    erasureData = GetOrCreateAdaptation(erasureKey);
+                }
+
+                if (!erasureData.Disabled && (wotgErasureActive || (erasureData.Level >= maxLevel && Player.dead)))
+                {
+                    if (erasureData.Level < maxLevel)
+                    {
+                        erasureData = GetOrCreateAdaptation(erasureKey);
+                        erasureData.Level = maxLevel;
+                        erasureData.CurrentExp = 0f;
 
                     AuraFlash.TriggerLevelUpEffect(Player, AdaptationCategory.Death);
 
@@ -1027,17 +1073,18 @@ namespace Stataria.Players
                 Player.statLife = Player.statLifeMax2;
                 Player.statMana = Player.statManaMax2;
 
-                if (wasDead && lastValidPosition != Vector2.Zero)
-                {
-                    Player.position = lastValidPosition;
-                    Player.velocity = Vector2.Zero;
+                    if (wasDead && lastValidPosition != Vector2.Zero)
+                    {
+                        Player.position = lastValidPosition;
+                        Player.velocity = Vector2.Zero;
+                    }
                 }
             }
 
             // Universal 0.1% edge case safety: If standard Death Adaptation is maxed, intercept direct player.dead force-assignments
             AdaptationKey deathKey = GetDeathKey();
             AdaptationData deathData = GetAdaptation(deathKey);
-            if (deathData.Level >= maxLevel && Player.dead)
+            if (!deathData.Disabled && deathData.Level >= maxLevel && Player.dead)
             {
                 bool wasDead = Player.dead;
                 Player.dead = false;
@@ -1066,7 +1113,7 @@ namespace Stataria.Players
             // Lock breath at max level of Breathlessness adaptation
             AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Breathlessness");
             AdaptationData breathData = GetAdaptation(breathKey);
-            if (breathData.Level >= maxLevel)
+            if (!breathData.Disabled && breathData.Level >= maxLevel)
             {
                 Player.breath = Player.breathMax;
             }
@@ -1075,57 +1122,60 @@ namespace Stataria.Players
             AdaptationKey darkKey = GetEnvironmentKey("Darkness", "Mods.Stataria.Adaptation.Darkness");
             AdaptationData darkData = GetAdaptation(darkKey);
 
-            Vector2 tileCoords = Player.Center / 16f;
-            Color tileColor = Lighting.GetColor((int)tileCoords.X, (int)tileCoords.Y);
-            Vector3 tileLight = tileColor.ToVector3();
-            float rawBrightness = (tileLight.X + tileLight.Y + tileLight.Z) / 3f;
-
-            // Subtract self-emitted ambient light so player's own adaptation doesn't throttle EXP gain
-            float selfLightContrib = 0f;
-            if (darkData.Level > 0)
+            if (!darkData.Disabled)
             {
-                float lightIntensity = (float)darkData.Level / maxLevel;
-                selfLightContrib = 0.95f * lightIntensity;
-            }
+                Vector2 tileCoords = Player.Center / 16f;
+                Color tileColor = Lighting.GetColor((int)tileCoords.X, (int)tileCoords.Y);
+                Vector3 tileLight = tileColor.ToVector3();
+                float rawBrightness = (tileLight.X + tileLight.Y + tileLight.Z) / 3f;
 
-            // Subtract halo light contribution so halo wheel light doesn't affect darkness adaptation gain
-            float haloLightContrib = 0f;
-            var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
-            float haloOpacity = clientConfig != null ? clientConfig.HaloOpacity : 1.0f;
-            if (haloOpacity > 0.01f)
-            {
-                Color haloColor = ActiveCategory.GetCategoryColor();
-                float haloMult = HaloSpinTimer > 0 ? 1.0f : 0.75f;
-                Vector3 haloVec = haloColor.ToVector3() * haloMult * haloOpacity * 0.45f * haloOpacity;
-                haloLightContrib = (haloVec.X + haloVec.Y + haloVec.Z) / 3f;
-            }
+                // Subtract self-emitted ambient light so player's own adaptation doesn't throttle EXP gain
+                float selfLightContrib = 0f;
+                if (darkData.Level > 0)
+                {
+                    float lightIntensity = (float)darkData.Level / maxLevel;
+                    selfLightContrib = 0.95f * lightIntensity;
+                }
 
-            // Subtract level up flash light contribution so level up visual effect light doesn't affect darkness adaptation gain
-            float levelUpLightContrib = 0f;
-            if (LevelUpFlashTimer > 0)
-            {
-                float flashIntensity = LevelUpFlashTimer / 120f;
-                levelUpLightContrib = 2.5f * flashIntensity;
-            }
+                // Subtract halo light contribution so halo wheel light doesn't affect darkness adaptation gain
+                float haloLightContrib = 0f;
+                var clientConfig = ModContent.GetInstance<StatariaClientConfig>();
+                float haloOpacity = clientConfig != null ? clientConfig.HaloOpacity : 1.0f;
+                if (haloOpacity > 0.01f)
+                {
+                    Color haloColor = ActiveCategory.GetCategoryColor();
+                    float haloMult = HaloSpinTimer > 0 ? 1.0f : 0.75f;
+                    Vector3 haloVec = haloColor.ToVector3() * haloMult * haloOpacity * 0.45f * haloOpacity;
+                    haloLightContrib = (haloVec.X + haloVec.Y + haloVec.Z) / 3f;
+                }
 
-            float netBrightness = Math.Max(0f, rawBrightness - selfLightContrib - haloLightContrib - levelUpLightContrib);
+                // Subtract level up flash light contribution so level up visual effect light doesn't affect darkness adaptation gain
+                float levelUpLightContrib = 0f;
+                if (LevelUpFlashTimer > 0)
+                {
+                    float flashIntensity = LevelUpFlashTimer / 120f;
+                    levelUpLightContrib = 2.5f * flashIntensity;
+                }
 
-            bool isDaytimeSurface = Main.dayTime && (Player.Center.Y < Main.worldSurface * 16f);
-            float darkThreshold = isDaytimeSurface ? 0.05f : 0.20f;
-            if (netBrightness < darkThreshold)
-            {
-                float darkExp = (darkThreshold - netBrightness) * 25.0f;
-                GainExp(darkKey, darkExp);
-            }
+                float netBrightness = Math.Max(0f, rawBrightness - selfLightContrib - haloLightContrib - levelUpLightContrib);
 
-            if (darkData.Level > 0)
-            {
-                Player.nightVision = true;
+                bool isDaytimeSurface = Main.dayTime && (Player.Center.Y < Main.worldSurface * 16f);
+                float darkThreshold = isDaytimeSurface ? 0.05f : 0.20f;
+                if (netBrightness < darkThreshold)
+                {
+                    float darkExp = (darkThreshold - netBrightness) * 25.0f;
+                    GainExp(darkKey, darkExp);
+                }
 
-                // Grant ambient night lighting that grows stronger with level!
-                float lightIntensity = (float)darkData.Level / maxLevel;
-                Vector3 lightColor = new Vector3(0.4f, 0.6f, 0.9f) * lightIntensity * 1.5f;
-                Lighting.AddLight(Player.Center, lightColor);
+                if (darkData.Level > 0)
+                {
+                    Player.nightVision = true;
+
+                    // Grant ambient night lighting that grows stronger with level!
+                    float lightIntensity = (float)darkData.Level / maxLevel;
+                    Vector3 lightColor = new Vector3(0.4f, 0.6f, 0.9f) * lightIntensity * 1.5f;
+                    Lighting.AddLight(Player.Center, lightColor);
+                }
             }
 
             // Calamity Environmental Adaptations (Sulphurous Water & Abyss Darkness)
@@ -1136,25 +1186,26 @@ namespace Stataria.Players
                 AdaptationData sulphWaterData = GetAdaptation(sulphWaterKey);
                 float currentPoison = CalamitySupportHelper.GetSulphWaterPoisoningLevel(Player);
 
-                if (currentPoison > 0f || (CalamitySupportHelper.GetInZone(Player, "sulfur") && Player.wet && !Player.lavaWet && !Player.honeyWet))
+                if (!sulphWaterData.Disabled)
                 {
-                    GainExp(sulphWaterKey, 0.8f);
-                }
-
-                if (sulphWaterData.Level > 0)
-                {
-                    if (sulphWaterData.Level >= maxLevel)
+                    if (currentPoison > 0f || (CalamitySupportHelper.GetInZone(Player, "sulfur") && Player.wet && !Player.lavaWet && !Player.honeyWet))
                     {
-                        CalamitySupportHelper.SetSulphWaterPoisoningLevel(Player, 0f);
+                        GainExp(sulphWaterKey, 0.8f);
                     }
-                    else if (currentPoison > 0f && Player.wet && !Player.lavaWet && !Player.honeyWet)
+
+                    if (sulphWaterData.Level > 0)
                     {
-                        float adaptRatio = (float)sulphWaterData.Level / maxLevel;
-                        // Calamity adds ~1/360f to SulphWaterPoisoningLevel per frame.
-                        // We subtract adaptRatio fraction of that frame increment so the bar fills up slower!
-                        float frameIncrement = 1f / 360f;
-                        float newPoison = Math.Max(0f, currentPoison - (frameIncrement * adaptRatio));
-                        CalamitySupportHelper.SetSulphWaterPoisoningLevel(Player, newPoison);
+                        if (sulphWaterData.Level >= maxLevel)
+                        {
+                            CalamitySupportHelper.SetSulphWaterPoisoningLevel(Player, 0f);
+                        }
+                        else if (currentPoison > 0f && Player.wet && !Player.lavaWet && !Player.honeyWet)
+                        {
+                            float adaptRatio = (float)sulphWaterData.Level / maxLevel;
+                            float frameIncrement = 1f / 360f;
+                            float newPoison = Math.Max(0f, currentPoison - (frameIncrement * adaptRatio));
+                            CalamitySupportHelper.SetSulphWaterPoisoningLevel(Player, newPoison);
+                        }
                     }
                 }
 
@@ -1162,7 +1213,7 @@ namespace Stataria.Players
                 AdaptationKey abyssDarkKey = GetEnvironmentKey("AbyssDarkness", "Mods.Stataria.Adaptation.AbyssDarkness", "Abyss Darkness");
                 AdaptationData abyssDarkData = GetAdaptation(abyssDarkKey);
 
-                if (CalamitySupportHelper.GetInZone(Player, "abyss"))
+                if (!abyssDarkData.Disabled && CalamitySupportHelper.GetInZone(Player, "abyss"))
                 {
                     GainExp(abyssDarkKey, 1.0f);
                     if (abyssDarkData.Level > 0)
@@ -1213,7 +1264,7 @@ namespace Stataria.Players
 
             foreach (var kvp in adaptations)
             {
-                if (kvp.Key.Category == AdaptationCategory.Debuff && kvp.Value.Level >= maxLevel)
+                if (!kvp.Value.Disabled && kvp.Key.Category == AdaptationCategory.Debuff && kvp.Value.Level >= maxLevel)
                 {
                     if (int.TryParse(kvp.Key.TargetId, out int buffId))
                     {
@@ -1235,27 +1286,30 @@ namespace Stataria.Players
 
             AdaptationKey fallKey = GetEnvironmentKey("FallDamage", "Mods.Stataria.Adaptation.FallDamage");
             AdaptationData fallData = GetAdaptation(fallKey);
-            if (fallData.Level >= maxLevel)
+            if (!fallData.Disabled && fallData.Level >= maxLevel)
             {
                 Player.noFallDmg = true;
             }
 
             AdaptationKey kbKey = GetEnvironmentKey("Knockback", "Mods.Stataria.Adaptation.Knockback");
             AdaptationData kbData = GetAdaptation(kbKey);
-            if (kbData.Level >= maxLevel)
+            if (!kbData.Disabled && kbData.Level >= maxLevel)
             {
                 Player.noKnockback = true;
             }
 
             AdaptationKey lavaKey = GetEnvironmentKey("Lava", "Mods.Stataria.Adaptation.Lava");
             AdaptationData lavaData = GetAdaptation(lavaKey);
-            if (lavaData.Level >= maxLevel)
+            if (!lavaData.Disabled)
             {
-                Player.lavaImmune = true;
-            }
-            else if (Player.lavaWet)
-            {
-                GainExp(lavaKey, 1.2f);
+                if (lavaData.Level >= maxLevel)
+                {
+                    Player.lavaImmune = true;
+                }
+                else if (Player.lavaWet)
+                {
+                    GainExp(lavaKey, 1.2f);
+                }
             }
 
             // 3. Abyss Pressure Adaptation (Defense Loss Refund)
@@ -1263,17 +1317,20 @@ namespace Stataria.Players
             {
                 AdaptationKey abyssPressKey = GetEnvironmentKey("AbyssPressure", "Mods.Stataria.Adaptation.AbyssPressure", "Abyss Pressure");
                 AdaptationData abyssPressData = GetAdaptation(abyssPressKey);
-                int defenseLoss = CalamitySupportHelper.GetAbyssDefenseLoss(Player);
-
-                if (defenseLoss > 0)
+                if (!abyssPressData.Disabled)
                 {
-                    GainExp(abyssPressKey, 0.5f);
-                }
+                    int defenseLoss = CalamitySupportHelper.GetAbyssDefenseLoss(Player);
 
-                if (abyssPressData.Level > 0 && defenseLoss > 0)
-                {
-                    int refundedDefense = (int)(defenseLoss * ((float)abyssPressData.Level / maxLevel));
-                    Player.statDefense += refundedDefense;
+                    if (defenseLoss > 0)
+                    {
+                        GainExp(abyssPressKey, 0.5f);
+                    }
+
+                    if (abyssPressData.Level > 0 && defenseLoss > 0)
+                    {
+                        int refundedDefense = (int)(defenseLoss * ((float)abyssPressData.Level / maxLevel));
+                        Player.statDefense += refundedDefense;
+                    }
                 }
             }
         }

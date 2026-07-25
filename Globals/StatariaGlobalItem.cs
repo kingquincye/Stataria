@@ -117,6 +117,25 @@ namespace Stataria
                     }
                 }
             }
+
+            var adaptor = player.GetModPlayer<Players.AdaptationPlayer>();
+            if (adaptor != null && adaptor.IsAdaptorActive)
+            {
+                if (item != null && item.ModItem != null && item.ModItem.Mod != null && item.ModItem.Mod.Name == "NoxusBoss" && item.ModItem.Name == "EmptinessSprayer")
+                {
+                    string tooltipText = Terraria.Localization.Language.GetTextValue("Mods.Stataria.Tooltip.AdaptorEmptinessSprayer");
+                    if (string.IsNullOrEmpty(tooltipText) || tooltipText == "Mods.Stataria.Tooltip.AdaptorEmptinessSprayer")
+                    {
+                        tooltipText = "[Adaptor] \"Deletes lesser beings\"... What happens when absolute erasure meets absolute adaptation?";
+                    }
+
+                    var line = new TooltipLine(Mod, "AdaptorEmptinessSprayer", tooltipText)
+                    {
+                        OverrideColor = new Microsoft.Xna.Framework.Color(220, 160, 255)
+                    };
+                    tooltips.Add(line);
+                }
+            }
         }
     }
 }

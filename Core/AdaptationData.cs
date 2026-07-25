@@ -8,12 +8,14 @@ namespace Stataria.Core
     {
         public int Level { get; set; }
         public float CurrentExp { get; set; }
+        public bool Disabled { get; set; }
 
-        public AdaptationData(int level = 0, float currentExp = 0f)
+        public AdaptationData(int level = 0, float currentExp = 0f, bool disabled = false)
         {
             int maxLevel = GetMaxLevel();
             Level = Math.Clamp(level, 0, maxLevel);
             CurrentExp = Math.Max(0f, currentExp);
+            Disabled = disabled;
         }
 
         public static int GetMaxLevel()
@@ -123,7 +125,8 @@ namespace Stataria.Core
             return new TagCompound
             {
                 ["level"] = Level,
-                ["exp"] = CurrentExp
+                ["exp"] = CurrentExp,
+                ["disabled"] = Disabled
             };
         }
 
@@ -131,7 +134,8 @@ namespace Stataria.Core
         {
             int level = tag.GetInt("level");
             float exp = tag.GetFloat("exp");
-            return new AdaptationData(level, exp);
+            bool disabled = tag.GetBool("disabled");
+            return new AdaptationData(level, exp, disabled);
         }
     }
 }

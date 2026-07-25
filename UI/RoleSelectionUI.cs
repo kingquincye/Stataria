@@ -236,6 +236,7 @@ namespace Stataria
             if (isActive)
             {
                 bool showAscendButton = role.ID == "Cleric" && !rpg.AscendedRoles.Contains("Cleric");
+                bool showAdaptorButton = role.ID == "Adaptor";
 
                 var statusPanel = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.RoleSelection.DeactivateButton"), 1f, false);
                 statusPanel.Height.Set(35f, 0f);
@@ -244,7 +245,7 @@ namespace Stataria
                 statusPanel.BorderColor = new Color(200, 140, 80, 255);
                 statusPanel.SetPadding(8f);
 
-                if (showAscendButton)
+                if (showAscendButton || showAdaptorButton)
                 {
                     statusPanel.Width.Set(180f, 0f);
                     statusPanel.HAlign = 0.5f;
@@ -266,6 +267,27 @@ namespace Stataria
                     }
                 };
                 panel.Append(statusPanel);
+
+                if (showAdaptorButton)
+                {
+                    var adaptButton = new UITextPanel<string>("ADAPTATIONS", 1f, false);
+                    adaptButton.Width.Set(180f, 0f);
+                    adaptButton.Height.Set(35f, 0f);
+                    adaptButton.HAlign = 0.5f;
+                    adaptButton.Left.Set(100f, 0f);
+                    adaptButton.Top.Set(currentY, 0f);
+                    adaptButton.SetPadding(8f);
+                    adaptButton.BackgroundColor = new Color(40, 55, 100, 220);
+                    adaptButton.BorderColor = new Color(120, 170, 255, 255);
+
+                    adaptButton.OnLeftClick += (evt, el) =>
+                    {
+                        SoundEngine.PlaySound(SoundID.MenuOpen);
+                        StatariaUI.RoleSelectionUI?.SetState(null);
+                        StatariaUI.ToggleAdaptationUI();
+                    };
+                    panel.Append(adaptButton);
+                }
 
                 if (showAscendButton)
                 {
@@ -350,10 +372,12 @@ namespace Stataria
 
             else if (isDeactivated)
             {
+                bool isAdaptor = role.ID == "Adaptor";
                 var reactivatePanel = new UITextPanel<LocalizedText>(Language.GetText("Mods.Stataria.UI.RoleSelection.ReactivateButton"), 1f, false);
-                reactivatePanel.Width.Set(200f, 0f);
+                reactivatePanel.Width.Set(isAdaptor ? 180f : 200f, 0f);
                 reactivatePanel.Height.Set(35f, 0f);
                 reactivatePanel.HAlign = 0.5f;
+                reactivatePanel.Left.Set(isAdaptor ? -100f : 0f, 0f);
                 reactivatePanel.Top.Set(currentY, 0f);
                 reactivatePanel.BackgroundColor = new Color(80, 120, 80, 200);
                 reactivatePanel.BorderColor = new Color(140, 200, 140, 255);
@@ -369,6 +393,27 @@ namespace Stataria
                 };
 
                 panel.Append(reactivatePanel);
+
+                if (isAdaptor)
+                {
+                    var adaptButton = new UITextPanel<string>("ADAPTATIONS", 1f, false);
+                    adaptButton.Width.Set(180f, 0f);
+                    adaptButton.Height.Set(35f, 0f);
+                    adaptButton.HAlign = 0.5f;
+                    adaptButton.Left.Set(100f, 0f);
+                    adaptButton.Top.Set(currentY, 0f);
+                    adaptButton.SetPadding(8f);
+                    adaptButton.BackgroundColor = new Color(40, 55, 100, 220);
+                    adaptButton.BorderColor = new Color(120, 170, 255, 255);
+
+                    adaptButton.OnLeftClick += (evt, el) =>
+                    {
+                        SoundEngine.PlaySound(SoundID.MenuOpen);
+                        StatariaUI.RoleSelectionUI?.SetState(null);
+                        StatariaUI.ToggleAdaptationUI();
+                    };
+                    panel.Append(adaptButton);
+                }
             }
             else if (role.Status == RoleStatus.Locked)
             {
@@ -390,13 +435,15 @@ namespace Stataria
             }
             else
             {
+                bool isAdaptor = role.ID == "Adaptor";
                 int cost = role.GetCurrentSwitchCost(rpg);
                 LocalizedText buttonText = confirmRoleID == role.ID ? Language.GetText("Mods.Stataria.UI.RoleSelection.ConfirmSwitch") : (cost > 0 ? Language.GetText("Mods.Stataria.UI.RoleSelection.SwitchCostButton").WithFormatArgs(cost) : Language.GetText("Mods.Stataria.UI.RoleSelection.SelectFreeButton"));
 
                 var switchButton = new UITextPanel<LocalizedText>(buttonText, 1f, false);
-                switchButton.Width.Set(250f, 0f);
+                switchButton.Width.Set(isAdaptor ? 180f : 250f, 0f);
                 switchButton.Height.Set(40f, 0f);
                 switchButton.HAlign = 0.5f;
+                switchButton.Left.Set(isAdaptor ? -100f : 0f, 0f);
                 switchButton.Top.Set(currentY, 0f);
 
                 if (canAfford)
@@ -431,6 +478,27 @@ namespace Stataria
                 }
 
                 panel.Append(switchButton);
+
+                if (isAdaptor)
+                {
+                    var adaptButton = new UITextPanel<string>("ADAPTATIONS", 1f, false);
+                    adaptButton.Width.Set(180f, 0f);
+                    adaptButton.Height.Set(40f, 0f);
+                    adaptButton.HAlign = 0.5f;
+                    adaptButton.Left.Set(100f, 0f);
+                    adaptButton.Top.Set(currentY, 0f);
+                    adaptButton.SetPadding(8f);
+                    adaptButton.BackgroundColor = new Color(40, 55, 100, 220);
+                    adaptButton.BorderColor = new Color(120, 170, 255, 255);
+
+                    adaptButton.OnLeftClick += (evt, el) =>
+                    {
+                        SoundEngine.PlaySound(SoundID.MenuOpen);
+                        StatariaUI.RoleSelectionUI?.SetState(null);
+                        StatariaUI.ToggleAdaptationUI();
+                    };
+                    panel.Append(adaptButton);
+                }
             }
 
             return panel;

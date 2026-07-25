@@ -99,6 +99,11 @@ UI: {
 		ConfirmAscend: 确认飞升？
 	}
 
+	Adaptation: {
+		Title: 适应矩阵
+		SearchPlaceholder: 搜索适应能力...
+	}
+
 	Socketing: {
 		Title: 镶嵌系统
 		RebirthPoints: 您的 RP: {0}
@@ -259,6 +264,7 @@ UI: {
 
 Keybinds: {
 	"Toggle Stataria UI.DisplayName": 切换 Stataria 界面
+	"Toggle Adaptations UI.DisplayName": 切换适应矩阵界面
 	"AGI Teleport.DisplayName": 传送
 	"Divine Intervention.DisplayName": 神圣干涉
 	"Soul Recall.DisplayName": 灵魂召回
@@ -2511,6 +2517,11 @@ Configs: {
 			Tooltip: 启用后，活体血肉职业仍能享受其他属性带来的伤害加成、自定义 VIT 生命恢复/药水强化以及耐力（END）的伤害减免（DR）。
 		}
 
+		EnableAdaptorRole: {
+			Label: 启用适应者职业
+			Tooltip: 禁用后，玩家无法选择或使用适应者职业。当前正在使用适应者职业的玩家将立即失去该职业。
+		}
+
 		AdaptorEnableCheatDeath: {
 			Label: 开启免死轮回
 			Tooltip: 允许适应者在受到致命伤害时免于死亡，获得临时无敌与完全恢复。
@@ -3686,3 +3697,5 @@ Projectiles: {
 	ElementalDischargeProjectile.DisplayName: 元素释放
 	FleshCloneProjectile.DisplayName: 血肉克隆体
 }
+
+Tooltip.AdaptorEmptinessSprayer: "[适应者] “抹除低等生物”……当绝对的抹除遭遇绝对的适应，会发生什么？"

@@ -99,6 +99,11 @@ UI: {
 		ConfirmAscend: CONFIRM?
 	}
 
+	Adaptation: {
+		Title: ADAPTATION MATRIX
+		SearchPlaceholder: Search adaptations...
+	}
+
 	Socketing: {
 		Title: Socketing System
 		RebirthPoints: Your RP: {0}
@@ -259,6 +264,7 @@ UI: {
 
 Keybinds: {
 	"Toggle Stataria UI.DisplayName": Toggle Stataria UI
+	"Toggle Adaptations UI.DisplayName": Toggle Adaptations UI
 	"AGI Teleport.DisplayName": Teleport
 	"Divine Intervention.DisplayName": Divine Intervention
 	"Soul Recall.DisplayName": Soul Recall
@@ -2511,6 +2517,11 @@ Configs: {
 			Tooltip: When enabled, the Living Flesh role still receives damage scaling, custom VIT regen/potion boosts, and Endurance DR from other stats.
 		}
 
+		EnableAdaptorRole: {
+			Label: Enable Adaptor Role
+			Tooltip: When disabled, the Adaptor role cannot be selected or used. Any player currently using the Adaptor role will lose it immediately.
+		}
+
 		AdaptorEnableCheatDeath: {
 			Label: Enable Cheat Death
 			Tooltip: Allows the Adaptor to cheat death upon receiving fatal damage, granting temporary invincibility and full recovery.
@@ -3686,3 +3697,5 @@ Projectiles: {
 	ElementalDischargeProjectile.DisplayName: Elemental Discharge Projectile
 	FleshCloneProjectile.DisplayName: Flesh Clone Projectile
 }
+
+Tooltip.AdaptorEmptinessSprayer: '''[Adaptor] "Deletes lesser beings"... What happens when absolute erasure meets absolute adaptation?'''

@@ -377,6 +377,7 @@ namespace Stataria
             [DefaultValue(false)] public bool LivingFleshAllowOtherStats { get; set; } = false;
 
             [Header("Adaptor")]
+            [DefaultValue(true)] public bool EnableAdaptorRole { get; set; } = true;
             [DefaultValue(true)] public bool AdaptorEnableCheatDeath { get; set; } = true;
             [DefaultValue(60)][Range(10, 300)] public int AdaptorCheatDeathCooldownSeconds { get; set; } = 60;
             [DefaultValue(3.0f)][Range(0.5f, 30.0f)][Increment(0.5f)] public float AdaptorCheatDeathInvincibilitySeconds { get; set; } = 3.0f;

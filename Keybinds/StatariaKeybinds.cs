@@ -7,6 +7,7 @@ namespace Stataria
     public class StatariaKeybinds : ModSystem
     {
         public static ModKeybind ToggleStatariaUI;
+        public static ModKeybind ToggleAdaptationUI;
         public static ModKeybind TeleportKey;
         public static ModKeybind DivineInterventionKey;
         public static ModKeybind DivineResurrectionKey;
@@ -22,6 +23,7 @@ namespace Stataria
             if (Main.dedServ)
                 return;
             ToggleStatariaUI = KeybindLoader.RegisterKeybind(Mod, "Toggle Stataria UI", "K");
+            ToggleAdaptationUI = KeybindLoader.RegisterKeybind(Mod, "Toggle Adaptations UI", "O");
             TeleportKey = KeybindLoader.RegisterKeybind(Mod, "AGI Teleport", "Q");
             DivineInterventionKey = KeybindLoader.RegisterKeybind(Mod, "Divine Intervention", "G");
             DivineResurrectionKey = KeybindLoader.RegisterKeybind(Mod, "Divine Resurrection", "X");
@@ -36,6 +38,7 @@ namespace Stataria
         public override void Unload()
         {
             ToggleStatariaUI = null;
+            ToggleAdaptationUI = null;
             TeleportKey = null;
             DivineInterventionKey = null;
             DivineResurrectionKey = null;

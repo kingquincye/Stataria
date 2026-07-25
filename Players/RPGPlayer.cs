@@ -596,13 +596,16 @@ namespace Stataria
             );
             AvailableRoles["LivingFlesh"] = livingFlesh;
 
-            var adaptor = new Role(
-                "Adaptor",
-                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Adaptor"),
-                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Adaptor"),
-                Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Adaptor")
-            );
-            AvailableRoles["Adaptor"] = adaptor;
+            if (config != null && config.roleSettings.EnableAdaptorRole)
+            {
+                var adaptor = new Role(
+                    "Adaptor",
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleName.Adaptor"),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleDescription.Adaptor"),
+                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleFlavorText.Adaptor")
+                );
+                AvailableRoles["Adaptor"] = adaptor;
+            }
 
             if (config.modIntegration.EnableSekirariaIntegration && SekirariaSupportHelper.SekirariaLoaded)
             {
@@ -2507,6 +2510,19 @@ namespace Stataria
         public override void PostUpdate()
         {
             var config = ModContent.GetInstance<StatariaConfig>();
+
+            if (config != null && !config.roleSettings.EnableAdaptorRole)
+            {
+                if (AvailableRoles.ContainsKey("Adaptor"))
+                {
+                    AvailableRoles.Remove("Adaptor");
+                }
+                if (RawActiveRole?.ID == "Adaptor")
+                {
+                    DeactivateRole();
+                    RawActiveRole = null;
+                }
+            }
 
             if (xpBarTimer > 0)
                 xpBarTimer--;

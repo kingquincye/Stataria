@@ -77,6 +77,9 @@ namespace Stataria.Globals
             }
 
             AdaptationData data = adaptorPlayer.GetAdaptation(key);
+            if (data.Disabled)
+                return;
+
             int maxLevel = AdaptationData.GetMaxLevel();
 
             if (data.Level >= maxLevel && config.roleSettings.AdaptorMaxLevelOffensiveLethal)
@@ -116,6 +119,9 @@ namespace Stataria.Globals
             AdaptationPlayer.GetNPCTargetIdAndName(target, out string targetId, out string name);
 
             AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: true);
+            AdaptationData data = adaptorPlayer.GetAdaptation(key);
+            if (data.Disabled)
+                return;
 
             float baseDamage = Math.Max((float)hit.SourceDamage, (float)damageDone);
             float hitMult = config != null ? config.roleSettings.AdaptorExpHitMultiplier : 0.5f;
@@ -128,7 +134,6 @@ namespace Stataria.Globals
 
             adaptorPlayer.GainExp(key, expGain);
 
-            AdaptationData data = adaptorPlayer.GetAdaptation(key);
             int maxLevel = AdaptationData.GetMaxLevel();
 
             if (data.Level >= maxLevel && config.roleSettings.AdaptorMaxLevelOffensiveLethal && target.active && target.life > 0)
@@ -156,6 +161,8 @@ namespace Stataria.Globals
             AdaptationPlayer.GetNPCTargetIdAndName(target, out string targetId, out string name);
             AdaptationKey key = new AdaptationKey(cat, targetId, name, isOffensive: true);
             AdaptationData data = adaptorPlayer.GetAdaptation(key);
+            if (data.Disabled)
+                return damageDone;
             int maxLevel = AdaptationData.GetMaxLevel();
 
             if (data.Level >= maxLevel)
