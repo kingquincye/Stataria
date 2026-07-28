@@ -2527,6 +2527,11 @@ Configs: {
 			Tooltip: 允许适应者在受到致命伤害时免于死亡，获得临时无敌与完全恢复。
 		}
 
+		AdaptorEnableLevelUpHeal: {
+			Label: 开启升级恢复
+			Tooltip: 启用后，提升适应等级将完全恢复生命值与法力值。
+		}
+
 		AdaptorCheatDeathCooldownSeconds: {
 			Label: 免死轮回冷却时间 (秒)
 			Tooltip: 免死轮回再次触发所需的冷却秒数。

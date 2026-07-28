@@ -2527,6 +2527,11 @@ Configs: {
 			Tooltip: Allows the Adaptor to cheat death upon receiving fatal damage, granting temporary invincibility and full recovery.
 		}
 
+		AdaptorEnableLevelUpHeal: {
+			Label: Enable Level Up Recovery
+			Tooltip: When enabled, leveling up an adaptation fully restores health and mana.
+		}
+
 		AdaptorCheatDeathCooldownSeconds: {
 			Label: Cheat Death Cooldown (Seconds)
 			Tooltip: Cooldown duration in seconds before Cheat Death can trigger again.

@@ -211,6 +211,10 @@ namespace Stataria.UI
         public void RefreshAdaptationList(bool preserveScroll = false)
         {
             float prevScroll = (preserveScroll && scrollbar != null) ? scrollbar.ViewPosition : 0f;
+            if (scrollbar != null)
+            {
+                scrollbar.ViewPosition = prevScroll;
+            }
             adaptationList?.Clear();
             rowPool.Clear();
             lastFirstIndex = -1;
@@ -340,7 +344,7 @@ namespace Stataria.UI
 
             UpdateVirtualScroll(force: true);
 
-            if (preserveScroll && scrollbar != null)
+            if (scrollbar != null)
             {
                 scrollbar.ViewPosition = prevScroll;
             }

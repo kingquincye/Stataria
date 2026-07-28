@@ -231,10 +231,15 @@ namespace Stataria.Players
 
             if (leveledUp)
             {
-                // Full heal on level up (HP & Mana)
-                PendingFullHeal = true;
-                Player.statLife = Player.statLifeMax2;
-                Player.statMana = Player.statManaMax2;
+                bool enableLevelUpHeal = config == null || config.roleSettings.AdaptorEnableLevelUpHeal;
+
+                if (enableLevelUpHeal)
+                {
+                    // Full heal on level up (HP & Mana)
+                    PendingFullHeal = true;
+                    Player.statLife = Player.statLifeMax2;
+                    Player.statMana = Player.statManaMax2;
+                }
 
                 HaloSpinTimer = 120;
                 LevelUpFlashTimer = 120;
