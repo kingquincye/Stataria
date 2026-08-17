@@ -498,7 +498,24 @@ namespace Stataria.Players
                      mainBannerName.Contains(specificName, StringComparison.OrdinalIgnoreCase)))
                 {
                     string cleanBannerName = mainBannerName.Replace(" ", "");
-                    targetId = "Banner_" + cleanBannerName;
+                    string modName = npc.ModNPC?.Mod?.Name;
+                    if (string.IsNullOrEmpty(modName) && mainNpcType > 0)
+                    {
+                        var mainModNpc = Terraria.ModLoader.NPCLoader.GetNPC(mainNpcType);
+                        if (mainModNpc != null && mainModNpc.Mod != null)
+                        {
+                            modName = mainModNpc.Mod.Name;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(modName))
+                    {
+                        targetId = $"{modName}/Banner_{cleanBannerName}";
+                    }
+                    else
+                    {
+                        targetId = "Banner_" + cleanBannerName;
+                    }
                     name = mainBannerName;
                     return;
                 }

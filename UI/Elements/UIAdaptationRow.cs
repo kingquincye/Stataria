@@ -4,8 +4,10 @@ using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent;
 using System;
+using System.Collections.Generic;
 using Stataria.Core;
 using Stataria.Players;
+using Terraria.ModLoader;
 
 namespace Stataria.UI.Elements
 {
@@ -194,20 +196,46 @@ namespace Stataria.UI.Elements
             cachedDisabled = data.Disabled;
         }
 
+        private static readonly Dictionary<string, string> bannerModCache = new Dictionary<string, string>();
+
         public static string GetModSubtext(string targetId)
         {
             if (string.IsNullOrWhiteSpace(targetId))
                 return "";
 
-            // Modded target IDs contain a slash '/' e.g. "ModName/EntityName" or "Proj_ModName/EntityName"
+            // 1. Special hardcoded environmental & death adaptation target IDs
+            if (targetId.Equals("SulphurousWater", StringComparison.OrdinalIgnoreCase) ||
+                targetId.Equals("AbyssDarkness", StringComparison.OrdinalIgnoreCase) ||
+                targetId.Equals("AbyssPressure", StringComparison.OrdinalIgnoreCase))
+            {
+                return "(CalamityMod)";
+            }
+
+            if (targetId.Equals("Erasure", StringComparison.OrdinalIgnoreCase) || targetId.Contains("Erasure"))
+            {
+                return "(Wrath of the Gods)";
+            }
+
             int slashIndex = targetId.IndexOf('/');
             if (slashIndex <= 0)
+            {
+                // Fallback for existing saved banner keys without a slash, e.g. "Banner_WulfrumDrone"
+                if (targetId.StartsWith("Banner_", StringComparison.OrdinalIgnoreCase))
+                {
+                    string cleanBannerName = targetId.Substring("Banner_".Length);
+                    string foundMod = FindModForBannerName(cleanBannerName);
+                    if (!string.IsNullOrEmpty(foundMod))
+                    {
+                        return $"({foundMod})";
+                    }
+                }
                 return "";
+            }
 
             string modPart = targetId.Substring(0, slashIndex);
 
-            // Strip entity type prefixes if present (e.g. Proj_ModName, NPC_ModName, Buff_ModName, Item_ModName)
-            string[] prefixes = new[] { "Proj_", "NPC_", "Item_", "Debuff_", "Buff_" };
+            // Strip entity type prefixes if present (e.g. Proj_ModName, NPC_ModName, Buff_ModName, Item_ModName, Banner_ModName)
+            string[] prefixes = new[] { "Proj_", "NPC_", "Item_", "Debuff_", "Buff_", "Banner_" };
             foreach (var prefix in prefixes)
             {
                 if (modPart.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
@@ -221,6 +249,38 @@ namespace Stataria.UI.Elements
                 return "";
 
             return $"({modPart})";
+        }
+
+        private static string FindModForBannerName(string cleanBannerName)
+        {
+            if (string.IsNullOrWhiteSpace(cleanBannerName))
+                return null;
+
+            lock (bannerModCache)
+            {
+                if (bannerModCache.TryGetValue(cleanBannerName, out string cachedMod))
+                    return cachedMod;
+
+                for (int i = 0; i < NPCLoader.NPCCount; i++)
+                {
+                    ModNPC modNpc = NPCLoader.GetNPC(i);
+                    if (modNpc == null || modNpc.Mod == null)
+                        continue;
+
+                    string npcName = Lang.GetNPCName(i).Value;
+                    if (string.IsNullOrWhiteSpace(npcName))
+                        npcName = modNpc.NPC.TypeName;
+
+                    if (!string.IsNullOrWhiteSpace(npcName) && npcName.Replace(" ", "").Equals(cleanBannerName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        bannerModCache[cleanBannerName] = modNpc.Mod.Name;
+                        return modNpc.Mod.Name;
+                    }
+                }
+
+                bannerModCache[cleanBannerName] = null;
+                return null;
+            }
         }
     }
 }

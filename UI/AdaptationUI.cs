@@ -289,8 +289,9 @@ namespace Stataria.UI
                     bool matchName = key.DisplayName.ToLowerInvariant().Contains(cleanSearch);
                     bool matchId = key.TargetId.ToLowerInvariant().Contains(cleanSearch);
                     bool matchCat = key.Category.ToString().ToLowerInvariant().Contains(cleanSearch);
+                    bool matchMod = UIAdaptationRow.GetModSubtext(key.TargetId).ToLowerInvariant().Contains(cleanSearch);
 
-                    if (!matchName && !matchId && !matchCat)
+                    if (!matchName && !matchId && !matchCat && !matchMod)
                         return false;
                 }
 
