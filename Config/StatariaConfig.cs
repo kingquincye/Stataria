@@ -77,6 +77,13 @@ namespace Stataria
 
             [Header("Damage_Calculation")]
             [DefaultValue(false)] public bool UseMultiplicativeDamage { get; set; } = false;
+
+            [Header("Level_Difference_XP")]
+            [DefaultValue(false)] public bool EnableLevelDifferenceXP { get; set; } = false;
+            [Increment(0.01f)][Range(0.01f, 0.50f)][DefaultValue(0.05f)] public float XPModifierPerLevelDifference { get; set; } = 0.05f;
+            [Range(0f, 1f)][DefaultValue(0.10f)] public float MinLevelDifferenceXPMultiplier { get; set; } = 0.10f;
+            [Range(1f, 10f)][DefaultValue(3.0f)] public float MaxLevelDifferenceXPMultiplier { get; set; } = 3.0f;
+            [DefaultValue(false)] public bool ApplyLevelDifferenceXPToBosses { get; set; } = false;
         }
 
         public class XPVerification
@@ -445,7 +452,7 @@ namespace Stataria
             [Range(1, 100)][DefaultValue(25)] public int MinimumLevelDifference { get; set; } = 25;
 
             [Header("Multiplayer_Scaling")]
-            [Range(0, 2)][DefaultValue(1)][Slider][SliderColor(150, 0, 150)][Increment(1)][DrawTicks] public int ScalingType { get; set; } = 1;
+            [Range(0, 3)][DefaultValue(1)][Slider][SliderColor(150, 0, 150)][Increment(1)][DrawTicks] public int ScalingType { get; set; } = 1;
             [Range(1, 1000)][DefaultValue(5)] public int LevelsPerPlayer { get; set; } = 5;
             [DefaultValue(true)] public bool UseProximityForScaling { get; set; } = true;
             [Range(500, 10000)][DefaultValue(4000)] public int ScalingProximityRange { get; set; } = 4000;
@@ -460,6 +467,22 @@ namespace Stataria
             [DefaultValue(0.50f)] public float EliteCriticalHitResistance { get; set; } = 0.50f;
             [DefaultValue(true)] public bool EliteScaleIncrease { get; set; } = true;
             [Range(1f, 2f)][DefaultValue(1.15f)] public float EliteScaleMultiplier { get; set; } = 1.15f;
+
+            [Header("Diminishing_Returns")]
+            [DefaultValue(false)] public bool EnableEnemyDiminishingReturns { get; set; } = false;
+            [Increment(0.001f)][Range(0.001f, 1f)][DefaultValue(0.01f)] public float EnemyDiminishingReturnsRate { get; set; } = 0.01f;
+
+            [Header("Boss_Progression_Scaling")]
+            [DefaultValue(false)] public bool EnableBossProgressionLevelFloor { get; set; } = false;
+            [Range(1, 1000)][DefaultValue(1)] public int BossProgressionBaseLevel { get; set; } = 1;
+            [Range(0, 100)][DefaultValue(5)] public int LevelsPerBossKilled { get; set; } = 5;
+            [DefaultValue(false)] public bool UseBossProgressionWhitelist { get; set; } = false;
+            public List<string> BossProgressionWhitelist { get; set; } = new List<string>();
+
+            [Header("Rebirth_Enemy_Scaling")]
+            [DefaultValue(false)] public bool EnableRebirthEnemyScaling { get; set; } = false;
+            [Range(0, 100)][DefaultValue(5)] public int LevelsPerPlayerRebirth { get; set; } = 5;
+            [DefaultValue(false)] public bool ScaleEnemyWithAverageRebirths { get; set; } = false;
         }
 
         public class StatSettings

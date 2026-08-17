@@ -26,7 +26,15 @@ namespace Stataria
             }
 
             if (npc.boss)
-                StatariaSystem.killedBossesGlobal.Add(npc.type);
+            {
+                if (StatariaSystem.killedBossesGlobal.Add(npc.type))
+                {
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        StatariaSystem.SyncGlobalBosses();
+                    }
+                }
+            }
 
             var activePlayers = Main.player.Where(p => p != null && p.active && !p.dead).ToList();
 
@@ -67,11 +75,24 @@ namespace Stataria
                 var rpg = p.GetModPlayer<RPGPlayer>();
                 bool hasKilledBefore = rpg.rewardedBosses.Contains(npc.type);
 
+                float levelXPMult = 1f;
+                if (config.generalBalance.EnableLevelDifferenceXP && (!npc.boss || config.generalBalance.ApplyLevelDifferenceXPToBosses))
+                {
+                    int enemyLevel = 1;
+                    if (npc.TryGetGlobalNPC<StatariaScalingGlobalNPC>(out var scalingData) && scalingData.Level > 0)
+                    {
+                        enemyLevel = scalingData.Level;
+                    }
+                    int diff = enemyLevel - rpg.Level;
+                    levelXPMult = 1f + (diff * config.generalBalance.XPModifierPerLevelDifference);
+                    levelXPMult = Math.Clamp(levelXPMult, config.generalBalance.MinLevelDifferenceXPMultiplier, config.generalBalance.MaxLevelDifferenceXPMultiplier);
+                }
+
                 if (npc.boss)
                 {
                     if (config.generalBalance.EnableBossHPXP)
                     {
-                        long hpXP = (long)(npc.lifeMax * config.generalBalance.KillXP);
+                        long hpXP = (long)(npc.lifeMax * config.generalBalance.KillXP * (config.generalBalance.ApplyLevelDifferenceXPToBosses ? levelXPMult : 1f));
 
                         if (config.multiplayerSettings.SplitKillXP)
                         {
@@ -91,7 +112,7 @@ namespace Stataria
                     {
                         if (!hasKilledBefore)
                         {
-                            long hpXP = (long)(npc.lifeMax * config.generalBalance.KillXP);
+                            long hpXP = (long)(npc.lifeMax * config.generalBalance.KillXP * (config.generalBalance.ApplyLevelDifferenceXPToBosses ? levelXPMult : 1f));
 
                             if (config.multiplayerSettings.SplitKillXP)
                             {
@@ -141,7 +162,7 @@ namespace Stataria
 
                 if (!npc.boss)
                 {
-                    long killXP = (long)(npc.lifeMax * config.generalBalance.KillXP);
+                    long killXP = (long)(npc.lifeMax * config.generalBalance.KillXP * levelXPMult);
 
                     if (config.multiplayerSettings.SplitKillXP)
                     {

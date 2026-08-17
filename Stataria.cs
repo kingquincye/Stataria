@@ -29,7 +29,9 @@ namespace Stataria
         SyncShinobiState,
         SyncAdaptationState,
         SyncAdaptationToggle,
-        SyncAllAdaptations
+        SyncAllAdaptations,
+        VampireHealOnKill,
+        ShinobiExecutionHeal
     }
 
     public class Stataria : Mod
@@ -509,44 +511,48 @@ namespace Stataria
             {
                 int playerIndex = reader.ReadInt32();
                 int itemSlot = reader.ReadInt32();
-                
-                if (playerIndex < 0 || playerIndex >= Main.maxPlayers)
-                    return;
-                    
-                Player player = Main.player[playerIndex];
-                if (player == null || !player.active)
-                    return;
-                    
-                Item item = null;
-                if (itemSlot >= 0 && itemSlot < player.inventory.Length)
-                {
-                    item = player.inventory[itemSlot];
-                }
-                else if (itemSlot == -1)
-                {
-                    if (StatariaUI.SocketingPanel != null)
-                        item = StatariaUI.SocketingPanel.SocketingItemSlot;
-                }
-                
-                if (item == null || item.IsAir)
-                    return;
-                    
-                var socketingData = item.GetGlobalItem<SocketingGlobalItem>();
-                
                 int coreCount = reader.ReadInt32();
-                socketingData.SocketedCores.Clear();
-                
+
+                var cores = new List<SocketedCore>();
                 for (int i = 0; i < coreCount; i++)
                 {
                     CoreType type = (CoreType)reader.ReadInt32();
                     int tier = reader.ReadInt32();
                     int count = reader.ReadInt32();
-                    socketingData.SocketedCores.Add(new SocketedCore(type, tier, count));
+                    cores.Add(new SocketedCore(type, tier, count));
                 }
-                
-                socketingData.ExpandedSlots = reader.ReadInt32();
-                socketingData.MaxSlots = SocketingGlobalItem.GetBaseSlots(item) + socketingData.ExpandedSlots;
-                
+                int expandedSlots = reader.ReadInt32();
+
+                if (playerIndex >= 0 && playerIndex < Main.maxPlayers)
+                {
+                    Player player = Main.player[playerIndex];
+                    if (player != null && player.active)
+                    {
+                        Item item = null;
+                        if (itemSlot >= 0 && itemSlot < player.inventory.Length)
+                        {
+                            item = player.inventory[itemSlot];
+                        }
+                        else if (itemSlot >= 100 && itemSlot < 100 + player.armor.Length)
+                        {
+                            item = player.armor[itemSlot - 100];
+                        }
+                        else if (itemSlot == -1)
+                        {
+                            if (StatariaUI.SocketingPanel != null)
+                                item = StatariaUI.SocketingPanel.SocketingItemSlot;
+                        }
+
+                        if (item != null && !item.IsAir && item.TryGetGlobalItem<SocketingGlobalItem>(out var socketingData))
+                        {
+                            socketingData.SocketedCores.Clear();
+                            socketingData.SocketedCores.AddRange(cores);
+                            socketingData.ExpandedSlots = expandedSlots;
+                            socketingData.MaxSlots = SocketingGlobalItem.GetBaseSlots(item) + socketingData.ExpandedSlots;
+                        }
+                    }
+                }
+
                 if (Main.netMode == NetmodeID.Server)
                 {
                     var packet = ModContent.GetInstance<Stataria>().GetPacket();
@@ -554,19 +560,19 @@ namespace Stataria
                     packet.Write(playerIndex);
                     packet.Write(itemSlot);
                     packet.Write(coreCount);
-                    
-                    foreach (var core in socketingData.SocketedCores)
+
+                    foreach (var core in cores)
                     {
                         packet.Write((int)core.Type);
                         packet.Write(core.Tier);
                         packet.Write(core.Count);
                     }
-                    
-                    packet.Write(socketingData.ExpandedSlots);
+
+                    packet.Write(expandedSlots);
                     packet.Send(-1, whoAmI);
                 }
-                
-                if (Main.LocalPlayer.whoAmI == playerIndex && StatariaUI.SocketingUI?.CurrentState != null)
+
+                if (Main.netMode == NetmodeID.MultiplayerClient && Main.LocalPlayer.whoAmI == playerIndex && StatariaUI.SocketingUI?.CurrentState != null)
                 {
                     StatariaUI.SocketingPanel?.RefreshUI();
                 }
@@ -777,6 +783,48 @@ namespace Stataria
                     if (Main.netMode == NetmodeID.Server)
                     {
                         shinobiPlayer.SyncShinobiState(toWho: -1, fromWho: whoAmI);
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.VampireHealOnKill)
+            {
+                int healAmount = reader.ReadInt32();
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    Player player = Main.LocalPlayer;
+                    var vampirePlayer = player.GetModPlayer<VampirePlayer>();
+                    if (vampirePlayer.IsVampireActive)
+                    {
+                        player.statLife += healAmount;
+                        if (player.statLife > player.statLifeMax2)
+                            player.statLife = player.statLifeMax2;
+
+                        if (healAmount > 0)
+                        {
+                            player.HealEffect(healAmount, true);
+                            NetMessage.SendData(MessageID.PlayerLifeMana, -1, -1, null, player.whoAmI);
+                        }
+                    }
+                }
+            }
+            else if (msgType == StatariaMessageType.ShinobiExecutionHeal)
+            {
+                int healAmount = reader.ReadInt32();
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    Player player = Main.LocalPlayer;
+                    var shinobiPlayer = player.GetModPlayer<ShinobiPlayer>();
+                    if (shinobiPlayer.IsShinobiActive)
+                    {
+                        player.statLife += healAmount;
+                        if (player.statLife > player.statLifeMax2)
+                            player.statLife = player.statLifeMax2;
+
+                        if (healAmount > 0)
+                        {
+                            player.HealEffect(healAmount, true);
+                            NetMessage.SendData(MessageID.PlayerLifeMana, -1, -1, null, player.whoAmI);
+                        }
                     }
                 }
             }

@@ -109,7 +109,7 @@ namespace Stataria
             if (itemChanged && Main.netMode != NetmodeID.SinglePlayer)
             {
                 Item newItem = _itemArray[_itemIndex];
-                if (!newItem.IsAir && SocketingGlobalItem.IsWeapon(newItem))
+                if (!newItem.IsAir && (SocketingGlobalItem.IsWeapon(newItem) || SocketingGlobalItem.IsArmor(newItem)))
                 {
                     SocketingGlobalItem.SyncSocketedItem(Main.LocalPlayer, newItem, -1);
                 }

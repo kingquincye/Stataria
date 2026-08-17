@@ -7,6 +7,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 
+using Terraria.ModLoader.IO;
+
 namespace Stataria
 {
     public class StatariaSystem : ModSystem
@@ -19,6 +21,77 @@ namespace Stataria
         {
             killedBossesGlobal.Clear();
             syncedPlayers.Clear();
+            PopulateVanillaDownedBosses();
+        }
+
+        public override void SaveWorldData(TagCompound tag)
+        {
+            tag["killedBossesGlobal"] = killedBossesGlobal.ToList();
+        }
+
+        public override void LoadWorldData(TagCompound tag)
+        {
+            killedBossesGlobal.Clear();
+            if (tag.ContainsKey("killedBossesGlobal"))
+            {
+                var list = tag.GetList<int>("killedBossesGlobal");
+                foreach (int id in list)
+                {
+                    killedBossesGlobal.Add(id);
+                }
+            }
+            PopulateVanillaDownedBosses();
+        }
+
+        public static void PopulateVanillaDownedBosses()
+        {
+            if (NPC.downedSlimeKing) killedBossesGlobal.Add(NPCID.KingSlime);
+            if (NPC.downedBoss1) killedBossesGlobal.Add(NPCID.EyeofCthulhu);
+            if (NPC.downedBoss2)
+            {
+                killedBossesGlobal.Add(NPCID.EaterofWorldsHead);
+                killedBossesGlobal.Add(NPCID.BrainofCthulhu);
+            }
+            if (NPC.downedQueenBee) killedBossesGlobal.Add(NPCID.QueenBee);
+            if (NPC.downedBoss3) killedBossesGlobal.Add(NPCID.SkeletronHead);
+            if (NPC.downedDeerclops) killedBossesGlobal.Add(NPCID.Deerclops);
+            if (Main.hardMode) killedBossesGlobal.Add(NPCID.WallofFlesh);
+            if (NPC.downedQueenSlime) killedBossesGlobal.Add(NPCID.QueenSlimeBoss);
+            if (NPC.downedMechBoss1) killedBossesGlobal.Add(NPCID.TheDestroyer);
+            if (NPC.downedMechBoss2)
+            {
+                killedBossesGlobal.Add(NPCID.Retinazer);
+                killedBossesGlobal.Add(NPCID.Spazmatism);
+            }
+            if (NPC.downedMechBoss3) killedBossesGlobal.Add(NPCID.SkeletronPrime);
+            if (NPC.downedPlantBoss) killedBossesGlobal.Add(NPCID.Plantera);
+            if (NPC.downedGolemBoss) killedBossesGlobal.Add(NPCID.Golem);
+            if (NPC.downedFishron) killedBossesGlobal.Add(NPCID.DukeFishron);
+            if (NPC.downedEmpressOfLight) killedBossesGlobal.Add(NPCID.HallowBoss);
+            if (NPC.downedAncientCultist) killedBossesGlobal.Add(NPCID.CultistBoss);
+            if (NPC.downedMoonlord) killedBossesGlobal.Add(NPCID.MoonLordCore);
+        }
+
+        public static int GetKilledBossCount(bool useWhitelist, List<string> whitelist)
+        {
+            if (!useWhitelist || whitelist == null || whitelist.Count == 0)
+            {
+                return killedBossesGlobal.Count;
+            }
+
+            int count = 0;
+            foreach (int bossId in killedBossesGlobal)
+            {
+                string name = Lang.GetNPCNameValue(bossId);
+                string idStr = bossId.ToString();
+                if (whitelist.Any(entry =>
+                    entry.Equals(name, StringComparison.OrdinalIgnoreCase) ||
+                    entry.Equals(idStr, StringComparison.OrdinalIgnoreCase)))
+                {
+                    count++;
+                }
+            }
+            return count;
         }
 
         public override void OnWorldUnload()

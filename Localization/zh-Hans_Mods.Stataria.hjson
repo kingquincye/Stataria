@@ -466,6 +466,7 @@ Configs: {
 			Damage_Calculation: 伤害计算
 			Diminishing_Returns: 收益递减机制
 			Respec_Settings: 洗点设置
+			Level_Difference_XP: 等级差经验缩放
 		}
 
 		EnableBossHPXP: {
@@ -581,6 +582,31 @@ Configs: {
 		XPCurveSteepness: {
 			Label: 经验曲线陡峭度
 			Tooltip: 经验缩放曲线的陡峭程度。
+		}
+
+		EnableLevelDifferenceXP: {
+			Label: 启用等级差经验缩放
+			Tooltip: 根据敌人等级与玩家等级的差距动态调整获得的经验值。击杀低等级敌人获得的经验减少，击杀高等级敌人获得的经验增加。
+		}
+
+		XPModifierPerLevelDifference: {
+			Label: 每级等级差经验变化率
+			Tooltip: 敌人与玩家每相差 1 级时经验的变化百分比（高于玩家 +X%，低于玩家 -X%）。
+		}
+
+		MinLevelDifferenceXPMultiplier: {
+			Label: 等级差最低经验倍率
+			Tooltip: 击杀严重低等级敌人时经验倍率的保底下限。
+		}
+
+		MaxLevelDifferenceXPMultiplier: {
+			Label: 等级差最高经验倍率
+			Tooltip: 击杀超高等级敌人时经验倍率的最高上限。
+		}
+
+		ApplyLevelDifferenceXPToBosses: {
+			Label: 对首领应用等级差经验缩放
+			Tooltip: 启用后，击杀首领获得的生命值经验也会受到玩家与首领等级差的影响。
 		}
 	}
 
@@ -758,6 +784,9 @@ Configs: {
 			Boss_Scaling: 首领数值随动
 			Flat_Scaling: 固定数值随动
 			Level_Variation: 等级波动机制
+			Diminishing_Returns: 敌人收益递减机制
+			Boss_Progression_Scaling: 首领进度等级随动
+			Rebirth_Enemy_Scaling: 玩家转生等级随动
 		}
 
 		EnableEnemyScaling: {
@@ -792,7 +821,7 @@ Configs: {
 
 		ScalingType: {
 			Label: 随动类型
-			Tooltip: 决定如何计算敌人的数值缩放：0 = 玩家数量 (根据人数给固定加成)，1 = 最高等级 (根据最强玩家)，2 = 平均等级 (根据队伍平均等级)。
+			Tooltip: 决定如何计算敌人的数值缩放：0 = 玩家数量 (根据人数给固定加成)，1 = 最高等级 (根据最强玩家)，2 = 平均等级 (根据队伍平均等级)，3 = 首领进度 (根据已击败的首领数量)。
 		}
 
 		UseProximityForScaling: {
@@ -934,6 +963,56 @@ Configs: {
 		FlatBossDamageScaling: {
 			Label: 固定首领伤害缩放
 			Tooltip: 固定首领伤害缩放的配置。
+		}
+
+		EnableEnemyDiminishingReturns: {
+			Label: 启用敌人收益递减机制
+			Tooltip: 在高等级时对敌人的生命值、伤害和防御力应用收益递减曲线，防止在玩家开启收益递减时敌人强度大幅超出玩家。
+		}
+
+		EnemyDiminishingReturnsRate: {
+			Label: 敌人收益递减速率
+			Tooltip: 敌人在高等级时属性增长减缓的剧烈程度。
+		}
+
+		EnableBossProgressionLevelFloor: {
+			Label: 启用首领进度最低等级保底
+			Tooltip: 根据当前世界击败的首领数量为所有生成的敌人设定最低等级保底，无论当前采用哪种等级随动模式。
+		}
+
+		BossProgressionBaseLevel: {
+			Label: 首领进度基础等级
+			Tooltip: 在击败任何首领之前，首领进度随动模式下敌人的初始基础等级。
+		}
+
+		LevelsPerBossKilled: {
+			Label: 每个被击败首领增加等级
+			Tooltip: 世界中每击败一个独特的首领，敌人获得的等级提升。
+		}
+
+		UseBossProgressionWhitelist: {
+			Label: 使用首领白名单
+			Tooltip: 开启后，仅白名单中列出的首领才会计入首领进度随动。
+		}
+
+		BossProgressionWhitelist: {
+			Label: 首领进度白名单
+			Tooltip: 参与首领进度等级计算的首领名称或 ID 列表。
+		}
+
+		EnableRebirthEnemyScaling: {
+			Label: 启用玩家转生等级随动
+			Tooltip: 根据玩家的转生次数为生成的敌人增加“幻影等级”，以保持转生后的游戏挑战性。
+		}
+
+		LevelsPerPlayerRebirth: {
+			Label: 每次转生增加敌人等级
+			Tooltip: 玩家每转生一次，为生成的敌人额外增加的等级数。
+		}
+
+		ScaleEnemyWithAverageRebirths: {
+			Label: 按平均转生次数随动
+			Tooltip: 在多人模式下，使用附近玩家的平均转生次数而不是最高转生次数。
 		}
 	}
 
@@ -3336,8 +3415,7 @@ RoleEffects: {
 	}
 
 	ApexSummoner: {
-		MassiveBonus: • 当您只召唤“一种”类型的仆从时，获得巨额召唤伤害加成
-		DamagePerUnusedSlot: • 每个未使用的栏位提供 +{0}% 召唤伤害
+		DamagePerUnusedSlot: • 每个未使用的栏位提供 +{0}% 召唤伤害 (仅限指挥单一种类仆从时生效)
 		BonusLost: • 如果召唤了多种不同类型的仆从，此加成将失效
 	}
 

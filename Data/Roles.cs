@@ -129,7 +129,6 @@ namespace Stataria
             {
                 var effects = new List<string>
                 {
-                    Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.ApexSummoner.MassiveBonus"),
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.ApexSummoner.DamagePerUnusedSlot", config.roleSettings.ApexSummonerDamagePerUnusedSlot.ToString("0.##")),
                     Terraria.Localization.Language.GetTextValue("Mods.Stataria.RoleEffects.ApexSummoner.BonusLost")
                 };

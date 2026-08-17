@@ -351,6 +351,11 @@ namespace Stataria
                 if (player.inventory[i] == targetItem)
                     return i;
             }
+            for (int i = 0; i < player.armor.Length; i++)
+            {
+                if (player.armor[i] == targetItem)
+                    return 100 + i;
+            }
             return -1;
         }
 

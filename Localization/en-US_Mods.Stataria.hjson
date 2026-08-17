@@ -466,6 +466,7 @@ Configs: {
 			Damage_Calculation: Damage Calculation
 			Diminishing_Returns: Diminishing Returns
 			Respec_Settings: Respec Settings
+			Level_Difference_XP: Level Difference XP Scaling
 		}
 
 		EnableBossHPXP: {
@@ -581,6 +582,31 @@ Configs: {
 		XPCurveSteepness: {
 			Label: XP Curve Steepness
 			Tooltip: Determines how much the XP scaling exponent increases with each level. Makes leveling progressively harder at higher levels.
+		}
+
+		EnableLevelDifferenceXP: {
+			Label: Enable Level Difference XP Scaling
+			Tooltip: Adjusts XP earned based on the difference between enemy level and player level. Underleveled enemies grant reduced XP, while overleveled enemies grant bonus XP.
+		}
+
+		XPModifierPerLevelDifference: {
+			Label: XP Modifier Per Level Difference
+			Tooltip: The percentage change in XP earned per level difference between the enemy and the player (+X% if enemy is higher, -X% if lower).
+		}
+
+		MinLevelDifferenceXPMultiplier: {
+			Label: Min Level Difference XP Multiplier
+			Tooltip: The minimum multiplier floor for XP earned from underleveled enemies.
+		}
+
+		MaxLevelDifferenceXPMultiplier: {
+			Label: Max Level Difference XP Multiplier
+			Tooltip: The maximum multiplier ceiling for XP earned from overleveled enemies.
+		}
+
+		ApplyLevelDifferenceXPToBosses: {
+			Label: Apply Level Difference XP To Bosses
+			Tooltip: If enabled, boss XP will also be modified by the level difference between the boss and the player.
 		}
 	}
 
@@ -758,6 +784,9 @@ Configs: {
 			Boss_Scaling: Boss Scaling
 			Flat_Scaling: Flat Scaling
 			Level_Variation: Level Variation
+			Diminishing_Returns: Enemy Diminishing Returns
+			Boss_Progression_Scaling: Boss Progression Scaling
+			Rebirth_Enemy_Scaling: Rebirth Enemy Scaling
 		}
 
 		EnableEnemyScaling: {
@@ -792,7 +821,7 @@ Configs: {
 
 		ScalingType: {
 			Label: Scaling Type
-			Tooltip: Determines how enemy scaling is calculated: 0 = Player Count (fixed bonus per player), 1 = Highest Level (scales to strongest player), 2 = Average Level (scales to party average).
+			Tooltip: Determines how enemy scaling is calculated: 0 = Player Count (fixed bonus per player), 1 = Highest Level (scales to strongest player), 2 = Average Level (scales to party average), 3 = Boss Progression (scales with defeated bosses).
 		}
 
 		UseProximityForScaling: {
@@ -934,6 +963,56 @@ Configs: {
 		FlatBossDamageScaling: {
 			Label: Flat Boss Damage Scaling
 			Tooltip: Configuration for Flat Boss Damage Scaling.
+		}
+
+		EnableEnemyDiminishingReturns: {
+			Label: Enable Enemy Diminishing Returns
+			Tooltip: Applies diminishing returns to enemy health, damage, and defense scaling at high levels, preventing enemies from drastically outscaling players when player diminishing returns is enabled.
+		}
+
+		EnemyDiminishingReturnsRate: {
+			Label: Enemy Diminishing Returns Rate
+			Tooltip: How aggressively enemy level stat gains diminish at high levels.
+		}
+
+		EnableBossProgressionLevelFloor: {
+			Label: Enable Boss Progression Level Floor
+			Tooltip: Sets a minimum level floor for all spawned enemies based on world boss progression, regardless of player level scaling mode.
+		}
+
+		BossProgressionBaseLevel: {
+			Label: Boss Progression Base Level
+			Tooltip: Starting base level for enemies under boss progression scaling before any bosses are defeated.
+		}
+
+		LevelsPerBossKilled: {
+			Label: Levels Per Boss Defeated
+			Tooltip: Number of enemy levels added for each unique boss defeated in the world.
+		}
+
+		UseBossProgressionWhitelist: {
+			Label: Use Boss Whitelist
+			Tooltip: When enabled, only bosses listed in the whitelist count towards boss progression scaling.
+		}
+
+		BossProgressionWhitelist: {
+			Label: Boss Progression Whitelist
+			Tooltip: List of boss names or IDs that contribute to boss progression level scaling.
+		}
+
+		EnableRebirthEnemyScaling: {
+			Label: Enable Rebirth Enemy Scaling
+			Tooltip: Adds bonus "ghost levels" to spawned enemies based on player rebirth count to maintain challenge post-rebirth.
+		}
+
+		LevelsPerPlayerRebirth: {
+			Label: Levels Per Player Rebirth
+			Tooltip: Number of bonus levels added to enemies per player rebirth count.
+		}
+
+		ScaleEnemyWithAverageRebirths: {
+			Label: Scale With Average Rebirths
+			Tooltip: In multiplayer, uses the average rebirth count of nearby players instead of the highest rebirth count.
 		}
 	}
 
@@ -3336,8 +3415,7 @@ RoleEffects: {
 	}
 
 	ApexSummoner: {
-		MassiveBonus: • Massive summon damage bonus when you have exactly one type of minion active
-		DamagePerUnusedSlot: • +{0}% Summon Damage per unused minion slot
+		DamagePerUnusedSlot: • +{0}% Summon Damage per unused minion slot (only when commanding a single minion type)
 		BonusLost: • Bonus is lost if multiple minion types are summoned
 	}
 

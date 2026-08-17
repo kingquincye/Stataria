@@ -65,13 +65,23 @@ namespace Stataria
                 int healAmount = (int)(player.statLifeMax2 * config.roleSettings.ShinobiExecutionHealPercent / 100f);
                 healAmount = Math.Max(1, healAmount);
 
-                player.statLife += healAmount;
-                if (player.statLife > player.statLifeMax2)
-                    player.statLife = player.statLifeMax2;
-
-                if (healAmount > 0 && Main.netMode != NetmodeID.Server)
+                if (Main.netMode == NetmodeID.SinglePlayer)
                 {
-                    player.HealEffect(healAmount, true);
+                    player.statLife += healAmount;
+                    if (player.statLife > player.statLifeMax2)
+                        player.statLife = player.statLifeMax2;
+
+                    if (healAmount > 0)
+                    {
+                        player.HealEffect(healAmount, true);
+                    }
+                }
+                else if (Main.netMode == NetmodeID.Server)
+                {
+                    var packet = ModContent.GetInstance<Stataria>().GetPacket();
+                    packet.Write((byte)StatariaMessageType.ShinobiExecutionHeal);
+                    packet.Write(healAmount);
+                    packet.Send(player.whoAmI);
                 }
             }
         }
@@ -85,13 +95,23 @@ namespace Stataria
             int healAmount = (int)(player.statLifeMax2 * config.roleSettings.VampireKillHealPercent / 100f);
             healAmount = Math.Max(1, healAmount);
 
-            player.statLife += healAmount;
-            if (player.statLife > player.statLifeMax2)
-                player.statLife = player.statLifeMax2;
-
-            if (healAmount > 0 && Main.netMode != NetmodeID.Server)
+            if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                player.HealEffect(healAmount, true);
+                player.statLife += healAmount;
+                if (player.statLife > player.statLifeMax2)
+                    player.statLife = player.statLifeMax2;
+
+                if (healAmount > 0)
+                {
+                    player.HealEffect(healAmount, true);
+                }
+            }
+            else if (Main.netMode == NetmodeID.Server)
+            {
+                var packet = ModContent.GetInstance<Stataria>().GetPacket();
+                packet.Write((byte)StatariaMessageType.VampireHealOnKill);
+                packet.Write(healAmount);
+                packet.Send(player.whoAmI);
             }
         }
 

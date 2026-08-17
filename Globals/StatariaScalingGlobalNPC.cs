@@ -438,6 +438,28 @@ namespace Stataria
                         baseLevel = (int)Math.Ceiling(avgLevel);
                     }
                     break;
+
+                case 3:
+                    {
+                        int bossCount = StatariaSystem.GetKilledBossCount(config.enemyScaling.UseBossProgressionWhitelist, config.enemyScaling.BossProgressionWhitelist);
+                        baseLevel = config.enemyScaling.BossProgressionBaseLevel + (bossCount * config.enemyScaling.LevelsPerBossKilled);
+                    }
+                    break;
+            }
+
+            if (config.enemyScaling.EnableBossProgressionLevelFloor)
+            {
+                int bossCount = StatariaSystem.GetKilledBossCount(config.enemyScaling.UseBossProgressionWhitelist, config.enemyScaling.BossProgressionWhitelist);
+                int floorLevel = config.enemyScaling.BossProgressionBaseLevel + (bossCount * config.enemyScaling.LevelsPerBossKilled);
+                baseLevel = Math.Max(baseLevel, floorLevel);
+            }
+
+            if (config.enemyScaling.EnableRebirthEnemyScaling && activePlayers.Any())
+            {
+                int effectiveRebirths = config.enemyScaling.ScaleEnemyWithAverageRebirths
+                    ? (int)Math.Round(activePlayers.Average(p => p.GetModPlayer<RPGPlayer>().RebirthCount))
+                    : activePlayers.Max(p => p.GetModPlayer<RPGPlayer>().RebirthCount);
+                baseLevel += effectiveRebirths * config.enemyScaling.LevelsPerPlayerRebirth;
             }
 
             if (config.enemyScaling.EnableLevelVariation)
@@ -514,6 +536,18 @@ namespace Stataria
             IsElite = Main.rand.NextDouble() < config.enemyScaling.EliteEnemyChance;
         }
 
+        public float GetEffectiveLevelDifference()
+        {
+            float levelDiff = Math.Max(0, Level - 1);
+            var config = ModContent.GetInstance<StatariaConfig>();
+            if (config.enemyScaling.EnableEnemyDiminishingReturns && levelDiff > 0)
+            {
+                float diminishingRate = config.enemyScaling.EnemyDiminishingReturnsRate;
+                levelDiff = levelDiff / (1f + (levelDiff * diminishingRate));
+            }
+            return levelDiff;
+        }
+
         public void ApplyScaling(NPC npc)
         {
             var config = ModContent.GetInstance<StatariaConfig>();
@@ -521,6 +555,7 @@ namespace Stataria
             if (!config.enemyScaling.EnableEnemyScaling)
                 return;
 
+            float effectiveLevelDiff = GetEffectiveLevelDifference();
             float healthMult = 1f;
             int additionalFlatHealth = 0;
 
@@ -528,26 +563,26 @@ namespace Stataria
             {
                 if (config.enemyScaling.EnableBossScaling)
                 {
-                    healthMult = 1f + ((Level - 1) * config.enemyScaling.BossHealthScaling);
-                    damageMult = 1f + ((Level - 1) * config.enemyScaling.BossDamageScaling);
+                    healthMult = 1f + (effectiveLevelDiff * config.enemyScaling.BossHealthScaling);
+                    damageMult = 1f + (effectiveLevelDiff * config.enemyScaling.BossDamageScaling);
 
                     if (config.enemyScaling.EnableFlatEnemyScaling)
                     {
-                        additionalFlatHealth += (Level - 1) * config.enemyScaling.FlatBossHealthScaling;
+                        additionalFlatHealth += (int)(effectiveLevelDiff * config.enemyScaling.FlatBossHealthScaling);
                     }
                 }
             }
             else
             {
-                healthMult = 1f + ((Level - 1) * config.enemyScaling.EnemyHealthScaling);
-                damageMult = 1f + ((Level - 1) * config.enemyScaling.EnemyDamageScaling);
+                healthMult = 1f + (effectiveLevelDiff * config.enemyScaling.EnemyHealthScaling);
+                damageMult = 1f + (effectiveLevelDiff * config.enemyScaling.EnemyDamageScaling);
 
                 if (config.enemyScaling.EnableFlatEnemyScaling)
                 {
-                    additionalFlatHealth += (Level - 1) * config.enemyScaling.FlatEnemyHealthScaling;
+                    additionalFlatHealth += (int)(effectiveLevelDiff * config.enemyScaling.FlatEnemyHealthScaling);
                 }
 
-                float defenseMult = 1f + ((Level - 1) * config.enemyScaling.EnemyDefenseScaling);
+                float defenseMult = 1f + (effectiveLevelDiff * config.enemyScaling.EnemyDefenseScaling);
 
                 if (config.enemyScaling.EnableDefenseCap)
                 {
@@ -612,14 +647,15 @@ namespace Stataria
 
             if (config.enemyScaling.EnableFlatEnemyScaling)
             {
+                float effectiveLevelDiff = GetEffectiveLevelDifference();
                 int flatDamage = 0;
                 if (npc.boss && config.enemyScaling.EnableBossScaling)
                 {
-                    flatDamage = (Level - 1) * config.enemyScaling.FlatBossDamageScaling;
+                    flatDamage = (int)(effectiveLevelDiff * config.enemyScaling.FlatBossDamageScaling);
                 }
                 else if (!npc.boss)
                 {
-                    flatDamage = (Level - 1) * config.enemyScaling.FlatEnemyDamageScaling;
+                    flatDamage = (int)(effectiveLevelDiff * config.enemyScaling.FlatEnemyDamageScaling);
                 }
 
                 if (IsElite)
