@@ -631,7 +631,7 @@ namespace Stataria
                 CustomLifeMax = -1;
                 CustomLife = -1;
                 lastLife = -1;
-                npc.lifeMax = (int)targetMaxHealth;
+                npc.lifeMax = (int)Math.Round(targetMaxHealth);
                 npc.life = (int)Math.Round(targetMaxHealth * healthRatio);
             }
         }
