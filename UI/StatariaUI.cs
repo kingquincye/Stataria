@@ -103,6 +103,11 @@ namespace Stataria
             if (Main.dedServ)
                 return;
 
+            if ((StatUI?.CurrentState != null || SkillTreeUI?.CurrentState != null || RoleSelectionUI?.CurrentState != null || SocketingUI?.CurrentState != null) && AdaptationUI?.CurrentState != null)
+            {
+                CloseAdaptationUI();
+            }
+
             if (StatUI?.CurrentState != null)
             {
                 StatUI.Update(gameTime);
@@ -340,6 +345,14 @@ namespace Stataria
                     },
                     InterfaceScaleType.Game)
                 );
+            }
+        }
+
+        public static void CloseAdaptationUI()
+        {
+            if (AdaptationUI?.CurrentState != null)
+            {
+                AdaptationUI.SetState(null);
             }
         }
 

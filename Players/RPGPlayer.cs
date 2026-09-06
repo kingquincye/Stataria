@@ -189,7 +189,10 @@ namespace Stataria
             }
             tag["RebirthAbilities"] = abilitiesData;
             if (_activeRole != null)
+            {
                 tag["ActiveRoleID"] = _activeRole.ID;
+                tag["ActiveRoleStatus"] = (byte)_activeRole.Status;
+            }
             tag["RoleSwitchCount"] = RoleSwitchCount;
             tag["AscendedRoles"] = new List<string>(AscendedRoles);
 
@@ -259,7 +262,14 @@ namespace Stataria
                 if (AvailableRoles.ContainsKey(activeRoleID))
                 {
                     _activeRole = AvailableRoles[activeRoleID];
-                    _activeRole.Status = RoleStatus.Active;
+                    if (tag.ContainsKey("ActiveRoleStatus"))
+                    {
+                        _activeRole.Status = (RoleStatus)tag.GetByte("ActiveRoleStatus");
+                    }
+                    else
+                    {
+                        _activeRole.Status = RoleStatus.Active;
+                    }
                 }
             }
             RoleSwitchCount = tag.ContainsKey("RoleSwitchCount") ? tag.GetInt("RoleSwitchCount") : 0;
@@ -795,6 +805,7 @@ namespace Stataria
                 }
                 else
                 {
+                    StatariaUI.CloseAdaptationUI();
                     StatariaUI.TabBarInterface.SetState(StatariaUI.TabBarPanel);
                     OpenUIOnTab(LastActiveTab);
                 }
@@ -886,6 +897,7 @@ namespace Stataria
 
         private void OpenUIOnTab(TabBarUI.TabType tab)
         {
+            StatariaUI.CloseAdaptationUI();
             var config = ModContent.GetInstance<StatariaConfig>();
 
             switch (tab)
@@ -909,7 +921,7 @@ namespace Stataria
                     if (config.roleSettings.EnableRoleSystem)
                     {
                         StatariaUI.RoleSelectionUI.SetState(StatariaUI.RoleSelectionPanel);
-                        StatariaUI.RoleSelectionPanel?.RefreshRolesList();
+                        StatariaUI.RoleSelectionPanel?.RefreshRolesList(true);
                     }
                     else
                     {

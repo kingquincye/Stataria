@@ -94,7 +94,7 @@ namespace Stataria
             RefreshRolesList();
         }
 
-        public void RefreshRolesList()
+        public void RefreshRolesList(bool resetScroll = false)
         {
             rolesList.Clear();
 
@@ -105,11 +105,40 @@ namespace Stataria
 
             pointsText.SetText(Language.GetText("Mods.Stataria.UI.RoleSelection.RebirthPoints").WithFormatArgs(rpg.RebirthPoints));
 
+            List<Role> orderedRoles = new List<Role>();
+            Role activeOrDeactivatedRole = null;
+
             foreach (var kvp in rpg.AvailableRoles)
             {
                 var role = kvp.Value;
+                bool isSelected = (rpg.RawActiveRole != null && role.ID == rpg.RawActiveRole.ID) ||
+                                  role.Status == RoleStatus.Active ||
+                                  role.Status == RoleStatus.Deactivated;
+
+                if (isSelected && activeOrDeactivatedRole == null)
+                {
+                    activeOrDeactivatedRole = role;
+                }
+                else
+                {
+                    orderedRoles.Add(role);
+                }
+            }
+
+            if (activeOrDeactivatedRole != null)
+            {
+                orderedRoles.Insert(0, activeOrDeactivatedRole);
+            }
+
+            foreach (var role in orderedRoles)
+            {
                 var rolePanel = CreateRolePanel(role, rpg, player);
                 rolesList.Add(rolePanel);
+            }
+
+            if (resetScroll && scrollbar != null)
+            {
+                scrollbar.ViewPosition = 0f;
             }
         }
 
@@ -263,7 +292,7 @@ namespace Stataria
                     if (rpg.DeactivateRole())
                     {
                         SoundEngine.PlaySound(SoundID.MenuTick);
-                        RefreshRolesList();
+                        RefreshRolesList(true);
                     }
                 };
                 panel.Append(statusPanel);
@@ -388,7 +417,7 @@ namespace Stataria
                     if (rpg.SwitchToRole(role.ID))
                     {
                         SoundEngine.PlaySound(SoundID.Research);
-                        RefreshRolesList();
+                        RefreshRolesList(true);
                     }
                 };
 
@@ -466,7 +495,7 @@ namespace Stataria
                         if (rpg.SwitchToRole(role.ID))
                         {
                             SoundEngine.PlaySound(SoundID.Research);
-                            RefreshRolesList();
+                            RefreshRolesList(true);
                         }
                     };
                 }

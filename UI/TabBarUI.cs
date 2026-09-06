@@ -141,6 +141,7 @@ namespace Stataria
             StatariaUI.RoleSelectionPanel?.ResetConfirmation();
             StatariaUI.SocketingPanel?.ResetConfirmation();
             StatariaUI.SkillTreePanel?.ResetConfirmation();
+            StatariaUI.CloseAdaptationUI();
 
             UpdateTabAppearance();
 
@@ -167,7 +168,7 @@ namespace Stataria
                     StatariaUI.SkillTreeUI?.SetState(null);
                     StatariaUI.SocketingUI?.SetState(null);
                     StatariaUI.RoleSelectionUI?.SetState(StatariaUI.RoleSelectionPanel);
-                    StatariaUI.RoleSelectionPanel?.RefreshRolesList();
+                    StatariaUI.RoleSelectionPanel?.RefreshRolesList(true);
                     break;
                 case TabType.Socketing:
                     if (config.socketingSystem.EnableSocketingSystem)
