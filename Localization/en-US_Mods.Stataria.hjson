@@ -3533,6 +3533,10 @@ Adaptation: {
 	Death: Death
 	Darkness: Darkness
 	Erasure: Erasure
+	DefenseDamage: Defense Damage
+	SulphurousWater: Sulphurous Water
+	AbyssDarkness: Abyss Darkness
+	AbyssPressure: Abyss Pressure
 }
 
 AdaptationUI: {

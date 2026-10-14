@@ -810,5 +810,108 @@ namespace Stataria
             return false;
         }
         #endregion
+
+        #region Defense Damage Support
+        public static int GetTotalDefenseDamage(Player player)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return 0;
+
+            return GetFieldValue<int>(player, "totalDefenseDamage");
+        }
+
+        public static bool SetTotalDefenseDamage(Player player, int value)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return false;
+
+            return SetFieldValue(player, "totalDefenseDamage", Math.Max(0, value));
+        }
+
+        public static int GetCurrentDefenseDamage(Player player)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return 0;
+
+            try
+            {
+                object calPlayer = GetCalamityPlayer(player);
+                if (calPlayer == null)
+                    return 0;
+
+                PropertyInfo prop = calamityPlayerType?.GetProperty("CurrentDefenseDamage", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (prop != null)
+                {
+                    return (int)prop.GetValue(calPlayer);
+                }
+
+                int total = GetTotalDefenseDamage(player);
+                int recoveryFrames = GetFieldValue<int>(player, "defenseDamageRecoveryFrames");
+                int totalRecoveryFrames = GetFieldValue<int>(player, "totalDefenseDamageRecoveryFrames", 60);
+                if (totalRecoveryFrames <= 0) totalRecoveryFrames = 60;
+                return (int)(total * ((float)recoveryFrames / totalRecoveryFrames));
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        public static int GetDefenseDamageRecoveryFrames(Player player)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return 0;
+
+            return GetFieldValue<int>(player, "defenseDamageRecoveryFrames");
+        }
+
+        public static bool SetDefenseDamageRecoveryFrames(Player player, int value)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return false;
+
+            return SetFieldValue(player, "defenseDamageRecoveryFrames", Math.Max(0, value));
+        }
+
+        public static void SetDefenseDamageImmunity(Player player, bool immune)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return;
+
+            SetFieldValue(player, "externalDefenseDamageImmunity", immune);
+        }
+
+        public static void ClearDefenseDamage(Player player)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return;
+
+            SetFieldValue(player, "totalDefenseDamage", 0);
+            SetFieldValue(player, "defenseDamageRecoveryFrames", 0);
+            SetFieldValue(player, "defenseDamageDelayFrames", 0);
+            SetFieldValue(player, "totalDefenseDamageRecoveryFrames", 60);
+        }
+        #endregion
     }
 }

@@ -3533,6 +3533,10 @@ Adaptation: {
 	Death: 死亡
 	Darkness: 黑暗
 	Erasure: 抹除
+	DefenseDamage: 防御损伤
+	SulphurousWater: 硫磺水
+	AbyssDarkness: 深渊黑暗
+	AbyssPressure: 深渊水压
 }
 
 AdaptationUI: {

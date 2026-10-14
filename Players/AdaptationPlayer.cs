@@ -25,6 +25,7 @@ namespace Stataria.Players
         public AdaptationCategory ActiveCategory { get; set; } = AdaptationCategory.Mob;
         public bool InstantAdaptationMode { get; set; }
         public bool PendingFullHeal { get; set; }
+        private int preHurtCurrentDefenseDamage;
 
         public bool IsAdaptorActive
         {
@@ -59,6 +60,13 @@ namespace Stataria.Players
             return !data.Disabled && data.Level >= maxLevel;
         }
 
+        public bool IsDefenseDamageAdapted(int maxLevel)
+        {
+            AdaptationKey defKey = GetEnvironmentKey("DefenseDamage", "Mods.Stataria.Adaptation.DefenseDamage", "Defense Damage");
+            var data = GetAdaptation(defKey);
+            return !data.Disabled && data.Level >= maxLevel;
+        }
+
         public override void PreUpdate()
         {
             if (IsAdaptorActive && !Player.dead && Player.statLife > 0)
@@ -72,6 +80,11 @@ namespace Stataria.Players
             if (IsAdaptorActive)
             {
                 CheckAndHandleErasureAdaptation(AdaptationData.GetMaxLevel());
+                if (CalamitySupportHelper.CalamityLoaded && IsDefenseDamageAdapted(AdaptationData.GetMaxLevel()))
+                {
+                    CalamitySupportHelper.SetDefenseDamageImmunity(Player, true);
+                    CalamitySupportHelper.ClearDefenseDamage(Player);
+                }
             }
 
             if (CheatDeathCooldownTimer > 0)
@@ -638,6 +651,11 @@ namespace Stataria.Players
             if (!IsAdaptorActive)
                 return;
 
+            if (CalamitySupportHelper.CalamityLoaded)
+            {
+                preHurtCurrentDefenseDamage = CalamitySupportHelper.GetCurrentDefenseDamage(Player);
+            }
+
             if (CheatDeathInvincibilityTimer > 0)
             {
                 modifiers.FinalDamage *= 0f;
@@ -840,6 +858,38 @@ namespace Stataria.Players
                 AdaptationKey kbKey = GetEnvironmentKey("Knockback", "Mods.Stataria.Adaptation.Knockback");
                 float kbExp = Math.Max(25f, rawDamage * 0.8f + info.Knockback * 10f);
                 GainExp(kbKey, kbExp);
+            }
+
+            // Calamity Defense Damage Adaptation (Pre-mitigation burst EXP & level-scaled damage reduction)
+            if (CalamitySupportHelper.CalamityLoaded)
+            {
+                int currentTotalDefDmg = CalamitySupportHelper.GetTotalDefenseDamage(Player);
+                int rawDefDmgTaken = currentTotalDefDmg - preHurtCurrentDefenseDamage;
+                if (rawDefDmgTaken > 0)
+                {
+                    AdaptationKey defDmgKey = GetEnvironmentKey("DefenseDamage", "Mods.Stataria.Adaptation.DefenseDamage", "Defense Damage");
+                    AdaptationData defDmgData = GetAdaptation(defDmgKey);
+
+                    // 1. Full raw burst EXP (calculated from raw unmitigated defense damage so leveling never slows down)
+                    GainExp(defDmgKey, Math.Max(25f, rawDefDmgTaken * hurtMult * 2.0f));
+
+                    // 2. Reduce the added defense damage based on adaptation level
+                    if (!defDmgData.Disabled)
+                    {
+                        int maxLevelVal = AdaptationData.GetMaxLevel();
+                        float progress = Math.Clamp((float)defDmgData.Level / maxLevelVal, 0f, 1f);
+                        if (progress >= 1f)
+                        {
+                            // 100% immune: keep previous defense damage (or 0)
+                            CalamitySupportHelper.SetTotalDefenseDamage(Player, preHurtCurrentDefenseDamage);
+                        }
+                        else if (progress > 0f)
+                        {
+                            int mitigatedAdded = (int)Math.Round(rawDefDmgTaken * (1.0f - progress));
+                            CalamitySupportHelper.SetTotalDefenseDamage(Player, preHurtCurrentDefenseDamage + mitigatedAdded);
+                        }
+                    }
+                }
             }
         }
 
@@ -1253,6 +1303,32 @@ namespace Stataria.Players
                         CalamitySupportHelper.AddAbyssLightStrength(Player, adaptRatio * 5.0f);
                     }
                 }
+
+                // 3. Defense Damage Adaptation (Lingering passive EXP & Max-level immunity)
+                AdaptationKey defDamageKey = GetEnvironmentKey("DefenseDamage", "Mods.Stataria.Adaptation.DefenseDamage", "Defense Damage");
+                AdaptationData defDamageData = GetAdaptation(defDamageKey);
+
+                if (!defDamageData.Disabled)
+                {
+                    if (defDamageData.Level >= maxLevel)
+                    {
+                        CalamitySupportHelper.SetDefenseDamageImmunity(Player, true);
+                        if (CalamitySupportHelper.GetTotalDefenseDamage(Player) > 0)
+                        {
+                            CalamitySupportHelper.ClearDefenseDamage(Player);
+                        }
+                    }
+                    else
+                    {
+                        int currentDefDmg = CalamitySupportHelper.GetCurrentDefenseDamage(Player);
+                        int totalDefDmg = CalamitySupportHelper.GetTotalDefenseDamage(Player);
+
+                        if (totalDefDmg > 0 || currentDefDmg > 0)
+                        {
+                            GainExp(defDamageKey, 0.75f);
+                        }
+                    }
+                }
             }
         }
 
@@ -1353,6 +1429,16 @@ namespace Stataria.Players
                         int refundedDefense = (int)(defenseLoss * ((float)abyssPressData.Level / maxLevel));
                         Player.statDefense += refundedDefense;
                     }
+                }
+            }
+
+            // 4. Calamity Defense Damage Adaptation (Max Level Immunity enforcement)
+            if (CalamitySupportHelper.CalamityLoaded && IsDefenseDamageAdapted(maxLevel))
+            {
+                CalamitySupportHelper.SetDefenseDamageImmunity(Player, true);
+                if (CalamitySupportHelper.GetTotalDefenseDamage(Player) > 0)
+                {
+                    CalamitySupportHelper.ClearDefenseDamage(Player);
                 }
             }
         }

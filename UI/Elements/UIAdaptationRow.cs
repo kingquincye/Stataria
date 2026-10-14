@@ -206,7 +206,8 @@ namespace Stataria.UI.Elements
             // 1. Special hardcoded environmental & death adaptation target IDs
             if (targetId.Equals("SulphurousWater", StringComparison.OrdinalIgnoreCase) ||
                 targetId.Equals("AbyssDarkness", StringComparison.OrdinalIgnoreCase) ||
-                targetId.Equals("AbyssPressure", StringComparison.OrdinalIgnoreCase))
+                targetId.Equals("AbyssPressure", StringComparison.OrdinalIgnoreCase) ||
+                targetId.Equals("DefenseDamage", StringComparison.OrdinalIgnoreCase))
             {
                 return "(CalamityMod)";
             }

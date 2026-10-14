@@ -3533,6 +3533,10 @@ Adaptation: {
 	Death: Смерть
 	Darkness: Тьма
 	Erasure: Стирание
+	DefenseDamage: Урон по защите
+	SulphurousWater: Сернистая вода
+	AbyssDarkness: Тьма Бездны
+	AbyssPressure: Давление Бездны
 }
 
 AdaptationUI: {
