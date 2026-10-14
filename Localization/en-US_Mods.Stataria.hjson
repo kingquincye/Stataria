@@ -3383,7 +3383,7 @@ RebirthAbilityText: {
 	EnhancedSpawns: Increases enemy spawn rate by {0}% per level. Stacks with other spawn rate modifiers.
 	AutoClickerDetail: Auto-clicks at ~{0} CPS. Click effects are {1} (configurable).
 	AutoClickerDefault: Enables auto-clicking. Speed improves with levels. Effect interaction is configurable.
-	EnhancedFortune: Grants +{0} luck per level when toggled on, improving drop rates and other luck-based mechanics.
+	EnhancedFortune: Increases rare item drop rates by boosting the Extra Luck system by +{0} per level when toggled on.
 	LevelInfo: "{0} (Level {1}/{2})"
 	Allowed: allowed
 	Prevented: prevented
@@ -3645,7 +3645,7 @@ RebirthAbilityName: {
 }
 
 RebirthAbilityDescription: {
-	EnhancedFortune: Grants additional luck per level when toggled on, improving drop rates and other luck-based mechanics.
+	EnhancedFortune: Increases rare item drop rates by boosting the Extra Luck system per level when toggled on.
 	ReducedPotionSickness: Reduces potion sickness duration by 50%
 	ExtraAccessorySlot: Grants an additional accessory slot per level
 	LastStand: When you would die, heal for 10% of your max health and gain 3 seconds of immunity. 3 minute cooldown.

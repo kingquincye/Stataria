@@ -395,13 +395,13 @@ namespace Stataria
             [DefaultValue(750f)][Range(50f, 200000f)] public float AdaptorBaseExpBoss { get; set; } = 750f;
             [DefaultValue(80f)][Range(10f, 50000f)] public float AdaptorBaseExpDebuff { get; set; } = 80f;
             [DefaultValue(150f)][Range(10f, 50000f)] public float AdaptorBaseExpEnvironment { get; set; } = 150f;
-            [DefaultValue(2000f)][Range(100f, 500000f)] public float AdaptorBaseExpDeath { get; set; } = 2000f;
+            [DefaultValue(200f)][Range(10f, 500000f)] public float AdaptorBaseExpDeath { get; set; } = 200f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpDarkness { get; set; } = 20f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpFallDamage { get; set; } = 20f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpBreathlessness { get; set; } = 20f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpLava { get; set; } = 20f;
             [DefaultValue(20f)][Range(1f, 100000f)] public float AdaptorBaseExpKnockback { get; set; } = 20f;
-            [DefaultValue(300f)][Range(1f, 50000f)] public float AdaptorDeathExpGain { get; set; } = 300f;
+            [DefaultValue(2000f)][Range(1f, 50000f)] public float AdaptorDeathExpGain { get; set; } = 2000f;
             [DefaultValue(1.5f)][Range(0.01f, 50.0f)] public float AdaptorExpHurtMultiplier { get; set; } = 1.5f;
             [DefaultValue(0.5f)][Range(0.01f, 50.0f)] public float AdaptorExpHitMultiplier { get; set; } = 0.5f;
             [DefaultValue(0.5f)][Range(0.01f, 500.0f)] public float AdaptorExpDebuffTickGain { get; set; } = 0.5f;

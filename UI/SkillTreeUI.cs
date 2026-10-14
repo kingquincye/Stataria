@@ -230,6 +230,15 @@ namespace Stataria
                     }
                 }
 
+                if (abilityKey == "EnhancedFortune")
+                {
+                    var currentConfig = ModContent.GetInstance<StatariaConfig>();
+                    if (!currentConfig.extraLuckSettings.EnableExtraLuckSystem)
+                    {
+                        continue;
+                    }
+                }
+
                 if (ability.IsHidden && !showHiddenAbilities)
                     continue;
 

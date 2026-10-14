@@ -3383,7 +3383,7 @@ RebirthAbilityText: {
 	EnhancedSpawns: 每级增加 {0}% 的敌人生成速度。可与其他刷怪倍率叠加。
 	AutoClickerDetail: 自动点击大约 {0} 次/秒 (CPS)。点击效果: {1} (可在配置中修改)。
 	AutoClickerDefault: 开启自动点击器。速度随等级提升。对物品效果的触发可在配置中设置。
-	EnhancedFortune: 开启后，每级提供 +{0} 额外运气，提高掉落率和其他运气机制收益。
+	EnhancedFortune: 开启后，每级为额外运气系统提供 +{0} 加成，提高稀有物品掉落率。
 	LevelInfo: "{0} (等级 {1}/{2})"
 	Allowed: 允许
 	Prevented: 已阻止
@@ -3645,7 +3645,7 @@ RebirthAbilityName: {
 }
 
 RebirthAbilityDescription: {
-	EnhancedFortune: 开启后，每级提供额外的运气，提高物品掉落率和其他运气机制的收益。
+	EnhancedFortune: 开启后，每级提升额外运气系统，增加稀有物品掉落率。
 	ReducedPotionSickness: 将耐药性（药水冷却）时间降低 50%。
 	ExtraAccessorySlot: 每级提供一个额外的饰品栏位。
 	LastStand: 当您受到致命一击时，恢复 10% 的最大生命值并获得 3 秒的无敌时间。冷却时间 3 分钟。

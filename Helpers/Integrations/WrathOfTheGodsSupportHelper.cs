@@ -58,6 +58,13 @@ namespace Stataria
 
         private static void Hook_Player_Spawn(On_Player.orig_Spawn orig, Player self, PlayerSpawnContext context)
         {
+            // Do not interfere with Magic Mirror, Recall Potions, or initial world join!
+            if (context != PlayerSpawnContext.ReviveFromDeath)
+            {
+                orig(self, context);
+                return;
+            }
+
             if (self != null && self.active)
             {
                 var adaptor = self.GetModPlayer<AdaptationPlayer>();
@@ -69,7 +76,10 @@ namespace Stataria
 
                     if (deathAdapted || erasureAdapted)
                     {
-                        // Prevent spawn teleport! Keep player exactly where they stood before death/erasure
+                        // Run vanilla Spawn first so the player sprite and limbs are restored properly
+                        orig(self, context);
+
+                        // Now keep the player right where they died instead of at the base bed/spawn
                         if (adaptor.LastValidPosition != Vector2.Zero)
                         {
                             self.position = adaptor.LastValidPosition;
@@ -82,7 +92,7 @@ namespace Stataria
                         self.statLife = self.statLifeMax2;
                         self.statMana = self.statManaMax2;
                         Main.gameMenu = false;
-                        return; // Cancel vanilla Spawn teleport routine!
+                        return;
                     }
                 }
             }

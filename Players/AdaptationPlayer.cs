@@ -48,13 +48,15 @@ namespace Stataria.Players
         public bool IsDeathAdapted(int maxLevel)
         {
             AdaptationKey deathKey = GetDeathKey();
-            return GetAdaptation(deathKey).Level >= maxLevel;
+            var data = GetAdaptation(deathKey);
+            return !data.Disabled && data.Level >= maxLevel;
         }
 
         public bool IsErasureAdapted(int maxLevel)
         {
             AdaptationKey erasureKey = GetErasureKey();
-            return GetAdaptation(erasureKey).Level >= maxLevel;
+            var data = GetAdaptation(erasureKey);
+            return !data.Disabled && data.Level >= maxLevel;
         }
 
         public override void PreUpdate()
@@ -891,7 +893,7 @@ namespace Stataria.Players
                 }
 
                 // Gain Death EXP
-                float deathExpGain = config != null ? config.roleSettings.AdaptorDeathExpGain : 300f;
+                float deathExpGain = config != null ? config.roleSettings.AdaptorDeathExpGain : 2000f;
                 GainExp(deathKey, deathExpGain);
 
                 AuraFlash.TriggerCheatDeathEffect(Player);
@@ -1087,18 +1089,17 @@ namespace Stataria.Players
                     ));
                 }
 
-                // Restore Player
-                bool wasDead = Player.dead;
-                Player.dead = false;
-                Player.respawnTimer = 0;
-                Player.immuneAlpha = 0;
-                Player.statLife = Player.statLifeMax2;
-                Player.statMana = Player.statManaMax2;
+                    // Restore Player
+                    bool wasDead = Player.dead;
+                    Player.dead = false;
+                    Player.respawnTimer = 0;
+                    Player.immuneAlpha = 0;
+                    Player.statLife = Player.statLifeMax2;
+                    Player.statMana = Player.statManaMax2;
 
-                    if (wasDead && lastValidPosition != Vector2.Zero)
+                    if (wasDead)
                     {
-                        Player.position = lastValidPosition;
-                        Player.velocity = Vector2.Zero;
+                        Player.Spawn(PlayerSpawnContext.ReviveFromDeath);
                     }
                 }
             }
@@ -1115,10 +1116,9 @@ namespace Stataria.Players
                 Player.statLife = Player.statLifeMax2;
                 Player.statMana = Player.statManaMax2;
 
-                if (wasDead && lastValidPosition != Vector2.Zero)
+                if (wasDead)
                 {
-                    Player.position = lastValidPosition;
-                    Player.velocity = Vector2.Zero;
+                    Player.Spawn(PlayerSpawnContext.ReviveFromDeath);
                 }
             }
         }
