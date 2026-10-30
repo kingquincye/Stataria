@@ -2746,6 +2746,11 @@ Configs: {
 			Tooltip: 启用或禁用整个镶嵌系统，包括其 UI 标签页。
 		}
 
+		EnableHugoSpawn: {
+			Label: 启用雨果 (Hugo) 生成
+			Tooltip: 禁用时，核心商人雨果将不会入住城镇（如果已存在则会离开）。若镶嵌系统被禁用，该选项会自动失效。
+		}
+
 		PowerT1Effect: {
 			Label: 力量核心 T.1 效果
 			Tooltip: 力量核心 T.1 提供的伤害加成百分比。
@@ -3343,7 +3348,7 @@ Items: {
 
 NPCs: {
 	Hugo: {
-		Census.SpawnCondition: 条件未知
+		Census.SpawnCondition: 在启用镶嵌系统及雨果生成时拥有空房。
 		DisplayName: 雨果
 
 		TownNPCMood: {
@@ -3369,8 +3374,25 @@ NPCs: {
 			Chat3: 你能感觉到它们散发出的能量，对吧？小心使用。
 			Chat4: 每一个核心都包含着一份潜力。能不能解开它就看你的了。
 			ChatRebirth: 你感觉... 变了。就像你已经看到了帷幕之外。核心与那股能量产生了共鸣。
+			ChatEmptinessSprayer: 我看到你手里拿着的那个喷雾瓶了……别妄想把那虚空用在我身上。这对你绝不会有好下场的。
 		}
 
+		SprayReaction1: 你真以为那招对我有用吗？
+		SprayReaction2: 原路奉还！
+		SprayReaction3: 核心拒绝了你的虚空。
+		SprayReaction4: 你无法消灭早已完成适应的存在。
+		SprayReaction_Stage2_1: 你知道你只是在喷你自己，对吧？
+		SprayReaction_Stage2_2: 还在喷？
+		SprayReaction_Stage2_3: 朋友，我们可以这样玩上一整天。
+		SprayReaction_Stage2_4: 又轮到我了？
+		SprayReaction_Stage3_1: 你玩得挺开心？
+		SprayReaction_Stage3_2: 行吧，你现在纯粹是在浪费虚空喷雾。
+		SprayReaction_Stage3_3: 我是卖宇宙伟力的，不是被它消灭的。
+		SprayReaction_Stage3_4: 这玩意儿打你身上甚至都不痒了吧？
+		SprayReaction_Stage4_1: 认真的？还在喷？
+		SprayReaction_Stage4_2: 我有的是时间。
+		SprayReaction_Stage4_3: 你在期待发生点别的什么吗？
+		SprayReaction_Stage4_4: *叹气*……既然站着也是站着，要买个核心吗？
 		Shop: 商店
 	}
 }

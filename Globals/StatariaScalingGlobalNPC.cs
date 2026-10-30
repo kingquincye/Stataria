@@ -1011,23 +1011,5 @@ namespace Stataria
                 }
             }
         }
-
-        public override void SaveData(NPC npc, TagCompound tag)
-        {
-            tag["IsElite"] = IsElite;
-            tag["Level"] = Level;
-            tag["hasBeenScaled"] = hasBeenScaled;
-            tag["CustomLifeMax"] = CustomLifeMax;
-            tag["CustomLife"] = CustomLife;
-        }
-
-        public override void LoadData(NPC npc, TagCompound tag)
-        {
-            IsElite = tag.GetBool("IsElite");
-            Level = tag.GetInt("Level");
-            hasBeenScaled = tag.GetBool("hasBeenScaled");
-            CustomLifeMax = tag.ContainsKey("CustomLifeMax") ? tag.GetDouble("CustomLifeMax") : -1;
-            CustomLife = tag.ContainsKey("CustomLife") ? tag.GetDouble("CustomLife") : -1;
-        }
     }
 }

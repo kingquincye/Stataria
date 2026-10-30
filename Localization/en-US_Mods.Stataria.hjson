@@ -2746,6 +2746,11 @@ Configs: {
 			Tooltip: Enables or disables the entire socketing system including the UI tab.
 		}
 
+		EnableHugoSpawn: {
+			Label: Enable Hugo Spawning
+			Tooltip: When disabled, Hugo the Core merchant will not spawn (and will leave if already present). Automatically disabled if the Socketing System is disabled.
+		}
+
 		PowerT1Effect: {
 			Label: Power T.1 Effect
 			Tooltip: Percentage damage bonus provided by Core of Power T.1.
@@ -3343,7 +3348,7 @@ Items: {
 
 NPCs: {
 	Hugo: {
-		Census.SpawnCondition: Conditions unknown
+		Census.SpawnCondition: Have a vacant house while the Socketing System and Hugo spawning are enabled.
 		DisplayName: Hugo
 
 		TownNPCMood: {
@@ -3369,8 +3374,25 @@ NPCs: {
 			Chat3: You can feel the energy radiating from these, can't you? Handle them with care.
 			Chat4: Each core holds a fragment of potential. It's up to you to unlock it.
 			ChatRebirth: You feel... different. Like you've seen beyond the veil. The cores resonate with that energy.
+			ChatEmptinessSprayer: I see that spray bottle you're holding... Don't even think about using that void on me. Nothing good will come of it for you.
 		}
 
+		SprayReaction1: Did you really think that would work on me?
+		SprayReaction2: Return to sender!
+		SprayReaction3: The Cores reject your void.
+		SprayReaction4: You cannot unmake what has already adapted.
+		SprayReaction_Stage2_1: You do realize you're just spraying yourself, right?
+		SprayReaction_Stage2_2: Still at it?
+		SprayReaction_Stage2_3: We could do this all day, friend.
+		SprayReaction_Stage2_4: My turn again?
+		SprayReaction_Stage3_1: Are you having fun?
+		SprayReaction_Stage3_2: Okay, now you're just wasting void fluid.
+		SprayReaction_Stage3_3: I sell cosmic power, I don't succumb to it.
+		SprayReaction_Stage3_4: Does that even tickle you at this point?
+		SprayReaction_Stage4_1: Seriously? Still?
+		SprayReaction_Stage4_2: I have all the time in the world.
+		SprayReaction_Stage4_3: Are you waiting for something else to happen?
+		SprayReaction_Stage4_4: *sigh*... Need any Cores while you stand there?
 		Shop: Shop
 	}
 }

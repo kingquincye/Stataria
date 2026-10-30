@@ -102,6 +102,7 @@ namespace Stataria
         {
             [Header("Socketing_System")]
             [DefaultValue(true)] public bool EnableSocketingSystem { get; set; } = true;
+            [DefaultValue(true)] public bool EnableHugoSpawn { get; set; } = true;
 
             [Header("Core_Effects")]
             [Range(0f, 100f)][DefaultValue(5f)] public float PowerT1Effect { get; set; } = 5f;

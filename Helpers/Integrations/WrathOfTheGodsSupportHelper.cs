@@ -12,6 +12,7 @@ namespace Stataria
     public class WrathOfTheGodsSupportHelper : ModSystem
     {
         public static bool WotGLoaded { get; private set; }
+        public static int EmptinessSprayerGasProjType { get; private set; } = -1;
         private static Type playerDeletionSystemType;
         private static PropertyInfo playerWasDeletedProp;
         private static PropertyInfo deletionTimerProp;
@@ -36,11 +37,98 @@ namespace Stataria
                         deletedByNamelessProp = playerDeletionSystemType.GetProperty("PlayerWasDeletedByNamelessDeity", BindingFlags.Public | BindingFlags.Static);
                         deletedByLaRugaProp = playerDeletionSystemType.GetProperty("PlayerWasDeletedByLaRuga", BindingFlags.Public | BindingFlags.Static);
                     }
+
+                    if (wotgMod != null)
+                    {
+                        if (wotgMod.TryFind<ModProjectile>("EmptinessSprayerGas", out ModProjectile gasProj))
+                        {
+                            EmptinessSprayerGasProjType = gasProj.Type;
+                        }
+                        else if (wotgMod.TryFind<ModProjectile>("NoxusSprayerGas", out ModProjectile legacyGasProj))
+                        {
+                            EmptinessSprayerGasProjType = legacyGasProj.Type;
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     StatariaLogger.Error("Failed to initialize WrathOfTheGodsSupportHelper: " + ex.Message);
                 }
+            }
+        }
+
+        public override void PostSetupContent()
+        {
+            if (WotGLoaded)
+            {
+                RegisterHugoReflection();
+            }
+        }
+
+        public static void RegisterHugoReflection(int hugoType = -1)
+        {
+            if (!WotGLoaded)
+                return;
+
+            try
+            {
+                Mod wotgMod = ModLoader.GetMod("NoxusBoss");
+                if (wotgMod == null)
+                    return;
+
+                if (EmptinessSprayerGasProjType <= 0)
+                {
+                    if (wotgMod.TryFind<ModProjectile>("EmptinessSprayerGas", out ModProjectile gasProj))
+                        EmptinessSprayerGasProjType = gasProj.Type;
+                    else if (wotgMod.TryFind<ModProjectile>("NoxusSprayerGas", out ModProjectile legacyGasProj))
+                        EmptinessSprayerGasProjType = legacyGasProj.Type;
+                }
+
+                if (hugoType <= 0)
+                {
+                    hugoType = ModContent.NPCType<NPCs.Hugo>();
+                }
+
+                if (hugoType <= 0)
+                    return;
+
+                Type emptinessSprayerType = wotgMod.Code?.GetType("NoxusBoss.Content.Items.MiscOPTools.EmptinessSprayer")
+                    ?? wotgMod.Code?.GetType("NoxusBoss.Content.Items.MiscOPTools.NoxusSprayer");
+
+                if (emptinessSprayerType != null)
+                {
+                    PropertyInfo reflectProp = emptinessSprayerType.GetProperty("NPCsThatReflectSpray", BindingFlags.Public | BindingFlags.Static);
+                    if (reflectProp != null)
+                    {
+                        bool[] reflectArray = reflectProp.GetValue(null) as bool[];
+                        if (reflectArray != null)
+                        {
+                            if (hugoType >= reflectArray.Length)
+                            {
+                                Array.Resize(ref reflectArray, hugoType + 1);
+                                FieldInfo backingField = emptinessSprayerType.GetField("<NPCsThatReflectSpray>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
+                                backingField?.SetValue(null, reflectArray);
+                            }
+                            reflectArray[hugoType] = true;
+                            StatariaLogger.Info($"[Stataria] Registered Hugo (ID: {hugoType}) to reflect Wrath of the Gods Emptiness Sprayer.");
+                        }
+                    }
+
+                    // Ensure Hugo is NOT in NPCsToNotDelete, because NPCsToNotDelete causes EmptinessSprayerGas to early-continue before checking reflection
+                    PropertyInfo noDeleteProp = emptinessSprayerType.GetProperty("NPCsToNotDelete", BindingFlags.Public | BindingFlags.Static);
+                    if (noDeleteProp != null)
+                    {
+                        bool[] noDeleteArray = noDeleteProp.GetValue(null) as bool[];
+                        if (noDeleteArray != null && hugoType < noDeleteArray.Length)
+                        {
+                            noDeleteArray[hugoType] = false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                StatariaLogger.Error("Failed to register Hugo for WotG spray reflection: " + ex.Message);
             }
         }
 
@@ -54,6 +142,7 @@ namespace Stataria
             deletionTimerProp = null;
             deletedByNamelessProp = null;
             deletedByLaRugaProp = null;
+            EmptinessSprayerGasProjType = -1;
         }
 
         private static void Hook_Player_Spawn(On_Player.orig_Spawn orig, Player self, PlayerSpawnContext context)
@@ -110,11 +199,34 @@ namespace Stataria
                 return;
 
             var adaptor = localPlayer.GetModPlayer<AdaptationPlayer>();
-            if (adaptor == null || !adaptor.IsAdaptorActive)
-                return;
+            if (adaptor != null && adaptor.IsAdaptorActive)
+            {
+                int maxLevel = AdaptationData.GetMaxLevel();
+                adaptor.CheckAndHandleErasureAdaptation(maxLevel);
+            }
 
-            int maxLevel = AdaptationData.GetMaxLevel();
-            adaptor.CheckAndHandleErasureAdaptation(maxLevel);
+            // In multiplayer, WotG disables the singleplayer menu deletion kick.
+            // If the player hit themselves with a reflected emptiness spray, erase/kill them if not adapted.
+            if (Main.netMode == Terraria.ID.NetmodeID.MultiplayerClient && !localPlayer.dead && EmptinessSprayerGasProjType > 0)
+            {
+                for (int i = 0; i < Main.maxProjectiles; i++)
+                {
+                    Projectile p = Main.projectile[i];
+                    if (p.active && p.type == EmptinessSprayerGasProjType && p.owner == localPlayer.whoAmI && p.ai[0] == 1f && p.ai[1] >= 20f)
+                    {
+                        if (p.Hitbox.Intersects(localPlayer.Hitbox))
+                        {
+                            int maxLevel = AdaptationData.GetMaxLevel();
+                            bool erasureAdapted = adaptor != null && adaptor.IsAdaptorActive && adaptor.IsErasureAdapted(maxLevel);
+                            if (!erasureAdapted)
+                            {
+                                localPlayer.KillMe(Terraria.DataStructures.PlayerDeathReason.ByCustomReason(Terraria.Localization.NetworkText.FromLiteral(localPlayer.name + " was erased by reflected emptiness.")), 999999, 0);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         public static bool IsPlayerWasDeletedActive()
