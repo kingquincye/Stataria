@@ -1254,6 +1254,11 @@ Configs: {
 			Tooltip: Increases block placement and mining range.
 		}
 
+		TCH_OptimizeTorchSmartCursor: {
+			Label: Optimize Torch Smart Cursor
+			Tooltip: Prevents severe lag (1 FPS) when holding torches with Smart Cursor enabled at high reach by safely capping the auto-placement search radius to 18 tiles. Manual building and mining reach remain completely unaffected.
+		}
+
 		SPR_Damage: {
 			Label: Damage
 			Tooltip: Increases summon damage by a percentage per point.

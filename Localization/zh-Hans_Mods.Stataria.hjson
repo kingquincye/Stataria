@@ -1254,6 +1254,11 @@ Configs: {
 			Tooltip: 增加放置方块和挖矿的距离。
 		}
 
+		TCH_OptimizeTorchSmartCursor: {
+			Label: 优化火把智能光标
+			Tooltip: 防止在高触及范围下手持火把使用智能光标时出现严重的帧率下降(骤降至1帧)。安全地将自动放置搜索半径限制为18格，且完全不影响手动放置和挖掘的触及范围。
+		}
+
 		SPR_Damage: {
 			Label: 召唤伤害
 			Tooltip: 每点按百分比增加召唤伤害。

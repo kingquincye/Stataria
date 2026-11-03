@@ -579,6 +579,7 @@ namespace Stataria
             [DefaultValue(1f)] public float TCH_BuildSpeed { get; set; } = 1f;
             [DefaultValue(true)] public bool TCH_EnableRange { get; set; } = true;
             [DefaultValue(0.2f)] public float TCH_Range { get; set; } = 0.2f;
+            [DefaultValue(true)] public bool TCH_OptimizeTorchSmartCursor { get; set; } = true;
 
             [Header("SPR_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float SPR_Damage { get; set; } = 0.5f;
