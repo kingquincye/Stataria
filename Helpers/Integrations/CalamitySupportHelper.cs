@@ -913,5 +913,111 @@ namespace Stataria
             SetFieldValue(player, "totalDefenseDamageRecoveryFrames", 60);
         }
         #endregion
+
+        #region Cooldown Handling
+        public static bool ClearPotionCooldown(Player player)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return false;
+
+            try
+            {
+                object calPlayer = GetCalamityPlayer(player);
+                if (calPlayer == null)
+                    return false;
+
+                FieldInfo cooldownsField = GetFieldInfoCached("cooldowns");
+                if (cooldownsField != null)
+                {
+                    var cooldowns = cooldownsField.GetValue(calPlayer) as System.Collections.IDictionary;
+                    if (cooldowns != null && cooldowns.Count > 0)
+                    {
+                        List<object> keysToRemove = null;
+                        foreach (var key in cooldowns.Keys)
+                        {
+                            string keyStr = key as string;
+                            if (keyStr != null && (keyStr.IndexOf("Potion", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                   keyStr.IndexOf("Sickness", StringComparison.OrdinalIgnoreCase) >= 0))
+                            {
+                                keysToRemove ??= new List<object>();
+                                keysToRemove.Add(key);
+                            }
+                        }
+
+                        if (keysToRemove != null && keysToRemove.Count > 0)
+                        {
+                            foreach (var k in keysToRemove)
+                            {
+                                object cdInstance = cooldowns[k];
+                                if (cdInstance != null)
+                                {
+                                    FieldInfo timeLeftField = cdInstance.GetType().GetField("timeLeft", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                                    timeLeftField?.SetValue(cdInstance, 0);
+                                }
+                                cooldowns.Remove(k);
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+
+        public static bool SyncPotionCooldownTimeLeft(Player player, int timeLeft)
+        {
+            if (!initialized)
+                Initialize();
+
+            if (!CalamityLoaded)
+                return false;
+
+            try
+            {
+                object calPlayer = GetCalamityPlayer(player);
+                if (calPlayer == null)
+                    return false;
+
+                FieldInfo cooldownsField = GetFieldInfoCached("cooldowns");
+                if (cooldownsField != null)
+                {
+                    var cooldowns = cooldownsField.GetValue(calPlayer) as System.Collections.IDictionary;
+                    if (cooldowns != null && cooldowns.Count > 0)
+                    {
+                        foreach (var key in cooldowns.Keys)
+                        {
+                            string keyStr = key as string;
+                            if (keyStr != null && (keyStr.IndexOf("Potion", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                                   keyStr.IndexOf("Sickness", StringComparison.OrdinalIgnoreCase) >= 0))
+                            {
+                                object cdInstance = cooldowns[key];
+                                if (cdInstance != null)
+                                {
+                                    FieldInfo timeLeftField = cdInstance.GetType().GetField("timeLeft", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                                    if (timeLeftField != null)
+                                    {
+                                        timeLeftField.SetValue(cdInstance, timeLeft);
+                                    }
+                                }
+                            }
+                        }
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
+        }
+        #endregion
     }
 }

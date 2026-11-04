@@ -1,11 +1,31 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Stataria.Players;
+using Stataria.Core;
 
 namespace Stataria
 {
     public class StatariaGlobalItem : GlobalItem
     {
+        public override bool CanUseItem(Item item, Player player)
+        {
+            if (item.potion || item.healLife > 0)
+            {
+                var adapt = player.GetModPlayer<AdaptationPlayer>();
+                if (adapt != null && adapt.IsAdaptorActive && adapt.IsPotionSicknessAdapted(AdaptationData.GetMaxLevel()))
+                {
+                    player.potionDelay = 0;
+                    player.buffImmune[BuffID.PotionSickness] = true;
+                    player.ClearBuff(BuffID.PotionSickness);
+                    if (CalamitySupportHelper.CalamityLoaded)
+                        CalamitySupportHelper.ClearPotionCooldown(player);
+                    return true;
+                }
+            }
+
+            return base.CanUseItem(item, player);
+        }
         public override void ModifyItemScale(Item item, Player player, ref float scale)
         {
             var rpg = player.GetModPlayer<RPGPlayer>();
@@ -42,6 +62,17 @@ namespace Stataria
 
         public override bool ConsumeItem(Item item, Player player)
         {
+            if (item.potion || item.healLife > 0)
+            {
+                var adapt = player.GetModPlayer<AdaptationPlayer>();
+                if (adapt != null && adapt.IsAdaptorActive && adapt.IsPotionSicknessAdapted(AdaptationData.GetMaxLevel()))
+                {
+                    player.potionDelay = 0;
+                    if (CalamitySupportHelper.CalamityLoaded)
+                        CalamitySupportHelper.ClearPotionCooldown(player);
+                }
+            }
+
             var rpg = player.GetModPlayer<RPGPlayer>();
             var config = ModContent.GetInstance<StatariaConfig>();
 
@@ -64,6 +95,17 @@ namespace Stataria
 
         public override bool? UseItem(Item item, Player player)
         {
+            if (item.potion || item.healLife > 0)
+            {
+                var adapt = player.GetModPlayer<AdaptationPlayer>();
+                if (adapt != null && adapt.IsAdaptorActive && adapt.IsPotionSicknessAdapted(AdaptationData.GetMaxLevel()))
+                {
+                    player.potionDelay = 0;
+                    if (CalamitySupportHelper.CalamityLoaded)
+                        CalamitySupportHelper.ClearPotionCooldown(player);
+                }
+            }
+
             var spellweaverPlayer = player.GetModPlayer<SpellweaverPlayer>();
             if (spellweaverPlayer.IsSpellweaverActive && item.DamageType == DamageClass.Magic && item.mana > 0)
             {

@@ -1727,7 +1727,7 @@ namespace Stataria
             var config = ModContent.GetInstance<StatariaConfig>();
 
             int effectiveSPR = GetEffectiveStat("SPR");
-            int sprMinions = effectiveSPR / config.statSettings.SPR_MinionsPerX;
+            int sprMinions = config.statSettings.SPR_MinionsPerX > 0 ? (effectiveSPR / config.statSettings.SPR_MinionsPerX) : 0;
             int totalSlots = Player.maxMinions - beastmasterBonusSlots;
             int baseSlots = totalSlots - sprMinions;
 
@@ -1984,8 +1984,10 @@ namespace Stataria
 
             int effectiveSPR = GetEffectiveStat("SPR");
 
-            Player.maxMinions += effectiveSPR / config.statSettings.SPR_MinionsPerX;
-            Player.maxTurrets += effectiveSPR / config.statSettings.SPR_SentriesPerX;
+            if (config.statSettings.SPR_MinionsPerX > 0)
+                Player.maxMinions += effectiveSPR / config.statSettings.SPR_MinionsPerX;
+            if (config.statSettings.SPR_SentriesPerX > 0)
+                Player.maxTurrets += effectiveSPR / config.statSettings.SPR_SentriesPerX;
             float summonBonus = effectiveSPR * (config.statSettings.SPR_Damage / 100f);
             if (summonBonus > 0f)
             {
@@ -2589,46 +2591,52 @@ namespace Stataria
 
             if (config.statSettings.UseCustomHpRegen && !blockVITRegen)
             {
-                if (customRegenDelayTimer > 0)
-                    customRegenDelayTimer--;
-                else if (Player.statLife < Player.statLifeMax2 && !Player.dead)
+                if (config.statSettings.CustomHpRegenPerVIT > 0f)
                 {
-                    float hpPerSecond = effectiveVIT * config.statSettings.CustomHpRegenPerVIT;
-
-                    if (isGuardian && config.roleSettings.GuardianReduceVitEffects)
+                    if (customRegenDelayTimer > 0)
+                        customRegenDelayTimer--;
+                    else if (Player.statLife < Player.statLifeMax2 && !Player.dead)
                     {
-                        float reductionFactor = 1f - (config.roleSettings.GuardianVitEffectReduction / 100f);
-                        hpPerSecond *= reductionFactor;
-                    }
+                        float hpPerSecond = effectiveVIT * config.statSettings.CustomHpRegenPerVIT;
 
-                    regenCarryover += hpPerSecond / 60f;
+                        if (isGuardian && config.roleSettings.GuardianReduceVitEffects)
+                        {
+                            float reductionFactor = 1f - (config.roleSettings.GuardianVitEffectReduction / 100f);
+                            hpPerSecond *= reductionFactor;
+                        }
 
-                    if (regenCarryover >= 1f)
-                    {
-                        int healAmount = (int)regenCarryover;
-                        regenCarryover -= healAmount;
-                        Player.statLife += healAmount;
-                        if (Player.statLife > Player.statLifeMax2)
-                            Player.statLife = Player.statLifeMax2;
+                        regenCarryover += hpPerSecond / 60f;
 
-                        if (Main.netMode != NetmodeID.SinglePlayer)
-                            Player.HealEffect(healAmount, false);
+                        if (regenCarryover >= 1f)
+                        {
+                            int healAmount = (int)regenCarryover;
+                            regenCarryover -= healAmount;
+                            Player.statLife += healAmount;
+                            if (Player.statLife > Player.statLifeMax2)
+                                Player.statLife = Player.statLifeMax2;
+
+                            if (Main.netMode != NetmodeID.SinglePlayer)
+                                Player.HealEffect(healAmount, false);
+                        }
                     }
                 }
             }
-            else if (!blockVITRegen)
+            else if (!blockVITRegen && config.statSettings.EnableVITLifeRegen && config.statSettings.VIT_LifeRegenPerPoint > 0f)
             {
                 float vitRegenMultiplier = 1f;
                 if (isGuardian && config.roleSettings.GuardianReduceVitEffects)
                 {
                     vitRegenMultiplier = 1f - (config.roleSettings.GuardianVitEffectReduction / 100f);
                 }
-                Player.lifeRegen += (int)((effectiveVIT / 2) * vitRegenMultiplier);
+                Player.lifeRegen += (int)((effectiveVIT * config.statSettings.VIT_LifeRegenPerPoint) * vitRegenMultiplier);
             }
 
             int effectiveINT = GetEffectiveStat("INT");
 
-            Player.manaRegenBonus += effectiveINT / 2;
+            if (config.statSettings.EnableINTManaRegen && config.statSettings.INT_ManaRegenPerPoint > 0f)
+            {
+                Player.manaRegenBonus += (int)(effectiveINT * config.statSettings.INT_ManaRegenPerPoint);
+            }
 
             if (teleportCooldownTimer > 0)
                 teleportCooldownTimer--;

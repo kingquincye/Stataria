@@ -174,7 +174,7 @@ UI: {
 		VIT_HpSecReduced: +{0} HP/秒 (+{1} 每点, 守护者效果已削弱)
 		VIT_LifeRegenReduced: +{0} 生命恢复速度 (+{1} 每点, 守护者效果已削弱)
 		VIT_HpSec: +{0} HP/秒 (+{1} 每点)
-		VIT_LifeRegen: +{0} 生命恢复速度 (+0.5 每点)
+		VIT_LifeRegen: +{0} 生命恢复速度 (+{1} 每点)
 		VIT_Healing: +{0}% 治疗量提升 (+{1}% 每点)
 		LivingFleshLockout: 活肉: 锁定 (已禁用，返回 0)
 		VIT_LivingFleshRegen: 活肉: 击杀敌人提供 +{0} 生命恢复速度 (+{1} 每点)
@@ -189,7 +189,7 @@ UI: {
 		AGI_ImprovedJump: 提升跳跃高度与速度
 		AGI_DesperadoNoSpeed: 亡命徒: 远程武器无法获得敏捷攻速加成
 		INT_MaxMana: +{0} 最大法力值 (+{1} 每点)
-		INT_ManaRegen: +{0} 法力恢复速度 (+0.5 每点)
+		INT_ManaRegen: +{0} 法力恢复速度 (+{1} 每点)
 		INT_MagicDamage: +{0}% 魔法伤害 (+{1}% 每点)
 		INT_MagicFlatDamage: +{0} 魔法固定伤害 (+{1} 每点)
 		INT_ManaCost: -{0} 法力消耗 (收益递减)
@@ -236,6 +236,7 @@ UI: {
 		TCH_BuildSpeed: +{0}% 建造速度 (+{1}% 每点)
 		TCH_TilesReach: +{0} 格方块触及范围 (+{1} 每点)
 		TCH_NoEffects: 没有激活的 TCH 效果。
+		Stat_NoEffects: 没有激活的 {0} 效果。
 		RGE_RogueDamage: +{0}% 盗贼伤害 (+{1}% 每点)
 		RGE_MaxStealth: +{0} 最大潜行值 (+{1} 每点)
 		RGE_Velocity: +{0}% 盗贼弹幕速度 (+{1}% 每点)
@@ -1039,6 +1040,16 @@ Configs: {
 			Tooltip: 每点增加最大生命值。
 		}
 
+		EnableVITLifeRegen: {
+			Label: 启用生命恢复
+			Tooltip: 开启后，体质将增加自然生命恢复速度。
+		}
+
+		VIT_LifeRegenPerPoint: {
+			Label: 每点生命恢复
+			Tooltip: 每点体质提供的生命恢复速度。
+		}
+
 		UseCustomHpRegen: {
 			Label: 使用独立生命恢复
 			Tooltip: 启用基于 VIT 的独立生命恢复系统。它将忽略原版生命恢复机制，直接随时间恢复生命值。
@@ -1122,6 +1133,16 @@ Configs: {
 		INT_MP: {
 			Label: 法力值
 			Tooltip: 增加最大法力值。
+		}
+
+		EnableINTManaRegen: {
+			Label: 启用法力恢复
+			Tooltip: 开启后，智力将增加自然法力恢复速度。
+		}
+
+		INT_ManaRegenPerPoint: {
+			Label: 每点法力恢复
+			Tooltip: 每点智力提供的法力恢复速度加成。
 		}
 
 		INT_ManaCostReduction: {
@@ -1271,12 +1292,12 @@ Configs: {
 
 		SPR_MinionsPerX: {
 			Label: 达到 X 点增加仆从上限
-			Tooltip: 每 X 点 SPR 增加 1 个仆从上限。
+			Tooltip: 每 X 点 SPR 增加 1 个仆从上限（设为 0 禁用）。
 		}
 
 		SPR_SentriesPerX: {
 			Label: 达到 X 点增加哨兵上限
-			Tooltip: 每 X 点 SPR 增加 1 个哨兵上限。
+			Tooltip: 每 X 点 SPR 增加 1 个哨兵上限（设为 0 禁用）。
 		}
 
 		EnableStatCaps: {

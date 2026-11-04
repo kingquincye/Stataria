@@ -67,11 +67,45 @@ namespace Stataria.Players
             return !data.Disabled && data.Level >= maxLevel;
         }
 
+        public bool IsPotionSicknessAdapted(int maxLevel)
+        {
+            var data = GetPotionSicknessAdaptation();
+            return !data.Disabled && data.Level >= maxLevel;
+        }
+
+        public AdaptationData GetPotionSicknessAdaptation()
+        {
+            string buffIdName = BuffID.Search.GetName(BuffID.PotionSickness);
+            if (string.IsNullOrEmpty(buffIdName))
+                buffIdName = "PotionSickness";
+
+            AdaptationKey key = new AdaptationKey(AdaptationCategory.Debuff, buffIdName, "Potion Sickness", isOffensive: false);
+            var data = GetAdaptation(key);
+            if (data.Level > 0)
+                return data;
+
+            AdaptationKey fallbackKey = new AdaptationKey(AdaptationCategory.Debuff, "21", "Potion Sickness", isOffensive: false);
+            var fallbackData = GetAdaptation(fallbackKey);
+            if (fallbackData.Level > 0)
+                return fallbackData;
+
+            return data;
+        }
+
         public override void PreUpdate()
         {
             if (IsAdaptorActive && !Player.dead && Player.statLife > 0)
             {
                 lastValidPosition = Player.position;
+            }
+
+            if (IsAdaptorActive && IsPotionSicknessAdapted(AdaptationData.GetMaxLevel()))
+            {
+                if (Player.potionDelay > 0)
+                    Player.potionDelay = 0;
+
+                if (CalamitySupportHelper.CalamityLoaded)
+                    CalamitySupportHelper.ClearPotionCooldown(Player);
             }
         }
 
@@ -84,6 +118,19 @@ namespace Stataria.Players
                 {
                     CalamitySupportHelper.SetDefenseDamageImmunity(Player, true);
                     CalamitySupportHelper.ClearDefenseDamage(Player);
+                }
+                if (IsPotionSicknessAdapted(AdaptationData.GetMaxLevel()))
+                {
+                    Player.buffImmune[BuffID.PotionSickness] = true;
+                    Player.ClearBuff(BuffID.PotionSickness);
+                    if (Player.potionDelay > 0)
+                    {
+                        Player.potionDelay = 0;
+                    }
+                    if (CalamitySupportHelper.CalamityLoaded)
+                    {
+                        CalamitySupportHelper.ClearPotionCooldown(Player);
+                    }
                 }
             }
 
@@ -1054,6 +1101,12 @@ namespace Stataria.Players
                     Player.buffImmune[buffType] = true;
                     Player.DelBuff(i);
                     i--;
+                    if (buffType == BuffID.PotionSickness)
+                    {
+                        Player.potionDelay = 0;
+                        if (CalamitySupportHelper.CalamityLoaded)
+                            CalamitySupportHelper.ClearPotionCooldown(Player);
+                    }
                 }
                 else
                 {
@@ -1065,8 +1118,25 @@ namespace Stataria.Players
                     if (data.Level > 0 && !isTileAura && buffTime > 300 && Main.GameUpdateCount % debuffInterval == 0)
                     {
                         Player.buffTime[i] = Math.Max(0, Player.buffTime[i] - 1);
+                        if (buffType == BuffID.PotionSickness)
+                        {
+                            Player.potionDelay = Math.Min(Player.potionDelay, Player.buffTime[i]);
+                            if (CalamitySupportHelper.CalamityLoaded)
+                                CalamitySupportHelper.SyncPotionCooldownTimeLeft(Player, Player.potionDelay);
+                        }
                     }
                 }
+            }
+
+            if (IsPotionSicknessAdapted(maxLevel))
+            {
+                Player.buffImmune[BuffID.PotionSickness] = true;
+                Player.ClearBuff(BuffID.PotionSickness);
+                if (Player.potionDelay > 0)
+                    Player.potionDelay = 0;
+
+                if (CalamitySupportHelper.CalamityLoaded)
+                    CalamitySupportHelper.ClearPotionCooldown(Player);
             }
 
             if (Player.breath < Player.breathMax)
@@ -1181,6 +1251,15 @@ namespace Stataria.Players
             int maxLevel = AdaptationData.GetMaxLevel();
 
             CheckAndHandleErasureAdaptation(maxLevel);
+
+            if (IsPotionSicknessAdapted(maxLevel))
+            {
+                if (Player.potionDelay > 0)
+                    Player.potionDelay = 0;
+
+                if (CalamitySupportHelper.CalamityLoaded)
+                    CalamitySupportHelper.ClearPotionCooldown(Player);
+            }
 
             // Lock breath at max level of Breathlessness adaptation
             AdaptationKey breathKey = GetEnvironmentKey("Breath", "Mods.Stataria.Adaptation.Breathlessness");
@@ -1440,6 +1519,58 @@ namespace Stataria.Players
                 {
                     CalamitySupportHelper.ClearDefenseDamage(Player);
                 }
+            }
+
+            // 5. Potion Sickness Adaptation (Max Level Immunity enforcement & Potion Delay Clearing)
+            if (IsPotionSicknessAdapted(maxLevel))
+            {
+                Player.buffImmune[BuffID.PotionSickness] = true;
+                Player.ClearBuff(BuffID.PotionSickness);
+                if (Player.potionDelay > 0)
+                {
+                    Player.potionDelay = 0;
+                }
+                if (CalamitySupportHelper.CalamityLoaded)
+                {
+                    CalamitySupportHelper.ClearPotionCooldown(Player);
+                }
+            }
+        }
+
+        public override void PostUpdateBuffs()
+        {
+            if (IsAdaptorActive && IsPotionSicknessAdapted(AdaptationData.GetMaxLevel()))
+            {
+                Player.buffImmune[BuffID.PotionSickness] = true;
+                Player.ClearBuff(BuffID.PotionSickness);
+                if (Player.potionDelay > 0)
+                    Player.potionDelay = 0;
+
+                if (CalamitySupportHelper.CalamityLoaded)
+                    CalamitySupportHelper.ClearPotionCooldown(Player);
+            }
+        }
+
+        public override void PostItemCheck()
+        {
+            if (IsAdaptorActive && IsPotionSicknessAdapted(AdaptationData.GetMaxLevel()))
+            {
+                if (Player.potionDelay > 0)
+                {
+                    Player.potionDelay = 0;
+                    if (CalamitySupportHelper.CalamityLoaded)
+                        CalamitySupportHelper.ClearPotionCooldown(Player);
+                }
+            }
+        }
+
+        public override void GetHealLife(Item item, bool quickHeal, ref int healValue)
+        {
+            if (IsAdaptorActive && IsPotionSicknessAdapted(AdaptationData.GetMaxLevel()))
+            {
+                Player.potionDelay = 0;
+                if (CalamitySupportHelper.CalamityLoaded)
+                    CalamitySupportHelper.ClearPotionCooldown(Player);
             }
         }
 

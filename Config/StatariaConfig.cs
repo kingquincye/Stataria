@@ -516,6 +516,8 @@ namespace Stataria
 
             [Header("VIT_Settings")]
             [Increment(0.1f)][Range(0f, 1000f)][DefaultValue(2f)] public float VIT_HP { get; set; } = 2f;
+            [DefaultValue(true)] public bool EnableVITLifeRegen { get; set; } = true;
+            [Increment(0.05f)][Range(0f, 10f)][DefaultValue(0.5f)] public float VIT_LifeRegenPerPoint { get; set; } = 0.5f;
             [DefaultValue(false)] public bool UseCustomHpRegen { get; set; } = false;
             [Range(0f, 10f)][DefaultValue(0.25f)] public float CustomHpRegenPerVIT { get; set; } = 0.25f;
             [Range(0, 10)][DefaultValue(3)] public int CustomHpRegenDelay { get; set; } = 3;
@@ -539,6 +541,8 @@ namespace Stataria
             [Increment(0.01f)][Range(0f, 10f)][DefaultValue(0.5f)] public float INT_Damage { get; set; } = 0.5f;
             [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float INT_FlatDamage { get; set; } = 0f;
             [Increment(0.01f)][Range(0f, 1000f)][DefaultValue(2f)] public float INT_MP { get; set; } = 2f;
+            [DefaultValue(true)] public bool EnableINTManaRegen { get; set; } = true;
+            [Increment(0.05f)][Range(0f, 10f)][DefaultValue(0.5f)] public float INT_ManaRegenPerPoint { get; set; } = 0.5f;
             [Increment(0.01f)][Range(0f, 10f)][DefaultValue(1.2f)] public float INT_ManaCostReduction { get; set; } = 1.2f;
             [Increment(0.01f)][DefaultValue(1f)] public float INT_ArmorPen { get; set; } = 1f;
 
@@ -584,8 +588,8 @@ namespace Stataria
             [Header("SPR_Settings")]
             [Range(0f, 10f)][DefaultValue(0.5f)] public float SPR_Damage { get; set; } = 0.5f;
             [Increment(0.01f)][Range(0f, 100f)][DefaultValue(0f)] public float SPR_FlatDamage { get; set; } = 0f;
-            [Range(1, 100)][DefaultValue(25)] public int SPR_MinionsPerX { get; set; } = 25;
-            [Range(1, 100)][DefaultValue(50)] public int SPR_SentriesPerX { get; set; } = 50;
+            [Range(0, 100)][DefaultValue(25)] public int SPR_MinionsPerX { get; set; } = 25;
+            [Range(0, 100)][DefaultValue(50)] public int SPR_SentriesPerX { get; set; } = 50;
         }
 
         public class ModIntegration

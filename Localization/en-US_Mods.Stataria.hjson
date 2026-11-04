@@ -174,7 +174,7 @@ UI: {
 		VIT_HpSecReduced: +{0} HP/sec (+{1} per point, Guardian reduced)
 		VIT_LifeRegenReduced: +{0} Life Regen (+{1} per point, Guardian reduced)
 		VIT_HpSec: +{0} HP/sec (+{1} per point)
-		VIT_LifeRegen: +{0} Life Regen (+0.5 per point)
+		VIT_LifeRegen: +{0} Life Regen (+{1} per point)
 		VIT_Healing: +{0}% Healing (+{1}% per point)
 		LivingFleshLockout: Living Flesh: Lockout (Disabled, returns 0)
 		VIT_LivingFleshRegen: Living Flesh: +{0} HP Regen on kill (+{1} per point)
@@ -189,7 +189,7 @@ UI: {
 		AGI_ImprovedJump: Improved Jump Height & Speed
 		AGI_DesperadoNoSpeed: Desperado: Ranged attack speed bonus disabled
 		INT_MaxMana: +{0} Max Mana (+{1} per point)
-		INT_ManaRegen: +{0} Mana Regen (+0.5 per point)
+		INT_ManaRegen: +{0} Mana Regen (+{1} per point)
 		INT_MagicDamage: +{0}% Magic Damage (+{1}% per point)
 		INT_MagicFlatDamage: +{0} Magic Flat Damage (+{1} per point)
 		INT_ManaCost: -{0} Mana Cost (Diminishing)
@@ -236,6 +236,7 @@ UI: {
 		TCH_BuildSpeed: +{0}% Build Speed (+{1}% per point)
 		TCH_TilesReach: +{0} Tiles Reach (+{1} per point)
 		TCH_NoEffects: No active TCH effects.
+		Stat_NoEffects: No active {0} effects.
 		RGE_RogueDamage: +{0}% Rogue Damage (+{1}% per point)
 		RGE_MaxStealth: +{0} Max Stealth (+{1} per point)
 		RGE_Velocity: +{0}% Rogue Velocity (+{1}% per point)
@@ -1039,6 +1040,16 @@ Configs: {
 			Tooltip: Increases max health per point.
 		}
 
+		EnableVITLifeRegen: {
+			Label: Enable Life Regen
+			Tooltip: When enabled, Vitality increases natural life regeneration.
+		}
+
+		VIT_LifeRegenPerPoint: {
+			Label: Life Regen Per Point
+			Tooltip: Amount of life regeneration granted per point of Vitality.
+		}
+
 		UseCustomHpRegen: {
 			Label: Use Custom Hp Regen
 			Tooltip: Enables a custom HP regeneration system based on VIT. Ignores vanilla life regen and heals directly over time.
@@ -1122,6 +1133,16 @@ Configs: {
 		INT_MP: {
 			Label: Mana
 			Tooltip: Increases max mana.
+		}
+
+		EnableINTManaRegen: {
+			Label: Enable Mana Regen
+			Tooltip: When enabled, Intelligence increases natural mana regeneration.
+		}
+
+		INT_ManaRegenPerPoint: {
+			Label: Mana Regen Per Point
+			Tooltip: Amount of mana regeneration bonus granted per point of Intelligence.
 		}
 
 		INT_ManaCostReduction: {
